@@ -3,9 +3,15 @@ Scripts to build Debian nightlies of mapnik branches, and upload to PPAs.
 They currently run on Koordinates' CI server every night at 0000UTC and upload 
 to the Mapnik nightly build PPAs at https://launchpad.net/~mapnik
 
+If you want to use the packages created from these scripts add this PPA:
+
+https://launchpad.net/~mapnik/
+
+
 Requirements:
 
 * apt-get install debhelper devscripts python-scons dput subversion
+
 
 Setting up:
 
@@ -13,7 +19,7 @@ Setting up:
    http://svn.mapnik.org/
 2. update the nightly-build.sh script with your name/GPG key/etc, and what 
    branches/dists/ppas you want. Set the latest-releases correctly too.
-3. set prev.rev in each branch directory to be the current revisionm the branch
+3. set prev.rev in each branch directory to be the current revision of the branch
 4. run nightly-builds.sh --force 
 5. after that, run nightly-builds.sh and it'll regenerate and upload source 
    packages if something's changed.
