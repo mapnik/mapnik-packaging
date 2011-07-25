@@ -18,22 +18,28 @@ Setting up:
 1. for each branch create a svn/ dir in it's directory with a checkout from 
    http://svn.mapnik.org/
 2. update the nightly-build.sh script with your name/GPG key/etc, and what 
-   branches/dists/ppas you want. Set the latest-releases correctly too.
+   branches/dists/ppas you want. Set the latest releases correctly too.
 3. set prev.rev in each branch directory to be the current revision of the branch
-4. run nightly-builds.sh --force 
-5. after that, run nightly-builds.sh and it'll regenerate and upload source 
+4. run nightly-builds.sh -f -d to make sure it works
+5. run nightly-builds.sh -c to delete what you just built
+6. run nightly-builds.sh -f to force the first build & upload
+7. after that, run nightly-builds.sh and it'll regenerate and upload source 
    packages if something's changed.
+8. run nightly-builds.sh -c to cleanup occasionally
+
 
 Notes:
 
 debian/ directories are taken from the appropriate directory for each branch, 
 except for the changelog which is built dynamically.
 
+
 Licenses:
 
 * debian/ files: GPL-2+
-* svncl2deb.sh: any Perl license (Artistic, GPL-1+
+* svncl2deb.sh: any Perl license (Artistic, GPL-1+)
 * nightly-build.sh: GPL-2+
+
 
 Feedback:
 
