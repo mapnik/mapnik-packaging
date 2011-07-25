@@ -3,6 +3,7 @@ Format-Specification: http://dep.debian.net/deps/dep5/
 Files: debian/*
 Copyright: © 2006-2009, Dominic Hargreaves <dom@earth.li>
  © 2010, David Paleino <dapal@debian.org>
+ © 2011, Robert Coup <robert@coup.net.nz>
 License: GPL-2+
 
 Files: agg/*
