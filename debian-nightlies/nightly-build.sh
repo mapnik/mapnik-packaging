@@ -5,11 +5,6 @@ set -e
 # Author: Robert Coup <robert@coup.net.nz>
 # License: GPL-2+
 
-# Run with --force to build anyway (if the previous rev matches the current one)
-# you may need to clear out old tgz/dirs/etc
-
-#TODO: cleanup old builds
-
 # Branches to build
 # branch keys here should match the build directory structure (./foo/svn/, ./foo/debian/)
 # branch values are the latest official release from the branch
@@ -36,7 +31,45 @@ GPGKEY=80B52FF1
 DEBFULLNAME="Robert Coup (Mapnik Nightly Builds)"
 DEBEMAIL="robert+mapniknightly@coup.net.nz"
 
-######### Shouldn't need to edit anything past here 
+######### Shouldn't need to edit anything past here #########
+
+# parse command line opts
+OPT_DRYRUN=
+OPT_FORCE=
+OPT_CLEAN=
+while getopts ":fnc" OPT; do
+    case $OPT in
+        c)
+           OPT_CLEAN=1
+           ;;
+        n)
+           OPT_DRYRUN=1
+           ;;
+        f)
+           OPT_FORCE=1
+           ;;
+        \?)
+            echo "Usage: $0 [-f] [-n] [-c]" >&2
+            echo "  -n   Skip the PPA upload & saving changelog." >&2
+            echo "  -f   Force a build, even if the script doesn't want to. You may need to " >&2
+            echo "       clean up debs/etc first." >&2
+            echo "  -c   Delete archived builds. Leaves changelogs alone." >&2
+            exit 2
+            ;;
+    esac
+done
+
+if [ ! -z $OPT_CLEAN ]; then
+    # delete old archives
+    for BRANCH in "${!BRANCHES[@]}"; do
+        PACKAGE="${PACKAGES[$BRANCH]}"
+        echo -e "\n*** Branch $BRANCH (${PACKAGE})"
+        echo "rm -rvI \"${BRANCH}\"/${PACKAGE}_*"
+        rm -rvI "${BRANCH}"/${PACKAGE}_*
+    done
+    exit 0
+fi
+
 
 DATE=$(date +%Y%m%d)
 DATE_REPR=$(date -R)
@@ -56,10 +89,11 @@ for BRANCH in "${!BRANCHES[@]}"; do
     # Shall we build or not ? 
     if [ "$REV" == "${REV_PREV}" ]; then
         echo "No need to build!"
-        if [ "$1" != "--force" ]; then 
+        if [ -z "$OPT_FORCE" ]; then
             popd
             continue
         fi
+        echo "> ignoring..."
         CHANGELOG="  * : No changes"
     else
         # convert svn changelog into deb changelog.
@@ -112,15 +146,21 @@ EOF
 
         # send to ppa
         echo "Sending to PPA..."
-        dput -f "$PPA" "${PACKAGE}_${DIST_VERSION}_source.changes"
+        if [ -z "$OPT_DRYRUN" ]; then
+            dput -f "$PPA" "${PACKAGE}_${DIST_VERSION}_source.changes"
 
-        # save changelog for next time
-        cp $SOURCE/debian/changelog $DIST.changelog
+            # save changelog for next time
+            cp $SOURCE/debian/changelog $DIST.changelog
+        else
+            echo "> skipping..."
+        fi
     done
 
     # save the revision for next time
-    # FIXME: what if 1x dist build succeeds and another fails?
-    echo "$REV" > prev.rev
+    # FIXME: what if one dist build succeeds and another fails?
+    if [ -z "$OPT_DRYRUN" ]; then
+        echo "$REV" > prev.rev
+    fi
     popd
 done
 
