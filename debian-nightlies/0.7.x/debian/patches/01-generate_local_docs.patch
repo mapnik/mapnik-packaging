@@ -1,0 +1,20 @@
+From: David Paleino <dapal@debian.org>
+Subject: generate documentation for the locally built module
+Forwarded: no
+
+---
+ docs/epydoc_config/build_epydoc.sh |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- mapnik.orig/docs/epydoc_config/build_epydoc.sh
++++ mapnik/docs/epydoc_config/build_epydoc.sh
+@@ -13,7 +13,8 @@ epydoc --no-private \
+     --no-sourcecode \
+     --name mapnik \
+     --url http://mapnik.org \
+-    --css mapnik_epydoc.css mapnik \
++    --css mapnik_epydoc.css \
++    ../../bindings/python/mapnik \
+     -o $API_DOCS_DIR
+ 
+ exit $?

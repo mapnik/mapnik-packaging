@@ -1,0 +1,5 @@
+#!/bin/sh
+
+SOVER=`readlink /usr/lib/libmapnik2.so |sed -e 's/libmapnik2.so.//'`
+
+echo /usr/lib/mapnik/$SOVER

@@ -1,0 +1,66 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+# scons flags
+SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,kismet CAIRO=True PROJ_INCLUDES=/usr/include PROJ_LIBS=/usr/lib INTERNAL_LIBAGG=yes SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu XMLPARSER=libxml2 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr LIB_DIR_NAME=/mapnik2/0.8
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	export CFLAGS += -O0
+else
+	export CFLAGS += -O2
+endif
+
+override_dh_auto_test:
+	
+
+override_dh_auto_configure:
+	scons $(SCONS_FLAGS) CCFLAGS="$(CFLAGS)" configure
+	dh_auto_configure
+
+override_dh_auto_build:
+	for py in $(shell pyversions -r); do \
+		scons $(SCONS_FLAGS) PYTHON=/usr/bin/$$py ; \
+	done
+
+	dh_auto_build
+
+override_dh_prep:
+	dh_prep -Xdebian/tmp
+
+override_dh_install:
+	scons $(SCONS_FLAGS) install
+	dh_install
+	find $(CURDIR)/debian/ -name "modserver.py" | xargs chmod -x
+
+	# build Python API documentation
+	# and trick epydoc into loading the shlib too
+	-ln -s ../_mapnik2.so bindings/python/mapnik2/
+	-( cd docs/epydoc_config ; \
+	LD_LIBRARY_PATH=$(CURDIR)/debian/libmapnik2/usr/lib/ ./build_epydoc.sh )
+	rm -rf bindings/python/mapnik2/_mapnik2.so
+	dh_install -pmapnik2-doc docs/api_docs/python /usr/share/doc/mapnik2-doc/
+
+override_dh_auto_clean:
+	-scons --clean $(SCONS_FLAGS)
+	find -name '*.pyc' -exec rm -f {} \;
+	find -name '.sconsign*' -exec rm -f {} \;
+	find -name '*.o' -exec rm -f {} \;
+	rm -rf .sconf_temp config.log bindings/python/mapnik2/paths.py \
+		utils/shapeindex/shapeindex config.py config.cache \
+		docs/api_docs/python/*
+
+#	dh_auto_clean
+
+override_dh_installexamples:
+	dh_installexamples -Xdata/new
+	find $(CURDIR)/debian/ -name "*.png" | xargs -r chmod -x
+
+%:
+#	dh_installexamples -Xdata/new
+#	dh_install --sourcedir=debian/tmp
+	dh $@
