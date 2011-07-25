@@ -12,7 +12,7 @@ Setting up:
 1. for each branch create a svn/ dir in it's directory with a checkout from 
    http://svn.mapnik.org/
 2. update the nightly-build.sh script with your name/GPG key/etc, and what 
-   branches/dists/ppas you want.
+   branches/dists/ppas you want. Set the latest-releases correctly too.
 3. set prev.rev in each branch directory to be the current revisionm the branch
 4. run nightly-builds.sh --force 
 5. after that, run nightly-builds.sh and it'll regenerate and upload source 
