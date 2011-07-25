@@ -1,8 +1,7 @@
 Source: mapnik
 Priority: optional
 Maintainer: Mapnik Developers <mapnik-devel@lists.berlios.de>
-Uploaders: Mapnik Developers <mapnik-devel@lists.berlios.de>,
- Robert Coup <robert@coup.net.nz>
+Uploaders: Robert Coup <robert@coup.net.nz>
 Build-Depends:
  scons,
  python-support (>= 0.90.0~),
@@ -23,7 +22,6 @@ Build-Depends:
  libpq-dev,
  libproj-dev,
  libltdl-dev,
- libfribidi-dev,
  libgdal1-dev,
  libxml2-dev,
  libicu-dev,
@@ -82,7 +80,6 @@ Depends:
  libpq-dev,
  libproj-dev,
  libltdl-dev,
- libfribidi-dev,
  libgdal1-dev,
  libxml2-dev,
  libagg-dev,

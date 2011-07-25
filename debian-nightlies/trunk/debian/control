@@ -1,8 +1,7 @@
 Source: mapnik2
 Priority: optional
 Maintainer: Mapnik Developers <mapnik-devel@lists.berlios.de>
-Uploaders: Mapnik Developers <mapnik-devel@lists.berlios.de>,
- Robert Coup <robert@coup.net.nz>
+Uploaders: Robert Coup <robert@coup.net.nz>
 Build-Depends:
  scons,
  python-support (>= 0.8.4),
@@ -23,7 +22,6 @@ Build-Depends:
  libpq-dev,
  libproj-dev,
  libltdl7-dev,
- libfribidi-dev,
  libgdal1-dev,
  libxml2-dev,
  libicu-dev (>= 4.2),
@@ -38,8 +36,6 @@ Standards-Version: 3.8.4
 Section: libs
 XS-Python-Version: >= 2.5
 Homepage: http://www.mapnik.org/
-Vcs-Git: git://git.debian.org/pkg-grass/mapnik.git
-Vcs-Browser: http://git.debian.org/?p=pkg-grass/mapnik.git
 
 Package: libmapnik2
 Architecture: any
@@ -69,6 +65,7 @@ Architecture: any
 Depends:
  ${misc:Depends},
  libmapnik2 (= ${binary:Version}),
+ mapnik2-utils (= ${binary:Version}),
  libc6-dev | libc-dev,
  libboost-thread1.42-dev,
  libboost-filesystem1.42-dev,
@@ -84,7 +81,6 @@ Depends:
  libpq-dev,
  libproj-dev,
  libltdl7-dev,
- libfribidi-dev,
  libgdal1-dev,
  libxml2-dev,
  libicu-dev (>= 4.2),
@@ -118,6 +114,7 @@ Depends:
  ${shlibs:Depends},
  ${misc:Depends}
 Conflicts: mapnik-utils
+Replaces: mapnik-utils
 Description: C++/Python toolkit for developing GIS applications (utilities)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
  (Geographic Information Systems) applications. At the core is a C++
@@ -166,6 +163,7 @@ Architecture: all
 Recommends: libmapnik2-dev
 Depends: ${misc:Depends}
 Conflicts: mapnik-docs
+Replaces: mapnik-docs
 Description: C++/Python toolkit for developing GIS applications (doc)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
  (Geographic Information Systems) applications. At the core is a C++
