@@ -20,12 +20,14 @@ Setting up:
 2. update the nightly-build.sh script with your name/GPG key/etc, and what 
    branches/dists/ppas you want. Set the latest releases correctly too.
 3. set prev.rev in each branch directory to be the current revision of the branch
-4. run nightly-builds.sh -f -d to make sure it works
-5. run nightly-builds.sh -c to delete what you just built
-6. run nightly-builds.sh -f to force the first build & upload
-7. after that, run nightly-builds.sh and it'll regenerate and upload source 
+4. run ./nightly-builds.sh -f -d to make sure it works
+5. run ./nightly-builds.sh -c to delete what you just built
+6. run ./nightly-builds.sh -f to force the first build & upload
+7. after that, run ./nightly-builds.sh and it'll regenerate and upload source 
    packages if something's changed.
-8. run nightly-builds.sh -c to cleanup occasionally
+8. run ./nightly-builds.sh -c to cleanup occasionally
+9. to re-run a single trunk build because you've fixed debian/ stuff, do
+   ./nightly-builds.sh -f -b trunk -r 2
 
 
 Notes:

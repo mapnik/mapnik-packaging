@@ -37,8 +37,9 @@ DEBEMAIL="robert+mapniknightly@coup.net.nz"
 OPT_DRYRUN=""
 OPT_FORCE=""
 OPT_CLEAN=""
-OPT_BUILDNUM="1"
-while getopts "fncb:" OPT; do
+OPT_BUILDREV="1"
+BRANCHES_TO_BUILD="${!BRANCHES[@]}"
+while getopts "fncr:b:" OPT; do
     case $OPT in
         c)
            OPT_CLEAN="1"
@@ -50,15 +51,19 @@ while getopts "fncb:" OPT; do
            OPT_FORCE="1"
            ;;
         b)
-           OPT_BUILDNUM="$OPTARG"
+           BRANCHES_TO_BUILD="$OPTARG"
+           ;;
+        r)
+           OPT_BUILDREV="$OPTARG"
            ;;
         \?)
             echo "Usage: $0 [-f] [-n] [-c] [-b N]" >&2
-            echo "  -n   Skip the PPA upload & saving changelog." >&2
-            echo "  -f   Force a build, even if the script doesn't want to. You may need to " >&2
-            echo "       clean up debs/etc first." >&2
-            echo "  -c   Delete archived builds. Leaves changelogs alone." >&2
-            echo "  -b N Use N as the Debian build revision (default: 1)" >&2
+            echo "  -n         Skip the PPA upload & saving changelog." >&2
+            echo "  -f         Force a build, even if the script doesn't want to. You may " >&2
+            echo "             need to clean up debs/etc first." >&2
+            echo "  -c         Delete archived builds. Leaves changelogs alone." >&2
+            echo "  -r N       Use N as the Debian build revision (default: 1)" >&2
+            echo "  -b BRANCH  Just deal with this branch. (default: ${!BRANCHES[@]})" >&2
             exit 2
             ;;
     esac
@@ -66,7 +71,7 @@ done
 
 if [ ! -z $OPT_CLEAN ]; then
     # delete old archives
-    for BRANCH in "${!BRANCHES[@]}"; do
+    for BRANCH in "${BRANCHES_TO_BUILD}"; do
         PACKAGE="${PACKAGES[$BRANCH]}"
         echo -e "\n*** Branch $BRANCH (${PACKAGE})"
         echo "rm -rvI \"${BRANCH}\"/${PACKAGE}_*"
@@ -79,7 +84,7 @@ fi
 DATE=$(date +%Y%m%d)
 DATE_REPR=$(date -R)
 
-for BRANCH in "${!BRANCHES[@]}"; do
+for BRANCH in "${BRANCHES_TO_BUILD}"; do
     RELEASE_VERSION="${BRANCHES[$BRANCH]}"
     PACKAGE="${PACKAGES[$BRANCH]}"
     PPA="${PPAS[$BRANCH]}"
@@ -112,14 +117,18 @@ for BRANCH in "${!BRANCHES[@]}"; do
     SOURCE="${PACKAGE}_${BUILD_VERSION}"
     ORIG_TGZ="${PACKAGE}_${BUILD_VERSION}.orig.tar.gz"
     echo "Building orig.tar.gz ..."
-    svn export -q svn/ $SOURCE
-    tar czf $ORIG_TGZ "${SOURCE}/"
-    rm -rf $SOURCE
+    if [ ! -f $ORIG_TGZ ]; then
+        svn export -q svn/ "$SOURCE"
+        tar czf $ORIG_TGZ "${SOURCE}/"
+    else
+        echo "> already exists - skipping ..."
+    fi
+    rm -rf "$SOURCE"
 
     echo "Build Version ${BUILD_VERSION}"
     for DIST in $DISTS; do
         echo "Building $DIST ..."
-        DIST_VERSION="${BUILD_VERSION}-${OPT_BUILDNUM}~${DIST}1"
+        DIST_VERSION="${BUILD_VERSION}-${OPT_BUILDREV}~${DIST}1"
         echo "Dist-specific Build Version ${DIST_VERSION}"
 
         # start with a clean export
