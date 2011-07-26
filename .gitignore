@@ -1,0 +1,5 @@
+debian-nightlies/*/svn
+debian-nightlies/*/*.changelog
+debian-nightlies/*/mapnik_*
+debian-nightlies/*/mapnik2_*
+
