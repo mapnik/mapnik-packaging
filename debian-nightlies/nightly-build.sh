@@ -24,7 +24,7 @@ PACKAGES["0.7.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="lucid maverick"
+DISTS="lucid maverick natty oneiric"
 
 # Build signing info...
 GPGKEY=80B52FF1
@@ -39,7 +39,8 @@ OPT_FORCE=""
 OPT_CLEAN=""
 OPT_BUILDREV="1"
 BRANCHES_TO_BUILD="${!BRANCHES[@]}"
-while getopts "fncr:b:" OPT; do
+DISTS_TO_BUILD="$DISTS"
+while getopts "fncr:b:d:" OPT; do
     case $OPT in
         c)
            OPT_CLEAN="1"
@@ -53,6 +54,9 @@ while getopts "fncr:b:" OPT; do
         b)
            BRANCHES_TO_BUILD="$OPTARG"
            ;;
+        d)
+           DISTS_TO_BUILD="$OPTARG"
+           ;;
         r)
            OPT_BUILDREV="$OPTARG"
            ;;
@@ -64,6 +68,8 @@ while getopts "fncr:b:" OPT; do
             echo "  -c         Delete archived builds. Leaves changelogs alone." >&2
             echo "  -r N       Use N as the Debian build revision (default: 1)" >&2
             echo "  -b BRANCH  Just deal with this branch. (default: ${!BRANCHES[@]})" >&2
+            # this is kinda dangerous, it stuffs up prev.rev
+            #echo "  -d DIST   Just deal with this dist. (default: $DISTS)" >&2
             exit 2
             ;;
     esac
@@ -84,7 +90,7 @@ fi
 DATE=$(date +%Y%m%d)
 DATE_REPR=$(date -R)
 
-for BRANCH in "${BRANCHES_TO_BUILD}"; do
+for BRANCH in ${BRANCHES_TO_BUILD}; do
     RELEASE_VERSION="${BRANCHES[$BRANCH]}"
     PACKAGE="${PACKAGES[$BRANCH]}"
     PPA="${PPAS[$BRANCH]}"
@@ -126,7 +132,7 @@ for BRANCH in "${BRANCHES_TO_BUILD}"; do
     rm -rf "$SOURCE"
 
     echo "Build Version ${BUILD_VERSION}"
-    for DIST in $DISTS; do
+    for DIST in $DISTS_TO_BUILD; do
         echo "Building $DIST ..."
         DIST_VERSION="${BUILD_VERSION}-${OPT_BUILDREV}~${DIST}1"
         echo "Dist-specific Build Version ${DIST_VERSION}"
@@ -173,6 +179,7 @@ EOF
 
     # save the revision for next time
     # FIXME: what if one dist build succeeds and another fails?
+    # or we're using -d option?
     if [ -z "$OPT_DRYRUN" ]; then
         echo "$REV" > prev.rev
     fi
