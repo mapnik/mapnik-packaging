@@ -34,26 +34,31 @@ DEBEMAIL="robert+mapniknightly@coup.net.nz"
 ######### Shouldn't need to edit anything past here #########
 
 # parse command line opts
-OPT_DRYRUN=
-OPT_FORCE=
-OPT_CLEAN=
-while getopts ":fnc" OPT; do
+OPT_DRYRUN=""
+OPT_FORCE=""
+OPT_CLEAN=""
+OPT_BUILDNUM="1"
+while getopts "fncb:" OPT; do
     case $OPT in
         c)
-           OPT_CLEAN=1
+           OPT_CLEAN="1"
            ;;
         n)
-           OPT_DRYRUN=1
+           OPT_DRYRUN="1"
            ;;
         f)
-           OPT_FORCE=1
+           OPT_FORCE="1"
+           ;;
+        b)
+           OPT_BUILDNUM="$OPTARG"
            ;;
         \?)
-            echo "Usage: $0 [-f] [-n] [-c]" >&2
+            echo "Usage: $0 [-f] [-n] [-c] [-b N]" >&2
             echo "  -n   Skip the PPA upload & saving changelog." >&2
             echo "  -f   Force a build, even if the script doesn't want to. You may need to " >&2
             echo "       clean up debs/etc first." >&2
             echo "  -c   Delete archived builds. Leaves changelogs alone." >&2
+            echo "  -b N Use N as the Debian build revision (default: 1)" >&2
             exit 2
             ;;
     esac
@@ -114,7 +119,8 @@ for BRANCH in "${!BRANCHES[@]}"; do
     echo "Build Version ${BUILD_VERSION}"
     for DIST in $DISTS; do
         echo "Building $DIST ..."
-        DIST_VERSION="${BUILD_VERSION}-1~${DIST}1"
+        DIST_VERSION="${BUILD_VERSION}-${OPT_BUILDNUM}~${DIST}1"
+        echo "Dist-specific Build Version ${DIST_VERSION}"
 
         # start with a clean export
         tar xzf $ORIG_TGZ
