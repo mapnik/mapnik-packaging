@@ -52,10 +52,12 @@ while getopts "fncr:b:d:" OPT; do
            OPT_FORCE="1"
            ;;
         b)
-           BRANCHES_TO_BUILD="$OPTARG"
+           # Jenkins does stupid things with quotes
+           BRANCHES_TO_BUILD=$(echo $OPTARG | sed s/\"//g)
            ;;
         d)
-           DISTS_TO_BUILD="$OPTARG"
+           # Jenkins does stupid things with quotes
+           DISTS_TO_BUILD=$(echo $OPTARG | sed s/\"//g)
            ;;
         r)
            OPT_BUILDREV="$OPTARG"
