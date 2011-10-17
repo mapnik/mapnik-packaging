@@ -5,7 +5,7 @@
 export DH_VERBOSE=1
 
 # scons flags
-SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,kismet CAIRO=True PROJ_INCLUDES=/usr/include PROJ_LIBS=/usr/lib INTERNAL_LIBAGG=yes SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu XMLPARSER=libxml2 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr LIB_DIR_NAME=/mapnik2
+SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,csv CAIRO=True PROJ_INCLUDES=/usr/include PROJ_LIBS=/usr/lib SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu XMLPARSER=libxml2 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr LIB_DIR_NAME=/mapnik2
 
 CFLAGS = -Wall -g
 
@@ -35,15 +35,6 @@ override_dh_prep:
 override_dh_install:
 	scons $(SCONS_FLAGS) install
 	dh_install
-	find $(CURDIR)/debian/ -name "modserver.py" | xargs chmod -x
-
-	# build Python API documentation
-	# and trick epydoc into loading the shlib too
-	-ln -s ../_mapnik2.so bindings/python/mapnik2/
-	-( cd docs/epydoc_config ; \
-	LD_LIBRARY_PATH=$(CURDIR)/debian/libmapnik2/usr/lib/ ./build_epydoc.sh )
-	rm -rf bindings/python/mapnik2/_mapnik2.so
-	dh_install -pmapnik2-doc docs/api_docs/python /usr/share/doc/mapnik2-doc/
 
 override_dh_auto_clean:
 	-scons --clean $(SCONS_FLAGS)
