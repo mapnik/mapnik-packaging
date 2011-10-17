@@ -37,6 +37,7 @@ cd boost_1_47_0
 ./bjam --prefix=$PREFIX -j2 -d2 \
   --with-thread \
   --with-filesystem \
+  --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
   --with-regex --disable-icu \
   toolset=darwin \
@@ -50,6 +51,7 @@ cd boost_1_47_0
 ./bjam --prefix=$PREFIX -j2 -d2 \
   --with-thread \
   --with-filesystem \
+  --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
   --with-regex --disable-icu \
   toolset=darwin \
