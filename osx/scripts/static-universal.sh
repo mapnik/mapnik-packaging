@@ -12,6 +12,10 @@ export CORE_CFLAGS="-O3 -arch x86_64 -arch i386 -mmacosx-version-min=10.6 -isysr
 export CORE_CXXFLAGS=$CORE_CFLAGS
 export CORE_LDFLAGS="-Wl,-search_paths_first -arch x86_64 -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"
 export ARCHFLAGS="-arch x86_64 -arch i386"
+# universal flags
+export CFLAGS=$CORE_CFLAGS
+export CXXFLAGS=$CORE_CXXFLAGS
+export LDFLAGS=$CORE_LDFLAGS
 
 
 cd osx
@@ -20,12 +24,56 @@ cd deps
 
 
 # icucore headers - temporary workaround until I can get more recent icu versions working
-wget http://www.opensource.apple.com/tarballs/ICU/ICU-400.38.tar.gz
-tar xvf ICU-400.38.tar.gz
-cd ICU-400.38
-make install
-cp -R build/usr/local/include/unicode/ ../../sources/include/unicode
-cd ../
+#wget http://www.opensource.apple.com/tarballs/ICU/ICU-400.38.tar.gz
+#tar xvf ICU-400.38.tar.gz
+#cd ICU-400.38
+#make install
+#cp -R build/usr/local/include/unicode/ ../../sources/include/unicode
+#cd ../
+
+wget http://download.icu-project.org/files/icu4c/4.8.1/icu4c-4_8_1-src.tgz
+tar xvf icu4c-4_8_1-src.tgz
+export CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
+
+#-DU_USING_ICU_NAMESPACE=0
+# -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+#-DUNISTR_FROM_CHAR_EXPLICIT=explicit -DUNISTR_FROM_STRING_EXPLICIT=explicit
+export CXXFLAGS=$CFLAGS
+cd icu/source
+./configure --prefix=$PREFIX --disable-samples --enable-static \
+--enable-release --disable-shared --with-library-bits=64 \
+--with-data-packaging=archive --disable-icuio --disable-tests --disable-layout \
+--disable-extras \
+--enable-rpath
+
+--with-library-suffix=iculib
+
+svn co http://source.icu-project.org/repos/icu/icu/trunk/source/ icu4c-trunk
+mkdir icubuild
+cd icubuild
+../icu4c-trunk/configure --prefix=/opt/icu49/ \
+--enable-static \
+--enable-release \
+--disable-shared \
+--with-library-bits=64 \
+--with-data-packaging=archive \
+--disable-threads \
+--disable-samples \
+--disable-icuio \
+--disable-tests \
+--disable-layout \
+--disable-extras \
+--enable-rpath
+
+
+install: ../icu4c-trunk/../license.html: No such file or directory
+make[1]: *** [install-icu] Error 71
+make: *** [install-recursive] Error 2
+
+
+make install -k -i
+
+make -j6 && make install
 
 # boost
 wget http://voxel.dl.sourceforge.net/project/boost/boost/1.47.0/boost_1_47_0.tar.bz2
@@ -33,19 +81,19 @@ tar xjvf boost_1_47_0.tar.bz2
 cd boost_1_47_0
 ./bootstrap.sh
 
-# no icu variant
 ./bjam --prefix=$PREFIX -j2 -d2 \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
-  --with-regex --disable-icu \
+  --with-regex  \
   toolset=darwin \
   macosx-version=10.6 \
   address-model=32_64 \
   architecture=x86 \
   link=static \
   variant=release \
+  -sICU_PATH=$PREFIX \
   stage
 
 ./bjam --prefix=$PREFIX -j2 -d2 \
@@ -53,7 +101,18 @@ cd boost_1_47_0
   --with-filesystem \
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
-  --with-regex --disable-icu \
+  --with-regex \
+  toolset=darwin \
+  macosx-version=10.6 \
+  address-model=32_64 \
+  architecture=x86 \
+  link=static \
+  variant=release \
+  -sICU_PATH=$PREFIX \
+  install
+
+./bjam --prefix=$PREFIX -j2 -d2 \
+  --with-python \
   toolset=darwin \
   macosx-version=10.6 \
   address-model=32_64 \
@@ -64,10 +123,6 @@ cd boost_1_47_0
 
 cd ../
 
-# universal flags
-export CFLAGS=$CORE_CFLAGS
-export CXXFLAGS=$CORE_CXXFLAGS
-export LDFLAGS=$CORE_LDFLAGS
 
 # sqlite
 wget http://www.sqlite.org/sqlite-autoconf-3070701.tar.gz
