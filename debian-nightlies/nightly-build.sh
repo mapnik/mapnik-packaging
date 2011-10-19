@@ -9,18 +9,21 @@ set -e
 # branch keys here should match the build directory structure (./foo/svn/, ./foo/debian/)
 # branch values are the latest official release from the branch
 declare -A BRANCHES
-BRANCHES["trunk"]="2" # is <2.0.0 when it actually comes along
-BRANCHES["0.7.x"]="0.7.2"
+BRANCHES["master"]="2.0.0"
+BRANCHES["2.0.1-dev"]="2.0.0"
+BRANCHES["0.7.2-dev"]="0.7.2"
 
 # PPA names, keys are branches
 declare -A PPAS
-PPAS["trunk"]="ppa:mapnik/nightly-trunk"
-PPAS["0.7.x"]="ppa:mapnik/nightly-0.7"
+PPAS["master"]="ppa:mapnik/nightly-trunk"
+PPAS["0.7.2-dev"]="ppa:mapnik/nightly-0.7"
+PPAS["2.0.1-dev"]="ppa:mapnik/nightly-2.0"
 
 # Package names, keys are branches
 declare -A PACKAGES
-PACKAGES["trunk"]="mapnik2"
-PACKAGES["0.7.x"]="mapnik"
+PACKAGES["master"]="mapnik2"
+PACKAGES["2.0.1-dev"]="mapnik2"
+PACKAGES["0.7.2-dev"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
@@ -92,16 +95,22 @@ fi
 DATE=$(date +%Y%m%d)
 DATE_REPR=$(date -R)
 
+# update the git data - do this once for all builds
+pushd git
+git fetch origin
+popd
+
 for BRANCH in ${BRANCHES_TO_BUILD}; do
     RELEASE_VERSION="${BRANCHES[$BRANCH]}"
     PACKAGE="${PACKAGES[$BRANCH]}"
     PPA="${PPAS[$BRANCH]}"
     echo -e "\n*** Branch $BRANCH (${PACKAGE})"
 
-    pushd "$BRANCH"
-    svn up svn/
-    REV="$(svn info svn/ | grep 'Last Changed Rev' | awk -F': ' '{ print $2 }')"
-    REV_PREV=$(cat prev.rev)
+    pushd git
+    git checkout "$BRANCH"
+    git merge --ff-only "origin/${BRANCH}"
+    REV="$(git log -1 --pretty=format:%h)"
+    REV_PREV="$(cat ../${BRANCH}/prev.rev)"
     echo "Previous revision was ${REV_PREV}"
 
     # Shall we build or not ? 
@@ -117,22 +126,22 @@ for BRANCH in ${BRANCHES_TO_BUILD}; do
         # convert svn changelog into deb changelog.
         # strip duplicate blank lines too
         REV_PREV2=$(echo "$REV_PREV" | awk '{print $1+1}')
-        CHANGELOG="$(svn log -r $REV_PREV2:$REV --stop-on-copy svn/ | ../svncl2deb.sh | cat -s)"
+        CHANGELOG="$(git log $REV_PREV..$REV --pretty=format:'[ %an ]%n>%s' | ../gitcl2deb.sh)"
     fi
 
-    BUILD_VERSION="${RELEASE_VERSION}+dev${DATE}.svn${REV}"
+    BUILD_VERSION="${RELEASE_VERSION}+dev${DATE}.git.${REV}"
 
     SOURCE="${PACKAGE}_${BUILD_VERSION}"
     ORIG_TGZ="${PACKAGE}_${BUILD_VERSION}.orig.tar.gz"
     echo "Building orig.tar.gz ..."
-    if [ ! -f $ORIG_TGZ ]; then
-        svn export -q svn/ "$SOURCE"
-        tar czf $ORIG_TGZ "${SOURCE}/"
+    if [ ! -f "../${BRANCH}/${ORIG_TGZ}" ]; then
+        git archive --format=tar "--prefix=${SOURCE}/" "${REV}" | gzip >"../${BRANCH}/${ORIG_TGZ}"
     else
         echo "> already exists - skipping ..."
     fi
-    rm -rf "$SOURCE"
+    popd
 
+    pushd $BRANCH
     echo "Build Version ${BUILD_VERSION}"
     for DIST in $DISTS_TO_BUILD; do
         echo "Building $DIST ..."

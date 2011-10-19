@@ -10,13 +10,12 @@ https://launchpad.net/~mapnik/
 
 Requirements:
 
-* apt-get install debhelper devscripts python-scons dput subversion
+* apt-get install debhelper devscripts python-scons dput git-core python
 
 
 Setting up:
 
-1. for each branch create a svn/ dir in it's directory with a checkout from 
-   http://svn.mapnik.org/
+1. clone the mapnik git repo from http://github.com/mapnik/mapnik into a git/ dir
 2. update the nightly-build.sh script with your name/GPG key/etc, and what 
    branches/dists/ppas you want. Set the latest releases correctly too.
 3. set prev.rev in each branch directory to be the current revision of the branch
@@ -36,12 +35,9 @@ debian/ directories are taken from the appropriate directory for each branch,
 except for the changelog which is built dynamically.
 
 
-Licenses:
+License: 
 
-* debian/ files: GPL-2+
-* svncl2deb.sh: any Perl license (Artistic, GPL-1+)
-* nightly-build.sh: GPL-2+
-
+* GPL-2+
 
 Feedback:
 
