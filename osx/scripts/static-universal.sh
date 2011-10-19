@@ -125,9 +125,9 @@ cd ../
 
 
 # sqlite
-wget http://www.sqlite.org/sqlite-autoconf-3070701.tar.gz
-tar xvf sqlite-autoconf-3070701.tar.gz
-cd sqlite-autoconf-3070701
+wget http://www.sqlite.org/sqlite-autoconf-3070800.tar.gz
+tar xvf sqlite-autoconf-3070800.tar.gz
+cd sqlite-autoconf-3070800
 export CFLAGS="-DSQLITE_ENABLE_RTREE=1 -O3 "$CFLAGS
 ./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
 make -j4
@@ -136,9 +136,10 @@ cd ../
 
 
 # freetype
-wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.6.tar.bz2
-tar xvf freetype-2.4.6.tar.bz2
-cd freetype-2.4.6
+# http://download.savannah.gnu.org/releases/freetype/
+wget http://savannah.spinellicreations.com/freetype/freetype-2.4.7.tar.bz2
+tar xvf freetype-2.4.7.tar.bz2
+cd freetype-2.4.7
 ./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
 make -j4
 make install
@@ -365,12 +366,14 @@ cd ../
 
 CXX = 'clang++'
 CC = 'clang++'
-CUSTOM_CXXFLAGS = '-arch x86_64 -arch i386 -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk'
-CUSTOM_LDFLAGS = '-Wl,-search_paths_first -arch x86_64 -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk'
-INPUT_PLUGINS = 'gdal,ogr,postgis,shape'
+CUSTOM_CXXFLAGS = '-arch x86_64 -arch i386 -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -isystem osx/sources/include '
+CUSTOM_LDFLAGS = '-Wl,-search_paths_first -arch x86_64 -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk -Losx/sources/lib '
+RUNTIME_LINK = 'static'
+INPUT_PLUGINS = 'csv,gdal,ogr,postgis,shape,sqlite'
 DESTDIR = './osx/sources/'
-BOOST_INCLUDES = './osx/sources/include'
-BOOST_LIBS = './osx/sources/lib'
+PATH = './osx/sources/bin/'
+BOOST_INCLUDES = 'osx/sources/include'
+BOOST_LIBS = 'osx/sources/lib'
 FREETYPE_CONFIG = './osx/sources/bin/freetype-config'
 ICU_INCLUDES = './osx/sources/include'
 ICU_LIB_NAME = 'icucore'
