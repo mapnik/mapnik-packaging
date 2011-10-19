@@ -10,19 +10,19 @@ set -e
 # branch values are the latest official release from the branch
 declare -A BRANCHES
 BRANCHES["master"]="2.0.0"
-BRANCHES["2.0.1-dev"]="2.0.0"
+BRANCHES["2.0.x"]="2.0.0"
 BRANCHES["0.7.2-dev"]="0.7.2"
 
 # PPA names, keys are branches
 declare -A PPAS
 PPAS["master"]="ppa:mapnik/nightly-trunk"
 PPAS["0.7.2-dev"]="ppa:mapnik/nightly-0.7"
-PPAS["2.0.1-dev"]="ppa:mapnik/nightly-2.0"
+PPAS["2.0.x"]="ppa:mapnik/nightly-2.0"
 
 # Package names, keys are branches
 declare -A PACKAGES
 PACKAGES["master"]="mapnik2"
-PACKAGES["2.0.1-dev"]="mapnik2"
+PACKAGES["2.0.x"]="mapnik2"
 PACKAGES["0.7.2-dev"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
