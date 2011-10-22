@@ -23,8 +23,11 @@ override_dh_auto_configure:
 	dh_auto_configure
 
 override_dh_auto_build:
-	for py in $(shell pyversions -r); do \
-		scons $(SCONS_FLAGS) PYTHON=/usr/bin/$$py ; \
+	set -e; \
+	for PYVER in $(shell pyversions -r); do \
+		scons $(SCONS_FLAGS) \
+		BOOST_PYTHON_LIB=`echo $$PYVER | sed 's/python\([0-9]\).\([0-9]\)/boost_python-py\1\2/'` \
+		PYTHON=`which $$PYVER`; \
 	done
 
 	dh_auto_build
