@@ -6,7 +6,9 @@ This is being tested on windows 7 64 bit.
 
 ## Gochas
 
-http://blogs.msdn.com/b/windowssdk/archive/2007/09/06/sdk-workaround.aspx
+VS 2008 `vcbuild` command is [broken on arrival](http://blogs.msdn.com/b/windowssdk/archive/2007/09/06/sdk-workaround.aspx)
+
+It complains about write-access. To fix it do:
 
     cd C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcpackages
     regsvr32 vcprojectengine.dll
@@ -14,8 +16,9 @@ http://blogs.msdn.com/b/windowssdk/archive/2007/09/06/sdk-workaround.aspx
 
 ## TODO
 
-Need proj4 nad files
-Patch from gnuwin32 segfaults
+ * Need proj4 nad files
+
+ * Patch from gnuwin32 segfaults
 
 
 ## Setup
