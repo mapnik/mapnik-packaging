@@ -1,0 +1,521 @@
+diff -rupN cairo-1.10.2/boilerplate/Makefile.sources cairo-fixed/boilerplate/Makefile.sources
+--- cairo-1.10.2/boilerplate/Makefile.sources	Mon Jul 12 09:57:04 2010
++++ cairo-fixed/boilerplate/Makefile.sources	Mon Oct 31 12:07:18 2011
+@@ -33,7 +33,8 @@ cairo_boilerplate_script_sources = cairo
+ cairo_boilerplate_skia_sources = cairo-boilerplate-skia.c
+ cairo_boilerplate_svg_sources = cairo-boilerplate-svg.c
+ cairo_boilerplate_test_surfaces_sources = cairo-boilerplate-test-surfaces.c
+-cairo_boilerplate_win32_sources = cairo-boilerplate-win32.c cairo-boilerplate-win32-printing.c
++cairo_boilerplate_win32_sources = cairo-boilerplate-win32.c
++cairo_boilerplate_win32_printing_sources = cairo-boilerplate-win32-printing.c
+ cairo_boilerplate_xcb_sources = cairo-boilerplate-xcb.c
+ cairo_boilerplate_xlib_headers = cairo-boilerplate-xlib.h
+ cairo_boilerplate_xlib_sources = cairo-boilerplate-xlib.c
+diff -rupN cairo-1.10.2/boilerplate/Makefile.win32 cairo-fixed/boilerplate/Makefile.win32
+--- cairo-1.10.2/boilerplate/Makefile.win32	Sun Jun 14 22:53:24 2009
++++ cairo-fixed/boilerplate/Makefile.win32	Mon Oct 31 12:07:18 2011
+@@ -11,10 +11,13 @@ HEADERS = \
+ 
+ SOURCES = \
+ 	$(enabled_cairo_boilerplate_sources) \
++	cairo-boilerplate-constructors.c \
+ 	$(NULL)
+ 
+ OBJECTS = $(patsubst %.c, $(CFG)/%-static.obj, $(SOURCES))
+ 
++cairo-boilerplate-constructors.c: Makefile.win32 $(enabled_cairo_boilerplate_sources) $(enabled_cairo_boilerplate_cxx_sources) make-cairo-boilerplate-constructors.sh
++	sh ./make-cairo-boilerplate-constructors.sh $(enabled_cairo_boilerplate_sources) $(enabled_cairo_boilerplate_cxx_sources) > $@
+ 
+ all: $(CFG)/boiler.lib
+ 
+diff -rupN cairo-1.10.2/boilerplate/Makefile.win32.features cairo-fixed/boilerplate/Makefile.win32.features
+--- cairo-1.10.2/boilerplate/Makefile.win32.features	Wed Aug 18 08:47:30 2010
++++ cairo-fixed/boilerplate/Makefile.win32.features	Mon Oct 31 12:07:18 2011
+@@ -139,6 +139,18 @@ enabled_cairo_boilerplate_cxx_sources +=
+ enabled_cairo_boilerplate_sources += $(cairo_boilerplate_win32_sources)
+ endif
+ 
++supported_cairo_boilerplate_headers += $(cairo_boilerplate_win32_printing_headers)
++all_cairo_boilerplate_headers += $(cairo_boilerplate_win32_printing_headers)
++all_cairo_boilerplate_private += $(cairo_boilerplate_win32_printing_private)
++all_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_win32_printing_cxx_sources)
++all_cairo_boilerplate_sources += $(cairo_boilerplate_win32_printing_sources)
++ifeq ($(CAIRO_CAN_TEST_WIN32_PRINTING_SURFACE),1)
++enabled_cairo_boilerplate_headers += $(cairo_boilerplate_win32_printing_headers)
++enabled_cairo_boilerplate_private += $(cairo_boilerplate_win32_printing_private)
++enabled_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_win32_printing_cxx_sources)
++enabled_cairo_boilerplate_sources += $(cairo_boilerplate_win32_printing_sources)
++endif
++
+ supported_cairo_boilerplate_headers += $(cairo_boilerplate_win32_font_headers)
+ all_cairo_boilerplate_headers += $(cairo_boilerplate_win32_font_headers)
+ all_cairo_boilerplate_private += $(cairo_boilerplate_win32_font_private)
+@@ -360,7 +372,7 @@ all_cairo_boilerplate_headers += $(cairo
+ all_cairo_boilerplate_private += $(cairo_boilerplate_ps_private)
+ all_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_ps_cxx_sources)
+ all_cairo_boilerplate_sources += $(cairo_boilerplate_ps_sources)
+-ifeq ($(CAIRO_HAS_PS_SURFACE),1)
++ifeq ($(CAIRO_CAN_TEST_PS_SURFACE),1)
+ enabled_cairo_boilerplate_headers += $(cairo_boilerplate_ps_headers)
+ enabled_cairo_boilerplate_private += $(cairo_boilerplate_ps_private)
+ enabled_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_ps_cxx_sources)
+@@ -372,7 +384,7 @@ all_cairo_boilerplate_headers += $(cairo
+ all_cairo_boilerplate_private += $(cairo_boilerplate_pdf_private)
+ all_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_pdf_cxx_sources)
+ all_cairo_boilerplate_sources += $(cairo_boilerplate_pdf_sources)
+-ifeq ($(CAIRO_HAS_PDF_SURFACE),1)
++ifeq ($(CAIRO_CAN_TEST_PDF_SURFACE),1)
+ enabled_cairo_boilerplate_headers += $(cairo_boilerplate_pdf_headers)
+ enabled_cairo_boilerplate_private += $(cairo_boilerplate_pdf_private)
+ enabled_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_pdf_cxx_sources)
+@@ -384,7 +396,7 @@ all_cairo_boilerplate_headers += $(cairo
+ all_cairo_boilerplate_private += $(cairo_boilerplate_svg_private)
+ all_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_svg_cxx_sources)
+ all_cairo_boilerplate_sources += $(cairo_boilerplate_svg_sources)
+-ifeq ($(CAIRO_HAS_SVG_SURFACE),1)
++ifeq ($(CAIRO_CAN_TEST_SVG_SURFACE),1)
+ enabled_cairo_boilerplate_headers += $(cairo_boilerplate_svg_headers)
+ enabled_cairo_boilerplate_private += $(cairo_boilerplate_svg_private)
+ enabled_cairo_boilerplate_cxx_sources += $(cairo_boilerplate_svg_cxx_sources)
+diff -rupN cairo-1.10.2/boilerplate/cairo-boilerplate-pdf.c cairo-fixed/boilerplate/cairo-boilerplate-pdf.c
+--- cairo-1.10.2/boilerplate/cairo-boilerplate-pdf.c	Sat Dec 25 14:21:34 2010
++++ cairo-fixed/boilerplate/cairo-boilerplate-pdf.c	Mon Oct 31 12:07:18 2011
+@@ -234,10 +234,8 @@ _cairo_boilerplate_pdf_force_fallbacks (
+     surface = (cairo_pdf_surface_t*) paginated->target;
+     surface->force_fallbacks = TRUE;
+ }
+-#endif
+ 
+ static const cairo_boilerplate_target_t targets[] = {
+-#if CAIRO_CAN_TEST_PDF_SURFACE
+     {
+ 	"pdf", "pdf", ".pdf", NULL,
+ 	CAIRO_SURFACE_TYPE_PDF,
+@@ -263,6 +261,6 @@ static const cairo_boilerplate_target_t 
+ 	_cairo_boilerplate_pdf_cleanup,
+ 	NULL, NULL, FALSE, TRUE, TRUE
+     },
+-#endif
+ };
+ CAIRO_BOILERPLATE (pdf, targets)
++#endif
+diff -rupN cairo-1.10.2/boilerplate/cairo-boilerplate-ps.c cairo-fixed/boilerplate/cairo-boilerplate-ps.c
+--- cairo-1.10.2/boilerplate/cairo-boilerplate-ps.c	Sat Dec 25 14:21:34 2010
++++ cairo-fixed/boilerplate/cairo-boilerplate-ps.c	Mon Oct 31 12:07:18 2011
+@@ -26,6 +26,8 @@
+ 
+ #include "cairo-boilerplate-private.h"
+ 
++#if CAIRO_CAN_TEST_PS_SURFACE
++
+ #include <cairo-ps.h>
+ 
+ #include <cairo-ps-surface-private.h>
+@@ -298,7 +300,6 @@ _cairo_boilerplate_ps_force_fallbacks (c
+ }
+ 
+ static const cairo_boilerplate_target_t targets[] = {
+-#if CAIRO_CAN_TEST_PS_SURFACE
+     {
+ 	"ps2", "ps", ".ps", NULL,
+ 	CAIRO_SURFACE_TYPE_PS,
+@@ -349,6 +350,6 @@ static const cairo_boilerplate_target_t 
+ 	_cairo_boilerplate_ps_cleanup,
+ 	NULL, NULL, FALSE, TRUE, TRUE
+     },
+-#endif
+ };
+ CAIRO_BOILERPLATE (ps, targets)
++#endif
+diff -rupN cairo-1.10.2/boilerplate/cairo-boilerplate-svg.c cairo-fixed/boilerplate/cairo-boilerplate-svg.c
+--- cairo-1.10.2/boilerplate/cairo-boilerplate-svg.c	Sat Dec 25 14:21:34 2010
++++ cairo-fixed/boilerplate/cairo-boilerplate-svg.c	Mon Oct 31 12:07:18 2011
+@@ -26,6 +26,8 @@
+ 
+ #include "cairo-boilerplate-private.h"
+ 
++#if CAIRO_CAN_TEST_SVG_SURFACE
++
+ #include <cairo-svg.h>
+ #include <cairo-svg-surface-private.h>
+ #include <cairo-paginated-surface-private.h>
+@@ -270,7 +272,6 @@ _cairo_boilerplate_svg_force_fallbacks (
+ }
+ 
+ static const cairo_boilerplate_target_t targets[] = {
+-#if CAIRO_CAN_TEST_SVG_SURFACE
+     /* It seems we should be able to round-trip SVG content perfectly
+      * through librsvg and cairo, but for some mysterious reason, some
+      * systems get an error of 1 for some pixels on some of the text
+@@ -324,6 +325,6 @@ static const cairo_boilerplate_target_t 
+ 	_cairo_boilerplate_svg_cleanup,
+ 	NULL, NULL, FALSE, TRUE, TRUE
+     },
+-#endif
+ };
+ CAIRO_BOILERPLATE (svg, targets)
++#endif
+diff -rupN cairo-1.10.2/boilerplate/cairo-boilerplate-win32-printing.c cairo-fixed/boilerplate/cairo-boilerplate-win32-printing.c
+--- cairo-1.10.2/boilerplate/cairo-boilerplate-win32-printing.c	Mon Jul 12 09:57:04 2010
++++ cairo-fixed/boilerplate/cairo-boilerplate-win32-printing.c	Mon Oct 31 12:07:18 2011
+@@ -36,6 +36,8 @@
+ 
+ #include "cairo-boilerplate-private.h"
+ 
++#if CAIRO_CAN_TEST_WIN32_PRINTING_SURFACE
++
+ #include <cairo-win32.h>
+ #include <cairo-win32-private.h>
+ #include <cairo-paginated-surface-private.h>
+@@ -343,7 +345,6 @@ _cairo_boilerplate_win32_printing_cleanu
+ }
+ 
+ static const cairo_boilerplate_target_t targets[] = {
+-#if CAIRO_CAN_TEST_WIN32_PRINTING_SURFACE
+     {
+ 	"win32-printing", "win32", ".ps", NULL,
+ 	CAIRO_SURFACE_TYPE_WIN32_PRINTING,
+@@ -367,6 +368,6 @@ static const cairo_boilerplate_target_t 
+ 	_cairo_boilerplate_win32_printing_cleanup,
+ 	NULL, NULL, FALSE, TRUE, TRUE
+     },
+-#endif
+ };
+ CAIRO_BOILERPLATE (win32_printing, targets)
++#endif
+diff -rupN cairo-1.10.2/build/Makefile.win32.common cairo-fixed/build/Makefile.win32.common
+--- cairo-1.10.2/build/Makefile.win32.common	Sun Jun 14 22:53:24 2009
++++ cairo-fixed/build/Makefile.win32.common	Tue Nov  1 10:22:28 2011
+@@ -1,71 +1,72 @@
+-default: all
+-
+-#
+-# Edit build/Makefile.win32.features to enable features to build
+-#
+-include $(top_srcdir)/build/Makefile.win32.features
+-
+-ifeq ($(top_builddir),)
+-top_builddir = $(top_srcdir)
+-endif
+-
+-CC := cl
+-LINK := link
+-
+-ifeq ($(CFG),debug)
+-MS_MDFLAGS := -MDd
+-MS_LDFLAGS := -LDd
+-OPT := -Od -Zi
+-else
+-MS_MDFLAGS := -MD
+-MS_LDFLAGS := -LD
+-OPT := -MD -O2
+-endif
+-
+-PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
+-PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
+-
+-CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+-ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
+-LIBPNG_CFLAGS += -I$(top_srcdir)/../libpng/
+-CAIRO_LIBS +=  $(top_builddir)/../libpng/libpng.lib
+-endif
+-ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
+-else
+-ZLIB_CFLAGS += -I$(top_srcdir)/../zlib/
+-CAIRO_LIBS += $(top_builddir)/../zlib/zdll.lib
+-endif
+-
+-DEFAULT_CFLAGS = -nologo $(MS_MDFLAGS) $(OPT)
+-DEFAULT_CFLAGS += -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+-DEFAULT_CFLAGS += -I. -I$(top_srcdir)
+-DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS)
+-
+-CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
+-
+-inform:
+-	@echo
+-ifneq ($(CFG),release)
+-ifneq ($(CFG),debug)
+-	@echo "Invalid configuration "$(CFG)" specified."
+-	@echo -n "You must specify a configuration when "
+-	@echo "running make, e.g. make CFG=debug"
+-	@echo
+-	@echo -n "Possible choices for configuration are "
+-	@echo "'release' and 'debug'"
+-	@exit 1
+-endif
+-endif
+-
+-# Some generic rules
+-
+-$(CFG)/%.obj: %.c
+-	@mkdir -p $(CFG)
+-	@$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
+-
+-$(CFG)/%-static.obj: %.c
+-	@mkdir -p $(CFG)
+-	@$(CC) $(CAIRO_CFLAGS) -c -DCAIRO_WIN32_STATIC_BUILD=1 -Fo"$@" $<
+-
+-clean:
+-	@rm -f $(CFG)/*.obj $(CFG)/*.dll $(CFG)/*.lib $(CFG)/*.pdb $(CFG)/*.ilk || exit 0
++default: all
++
++#
++# Edit build/Makefile.win32.features to enable features to build
++#
++include $(top_srcdir)/build/Makefile.win32.features
++
++ifeq ($(top_builddir),)
++top_builddir = $(top_srcdir)
++endif
++
++CC := cl
++LINK := link
++
++ifeq ($(CFG),debug)
++MS_MDFLAGS := -MDd
++MS_LDFLAGS := -LDd
++OPT := -Od -Zi
++else
++MS_MDFLAGS := -MD
++MS_LDFLAGS := -LD
++OPT := -MD -O2
++endif
++
++PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
++PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
++
++CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
++ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
++LIBPNG_CFLAGS += -I$(top_srcdir)/../libpng/
++CAIRO_LIBS +=  $(top_builddir)/../libpng/libpng.lib
++endif
++ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
++else
++ZLIB_CFLAGS += -I$(top_srcdir)/../zlib/
++CAIRO_LIBS += $(top_builddir)/../zlib/zlib.lib
++endif
++CAIRO_LIBS += $(top_builddir)/../freetype/freetype.lib
++
++DEFAULT_CFLAGS = -nologo $(MS_MDFLAGS) $(OPT)
++DEFAULT_CFLAGS += -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DDISABLE_SOME_FLOATING_POINT -D_BIND_TO_CURRENT_VCLIBS_VERSION -D_MT
++DEFAULT_CFLAGS += -I. -I$(top_srcdir)
++DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS)
++
++CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
++
++inform:
++	@echo
++ifneq ($(CFG),release)
++ifneq ($(CFG),debug)
++	@echo "Invalid configuration "$(CFG)" specified."
++	@echo -n "You must specify a configuration when "
++	@echo "running make, e.g. make CFG=debug"
++	@echo
++	@echo -n "Possible choices for configuration are "
++	@echo "'release' and 'debug'"
++	@exit 1
++endif
++endif
++
++# Some generic rules
++
++$(CFG)/%.obj: %.c
++	@mkdir -p $(CFG)
++	$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
++
++$(CFG)/%-static.obj: %.c
++	@mkdir -p $(CFG)
++	$(CC) $(CAIRO_CFLAGS) -c -DCAIRO_WIN32_STATIC_BUILD=1 -Fo"$@" $<
++
++clean:
++	@rm -f $(CFG)/*.obj $(CFG)/*.dll $(CFG)/*.lib $(CFG)/*.pdb $(CFG)/*.ilk || exit 0
+diff -rupN cairo-1.10.2/build/Makefile.win32.features cairo-fixed/build/Makefile.win32.features
+--- cairo-1.10.2/build/Makefile.win32.features	Wed Aug 18 08:47:30 2010
++++ cairo-fixed/build/Makefile.win32.features	Mon Oct 31 12:15:56 2011
+@@ -10,7 +10,7 @@ CAIRO_HAS_QUARTZ_SURFACE=0
+ CAIRO_HAS_QUARTZ_FONT=0
+ CAIRO_HAS_QUARTZ_IMAGE_SURFACE=0
+ CAIRO_HAS_WIN32_SURFACE=1
+-CAIRO_HAS_WIN32_FONT=1
++CAIRO_HAS_WIN32_FONT=0
+ CAIRO_HAS_SKIA_SURFACE=0
+ CAIRO_HAS_OS2_SURFACE=0
+ CAIRO_HAS_BEOS_SURFACE=0
+@@ -26,7 +26,7 @@ CAIRO_HAS_EGL_FUNCTIONS=0
+ CAIRO_HAS_GLX_FUNCTIONS=0
+ CAIRO_HAS_WGL_FUNCTIONS=0
+ CAIRO_HAS_SCRIPT_SURFACE=0
+-CAIRO_HAS_FT_FONT=0
++CAIRO_HAS_FT_FONT=1
+ CAIRO_HAS_FC_FONT=0
+ CAIRO_HAS_PS_SURFACE=1
+ CAIRO_HAS_PDF_SURFACE=1
+diff -rupN cairo-1.10.2/src/Makefile.sources cairo-fixed/src/Makefile.sources
+--- cairo-1.10.2/src/Makefile.sources	Sat Dec 25 14:21:34 2010
++++ cairo-fixed/src/Makefile.sources	Mon Oct 31 12:13:22 2011
+@@ -214,7 +214,7 @@ cairo_deflate_stream_sources = cairo-def
+ cairo_pdf_headers = cairo-pdf.h
+ cairo_pdf_private = cairo-pdf-surface-private.h
+ cairo_pdf_sources = cairo-pdf-surface.c
+-if CAIRO_HAS_PDF_SURFACE
++ifeq ($(CAIRO_HAS_PDF_SURFACE), 1)
+ req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
+ endif
+ 
+@@ -248,7 +248,7 @@ cairo_xlib_private = \
+ 	cairo-xlib-surface-private.h \
+ 	cairo-xlib-xrender-private.h \
+ 	$(NULL)
+-if BUILD_XLIB_XCB
++ifeq ($(BUILD_XLIB_XCB),1)
+ cairo_xlib_sources = cairo-xlib-xcb-surface.c
+ else
+ cairo_xlib_sources = \
+@@ -273,7 +273,7 @@ cairo_xcb_sources = \
+ 		    cairo-xcb-surface-core.c \
+ 		    cairo-xcb-surface-render.c \
+ 		    $(NULL)
+-if BUILD_XCB_SHM
++ifeq ($(BUILD_XCB_SHM), 1)
+ cairo_xcb_sources += \
+ 		    cairo-xcb-shm.c \
+ 		    cairo-xcb-connection-shm.c \
+@@ -322,7 +322,7 @@ cairo_gl_sources = cairo-gl-composite.c 
+ 		   cairo-gl-gradient.c \
+ 		   cairo-gl-shaders.c \
+ 		   cairo-gl-surface.c
+-if BUILD_PRIVATE_GLEW
++ifeq ($(BUILD_PRIVATE_GLEW),1)
+ cairo_gl_sources += glew/glew.c
+ endif
+ 
+@@ -373,7 +373,7 @@ cairo_drm_xr_sources = \
+ 
+ cairo_script_headers = cairo-script.h
+ cairo_script_sources = cairo-script-surface.c
+-if CAIRO_HAS_SCRIPT_SURFACE
++ifeq ($(CAIRO_HAS_SCRIPT_SURFACE), 1)
+ req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
+ endif
+ 
+@@ -383,7 +383,7 @@ cairo_tee_sources = cairo-tee-surface.c
+ 
+ cairo_xml_headers = cairo-xml.h
+ cairo_xml_sources = cairo-xml-surface.c
+-if CAIRO_HAS_XML_SURFACE
++ifeq ($(CAIRO_HAS_XML_SURFACE), 1)
+ req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
+ endif
+ 
+diff -rupN cairo-1.10.2/src/cairo-features.h cairo-fixed/src/cairo-features.h
+--- cairo-1.10.2/src/cairo-features.h	Thu Jan  1 00:00:00 1970
++++ cairo-fixed/src/cairo-features.h	Mon Oct 31 12:16:00 2011
+@@ -0,0 +1,14 @@
++/* Generated by Makefile.win32.  Do not edit. */
++#ifndef CAIRO_FEATURES_H
++#define CAIRO_FEATURES_H 1
++#define CAIRO_HAS_WIN32_SURFACE 1
++#define CAIRO_HAS_PNG_FUNCTIONS 1
++#define CAIRO_HAS_FT_FONT 1
++#define CAIRO_HAS_PS_SURFACE 1
++#define CAIRO_HAS_PDF_SURFACE 1
++#define CAIRO_HAS_SVG_SURFACE 1
++#define CAIRO_HAS_IMAGE_SURFACE 1
++#define CAIRO_HAS_RECORDING_SURFACE 1
++#define CAIRO_HAS_USER_FONT 1
++#define CAIRO_HAS_INTERPRETER 1
++#endif
+diff -rupN cairo-1.10.2/test/Makefile.win32 cairo-fixed/test/Makefile.win32
+--- cairo-1.10.2/test/Makefile.win32	Sat Dec 25 14:21:34 2010
++++ cairo-fixed/test/Makefile.win32	Mon Oct 31 12:07:18 2011
+@@ -14,18 +14,21 @@ TESTCORE_SOURCES = \
+ 
+ all: cairo-test-suite.exe
+ 
+-make-cairo-test-constructors.exe: $(CFG)/make-cairo-test-constructors.obj
+-	$(CC) $(OPT) $(MS_MDFLAGS) $(CFG)/make-cairo-test-constructors.obj -Fe"$@" -link $(LDFLAGS) user32.lib /NODEFAULTLIB:library
++cairo-test-constructors.c: Makefile.win32 $(test_sources) make-cairo-test-constructors.sh
++	sh ./make-cairo-test-constructors.sh $(test_sources) > $@
+ 
+-cairo-test-constructors.c: $(test_sources) make-cairo-test-constructors.exe
+-	./make-cairo-test-constructors.exe $(test_sources) > $@
++#make-cairo-test-constructors.exe: $(CFG)/make-cairo-test-constructors.obj
++#	$(CC) $(OPT) $(MS_MDFLAGS) $(CFG)/make-cairo-test-constructors.obj -Fe"$@" -link $(LDFLAGS) user32.lib /NODEFAULTLIB:library
++
++#cairo-test-constructors.c: $(test_sources) make-cairo-test-constructors.exe
++#	./make-cairo-test-constructors.exe $(test_sources) > $@
+ 
+ SOURCES = $(cairo_test_suite_sources) $(test_sources) cairo-test-constructors.c
+ 
+ OBJECTS = $(patsubst %.c, $(CFG)/%-static.obj, $(SOURCES))
+ 
+ cairo-test-suite.exe: $(OBJECTS) ./pdiff/pdiff.lib ../boilerplate/$(CFG)/boiler.lib
+-	$(CC) $(OPT) $(MS_MDFLAGS) $(OBJECTS) -Fe"$@" -link $(LDFLAGS) $(CAIRO_LIBS) /NODEFAULTLIB:library
++	$(CC) $(OPT) $(OBJECTS) -Fe"$@" -link $(LDFLAGS) $(CAIRO_LIBS)
+ 
+ ./pdiff/pdiff.lib:
+ 	(cd pdiff ; $(MAKE) -f Makefile.win32)
+diff -rupN cairo-1.10.2/test/cairo-test.c cairo-fixed/test/cairo-test.c
+--- cairo-1.10.2/test/cairo-test.c	Mon Jul 12 09:57:04 2010
++++ cairo-fixed/test/cairo-test.c	Mon Oct 31 12:07:18 2011
+@@ -75,6 +75,7 @@
+ #include <crtdbg.h>
+ #define vsnprintf _vsnprintf
+ #define access _access
++#define unlink _unlink
+ #define F_OK 0
+ #endif
+ 
+@@ -258,7 +259,7 @@ cairo_test_fini (cairo_test_context_t *c
+ 
+     cairo_boilerplate_fini ();
+ 
+-    cairo_debug_reset_static_data ();
++    //cairo_debug_reset_static_data ();
+ #if HAVE_FCFINI
+     FcFini ();
+ #endif
+diff -rupN cairo-1.10.2/test/cairo-test.h cairo-fixed/test/cairo-test.h
+--- cairo-1.10.2/test/cairo-test.h	Fri Jun 18 12:47:16 2010
++++ cairo-fixed/test/cairo-test.h	Mon Oct 31 12:07:18 2011
+@@ -50,6 +50,9 @@ typedef unsigned __int64 uint64_t;
+ # ifndef HAVE_UINT64_T
+ #  define HAVE_UINT64_T 1
+ # endif
++# ifndef UINT32_MAX
++#  define UINT32_MAX   0xFFFFFFFFUL
++# endif
+ #else
+ #error Cannot find definitions for fixed-width integral types (uint8_t, uint32_t, \etc.)
+ #endif
+diff -rupN cairo-1.10.2/test/pdiff/perceptualdiff.c cairo-fixed/test/pdiff/perceptualdiff.c
+--- cairo-1.10.2/test/pdiff/perceptualdiff.c	Fri Jun 18 12:47:24 2010
++++ cairo-fixed/test/pdiff/perceptualdiff.c	Mon Oct 31 12:07:18 2011
+@@ -17,7 +17,26 @@
+ */
+ 
+ #include <stdio.h>
++
++#if defined(_MSC_VER)
++typedef __int8 int8_t;
++typedef unsigned __int8 uint8_t;
++typedef __int16 int16_t;
++typedef unsigned __int16 uint16_t;
++typedef __int32 int32_t;
++typedef unsigned __int32 uint32_t;
++typedef __int64 int64_t;
++typedef unsigned __int64 uint64_t;
++# ifndef HAVE_UINT64_T
++#  define HAVE_UINT64_T 1
++# endif
++# ifndef UINT32_MAX
++#  define UINT32_MAX   0xFFFFFFFFUL
++# endif
++#else
+ #include <stdint.h>
++#endif
++
+ #include <string.h>
+ #include <math.h>
+ #include "lpyramid.h"
