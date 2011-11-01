@@ -8,19 +8,21 @@ This is being tested on windows 7 64 bit.
 
 http://blogs.msdn.com/b/windowssdk/archive/2007/09/06/sdk-workaround.aspx
 
- cd C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcpackages
- regsvr32 vcprojectengine.dll
- 
+    cd C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcpackages
+    regsvr32 vcprojectengine.dll
+
+
 ## TODO
 
 Need proj4 nad files
+Patch from gnuwin32 segfaults
 
 
 ## Setup
 
 Add gnuwin32 bin directory to your path:
 
-C:\Program Files (x86)\GnuWin32\bin
+    C:\Program Files (x86)\GnuWin32\bin
 
 Download Windows SDK:
 
@@ -93,8 +95,3 @@ Make sure these commands work (return usage):
 Now run the dependencies build script:
 
     build_mapnik_deps.bat
-
-
-dpaste errors:
-
-    curl -si -F 'content=<-' http://dpaste.com/api/v1/ | grep ^Location: | colrm 1 10
