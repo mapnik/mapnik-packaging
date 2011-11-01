@@ -4,8 +4,15 @@ This assumes a vanilla install of windows.
 
 This is being tested on windows 7 64 bit.
 
-## Gochas
+## Why VS 2008
 
+We use VS 2008 for several reasons:
+
+  * Python.org binaries (which we hope will work with mapnik python bindings) only work with VS 2008
+  * Boost does not play well yet with VS 2010 (conflicting boost::shared_ptr)
+
+## Gochas
+  
 VS 2008 `vcbuild` command is [broken on arrival](http://blogs.msdn.com/b/windowssdk/archive/2007/09/06/sdk-workaround.aspx)
 
 It complains about write-access. To fix it do:
