@@ -2,7 +2,7 @@
 
 *(Visual C++ express 2008 and 2010 32-bit)*
 
-Buiding Mapnik dependencies on windows can be tedious. The goal here is to provide
+Buiding dependencies on windows can be very tedious. The goal here is to provide
 consise instructions for building individual packages using both VC++ 2008 and 2010.
 Hopefully, this will allow fully automated builds in the future.
 
@@ -12,12 +12,12 @@ Hopefully, this will allow fully automated builds in the future.
 * GNU Unix tools (GnuWin32) 
 	  * [bsdtar](http://gnuwin32.sourceforge.net/packages/libarchive.htm) 
 	  * [make](http://gnuwin32.sourceforge.net/packages/make.htm)
-* [msysgit](http://code.google.com/p/msysgit/) - install Git to c:/Git to avoid issues with spaces in paths
+* [msysgit](http://code.google.com/p/msysgit/) - install into c:/Git to avoid issues with spaces in paths
 * unzip (from [msysgit](http://code.google.com/p/msysgit/))
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
 * sed (from [msysgit](http://code.google.com/p/msysgit/))
 * curl (from [msysgit](http://code.google.com/p/msysgit/))
-* cygwin (bash,make,ar ...) - to build ICU using vc++ 2008 FIXME!
+* [cygwin](http://www.cygwin.org) (bash,make,ar ...) - to build ICU using vc++ 2008 FIXME!
 
 ## Environment
 
@@ -46,7 +46,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	set ICU_VERSION=4.8
 	set LIBXML_VERSION=2.7.8
 	set LIBSIGC++_VERSION=
-	set CAIROMM_VERSION=
+	set CAIROMM_VERSION=1.10.0
     set SQLITE_VERSION=3070900
 	
 ## Download
@@ -263,27 +263,30 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 	cd libsigc++\MSVC_Net2010   
 	msbuild "libsigc++2.vcxproj" /t:Rebuild /p:Configuration="Release" /p:Platform=Win32
 	
-	
+
 	cd %ROOTDIR%
 
-
 ### cairomm
-	
+
+	bsdtar xvzf %PKGDIR%/cairomm-%CAIROMM_VERSION%.tar.gz
+	rename cairomm-%CAIROMM_VERSION% cairomm
+
 ##### VC++ 2008
 
 	set INCLUDE=%INCLUDE%;%ROOTDIR%\libsigc++;%ROOTDIR%\freetype\include;%ROOTDIR%\freetype\include\freetype;%ROOTDIR%\cairo\src
 	set LIB=%LIB%;%ROOTDIR%\cairo\src\release;%ROOTDIR%\libsigc++\MSVC_Net2008\Win32\Release
 	cd cairomm\MSVC_Net2008
 	vcbuild cairomm.sln /useenv "Release|Win32"	
-	
+
 ##### VC++ 2010
 
 TODO: add patch !!!
 
 	cd cairomm\MSVC_Net2010	   
 	msbuild cairomm.sln /p:Configuration="Release" /p:Platform=Win32
+	msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm_fixed" cairomm.sln
 	cd %ROOTDIR%
-	
+
 ### ltdl - TODO
 
 
