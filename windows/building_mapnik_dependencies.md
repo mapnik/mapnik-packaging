@@ -198,7 +198,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 
 ### LibXML2
-	
+
 	set LIBXML2_VERSION=2.7.8
 	curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
 	bsdtar xvfz %PKGDIR%\libxml2-%LIBXML2_VERSION%.tar.gz		
@@ -208,3 +208,33 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	nmake /f Makefile.msvc
 	cd %ROOTDIR%
 
+### Proj4
+	
+	set PROJ_VERSION=4.7.0 
+
+TODO: should we be using latest trunk, which has some threading fixes ??
+	
+	curl http://download.osgeo.org/proj/proj-4.7.0.tar.gz -O
+	bsdtar xvfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz 
+	rename proj-%PROJ_VERSION% proj
+	cd proj
+	nmake /f Makefile.vc
+	cd %ROOTDIR%	
+
+### GDAL
+
+	set GDAL_VERSION=1.8.1
+	curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
+	bsdtar xvfz %PKGDIR%\gdal-%GDAL_VERSION%.tar.gz		
+	rename gdal-%GDAL_VERSION% gdal
+	cd gdal
+
+##### VC++ 2008
+
+	nmake /f makefile.vc MSVC_VER=1500
+
+##### VC++ 2008
+
+	nmake /f makefile.vc MSVC_VER=1600
+ 
+	cd %ROOTDIR%
