@@ -11,13 +11,13 @@ Hopefully, this will allow fully automated builds in the future.
 * Visual C++ 2008 or 2010 Express
 * GNU Unix tools (GnuWin32) 
 	  * [bsdtar](http://gnuwin32.sourceforge.net/packages/libarchive.htm) 
-	  * [mnake](http://gnuwin32.sourceforge.net/packages/make.htm)
+	  * [make](http://gnuwin32.sourceforge.net/packages/make.htm)
 * [msysgit](http://code.google.com/p/msysgit/) - install Git to c:/Git to avoid issues with spaces in paths
 * unzip (from [msysgit](http://code.google.com/p/msysgit/))
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
 * sed (from [msysgit](http://code.google.com/p/msysgit/))
 * curl (from [msysgit](http://code.google.com/p/msysgit/))
-* cygwin -- *TODO*
+* cygwin (bash,make,ar ...) - to build ICU using vc++ 2008 FIXME!
 
 ## Environment
 
@@ -129,8 +129,8 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	cd postgresql\src
 	nmake /f win32.mak
 	cd %ROOTDIR%
-	
-	
+
+
 ### Tiff
 
 	set TIFF_VERSION=4.0.0beta7
@@ -209,11 +209,11 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	cd %ROOTDIR%
 
 ### Proj4
-	
+
 	set PROJ_VERSION=4.7.0 
 
 TODO: should we be using latest trunk, which has some threading fixes ??
-	
+
 	curl http://download.osgeo.org/proj/proj-4.7.0.tar.gz -O
 	bsdtar xvfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz 
 	rename proj-%PROJ_VERSION% proj
@@ -238,3 +238,4 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 	nmake /f makefile.vc MSVC_VER=1600
  
 	cd %ROOTDIR%
+
