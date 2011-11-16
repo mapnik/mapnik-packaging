@@ -239,3 +239,38 @@ TODO: should we be using latest trunk, which has some threading fixes ??
  
 	cd %ROOTDIR%
 
+
+### libsigc++
+
+##### VC++ 2008
+
+	cd libsigc++\MSVC_Net2008
+	vcbuild "libsigc++2.vcproj" "Release|Win32"
+
+##### VC++ 2010
+
+	cd libsigc++\MSVC_Net2010   
+	msbuild "libsigc++2.vcxproj" /t:Rebuild /p:Configuration="Release" /p:Platform=Win32
+	
+	
+	cd %ROOTDIR%
+
+
+### cairomm
+	
+##### VC++ 2008
+
+	set INCLUDE=%INCLUDE%;%ROOTDIR%\libsigc++;%ROOTDIR%\freetype\include;%ROOTDIR%\freetype\include\freetype;%ROOTDIR%\cairo\src
+	set LIB=%LIB%;%ROOTDIR%\cairo\src\release;%ROOTDIR%\libsigc++\MSVC_Net2008\Win32\Release
+	cd cairomm\MSVC_Net2008
+	vcbuild cairomm.sln /useenv "Release|Win32"	
+	
+##### VC++ 2010
+
+TODO: add patch !!!
+
+	cd cairomm\MSVC_Net2010	   
+	msbuild cairomm.sln /p:Configuration="Release" /p:Platform=Win32
+	cd %ROOTDIR%
+	
+### ltdl - TODO
