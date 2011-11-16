@@ -3,7 +3,7 @@
 *(Visual C++ express 2008 and 2010 32-bit)*
 
 Buiding dependencies on windows can be very tedious. The goal here is to provide
-consise instructions for building individual packages using both VC++ 2008 and 2010.
+concise instructions for building individual packages using both VC++ 2008 and 2010.
 Hopefully, this will allow fully automated builds in the future.
 
 ## Prerequisites
