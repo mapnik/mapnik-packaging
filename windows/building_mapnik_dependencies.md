@@ -31,6 +31,42 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	mkdir packages 
 	set PKGDIR=%ROOTDIR%/packages
 
+### Packages versions:
+
+	set ZLIB_VERSION=1.2.5
+	set LIBPNG_VERSION=1.5.6
+	set PIXMAN_VERSION=0.22.2
+	set CAIRO_VERSION=1.10.2
+	set JPEG_VERSION=8c
+	set FREETYPE_VERSION=2.4.7
+	set POSTGRESQL_VERSION=9.1.1
+	set TIFF_VERSION=4.0.0beta7
+	set PROJ_VERSION=4.7.0
+	set GDAL_VERSION=1.8.1
+	set ICU_VERSION=4.8
+	set LIBXML_VERSION=2.7.8
+	set LIBSIGC++_VERSION=
+	set CAIROMM_VERSION=
+    set SQLITE_VERSION=3070900
+	
+## Download
+
+	cd %PKGDIR%
+	curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
+	curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
+	curl http://ftp.de.postgresql.org/packages/databases/PostgreSQL/latest/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
+	curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-%LIBPNG_VERSION%.tar.gz -O
+	curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
+	curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
+	curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
+	curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
+	curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
+	curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
+	curl http://www.sqlite.org/sqlite-amalgamation-%SQLITE_VERSION%.zip -O
+	curl http://download.osgeo.org/proj/proj-%PROJ_VERSION%.tar.gz -O
+	
+	cd %ROOTDIR%
+	
 ## Building individual packages
 
 *NOTE: Some packages require different commands depending on the VC++ version.
@@ -39,8 +75,6 @@ for every build variant.*
 
 ### Jpeg
 
-	set JPEG_VERSION=8c
-	curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
 	unzip %PKGDIR%\jpegsr%JPEG_VERSIOB%.zip
 	rename jpeg-%JPEG_VERSIOB% jpeg
 	cd jpeg 
@@ -50,8 +84,6 @@ for every build variant.*
 
 ### Freetype 
 
-	set FREETYPE_VERSION=2.4.7
-	curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
 	bsdtar xvfz "%PKGDIR%\freetype-%FREETYPE_VERSION%.tar.gz"
 	rename freetype-%FREETYPE_VERSION% freetype
 	cd freetype
@@ -72,13 +104,8 @@ for every build variant.*
 
 zlib comes with old VC++ project files. Instead we use upgraded project file from libpng:
 
-	set ZLIB_VERSION=1.2.5
-	set LIBPNG_VERSION=1.5.6
-	curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-%LIBPNG_VERSION%.tar.gz -O
-	curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
 	bsdtar xvfz %PKGDIR%\libpng-%LIBPNG_VERSION%.tar.gz
 	rename libpng-%LIBPNG_VERSION% libpng
-
 
 	bsdtar xvfz %PKGDIR%\zlib-%ZLIB_VERSION%.tar.gz
 	rename zlib-%ZLIB_VERSION% zlib
@@ -95,7 +122,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 	vcupgrade zlib.vcproj
 	msbuild zlib.vcxproj /t:Rebuild /p:Configuration="LIB Release" /p:Platform=Win32
-
 
 	cd %ROOTDIR%\zlib
 	move projects\visualc71\Win32_LIB_Release\ZLib\zlib.lib zlib.lib
@@ -122,8 +148,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
    
 ### libpq (PostgreSQL C-interface)
 
-	set POSTGRESQL_VERSION=9.1.1
-	curl http://ftp.de.postgresql.org/packages/databases/PostgreSQL/latest/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
 	bsdtar xvfz "%PKGDIR%\postgresql-%POSTGRESQL_VERSION%.tar.gz"
 	rename postgresql-%POSTGRESQL_VERSION% postgresql
 	cd postgresql\src
@@ -133,8 +157,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ### Tiff
 
-	set TIFF_VERSION=4.0.0beta7
-	curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
 	bsdtar xvfz %PKGDIR%\tiff-%TIFF_VERSION%.tar.gz
 	rename tiff-%TIFF_VERSION% tiff
 	cd tiff
@@ -154,8 +176,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ### Pixman
 	
-	set PIXMAN_VERSION=0.22.2
-	curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
 	bsdtar xvfz %PKGDIR%\pixman-%PIXMAN_VERSION%.tar.gz
 	rename pixman-%PIXMAN_VERSION% pixman
 	cd pixman\pixman
@@ -164,7 +184,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	
 ### Cairo
 
-	set CAIRO_VERSION=1.10.2
 	bsdtar xvfz %PKGDIR%\cairo-%CAIRO_VERSION%.tar.gz
 	rename cairo-%CAIRO_VERSION% cairo
 	cd cairo 
@@ -179,8 +198,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	cd %ROOTDIR%
 
 ### ICU
-	
-	curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
+
 	bsdtar xvfz %PKGDIR%\icu4c-4_8_1_1-src.tgz
 
 ##### VC++ 2008
@@ -199,8 +217,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ### LibXML2
 
-	set LIBXML2_VERSION=2.7.8
-	curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
 	bsdtar xvfz %PKGDIR%\libxml2-%LIBXML2_VERSION%.tar.gz		
 	rename libxml2-%LIBXML2_VERSION% libxml2
 	cd libxml2\win32
@@ -209,12 +225,9 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	cd %ROOTDIR%
 
 ### Proj4
-
-	set PROJ_VERSION=4.7.0 
-
+	
 TODO: should we be using latest trunk, which has some threading fixes ??
 
-	curl http://download.osgeo.org/proj/proj-4.7.0.tar.gz -O
 	bsdtar xvfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz 
 	rename proj-%PROJ_VERSION% proj
 	cd proj
@@ -223,8 +236,6 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
 ### GDAL
 
-	set GDAL_VERSION=1.8.1
-	curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
 	bsdtar xvfz %PKGDIR%\gdal-%GDAL_VERSION%.tar.gz		
 	rename gdal-%GDAL_VERSION% gdal
 	cd gdal
@@ -274,3 +285,12 @@ TODO: add patch !!!
 	cd %ROOTDIR%
 	
 ### ltdl - TODO
+
+
+### sqlite 
+
+	unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
+	rename sqlite-amalgamation-%SQLITE_VERSION sqlite
+
+
+
