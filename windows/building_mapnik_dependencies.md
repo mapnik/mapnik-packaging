@@ -257,15 +257,16 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
 	cd libsigc++\MSVC_Net2008
 	vcbuild "libsigc++2.vcproj" "Release|Win32"
-
+	
 ##### VC++ 2010
 
 	cd libsigc++\MSVC_Net2010   
 	msbuild "libsigc++2.vcxproj" /t:Rebuild /p:Configuration="Release" /p:Platform=Win32
 	
-
+	
+	copy sigc++config.h %ROOTDIR%\libsigc++
 	cd %ROOTDIR%
-
+	
 ### cairomm
 
 	bsdtar xvzf %PKGDIR%/cairomm-%CAIROMM_VERSION%.tar.gz
