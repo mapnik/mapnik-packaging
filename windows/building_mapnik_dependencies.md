@@ -47,7 +47,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	set LIBXML_VERSION=2.7.8
 	set LIBSIGC++_VERSION=
 	set CAIROMM_VERSION=1.10.0
-    set SQLITE_VERSION=3070900
+        set SQLITE_VERSION=3070900
 	
 ## Download
 
@@ -59,6 +59,8 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
 	curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
 	curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
+	curl http://www.cairographics.org/releases/cairo-%CAIRO_VERSION%.tar.gz -O
+	curl http://www.cairographics.org/releases/cairomm-%CAIROMM_VERSION%.tar.gz -O
 	curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
 	curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
 	curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
