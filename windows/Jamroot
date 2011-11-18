@@ -110,7 +110,7 @@ build-project utils/shapeindex ;
 build-project utils/pgsql2sqlite ;
 
 # demo 
-# build-project demo/c++ ;
+build-project demo/c++ ;
 
 # install core lib and plugins
 

@@ -1,0 +1,13 @@
+MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location  $(MAPNIK_SOURCE)/demo/c++ ;
+
+exe rundemo :
+    rundemo.cpp
+    ../../src//mapnik2
+    ../..//thread
+    ../..//icu
+    ../..//cairo
+    ../..//cairomm
+    :
+    ;
+    
