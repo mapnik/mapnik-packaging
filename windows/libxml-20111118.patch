@@ -1,0 +1,24 @@
+--- win32/Makefile.msvc~	Wed Nov  9 19:31:32 2011
++++ win32/Makefile.msvc	Wed Nov  9 19:37:00 2011
+@@ -71,9 +71,9 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
+ !if "$(WITH_ICONV)" == "1"
+ LIBS = $(LIBS) iconv.lib
+ !endif 
+-+!if "$(WITH_ICU)" == "1"
+-+LIBS = $(LIBS) icu.lib
+-+!endif
++!if "$(WITH_ICU)" == "1"
++LIBS = $(LIBS) icuuc.lib
++!endif
+ !if "$(WITH_ZLIB)" == "1"
+ LIBS = $(LIBS) zdll.lib
+ !endif
+@@ -94,7 +94,7 @@ CFLAGS = $(CFLAGS) /D "_DEBUG" /Od /Z7
+ LDFLAGS = $(LDFLAGS) /DEBUG
+ !else
+ CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 
+-LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
++LDFLAGS = $(LDFLAGS)
+ !endif
+ 
+ # Libxml object files.
