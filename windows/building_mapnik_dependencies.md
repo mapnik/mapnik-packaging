@@ -12,7 +12,7 @@ Hopefully, this will allow fully automated builds in the future.
 * GNU Unix tools (GnuWin32) 
 	  * [bsdtar](http://gnuwin32.sourceforge.net/packages/libarchive.htm) 
 	  * [make](http://gnuwin32.sourceforge.net/packages/make.htm)
-* [msysgit](http://code.google.com/p/msysgit/) - install into c:/Git to avoid issues with spaces in paths
+* [msysgit](http://msysgit.googlecode.com/files/Git-1.7.7.1-preview20111027.exe) - install into c:/Git to avoid issues with spaces in paths
 * unzip (from [msysgit](http://code.google.com/p/msysgit/))
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
 * sed (from [msysgit](http://code.google.com/p/msysgit/))
@@ -25,7 +25,7 @@ We'll be using combination of "Visual Studio 2008 Command Prompt" (or "Visual St
 tools. Please, ensure PATH is setup correctly and GNU tools can be accessed from VC++ command prompt.
 The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 
-	set PATH=%PATH%;c:\Git\bin;c:\Cygwin\bin;c:\GnuWin32\bin
+	set PATH=%PATH%;c:\msysgit\msysgit\bin;c:\cygwin\bin;c:\GnuWin32\bin
 	set ROOTDIR=<mapnik_dependencies_dir>
 	cd %ROOTDIR%
 	mkdir packages 
@@ -44,13 +44,14 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	set PROJ_VERSION=4.7.0
 	set GDAL_VERSION=1.8.1
 	set ICU_VERSION=4.8
-	set LIBXML_VERSION=2.7.8
+	set LIBXML2_VERSION=2.7.8
 	set LIBSIGC++_VERSION=
 	set CAIROMM_VERSION=1.10.0
-    set SQLITE_VERSION=3070900
+	set SQLITE_VERSION=3070900
 	
 ## Download
 
+	wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
 	cd %PKGDIR%
 	curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
 	curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
@@ -59,6 +60,8 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
 	curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
 	curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
+	curl http://www.cairographics.org/releases/cairo-%CAIRO_VERSION%.tar.gz -O
+	curl http://www.cairographics.org/releases/cairomm-%CAIROMM_VERSION%.tar.gz -O
 	curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
 	curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
 	curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
@@ -75,8 +78,8 @@ for every build variant.*
 
 ### Jpeg
 
-	unzip %PKGDIR%\jpegsr%JPEG_VERSIOB%.zip
-	rename jpeg-%JPEG_VERSIOB% jpeg
+	unzip %PKGDIR%\jpegsr%JPEG_VERSION%.zip
+	rename jpeg-%JPEG_VERSION% jpeg
 	cd jpeg 
 	copy jconfig.txt jconfig.h
 	nmake /f Makefile.vc nodebug=1
@@ -209,8 +212,8 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ##### VC++ 2010
 
+	cd icu/
 	msbuild source\allinone\allinone.sln /t:Rebuild  /p:Configuration="Release" /p:Platform=Win32
-	
 	
 	cd %ROOTDIR%
 
