@@ -44,7 +44,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	set PROJ_VERSION=4.7.0
 	set GDAL_VERSION=1.8.1
 	set ICU_VERSION=4.8
-	set LIBXML_VERSION=2.7.8
+	set LIBXML2_VERSION=2.7.8
 	set LIBSIGC++_VERSION=
 	set CAIROMM_VERSION=1.10.0
 	set SQLITE_VERSION=3070900
@@ -212,8 +212,8 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ##### VC++ 2010
 
+	cd icu/
 	msbuild source\allinone\allinone.sln /t:Rebuild  /p:Configuration="Release" /p:Platform=Win32
-	
 	
 	cd %ROOTDIR%
 
