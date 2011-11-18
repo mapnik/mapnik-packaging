@@ -224,9 +224,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	rename libxml2-%LIBXML2_VERSION% libxml2
 	cd libxml2\win32
 	cscript configure.js compiler=msvc prefix=%ROOTDIR%\libxml2 iconv=no icu=yes include=%ROOTDIR%\icu\include lib=%ROOTDIR%\icu\lib
-	cd ..
-	patch  -p0 < libxml-20111118.patch
-	cd win32
+	patch  -p1 < libxml-20111118.patch
 	nmake /f Makefile.msvc
 	cd %ROOTDIR%
 
