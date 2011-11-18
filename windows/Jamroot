@@ -143,6 +143,12 @@ mapnik.install mapnik
     : $(fonts)
 ;
 
+# install c++ demo
+
+install demo : demo/c++//rundemo :
+	  <location>$(prefix)/demo/c++
+	;
+	
 #  python extensions
 if  [ python.configured ] 
 {
