@@ -47,10 +47,11 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 	set LIBXML_VERSION=2.7.8
 	set LIBSIGC++_VERSION=
 	set CAIROMM_VERSION=1.10.0
-        set SQLITE_VERSION=3070900
+	set SQLITE_VERSION=3070900
 	
 ## Download
 
+	wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
 	cd %PKGDIR%
 	curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
 	curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
