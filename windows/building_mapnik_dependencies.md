@@ -52,6 +52,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 ## Download
 
 	wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
+	wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml-20111118.patch --no-check-certificate
 	cd %PKGDIR%
 	curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
 	curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
@@ -224,7 +225,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 	rename libxml2-%LIBXML2_VERSION% libxml2
 	cd libxml2\win32
 	cscript configure.js compiler=msvc prefix=%ROOTDIR%\libxml2 iconv=no icu=yes include=%ROOTDIR%\icu\include lib=%ROOTDIR%\icu\lib
-	patch  -p1 < libxml-20111118.patch
+	patch  -p1 < ..\libxml-20111118.patch
 	nmake /f Makefile.msvc
 	cd %ROOTDIR%
 
