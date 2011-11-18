@@ -25,7 +25,7 @@ We'll be using combination of "Visual Studio 2008 Command Prompt" (or "Visual St
 tools. Please, ensure PATH is setup correctly and GNU tools can be accessed from VC++ command prompt.
 The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 
-	set PATH=%PATH%;c:\Git\bin;c:\Cygwin\bin;c:\GnuWin32\bin
+	set PATH=%PATH%;c:\msysgit\msysgit\bin;c:\cygwin\bin;c:\GnuWin32\bin
 	set ROOTDIR=<mapnik_dependencies_dir>
 	cd %ROOTDIR%
 	mkdir packages 
@@ -75,8 +75,8 @@ for every build variant.*
 
 ### Jpeg
 
-	unzip %PKGDIR%\jpegsr%JPEG_VERSIOB%.zip
-	rename jpeg-%JPEG_VERSIOB% jpeg
+	unzip %PKGDIR%\jpegsr%JPEG_VERSION%.zip
+	rename jpeg-%JPEG_VERSION% jpeg
 	cd jpeg 
 	copy jconfig.txt jconfig.h
 	nmake /f Makefile.vc nodebug=1
