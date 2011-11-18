@@ -12,7 +12,7 @@ Hopefully, this will allow fully automated builds in the future.
 * GNU Unix tools (GnuWin32) 
 	  * [bsdtar](http://gnuwin32.sourceforge.net/packages/libarchive.htm) 
 	  * [make](http://gnuwin32.sourceforge.net/packages/make.htm)
-* [msysgit](http://code.google.com/p/msysgit/) - install into c:/Git to avoid issues with spaces in paths
+* [msysgit](http://msysgit.googlecode.com/files/Git-1.7.7.1-preview20111027.exe) - install into c:/Git to avoid issues with spaces in paths
 * unzip (from [msysgit](http://code.google.com/p/msysgit/))
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
 * sed (from [msysgit](http://code.google.com/p/msysgit/))
