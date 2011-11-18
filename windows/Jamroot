@@ -1,0 +1,163 @@
+import type ;
+import os ;
+import modules ;
+import feature ;
+import path ;
+import python ; 
+import mapnik ;
+	
+type.register MAPNIK_PLUGIN : :  SHARED_LIB ;
+type.set-generated-target-suffix MAPNIK_PLUGIN : : input ;
+type.set-generated-target-prefix MAPNIK_PLUGIN : : "" ;
+
+BOOST_INCLUDES = [ modules.peek : BOOST_INCLUDES ] ;
+MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+
+echo "Building Mapnik on " [ os.name ] "..." ;
+echo "dependecies dir:" $(MAPNIK_DEPS_DIR) ;
+
+project mapnik
+    : source-location ../
+    : requirements
+	<include>$(MAPNIK_SOURCE)/include
+      	<include>$(MAPNIK_SOURCE)/deps/agg/include 
+	<include>$(BOOST_INCLUDES)
+	<include>$(MAPNIK_DEPS_DIR)/icu/include
+	<include>$(MAPNIK_DEPS_DIR)/ltdl
+      	<include>$(MAPNIK_DEPS_DIR)/freetype/include
+	<include>$(MAPNIK_DEPS_DIR)/proj/src
+	<include>$(MAPNIK_DEPS_DIR)/libpng
+	<include>$(MAPNIK_DEPS_DIR)/zlib
+	<include>$(MAPNIK_DEPS_DIR)/jpeg
+	<include>$(MAPNIK_DEPS_DIR)/tiff/libtiff	
+	<include>$(MAPNIK_DEPS_DIR)/libxml/include
+	<include>$(MAPNIK_DEPS_DIR)/cairo/src
+	<include>$(MAPNIK_DEPS_DIR)/cairomm
+	<include>$(MAPNIK_DEPS_DIR)/libsigc++
+	<threading>multi
+	<variant>debug:<define>MAPNIK_DEBUG
+	<define>MAPNIK_THREADSAFE
+	<define>HAVE_LIBXML2
+	<define>HAVE_JPEG
+	<define>HAVE_CAIRO
+	#<define>_HAS_CPP0X=0
+	#<define>LIBXML_STATIC
+	<toolset>gcc:<cxxflags>-fno-strict-aliasing 
+	<toolset>msvc:<define>_WINDOWS
+	<toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+	<toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS	
+    : default-build release
+    : build-dir build
+    ;
+
+# use-project /boost : $(BOOST_ROOT) ;
+# alias headers : : : : <include>include ;
+
+# boost libraries
+
+alias thread : /site-config//thread : <link>static ;
+alias filesystem : /site-config//filesystem : <link>static ;
+alias regex : /site-config//regex : <link>static ;
+alias python : /site-config//python : <link>shared ;
+alias program_options : /site-config//program_options : <link>static ;
+
+alias z : /site-config//z : <link>static ;
+alias png : /site-config//png : <link>static ;
+alias jpeg : /site-config//jpeg : <link>static ;
+alias tiff : /site-config//tiff : <link>static ;
+alias freetype2 : /site-config//freetype2 : <link>static ;
+alias cairo : /site-config//cairo : <link>shared ;	
+alias cairomm : /site-config//cairomm : <link>shared ;	
+alias ltdl : /site-config//ltdl : <link>static ;
+alias proj : /site-config//proj : <link>static ;
+alias icu  : /site-config//icu : <link>shared ;
+alias pq : /site-config//pq : <link>static ;
+alias wsock : /site-config//wsock : <link>static ;
+alias ws2 : /site-config//ws2 : <link>static ;
+alias advapi : /site-config//advapi : <link>static ;
+alias shfolder : /site-config//shfolder : <link>static ;
+alias secur : /site-config//secur : <link>static ;
+alias xml2 : /site-config//xml2 : <link>shared ;
+alias gdal : /site-config//gdal : <link>shared ;
+alias odbc : /site-config//odbc : <link>static ;
+alias odbccp : /site-config//odbccp : <link>static ;
+alias user : /site-config//user : <link>static ;
+
+# local with-pgsql = [ MATCH --with-pgsql=(.*) : [ modules.peek : ARGV ] ] ;
+local with-pgsql = [ option.get with-pgsql : "" ] ;
+if $(with-pgsql)
+{
+   # using pgsql : $(with-pgsql[1]) ;	
+   echo "--with-pgsql="$(with-pgsql) ; 	
+}
+
+
+# core library
+build-project src ;
+
+# input plug-ins
+build-project plugins/input/shape ;
+build-project plugins/input/sqlite ;
+build-project plugins/input/ogr ;
+build-project plugins/input/raster ;
+build-project plugins/input/postgis ;
+build-project plugins/input/gdal ;
+
+# utils
+
+build-project utils/shapeindex ;
+build-project utils/pgsql2sqlite ;
+
+# demo 
+# build-project demo/c++ ;
+
+# install core lib and plugins
+
+local prefix = [ option.get prefix : "" ] ;
+    
+if ! $(prefix)
+{
+    if [ modules.peek : NT ] { prefix = C:\\$(name) ; }
+    else if [ modules.peek : UNIX ] { prefix = /usr/local ; }        
+}
+
+local headers = [ path.glob-tree $(MAPNIK_SOURCE)/include/mapnik : *.hpp ] ;    
+#echo $(headers) ;
+local fonts = [ path.glob-tree $(MAPNIK_SOURCE)/fonts : *.ttf ] ;
+#echo $(fonts) ;
+
+mapnik.install mapnik
+    : $(MAPNIK_SOURCE)
+    : <install-dir>$(prefix)
+    : utils/shapeindex
+      utils/pgsql2sqlite
+    : src 
+    : $(headers)
+    : plugins/input/shape
+      plugins/input/sqlite
+      plugins/input/raster	
+      plugins/input/postgis
+      plugins/input/gdal
+      plugins/input/ogr
+    : $(fonts)
+;
+
+#  python extensions
+if  [ python.configured ] 
+{
+    build-project bindings/python ;
+    local python-root =  "c:/Python27" ;  #[ python.root ] ;
+    local python-version = "2.7" ; #[ python.python-version $(python-root)/bin/python ] ;
+    local python_bindings_dir = $(prefix)/python/$(python-version)/site-packages/mapnik2 ;
+    echo "Will install Python bindings into " $(python_bindings_dir) ;
+    install install-python
+        : bindings/python
+    	: <location>$(python_bindings_dir)
+   	;
+}
+else 
+{
+    ECHO "Python is not configured" ;
+    ECHO "Mapnik.Python library won't be built" ;
+}

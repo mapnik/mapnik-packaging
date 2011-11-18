@@ -1,0 +1,26 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/utils/pgsql2sqlite ;
+local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+
+exe pgsql2sqlite :
+    main.cpp
+    sqlite.cpp
+    ../..//src
+    ../..//program_options
+    ../..//pq
+    ../..//wsock
+    ../..//ws2
+    ../..//advapi
+    ../..//shfolder
+    ../..//secur
+    ../../../thirdparty/sqlite/sqlite3.c
+    :
+    <include>$(MAPNIK_SOURCE)/plugins/input/postgis
+    <include>$(MAPNIK_DEPS_DIR)/sqlite
+    <include>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libpq
+    <include>$(MAPNIK_DEPS_DIR)/postgresql/src/include	
+    <define>SQLITE_ENABLE_RTREE=1
+    <toolset>msvc:<define>_WINDOWS
+    <toolset>msvc:<define>MAPNIK_EXPORTS
+    ;
+

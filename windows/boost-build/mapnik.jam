@@ -1,0 +1,62 @@
+import option ;
+import property ;
+import stage ;
+import os ;
+
+rule install ( name : source_dir : requirements * : binaries * : libraries * : headers * : plugins * : fonts * )
+{     
+    
+    # local platform = [ SHELL "uname -m" : exit-status ] ;
+    # echo "[" $(platform) "]" ;
+    local lib_dir_schema = "lib" ;
+    
+    # if "x86_64" in [ SHELL "uname -m" : exit-status ]
+    # {
+    #    lib_dir_schema = "lib64" ;
+    #}
+    #else 
+    #{
+    #   lib_dir_schema = "lib" ;
+    #}
+    echo "lib_dir_schema="$(lib_dir_schema) ;
+
+    local install-dir
+        = [ property.select <install-dir> : $(requirements) ] ;
+        
+    $(install-dir) ?= /usr/local ;
+    install-dir = $(install-dir:G=) ;
+    requirements = [ property.change $(requirements) : <install-dir> ] ;
+    
+    # headers
+    stage.install $(name)-headers 
+        : $(headers)
+        : $(requirements) <location>$(install-dir)/include/mapnik
+	  <install-source-root>$(source_dir)/include/mapnik
+        ;
+
+    # install mapnik core lib
+    stage.install $(name)-lib : 
+        $(libraries) 
+        : $(requirements) <location>$(install-dir)/$(lib_dir_schema) 
+          <install-dependencies>on <install-type>SHARED_LIB
+        ;
+    # install utilities
+    stage.install $(name)-bin : 
+        $(binaries) 
+        : $(requirements) <location>$(install-dir)/bin 
+	<install-type>EXE
+        ;
+    
+    # install input plug-ins
+    stage.install $(name)-plugins : 
+        $(plugins) 
+        : $(requirements) <location>$(install-dir)/$(lib_dir_schema)/$(name)/input 
+        ;
+    
+    # install fonts
+    stage.install $(name)-fonts :
+	$(fonts)
+	: $(requirements) <location>$(install-dir)/$(lib_dir_schema)/$(name)/fonts 
+	;       	
+}
+

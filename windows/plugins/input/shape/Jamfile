@@ -1,0 +1,19 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/plugins/input/shape ;
+
+mapnik-plugin shape
+    : dbfile.cpp
+      shape_datasource.cpp
+      shape_featureset.cpp
+      shape_index_featureset.cpp
+      shape_io.cpp
+      ../../..//src
+      ../../..//thread  
+      ../../..//icu
+    : 
+      <include>.
+      <link>shared
+      <toolset>msvc:<define>_WINDOWS
+      <toolset>msvc:<define>MAPNIK_IMPORTS
+      <toolset>msvc:<define>SHAPE_MEMORY_MAPPED_FILE
+    ;

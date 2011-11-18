@@ -1,0 +1,23 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/plugins/input/postgis ;
+local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+mapnik-plugin postgis
+	: [ glob *.cpp ]
+	../../..//src
+	../../..//thread
+	../../..//icu
+	../../..//pq
+	../../..//wsock
+	../../..//ws2
+	../../..//advapi
+	../../..//shfolder
+	../../..//secur
+	:
+	<include>.
+	<include>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libpq
+	<include>$(MAPNIK_DEPS_DIR)/postgresql/src/include	
+     	<link>shared
+	<variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
+      	<toolset>msvc:<define>_WINDOWS
+      	<toolset>msvc:<define>MAPNIK_IMPORTS
+    	;

@@ -1,0 +1,9 @@
+MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/deps/agg ;
+
+lib agg 
+    : [ glob src/*.cpp ] 
+    : <include>include 
+      <link>static 
+      <toolset>gcc:<cxxflags>-fPIC 
+    ;

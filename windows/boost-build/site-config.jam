@@ -1,0 +1,58 @@
+# Copyright 2002, 2003 Vladimir Prus 
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt) 
+
+import project ;
+import modules ;
+project.initialize $(__name__) ;
+project site-config ;
+
+# configure your system libraries here!
+local BOOST_LIBS = [ modules.peek : BOOST_LIBS ] ;
+
+local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+
+lib z : : <name>zlib <search>$(MAPNIK_DEPS_DIR)/zlib ;
+lib png : z : <name>libpng <search>$(MAPNIK_DEPS_DIR)/libpng ;
+lib jpeg : : <name>libjpeg <search>$(MAPNIK_DEPS_DIR)/jpeg ;
+lib tiff : : <name>libtiff <search>$(MAPNIK_DEPS_DIR)/tiff/libtiff ;
+lib icu : : <name>icuuc <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
+lib xml2 : : <name>libxml2 <search>$(MAPNIK_DEPS_DIR)/libxml/win32/bin.msvc ;
+lib freetype2 : : <name>freetype <search>$(MAPNIK_DEPS_DIR)/freetype ;
+lib ltdl : : <name>libltdl <search>$(MAPNIK_DEPS_DIR)/ltdl/bin/msvc/release/link-static/threading-multi ;
+lib proj : : <name>proj <search>$(MAPNIK_DEPS_DIR)/proj/src ;
+lib pq : : <name>libpq <search>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libpq/Release  ;
+
+# Cairo
+lib cairo : : <name>cairo <search>$(MAPNIK_DEPS_DIR)/cairo/src/release ;
+lib cairomm : : <name>cairomm-vc90-1_0 <search>$(MAPNIK_DEPS_DIR)/cairomm/MSVC_Net2008/cairomm/Win32/Release ;
+#lib cairomm : : <name>cairomm-vc100-1_0 <search>$(MAPNIK_DEPS_DIR)/cairomm/MSVC_Net2010/cairomm/Win32/Release ;
+
+lib gdal : : <name>gdal <search>$(MAPNIK_DEPS_DIR)/gdal ;
+
+# win32 libs
+lib wsock : : <name>wsock32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
+lib ws2 : : <name>ws2_32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
+lib advapi : : <name>advapi32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
+lib shfolder : : <name>shfolder <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;		
+lib secur : : <name>secur32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;		
+lib odbc : : <name>odbc32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
+lib odbccp : : <name>odbccp32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
+lib user : : <name>user32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
+
+# boost libs
+lib thread : : <variant>release <name>libboost_thread-vc90-mt-1_47 <search>$(BOOST_LIBS) ;
+lib thread : : <variant>debug <name>libboost_thread-vc90-mt-gd-1_47 <search>$(BOOST_LIBS) ;
+
+lib filesystem : : <variant>release <name>libboost_filesystem-vc90-mt-1_47 <search>$(BOOST_LIBS) ;
+lib filesystem : : <variant>debug <name>libboost_filesystem-vc90-mt-gd-1_47 <search>$(BOOST_LIBS) ;
+
+lib regex : : <variant>release <name>libboost_regex-vc90-mt-1_47 <search>$(BOOST_LIBS) ;
+lib regex : : <variant>debug  <name>libboost_regex-vc90-mt-gd-1_47 <search>$(BOOST_LIBS) ;
+
+lib program_options : : <variant>release <name>libboost_program_options-vc90-mt-1_47 <search>$(BOOST_LIBS) ;
+lib program_options : : <variant>debug <name>libboost_program_options-vc90-mt-gd-1_47 <search>$(BOOST_LIBS) ;
+
+lib python : : <variant>release <name>boost_python-vc90-mt-1_47 <search>$(BOOST_LIBS) ;
+lib python : : <variant>debug <name>boost_python-vc90-mt-gd-1_47 <search>$(BOOST_LIBS) ;
+

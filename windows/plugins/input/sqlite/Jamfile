@@ -1,0 +1,18 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/plugins/input/sqlite ;
+local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+
+mapnik-plugin sqlite
+    : [ glob *.cpp ]
+      ../../..//src
+      ../../..//thread  
+      ../../..//icu
+      $(MAPNIK_DEPS_DIR)/sqlite/sqlite3.c
+    : 
+      <include>.
+      <include>$(MAPNIK_DEPS_DIR)/sqlite
+      <link>shared
+      <define>SQLITE_ENABLE_RTREE=1
+      <toolset>msvc:<define>_WINDOWS
+      <toolset>msvc:<define>MAPNIK_IMPORTS
+    ;  

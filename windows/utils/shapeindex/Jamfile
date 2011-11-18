@@ -1,0 +1,17 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/utils/shapeindex ;
+
+exe shapeindex :
+	shapeindex.cpp
+	$(MAPNIK_SOURCE)/plugins/input/shape/shape_io.cpp
+	$(MAPNIK_SOURCE)/plugins/input/shape/shape_datasource.cpp
+	$(MAPNIK_SOURCE)/plugins/input/shape/shape_featureset.cpp
+	$(MAPNIK_SOURCE)/plugins/input/shape/shape_index_featureset.cpp
+	$(MAPNIK_SOURCE)/plugins/input/shape/dbfile.cpp
+	../../src//mapnik2
+	../..//program_options
+	../..//icu
+	:
+	<include>$(MAPNIK_SOURCE)/plugins/input/shape
+	;
+
