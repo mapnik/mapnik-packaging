@@ -24,14 +24,14 @@ project mapnik
       	<include>$(MAPNIK_SOURCE)/deps/agg/include 
 	<include>$(BOOST_INCLUDES)
 	<include>$(MAPNIK_DEPS_DIR)/icu/include
-	<include>$(MAPNIK_DEPS_DIR)/ltdl
+	<include>ltdl
       	<include>$(MAPNIK_DEPS_DIR)/freetype/include
 	<include>$(MAPNIK_DEPS_DIR)/proj/src
 	<include>$(MAPNIK_DEPS_DIR)/libpng
 	<include>$(MAPNIK_DEPS_DIR)/zlib
 	<include>$(MAPNIK_DEPS_DIR)/jpeg
 	<include>$(MAPNIK_DEPS_DIR)/tiff/libtiff	
-	<include>$(MAPNIK_DEPS_DIR)/libxml/include
+	<include>$(MAPNIK_DEPS_DIR)/libxml2/include
 	<include>$(MAPNIK_DEPS_DIR)/cairo/src
 	<include>$(MAPNIK_DEPS_DIR)/cairomm
 	<include>$(MAPNIK_DEPS_DIR)/libsigc++
@@ -69,7 +69,7 @@ alias tiff : /site-config//tiff : <link>static ;
 alias freetype2 : /site-config//freetype2 : <link>static ;
 alias cairo : /site-config//cairo : <link>shared ;	
 alias cairomm : /site-config//cairomm : <link>shared ;	
-alias ltdl : /site-config//ltdl : <link>static ;
+# alias ltdl : /site-config//ltdl : <link>static ;
 alias proj : /site-config//proj : <link>static ;
 alias icu  : /site-config//icu : <link>shared ;
 alias pq : /site-config//pq : <link>static ;
@@ -92,9 +92,9 @@ if $(with-pgsql)
    echo "--with-pgsql="$(with-pgsql) ; 	
 }
 
-
 # core library
 build-project src ;
+
 
 # input plug-ins
 build-project plugins/input/shape ;

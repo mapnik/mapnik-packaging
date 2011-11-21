@@ -1,0 +1,7 @@
+lib ltdl :
+	ltdl.c
+	: <link>static
+	  <define>HAVE_CONFIG_H
+	  <define>_CRT_SECURE_NO_WARNINGS
+	  <define>__WINDOWS__
+	;

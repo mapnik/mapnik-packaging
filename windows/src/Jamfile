@@ -98,7 +98,7 @@ lib mapnik2
       	..//jpeg
       	..//tiff
       	..//freetype2
-      	..//ltdl
+      	../ltdl//ltdl
         ..//proj
 	..//icu
 	..//xml2
