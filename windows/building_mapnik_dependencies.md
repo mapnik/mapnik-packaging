@@ -52,7 +52,9 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 ## Download
 
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
+    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairomm-1.10.0-vc10-20111121.patch --no-check-certificate   
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml-20111118.patch --no-check-certificate
+    	 
     cd %PKGDIR%
     curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
     curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
@@ -290,14 +292,11 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
 ##### VC++ 2010
 
-TODO: add patch !!!
-
-    cd cairomm\MSVC_Net2010    
-    msbuild cairomm.sln /p:Configuration="Release" /p:Platform=Win32
-    msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm_fixed" cairomm.sln
+    cd cairomm
+    patch -p1 < cairomm-1.10.0-vc10-20111121.patch 
+    cd MSVC_Net2010    
+    msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm-fixed" cairomm.sln
     cd %ROOTDIR%
-
-### ltdl - TODO
 
 
 ### sqlite 
