@@ -78,12 +78,6 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 To avoid run-time clashes, it is a good idea to have a separate %ROOTDIR% 
 for every build variant.*
 
-### boost
-
-    bootstrap.bat
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-python --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu install release link=static 
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared
-
 ### Jpeg
 
     unzip %PKGDIR%\jpegsr%JPEG_VERSION%.zip
@@ -305,15 +299,20 @@ TODO: add patch !!!
 
 ### ltdl - TODO
 
-	
+
 ### sqlite 
 
-	* NOTE: there's no build step for sqlite, we simply unzip 
-	  and rename dir *
+*NOTE: there's no build step for sqlite, we simply unzip archive and rename dir*
 
-    unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
+	unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
     rename sqlite-amalgamation-%SQLITE_VERSION sqlite
-	
-	
+
+
+### boost
+
+    bootstrap.bat
+    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-python --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu install release link=static 
+    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared
+
 
 
