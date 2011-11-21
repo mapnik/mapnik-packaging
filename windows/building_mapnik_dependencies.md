@@ -293,7 +293,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 ##### VC++ 2010
 
     cd cairomm
-    patch -p1 < cairomm-1.10.0-vc10-20111121.patch 
+    patch -p1 < ..\cairomm-1.10.0-vc10-20111121.patch 
     cd MSVC_Net2010    
     msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm-fixed" cairomm.sln
     cd %ROOTDIR%
