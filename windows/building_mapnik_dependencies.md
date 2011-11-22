@@ -303,8 +303,8 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
 *NOTE: there's no build step for sqlite, we simply unzip archive and rename dir*
 
-	unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
-    rename sqlite-amalgamation-%SQLITE_VERSION sqlite
+    unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
+    rename sqlite-amalgamation-%SQLITE_VERSION% sqlite
 
 
 ### boost
