@@ -63,7 +63,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
     curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
     curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
-    curl http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2/libsigc++-%LIBSIGC++_VERSION%.tar.bz2 -O
+    curl http://caesar.acc.umu.se/pub/GNOME/sources/libsigc++/2.2/libsigc++-%LIBSIGC++_VERSION%.tar.bz2 -O
     curl http://www.cairographics.org/releases/cairo-%CAIRO_VERSION%.tar.gz -O
     curl http://www.cairographics.org/releases/cairomm-%CAIROMM_VERSION%.tar.gz -O
     curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
