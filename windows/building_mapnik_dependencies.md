@@ -48,6 +48,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set LIBSIGC++_VERSION=2.2.10
     set CAIROMM_VERSION=1.10.0
     set SQLITE_VERSION=3070900
+    set BOOST_VERSION=48
     
 ## Download
 
@@ -56,6 +57,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml-20111118.patch --no-check-certificate
     	 
     cd %PKGDIR%
+    curl http://iweb.dl.sourceforge.net/project/boost/boost/1.%BOOST_VERSION%.0/boost_1_%BOOST_VERSION%_0.tar.gz -O
     curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
     curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
     curl http://ftp.de.postgresql.org/packages/databases/PostgreSQL/latest/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
@@ -309,6 +311,9 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
 ### boost
 
+    bsdtar xvzf %PKGDIR%/boost_1_%BOOST_VERSION%_0.tar.gz
+    rename boost_1_%BOOST_VERSION%_0 boost
+    cd boost
     bootstrap.bat
     bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-python --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu install release link=static 
     bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared
