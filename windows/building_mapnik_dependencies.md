@@ -53,8 +53,8 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 ## Download
 
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
-    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairomm-1.10.0-vc10-20111121.patch --no-check-certificate
-    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml-20111118.patch --no-check-certificate
+    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairomm-1.10.0-vc10.patch --no-check-certificate
+    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml.patch --no-check-certificate
 
     cd %PKGDIR%
     curl http://iweb.dl.sourceforge.net/project/boost/boost/1.%BOOST_VERSION%.0/boost_1_%BOOST_VERSION%_0.tar.gz -O
@@ -230,7 +230,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     rename libxml2-%LIBXML2_VERSION% libxml2
     cd libxml2\win32
     cscript configure.js compiler=msvc prefix=%ROOTDIR%\libxml2 iconv=no icu=yes include=%ROOTDIR%\icu\include lib=%ROOTDIR%\icu\lib
-    patch  -p1 < ..\libxml-20111118.patch
+    patch  -p1 < ..\libxml.patch
     nmake /f Makefile.msvc
     cd %ROOTDIR%
 
@@ -294,7 +294,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 ##### VC++ 2010
 
     cd cairomm
-    patch -p1 < ..\cairomm-1.10.0-vc10-20111121.patch
+    patch -p1 < ..\cairomm-1.10.0-vc10.patch
     cd MSVC_Net2010
     msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm-fixed" cairomm.sln
     cd %ROOTDIR%
