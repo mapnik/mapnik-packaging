@@ -275,7 +275,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
     msbuild "libsigc++2.vcxproj" /t:Rebuild /p:Configuration="Release" /p:Platform=Win32
     
     
-    copy sigc++config.h %ROOTDIR%\libsigc++
+    copy "sigc++config.h" "%ROOTDIR%\libsigc++"
     cd %ROOTDIR%
 
 ### cairomm
