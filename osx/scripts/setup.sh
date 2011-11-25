@@ -335,40 +335,40 @@ scons PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig -j2 install BINDINGS=''
 
 # 2.5
 rm bindings/python/*os
-rm bindings/python/mapnik/_mapnik2.so
+rm bindings/python/mapnik/_mapnik.so
 scons configure BINDINGS=python PYTHON=/usr/bin/python2.5 BOOST_PYTHON_LIB=boost_python25
 scons -j2 install
-cp bindings/python/mapnik/_mapnik2.so osx/python/_mapnik2_25.so
+cp bindings/python/mapnik/_mapnik.so osx/python/_mapnik_25.so
 
 # 2.6
 rm bindings/python/*os
-rm bindings/python/mapnik/_mapnik2.so
+rm bindings/python/mapnik/_mapnik.so
 scons configure BINDINGS=python PYTHON=/usr/bin/python2.6 BOOST_PYTHON_LIB=boost_python26
 scons -j2 install
-cp bindings/python/mapnik/_mapnik2.so osx/python/_mapnik2_26.so
+cp bindings/python/mapnik/_mapnik.so osx/python/_mapnik_26.so
 
 # 2.7
 rm bindings/python/*os
-rm bindings/python/mapnik/_mapnik2.so
+rm bindings/python/mapnik/_mapnik.so
 scons configure BINDINGS=python PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7 BOOST_PYTHON_LIB=boost_python27
 scons -j2 install
-cp bindings/python/mapnik/_mapnik2.so osx/python/_mapnik2_27.so
+cp bindings/python/mapnik/_mapnik.so osx/python/_mapnik_27.so
 
 
 # 3.1
 # needs patch: http://trac.mapnik.org/wiki/Python3k
 rm bindings/python/*os
-rm bindings/python/mapnik/_mapnik2.so
+rm bindings/python/mapnik/_mapnik.so
 scons configure BINDINGS=python PYTHON=/Library/Frameworks/Python.framework/Versions/3.1/bin/python3.1 BOOST_PYTHON_LIB=boost_python31
 scons -j2 install
-cp bindings/python/mapnik/_mapnik2.so osx/python/_mapnik2_31.so
+cp bindings/python/mapnik/_mapnik.so osx/python/_mapnik_31.so
 
 # 3.2
 rm bindings/python/*os
-rm bindings/python/mapnik/_mapnik2.so
+rm bindings/python/mapnik/_mapnik.so
 scons configure BINDINGS=python PYTHON=/Library/Frameworks/Python.framework/Versions/3.2/bin/python3.2m BOOST_PYTHON_LIB=boost_python32
 scons -j2 install
-cp bindings/python/mapnik/_mapnik2.so osx/python/_mapnik2_32.so
+cp bindings/python/mapnik/_mapnik.so osx/python/_mapnik_32.so
 
 
 
@@ -413,7 +413,7 @@ export PATH=/Library/Frameworks/Mapnik.framework/Programs:$PATH
 #  OBJ="build/default/src/$VER/_mapnik_1.o"
 #  TARGET="lib/$VER/_mapnik.node"
 #  g++ $CXXFLAGS -I$NODE_PREFIX/include/node src/_mapnik.cc -c -o $OBJ
-#  LDFLAGS="-L/Library/Frameworks/Mapnik.framework/Versions/2.0/unix/lib -lmapnik2 -bundle -#undefined dynamic_lookup"
+#  LDFLAGS="-L/Library/Frameworks/Mapnik.framework/Versions/2.0/unix/lib -lmapnik -bundle -#undefined dynamic_lookup"
 #  g++ $OBJ -o $TARGET $LDFLAGS
 #done
 

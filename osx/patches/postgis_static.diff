@@ -14,7 +14,7 @@ Index: plugins/input/postgis/SConscript
 +ldflags += ' -framework CoreFoundation'
  
  if env['PLATFORM'] == 'Darwin':
-     libraries.append('mapnik2')
+     libraries.append('mapnik')
 @@ -41,7 +45,7 @@
      if env['THREADING'] == 'multi':
          libraries.append('boost_thread%s' % env['BOOST_APPEND'])
@@ -23,4 +23,4 @@ Index: plugins/input/postgis/SConscript
 +input_plugin = plugin_env.SharedLibrary('../postgis', source=postgis_src, SHLIBPREFIX='', SHLIBSUFFIX='.input', LIBS=libraries, LINKFLAGS=ldflags)
  
  if env['PLATFORM'] == 'Darwin':
-     # if the plugin links to libmapnik2 ensure it is built first
+     # if the plugin links to libmapnik ensure it is built first
