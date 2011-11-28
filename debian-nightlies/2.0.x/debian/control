@@ -1,4 +1,4 @@
-Source: mapnik2
+Source: mapnik
 Priority: optional
 Maintainer: Mapnik Developers <mapnik-devel@lists.berlios.de>
 Uploaders: Robert Coup <robert@coup.net.nz>
@@ -37,7 +37,7 @@ Section: libs
 XS-Python-Version: >= 2.5
 Homepage: http://www.mapnik.org/
 
-Package: libmapnik2
+Package: libmapnik
 Architecture: any
 Depends:
  ${shlibs:Depends},
@@ -59,13 +59,13 @@ Description: C++/Python toolkit for developing GIS applications (libraries)
  .
  This package contains the shared library and input plugins.
 
-Package: libmapnik2-dev
+Package: libmapnik-dev
 Section: libdevel
 Architecture: any
 Depends:
  ${misc:Depends},
- libmapnik2 (= ${binary:Version}),
- mapnik2-utils (= ${binary:Version}),
+ libmapnik (= ${binary:Version}),
+ mapnik-utils (= ${binary:Version}),
  libc6-dev | libc-dev,
  libboost-thread-dev (>= 1.42),
  libboost-filesystem-dev (>= 1.42) ,
@@ -91,7 +91,7 @@ Depends:
  libsqlite3-dev,
  libcurl4-gnutls-dev,
  libsigc++-2.0-dev
-Recommends: mapnik2-doc
+Recommends: mapnik-doc
 Description: C++/Python toolkit for developing GIS applications (devel)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
  (Geographic Information Systems) applications. At the core is a C++
@@ -108,7 +108,7 @@ Description: C++/Python toolkit for developing GIS applications (devel)
  This package contains the development headers, API documentation, and
  build utilities.
 
-Package: mapnik2-utils
+Package: mapnik-utils
 Section: utils
 Architecture: any
 Depends:
@@ -133,7 +133,7 @@ Description: C++/Python toolkit for developing GIS applications (utilities)
  .
  shapeindex: program to creates file system based index for ESRI shape-files
 
-Package: python-mapnik2
+Package: python-mapnik
 Section: python
 Architecture: any
 Depends:
@@ -158,10 +158,10 @@ Description: C++/Python toolkit for developing GIS applications (Python)
  .
  This package contains the Python bindings.
 
-Package: mapnik2-doc
+Package: mapnik-doc
 Section: doc
 Architecture: all
-Recommends: libmapnik2-dev
+Recommends: libmapnik-dev
 Depends: ${misc:Depends}
 Conflicts: mapnik-docs
 Replaces: mapnik-docs
