@@ -21,8 +21,8 @@ PPAS["2.0.x"]="ppa:mapnik/nightly-2.0"
 
 # Package names, keys are branches
 declare -A PACKAGES
-PACKAGES["master"]="mapnik2"
-PACKAGES["2.0.x"]="mapnik2"
+PACKAGES["master"]="mapnik"
+PACKAGES["2.0.x"]="mapnik"
 PACKAGES["0.7.2-dev"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)

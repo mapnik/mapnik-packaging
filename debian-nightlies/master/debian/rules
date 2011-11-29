@@ -5,7 +5,7 @@
 export DH_VERBOSE=1
 
 # scons flags
-SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,csv CAIRO=True PROJ_INCLUDES=/usr/include PROJ_LIBS=/usr/lib SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu XMLPARSER=libxml2 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr LIB_DIR_NAME=/mapnik2
+SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,csv CAIRO=True PROJ_INCLUDES=/usr/include PROJ_LIBS=/usr/lib SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu XMLPARSER=libxml2 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr LIB_DIR_NAME=/mapnik
 
 CFLAGS = -Wall -g
 
@@ -44,7 +44,7 @@ override_dh_auto_clean:
 	find -name '*.pyc' -exec rm -f {} \;
 	find -name '.sconsign*' -exec rm -f {} \;
 	find -name '*.o' -exec rm -f {} \;
-	rm -rf .sconf_temp config.log bindings/python/mapnik2/paths.py \
+	rm -rf .sconf_temp config.log bindings/python/mapnik/paths.py \
 		utils/shapeindex/shapeindex config.py config.cache \
 		docs/api_docs/python/*
 
