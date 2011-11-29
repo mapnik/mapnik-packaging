@@ -236,10 +236,15 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ### Proj4
 
-TODO: should we be using latest trunk, which has some threading fixes ??
+#### Official release
 
     bsdtar xvfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz 
     rename proj-%PROJ_VERSION% proj
+
+#### Latest trunk (threading fixes)
+
+    svn co http://svn.osgeo.org/metacrs/proj/trunk/proj
+
     cd proj
     nmake /f Makefile.vc
     cd %ROOTDIR%
