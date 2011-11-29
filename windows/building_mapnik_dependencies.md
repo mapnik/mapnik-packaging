@@ -254,7 +254,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
     nmake /f makefile.vc MSVC_VER=1500
 
-##### VC++ 2008
+##### VC++ 2010
 
     nmake /f makefile.vc MSVC_VER=1600
  
@@ -314,6 +314,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
     rename boost_1_%BOOST_VERSION%_0 boost
     cd boost
     bootstrap.bat
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu install release link=static
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared
+    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu -sICU_LINK=..\\icu\\lib\\icuuc.lib release link=static install
+    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared install
 
+    
