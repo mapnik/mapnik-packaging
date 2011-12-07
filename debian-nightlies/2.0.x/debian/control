@@ -4,6 +4,7 @@ Maintainer: Mapnik Developers <mapnik-devel@lists.berlios.de>
 Uploaders: Robert Coup <robert@coup.net.nz>
 Build-Depends:
  scons,
+ git-core,
  python-support (>= 0.8.4),
  debhelper (>= 7.0.50~),
  python-all-dev,
