@@ -31,8 +31,7 @@ Build-Depends:
  python-cairo-dev,
  libsqlite3-dev,
  libcurl4-gnutls-dev,
- libsigc++-2.0-dev,
- python-epydoc
+ libsigc++-2.0-dev
 Standards-Version: 3.8.4
 Section: libs
 XS-Python-Version: >= 2.5
