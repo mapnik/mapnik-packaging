@@ -11,6 +11,10 @@ DEST="mapnik" # the launchpad account name
 GPGKEY=80B52FF1
 DEBFULLNAME="Robert Coup (Mapnik Nightly Builds)"
 DEBEMAIL="robert+mapniknightly@coup.net.nz"
+#GPGKEY=89DBC525
+#DEBFULLNAME="Dane Springmeyer (Mapnik Nightly Builds)"
+#DEBEMAIL="dane.springmeyer@gmail.com"
+
 
 # Branches to build
 # branch keys here should match the build directory structure (./foo/svn/, ./foo/debian/)
@@ -34,7 +38,7 @@ PACKAGES["0.7.2-dev"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="lucid maverick natty oneiric"
+DISTS="lucid maverick natty oneiric precise"
 
 ######### Shouldn't need to edit anything past here #########
 
