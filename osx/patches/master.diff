@@ -11,18 +11,9 @@ index cae93d6..53d88e6 100644
  
  #include <boost/regex/icu.hpp>
 diff --git a/src/build.py b/src/build.py
-index 927cda4..60308ad 100644
+index 927cda4..9b92885 100644
 --- a/src/build.py
 +++ b/src/build.py
-@@ -52,7 +52,7 @@ libmapnik_cxxflags = copy(lib_env['CXXFLAGS'].data)
- ABI_VERSION = env['ABI_VERSION']
- 
- filesystem = 'boost_filesystem%s' % env['BOOST_APPEND']
--regex = 'boost_regex%s' % env['BOOST_APPEND']
-+regex = 'boost_regex%s-mapnik' % env['BOOST_APPEND']
- system = 'boost_system%s' % env['BOOST_APPEND']
- 
- # clear out and re-set libs for this env
 @@ -73,6 +73,7 @@ if env['THREADING'] == 'multi':
  if env['RUNTIME_LINK'] == 'static':
      if 'icuuc' in env['ICU_LIB_NAME']:
