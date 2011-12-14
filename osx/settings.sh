@@ -1,4 +1,5 @@
-export ROOTDIR=`pwd`
+
+export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # settings
 export MAPNIK_INSTALL=/opt/mapnik
