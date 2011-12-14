@@ -1,28 +1,12 @@
+# TODO
+# postgres/postgis from source
+
 # build notes for compiling mapnik deps statically
 # and "FAT" (aka. universal) in order to allow
 # linking a fully standalone libmapnik.a
 
-PREFIX=`pwd`/osx/sources
-mkdir -p $PREFIX
-export DYLD_LIBRARY_PATH=$PREFIX/lib
-export DYLD_LIBRARY_PATH=$PREFIX/lib
-export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
-export PATH=$PREFIX/bin:$PATH
-export CORE_CFLAGS="-O3 -arch x86_64 -arch i386 -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
-export CORE_CXXFLAGS=$CORE_CFLAGS
-export CORE_LDFLAGS="-Wl,-search_paths_first -arch x86_64 -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"
-export ARCHFLAGS="-arch x86_64 -arch i386"
-# universal flags
-export CFLAGS=$CORE_CFLAGS
-export CXXFLAGS=$CORE_CXXFLAGS
-export LDFLAGS=$CORE_LDFLAGS
 
-
-cd osx
-mkdir -p deps
-cd deps
-
-
+# ICU
 # icucore headers - temporary workaround until I can get more recent icu versions working
 #wget http://www.opensource.apple.com/tarballs/ICU/ICU-400.38.tar.gz
 #tar xvf ICU-400.38.tar.gz
@@ -31,8 +15,7 @@ cd deps
 #cp -R build/usr/local/include/unicode/ ../../sources/include/unicode
 #cd ../
 
-wget http://download.icu-project.org/files/icu4c/4.8.1/icu4c-4_8_1-src.tgz
-tar xvf icu4c-4_8_1-src.tgz
+tar xvf icu4c-${ICU_VERSION2)-src.tgz
 export CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
 
 #-DU_USING_ICU_NAMESPACE=0
@@ -40,9 +23,16 @@ export CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
 #-DUNISTR_FROM_CHAR_EXPLICIT=explicit -DUNISTR_FROM_STRING_EXPLICIT=explicit
 export CXXFLAGS=$CFLAGS
 cd icu/source
-./configure --prefix=$PREFIX --disable-samples --enable-static \
---enable-release --disable-shared --with-library-bits=64 \
---with-data-packaging=archive --disable-icuio --disable-tests --disable-layout \
+./configure --prefix=${BUILD} \
+--disable-samples \
+--enable-static \
+--enable-release \
+--disable-shared \
+--with-library-bits=64 \
+--with-data-packaging=archive \
+--disable-icuio \
+--disable-tests \
+--disable-layout \
 --disable-extras \
 --enable-rpath
 
@@ -65,23 +55,16 @@ cd icubuild
 --disable-extras \
 --enable-rpath
 
-
-install: ../icu4c-trunk/../license.html: No such file or directory
-make[1]: *** [install-icu] Error 71
-make: *** [install-recursive] Error 2
-
-
 make install -k -i
 
 make -j6 && make install
 
 # boost
-wget http://voxel.dl.sourceforge.net/project/boost/boost/1.47.0/boost_1_47_0.tar.bz2
-tar xjvf boost_1_47_0.tar.bz2
-cd boost_1_47_0
+tar xjvf boost_${BOOST_VERSION2}.tar.bz2
+cd boost_${BOOST_VERSION2}
 ./bootstrap.sh
 
-./bjam --prefix=$PREFIX -j2 -d2 \
+./bjam --prefix=${BUILD} -j2 -d2 \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
@@ -93,10 +76,10 @@ cd boost_1_47_0
   architecture=x86 \
   link=static \
   variant=release \
-  -sICU_PATH=$PREFIX \
+  -sICU_PATH=${BUILD} \
   stage
 
-./bjam --prefix=$PREFIX -j2 -d2 \
+./bjam --prefix=${BUILD} -j2 -d2 \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
@@ -108,10 +91,10 @@ cd boost_1_47_0
   architecture=x86 \
   link=static \
   variant=release \
-  -sICU_PATH=$PREFIX \
+  -sICU_PATH=${BUILD} \
   install
 
-./bjam --prefix=$PREFIX -j2 -d2 \
+./bjam --prefix=${BUILD} -j2 -d2 \
   --with-python \
   toolset=darwin \
   macosx-version=10.6 \
@@ -124,82 +107,7 @@ cd boost_1_47_0
 cd ../
 
 
-# sqlite
-wget http://www.sqlite.org/sqlite-autoconf-3070800.tar.gz
-tar xvf sqlite-autoconf-3070800.tar.gz
-cd sqlite-autoconf-3070800
-export CFLAGS="-DSQLITE_ENABLE_RTREE=1 -O3 "$CFLAGS
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
-make -j4
-make install
-cd ../
 
-
-# freetype
-# http://download.savannah.gnu.org/releases/freetype/
-wget http://savannah.spinellicreations.com/freetype/freetype-2.4.7.tar.bz2
-tar xvf freetype-2.4.7.tar.bz2
-cd freetype-2.4.7
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
-make -j4
-make install
-cd ../
-
-# proj4
-wget http://download.osgeo.org/proj/proj-datumgrid-1.5.zip
-#wget http://download.osgeo.org/proj/proj-4.7.0.tar.gz
-#tar xvf proj-4.7.0.tar.gz
-#cd proj-4.7.0
-# we use trunk instead for better threading support
-svn co http://svn.osgeo.org/metacrs/proj/trunk/proj proj-trunk # at the time pre-release 4.8.0
-cd proj-trunk/nad
-unzip ../../proj-datumgrid-1.5.zip
-cd ../
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
-make -j4
-make install
-cd ../
-
-# libpng
-wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.5.tar.gz
-tar xvf libpng-1.5.5.tar.gz
-cd libpng-1.5.5
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
-make -j4
-make install
-cd ../
-
-# libjpeg
-wget http://www.ijg.org/files/jpegsrc.v8c.tar.gz
-tar xvf jpegsrc.v8c.tar.gz
-cd jpeg-8c
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
-make -j4
-make install
-cd ../
-
-# libtiff
-wget http://download.osgeo.org/libtiff/tiff-3.9.5.tar.gz
-tar xvf tiff-3.9.5.tar.gz
-cd tiff-3.9.5
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking
-make -j4
-make install
-cd ../
-
-# gettext which provides libintl for libpq
-wget http://ftp.gnu.org/pub/gnu/gettext/gettext-0.18.1.1.tar.gz
-tar xvf gettext-0.18.1.1.tar.gz
-cd gettext-0.18.1.1
-export CC=gcc
-export CXX=g++
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking \
---without-included-gettext --disable-debug --without-included-glib \
---without-included-libcroco  --without-included-libxml \
---without-emacs --without-git --without-cvs
-make -j4
-make install
-cd ../
 
 
 # postgis
@@ -211,33 +119,7 @@ cp /usr/local/pgsql/lib/libpq.a osx/sources/lib/libpq.a
 
 
 # gdal 1.8.1
-wget http://download.osgeo.org/gdal/gdal-1.8.1.tar.gz
-tar xvf gdal-1.8.1.tar.gz
-cd gdal-1.8.1
-./configure --prefix=$PREFIX --enable-static --disable-shared --disable-dependency-tracking \
---with-libtiff=$PREFIX \
---with-jpeg=$PREFIX \
---with-png=$PREFIX \
---with-static-proj4=$PREFIX \
---with-sqlite3=no \
---with-spatialite=no \
---with-curl=no \
---with-geos=no \
---with-pcraster=no \
---with-cfitsio=no \
---with-odbc=no \
---with-libkml=no \
---with-pcidsk=no \
---with-jasper=no \
---with-gif=no \
---with-pg=no \
---with-hide-internal-symbols=yes \
---with-vfk=no \
---with-grib=no
 
-make -j4
-make install
-cd ../
 
 
 # cairo and friends
@@ -245,46 +127,46 @@ cd ../
 # pkg-config so we get cairo and friends configured correctly
 # note: we use 0.25 because >= 0.26 no long bundles glib and we don't
 # want to have to depend on an external glib dep
-wget http://pkgconfig.freedesktop.org/releases/pkg-config-0.25.tar.gz
-tar xvf pkg-config-0.25.tar.gz
-cd pkg-config-0.25
+
+tar xvf pkg-config-${PKG_CONFIG_VERSION}.tar.gz
+cd pkg-config-${PKG_CONFIG_VERSION}
 # patch glib.h
 # change line 198 to:
 #      ifndef G_INLINE_FUNC inline
-./configure --disable-debug --disable-dependency-tracking --prefix=$PREFIX
-make -j4
+./configure --disable-debug --disable-dependency-tracking --prefix=${BUILD}
+make -j${JOBS}
 make install
 cd ../
 
 # pixman
-wget http://cairographics.org/releases/pixman-0.22.2.tar.gz
-tar xvf pixman-0.22.2.tar.gz
-cd pixman-0.22.2
-./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=$PREFIX
-make -j4
+
+tar xvf pixman-${PIXMAN_VERSION}.tar.gz
+cd pixman-${PIXMAN_VERSION}
+./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD}
+make -j${JOBS}
 make install
 cd ../
 
 # fontconfig
-wget http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.8.0.tar.gz
-tar xvf fontconfig-2.8.0.tar.gz
-cd fontconfig-2.8.0
-./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=$PREFIX \
-    --with-freetype-config=$PREFIX/bin/freetype-config
-make -j4
+
+tar xvf fontconfig-${FONTCONFIG_VERSION}.tar.gz
+cd fontconfig-${FONTCONFIG_VERSION}
+./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD} \
+    --with-freetype-config=${BUILD}/bin/freetype-config
+make -j${JOBS}
 make install
 cd ../
 
 
 # cairo
-wget http://cairographics.org/releases/cairo-1.10.2.tar.gz
-tar xvf cairo-1.10.2.tar.gz
-cd cairo-1.10.2
+
+tar xvf cairo-${CAIRO_VERSION}.tar.gz
+cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
-export LDFLAGS="-L$PREFIX/lib "$CORE_LDFLAGS
-export CFLAGS="-I$PREFIX/include "$CORE_CFLAGS
-export png_CFLAGS="-I$PREFIX/include"
-export png_LIBS="-I$PREFIX/lib -lpng"
+export LDFLAGS="-L${BUILD}/lib "$CORE_LDFLAGS
+export CFLAGS="-I${BUILD}/include "$CORE_CFLAGS
+export png_CFLAGS="-I${BUILD}/include"
+export png_LIBS="-I${BUILD}/lib -lpng"
 ./configure \
   --enable-static --disable-shared \
   --enable-pdf=yes \
@@ -327,36 +209,36 @@ export png_LIBS="-I$PREFIX/lib -lpng"
   --enable-xcb-shm=no \
   --enable-xcb-drm=no \
   --disable-dependency-tracking \
-  --prefix=$PREFIX
-make -j4
+  --prefix=${BUILD}
+make -j${JOBS}
 make install
 cd ../
 
 
 # libsigcxx
-wget http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2/libsigc++-2.2.10.tar.bz2
-tar xvf libsigc++-2.2.10.tar.bz2
-cd libsigc++-2.2.10
+
+tar xvf libsigc++-${SIGCPP_VERSION2}.tar.bz2
+cd libsigc++-${SIGCPP_VERSION2}
 export CFLAGS=$CORE_CFLAGS
 export CXXFLAGS=$CORE_CXXFLAGS
 export LDFLAGS=$CORE_LDFLAGS
-./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=$PREFIX
-make -j4
+./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD}
+make -j${JOBS}
 make install
 cd ../
 
 # cairomm
-wget http://cairographics.org/releases/cairomm-1.10.0.tar.gz
-tar xvf cairomm-1.10.0.tar.gz
-cd cairomm-1.10.0
+
+tar xvf cairomm-${CAIROMM_VERSION}.tar.gz
+cd cairomm-${CAIROMM_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
-export LDFLAGS="-L$PREFIX/lib -lcairo -lfontconfig -lsigc-2.0 "$CORE_LDFLAGS
-export CFLAGS="-I$PREFIX/include -I$PREFIX/include/cairo -I$PREFIX/include/freetype2 -I$PREFIX/include/fontconfig -I$PREFIX/lib/sigc++-2.0/include -I$PREFIX/include/sigc++-2.0 -I$PREFIX/include/sigc++-2.0/sigc++ "$CORE_CFLAGS
-export CXXFLAGS="-I$PREFIX/include "$CFLAGS
+export LDFLAGS="-L${BUILD}/lib -lcairo -lfontconfig -lsigc-2.0 "$CORE_LDFLAGS
+export CFLAGS="-I${BUILD}/include -I${BUILD}/include/cairo -I${BUILD}/include/freetype2 -I${BUILD}/include/fontconfig -I${BUILD}/lib/sigc++-2.0/include -I${BUILD}/include/sigc++-2.0 -I${BUILD}/include/sigc++-2.0/sigc++ "$CORE_CFLAGS
+export CXXFLAGS="-I${BUILD}/include "$CFLAGS
 
 ./configure --enable-static --disable-shared \
-    --disable-dependency-tracking --prefix=$PREFIX
-make -j4
+    --disable-dependency-tracking --prefix=${BUILD}
+make -j${JOBS}
 make install
 cd ../
 

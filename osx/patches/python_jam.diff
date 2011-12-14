@@ -1,0 +1,23 @@
+--- tools/build/v2/tools/python.jam   2011-12-13 14:27:38.000000000 -0800
++++ tools/build/v2/tools/python.jam     2011-12-13 14:27:41.000000000 -0800
+@@ -976,10 +976,19 @@
+     # the Python framework, even when building extensions. Note that framework
+     # builds of Python always use shared libraries, so we do not need to worry
+     # about duplicate Python symbols.
+-    if $(target-os) in windows cygwin darwin
++    if $(target-os) in windows cygwin
+     {
+         alias python_for_extensions : python : $(target-requirements) ;
+     }
++    else if $(target-os) = darwin
++    {
++        alias python_for_extensions
++            :
++            : $(target-requirements)
++            :
++            : $(usage-requirements) <linkflags>"-undefined dynamic_lookup"
++            ;
++    }
+     # On AIX we need Python extensions and Boost.Python to import symbols from
+     # the Python interpreter. Dynamic libraries opened with dlopen() do not
+     # inherit the symbols from the Python interpreter.

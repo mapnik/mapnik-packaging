@@ -1,0 +1,33 @@
+diff --git a/SConstruct b/SConstruct
+index cae93d6..53d88e6 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -813,6 +813,7 @@ int main()
+     return False
+ 
+ def boost_regex_has_icu(context):
++    context.env.Append(LIBS='icui18n')
+     ret = context.TryRun("""
+ 
+ #include <boost/regex/icu.hpp>
+diff --git a/src/build.py b/src/build.py
+index 927cda4..60308ad 100644
+--- a/src/build.py
++++ b/src/build.py
+@@ -52,7 +52,7 @@ libmapnik_cxxflags = copy(lib_env['CXXFLAGS'].data)
+ ABI_VERSION = env['ABI_VERSION']
+ 
+ filesystem = 'boost_filesystem%s' % env['BOOST_APPEND']
+-regex = 'boost_regex%s' % env['BOOST_APPEND']
++regex = 'boost_regex%s-mapnik' % env['BOOST_APPEND']
+ system = 'boost_system%s' % env['BOOST_APPEND']
+ 
+ # clear out and re-set libs for this env
+@@ -73,6 +73,7 @@ if env['THREADING'] == 'multi':
+ if env['RUNTIME_LINK'] == 'static':
+     if 'icuuc' in env['ICU_LIB_NAME']:
+         lib_env['LIBS'].append('icudata')
++        lib_env['LIBS'].append('icui18n')
+ else:
+     if env['INTERNAL_LIBAGG']:
+           lib_env['LIBS'].insert(0, 'agg')
