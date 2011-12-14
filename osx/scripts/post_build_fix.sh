@@ -1,12 +1,11 @@
-
-MAPNIK_INSTALL=/opt/mapnik
-BUILD=/Users/dane/projects/mapnik-sdk/build
-
 # -R is needed to preserve symlinks
 cp -R ${BUILD}/lib/libboost_regex-mapnik*.dylib ${MAPNIK_INSTALL}/lib/
 cp -R ${BUILD}/lib/libicuuc*.dylib ${MAPNIK_INSTALL}/lib/
 cp -R ${BUILD}/lib/libicudata*.dylib ${MAPNIK_INSTALL}/lib/
 cp -R ${BUILD}/lib/libicui18n*.dylib ${MAPNIK_INSTALL}/lib/
+mkdir -p ${MAPNIK_INSTALL}/share/
+cp -R ${BUILD}/share/proj ${MAPNIK_INSTALL}/share/proj
+cp -R ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/gdal
 
 for i in {"2.6","2.7"}
 do
