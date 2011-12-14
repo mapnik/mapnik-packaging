@@ -48,12 +48,15 @@ patch tools/build/v2/tools/python.jam < ${BUILD}/patches/python_jam.diff
   architecture=x86 \
   link=shared \
   variant=release \
-  -sHAVE_ICU=1 -sICU_PATH=${INSTALL} \
+  -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   stage
 
 cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
+
+# bcp
+./b2 --prefix=${BUILD} -j${JOBS} -d2 stage tools/bcp
 
 # python
 <<COMMENT
