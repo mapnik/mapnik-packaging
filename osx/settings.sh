@@ -1,5 +1,8 @@
-
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# needed for Coda.app terminal to act sanely
+# otherwise various tests fail oddly
+#export LANG=en_US.UTF-8
 
 # settings
 export MAPNIK_INSTALL=/opt/mapnik
