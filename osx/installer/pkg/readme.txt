@@ -1,9 +1,6 @@
-Welcome to Mapnik
------------------
+# Welcome to Mapnik
 
-
-Installing
-----------
+## Installing
 
 Run the Mapnik.pkg.
 
@@ -19,12 +16,8 @@ You should be able to:
  
     mapnik-config --version
 
-See below for more details.
 
-
-
-Installation Details
---------------------
+## Installation Details
 
 This installer only works for Intel 64 bit enabled OS X 10.6 and 10.7.
 
@@ -42,9 +35,7 @@ And it automatically puts the 'mapnik-config' program on your ${PATH} by placing
     /etc/paths.d/mapnik
 
 
-
-Core Functionality
-------------------
+## Core Functionality
 
 This Mapnik installer includes:
 
@@ -59,9 +50,7 @@ This Mapnik installer includes:
  * Other libs: Boost, ICU, Cairo, Freetype2, and Proj4
 
 
-
-What next?
-----------
+## What next?
 
 Join the Mapnik community list by signing up at http://mapnik.org/contact/
 
@@ -80,9 +69,7 @@ For general Mapnik resources see the wiki:
     https://github.com/mapnik/mapnik/wiki
 
 
-
-Issues?
--------
+## Issues?
 
 Any questions or problems with the *installer* please post an issue at:
 
