@@ -16,6 +16,11 @@ You should be able to:
  
     mapnik-config --version
 
+3) And the command `which mapnik-config` should return:
+
+    $ which mapnik-config
+    /Library/Frameworks/Mapnik.framework/unix/bin/mapnik-config
+
 
 ## Installation Details
 
