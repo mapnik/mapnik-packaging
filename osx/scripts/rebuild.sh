@@ -3,6 +3,7 @@ rm -rf ${MAPNIK_INSTALL}
 scripts/build_mapnik.sh
 scripts/post_build_fix.sh
 scripts/copy_headers.sh
+scripts/copy_licenses.sh
 install_name_tool -id ${MAPNIK_INSTALL}/lib/libmapnik.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib
 rm installer/*dmg
 rm installer/pkg/*pkg
