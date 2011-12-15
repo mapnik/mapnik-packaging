@@ -2,3 +2,4 @@ build
 mapnik
 packages
 *-contents.xml
+*.pkg
