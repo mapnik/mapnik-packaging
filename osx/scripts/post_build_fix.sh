@@ -47,6 +47,9 @@ install_name_tool -change libicudata.${ICU_MAJOR_VER}.dylib @loader_path/libicud
 install_name_tool -change libicudata.${ICU_MAJOR_VER}.dylib @loader_path/libicudata.${ICU_MAJOR_VER}.dylib ${MAPNIK_INSTALL}/lib/libicui18n.dylib
 install_name_tool -change libicuuc.${ICU_MAJOR_VER}.dylib @loader_path/libicuuc.${ICU_MAJOR_VER}.dylib ${MAPNIK_INSTALL}/lib/libicui18n.dylib
 
+# cleanups
+find ${MAPNIK_INSTALL} -name ".DS_Store" -exec rm -f {} \;
+
 <<COMMENT
 export DYLD_LIBRARY_PATH=''
 
