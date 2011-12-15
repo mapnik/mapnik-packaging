@@ -20,6 +20,7 @@ boost/fusion/include/adapt_adt.hpp \
 boost-staging/
 cp -r boost-staging/boost ${MAPNIK_INSTALL}/include/boost
 
+cp -r ${BUILD}/include/proj_api.h ${MAPNIK_INSTALL}/include/proj_api.h
 cp -r ${BUILD}/include/unicode ${MAPNIK_INSTALL}/include/unicode
 cp -r ${BUILD}/include/freetype2 ${MAPNIK_INSTALL}/include/freetype2
 cp -r ${BUILD}/include/ft2build.h ${MAPNIK_INSTALL}/include/ft2build.h
