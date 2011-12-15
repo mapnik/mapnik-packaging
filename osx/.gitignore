@@ -4,3 +4,4 @@ packages
 *-contents.xml
 *.pkg
 *.dmg
+installer/pkg/licenses/*/*
