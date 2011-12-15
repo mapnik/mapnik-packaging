@@ -5,7 +5,8 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #export LANG=en_US.UTF-8
 
 # settings
-export MAPNIK_INSTALL=/opt/mapnik
+#export MAPNIK_INSTALL=/opt/mapnik
+export MAPNIK_INSTALL=/Library/Frameworks/Mapnik.framework/unix
 export MAPNIK_SOURCE=${ROOTDIR}/mapnik
 export PACKAGES=${ROOTDIR}/packages
 export BUILD=${ROOTDIR}/build

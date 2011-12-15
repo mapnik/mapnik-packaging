@@ -1,17 +1,19 @@
 set -e 
-
-cd ${ROOT_DIR}
-
-git clone https://github.com/mapnik/mapnik ${MAPNIK_SOURCE}
 cd ${MAPNIK_SOURCE}
-cp ${ROOT_DIR}/patches/config.py .
-git apply ${ROOT_DIR}/patches/master.diff
+
+git pull
+
+echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
+echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
+cat ${ROOTDIR}/patches/config.py >> config.py
+
+# TODO - one time
+#make uninstall
+#git apply ${ROOTDIR}/patches/master.diff
+
 ./configure BINDINGS=''
 make
 make install
-
-cd ${MAPNIK_SOURCE}
-#make uninstall
 
 # python versions
 for i in {"2.6","2.7"}
