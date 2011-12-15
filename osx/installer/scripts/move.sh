@@ -1,3 +1,4 @@
 #!/bin/bash
 
-mv /Library/Frameworks/Mapnik.framework $HOME/.Trash/
+if test -e "/Library/Frameworks/Mapnik.framework"; then rm -r "/Library/Frameworks/Mapnik.framework"; fi
+
