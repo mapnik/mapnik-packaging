@@ -7,6 +7,7 @@ mkdir -p ${MAPNIK_INSTALL}/share/
 cp -R ${BUILD}/share/proj ${MAPNIK_INSTALL}/share/proj
 cp -R ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/gdal
 
+
 for i in {"2.6","2.7"}
 do
     cp -R ${BUILD}/lib/libboost_python-${i}.dylib ${MAPNIK_INSTALL}/lib/python${i}/site-packages/mapnik/
