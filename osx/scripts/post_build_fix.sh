@@ -1,3 +1,5 @@
+# TODO - refactor for re-usability
+
 # -R is needed to preserve symlinks
 cp -R ${BUILD}/lib/libboost_regex-mapnik*.dylib ${MAPNIK_INSTALL}/lib/
 cp -R ${BUILD}/lib/libicuuc*.dylib ${MAPNIK_INSTALL}/lib/
@@ -8,11 +10,13 @@ cp -R ${BUILD}/share/proj ${MAPNIK_INSTALL}/share/proj
 cp -R ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/gdal
 
 
+# python
 for i in {"2.6","2.7"}
 do
     cp -R ${BUILD}/lib/libboost_python-${i}.dylib ${MAPNIK_INSTALL}/lib/python${i}/site-packages/mapnik/
 done
 
+# TODO - make linking dynamic
 for i in $(ls ${MAPNIK_INSTALL}/lib/mapnik/input/*input)
 do
   install_name_tool -change libmapnik.dylib @loader_path/../../libmapnik.dylib ${i}

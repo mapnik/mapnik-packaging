@@ -18,7 +18,7 @@ boost/spirit/include/phoenix_fusion.hpp \
 boost/fusion/include/adapt_struct.hpp \
 boost/fusion/include/adapt_adt.hpp \
 boost-staging/ 1>/dev/null
-cp -r boost-staging/boost ${MAPNIK_INSTALL}/include/boost
+cp -r boost-staging/boost ${MAPNIK_INSTALL}/include/
 
 cp -r ${BUILD}/include/proj_api.h ${MAPNIK_INSTALL}/include/proj_api.h
 cp -r ${BUILD}/include/unicode ${MAPNIK_INSTALL}/include/unicode

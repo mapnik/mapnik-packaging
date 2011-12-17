@@ -16,7 +16,7 @@ cd scripts/
 ./copy_headers.sh
 
 # package dmg
-./package_dmg.sh
+time ./package_dmg.sh
 
 # the uninstall mapnik and package sdk
-./package_sdk.sh
+time ./package_sdk.sh

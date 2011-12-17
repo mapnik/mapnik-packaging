@@ -18,6 +18,7 @@ make install
 # python versions
 for i in {"2.6","2.7"}
 do
+    # TODO - cpu waste
     rm -f bindings/python/*os
     rm -f bindings/python/mapnik/_mapnik.so
     ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
