@@ -1,3 +1,3 @@
 mkdir -p ${PACKAGES}
-mkdir -p ${STAGE}
 mkdir -p ${BUILD}
+mkdir -p ${MAPNIK_DIST}
