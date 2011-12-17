@@ -10,6 +10,10 @@ index cae93d6..53d88e6 100644
      ret = context.TryRun("""
  
  #include <boost/regex/icu.hpp>
+diff --git a/fonts/unifont-5.1.20080907.ttf b/fonts/unifont-5.1.20080907.ttf
+deleted file mode 100644
+index ecc911d..0000000
+Binary files a/fonts/unifont-5.1.20080907.ttf and /dev/null differ
 diff --git a/src/build.py b/src/build.py
 index 927cda4..9b92885 100644
 --- a/src/build.py
