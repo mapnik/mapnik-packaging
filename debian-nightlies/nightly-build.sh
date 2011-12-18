@@ -38,7 +38,7 @@ PACKAGES["0.7.2-dev"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="lucid maverick natty oneiric precise"
+DISTS="lucid maverick natty oneiric"
 
 ######### Shouldn't need to edit anything past here #########
 
