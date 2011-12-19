@@ -20,6 +20,8 @@ cd ${PACKAGES}
 
 
 # boost
+B2_VERBOSE=""
+#B2_VERBOSE="-d2"
 tar xjf boost_${BOOST_VERSION2}.tar.bz2
 cd boost_${BOOST_VERSION2}
 # patch python build to ensure we do not link boost_python to python
@@ -27,7 +29,7 @@ patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 ./bootstrap.sh
 
 # static libs
-./b2 --prefix=${BUILD} -j${JOBS} -d2 \
+./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
@@ -41,7 +43,7 @@ patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
   stage install
 
 # dynamic regex
-./b2 --prefix=${BUILD} -j${JOBS} -d2 \
+./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-regex \
   toolset=darwin \
   macosx-version=10.6 \
@@ -57,11 +59,11 @@ install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libb
 ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
 
 # bcp
-./b2 --prefix=${BUILD} -j${JOBS} -d2 stage tools/bcp
+./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} stage tools/bcp
 
 # python
 <<COMMENT
-./b2 --prefix=${BUILD} -j${JOBS} -d2 \
+./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-python \
   toolset=darwin \
   macosx-version=10.6 \
