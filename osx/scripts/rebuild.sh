@@ -12,6 +12,9 @@ cd scripts/
 # make portable
 ./post_build_fix.sh
 
+# test mapnik
+./test_mapnik.sh
+
 # package mapnik tarball
 ./package_tarball.sh
 
@@ -20,7 +23,7 @@ cd scripts/
 ./copy_headers.sh
 
 # package dmg
-time ./package_dmg.sh
+./package_dmg.sh
 
 # the uninstall mapnik and package sdk
-time ./package_sdk.sh
+./package_sdk.sh

@@ -44,21 +44,21 @@ patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
   variant=release \
   stage install
 
-# dynamic regex
+# static regex
 ./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-regex \
   toolset=darwin \
   macosx-version=10.6 \
   address-model=32_64 \
   architecture=x86 \
-  link=shared \
+  link=static \
   variant=release \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
-  stage
+  stage install
 
-cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
-install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
-ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
+#cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
+#install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
+#ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
 
 # bcp
 ./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} stage tools/bcp

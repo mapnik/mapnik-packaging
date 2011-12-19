@@ -9,6 +9,9 @@ LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
 cd ${MAPNIK_SOURCE}
 make uninstall
 
+# also remove python versions
+rm -rf ${MAPNIK_INSTALL}/lib/python*
+
 # package more boost headers
 # (only needed to compile mapnik itself)
 cd ${PACKAGES}/boost*/
@@ -52,8 +55,8 @@ cp ${BUILD}/bin/gdal-config ${LOCAL_TARGET}/bin/
 
 # libs
 cp -R ${BUILD}/lib/lib*.a ${LOCAL_TARGET}/lib/
-cp -R ${BUILD}/lib/libboost_regex-mapnik.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
-install_name_tool -id @loader_path/libboost_regex.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
+#cp -R ${BUILD}/lib/libboost_regex-mapnik.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
+#install_name_tool -id @loader_path/libboost_regex.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
 cp -R ${BUILD}/lib/libicu*.dylib ${LOCAL_TARGET}/lib/
 
 
