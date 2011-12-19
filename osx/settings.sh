@@ -13,7 +13,7 @@ export PACKAGES=${ROOTDIR}/packages
 export BUILD=${ROOTDIR}/build
 export MAPNIK_TAR_DIR="mapnik"
 export OPTIMIZATION="-Os"
-export JOBS="6"
+export JOBS="`sysctl -n hw.ncpu`"
 # -arch i386 breaks icu Collator::createInstance
 #export ARCH_FLAGS="-arch x86_64"
 export ARCH_FLAGS="-arch x86_64 -arch i386"

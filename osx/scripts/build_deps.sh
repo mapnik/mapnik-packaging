@@ -4,6 +4,7 @@ mkdir -p ${BUILD}
 cd ${PACKAGES}
 
 # icu
+echo '*building icu*'
 # *WARNING* do not set an $INSTALL variable
 # it will screw up icu build scripts
 tar xf icu4c-${ICU_VERSION2}-src.tgz
@@ -20,6 +21,7 @@ cd ${PACKAGES}
 
 
 # boost
+echo '*building boost*'
 B2_VERBOSE=""
 #B2_VERBOSE="-d2"
 tar xjf boost_${BOOST_VERSION2}.tar.bz2
@@ -82,6 +84,8 @@ COMMENT
 #cp stage/lib/libboost_python-2.5.dylib ${BUILD}/lib/libboost_python-2.5.dylib
 #install_name_tool -id @loader_path/libboost_python-2.5.dylib ${BUILD}/lib/libboost_python-2.5.dylib
 
+echo '*building boost python versions*'
+
 python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
 mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.6.dylib
 cp stage/lib/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
@@ -100,6 +104,7 @@ install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboo
 cd ${PACKAGES}
 
 # freetype
+echo '*building freetype*'
 tar xf freetype-${FREETYPE_VERSION}.tar.bz2
 cd freetype-${FREETYPE_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
@@ -108,6 +113,7 @@ make install
 cd ${PACKAGES}
 
 # proj4
+echo '*building proj.4*'
 cd proj-trunk/nad
 unzip -o ../../proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
 cd ../
@@ -117,6 +123,7 @@ make install
 cd ${PACKAGES}
 
 # libpng
+echo '*building libpng*'
 tar xf libpng-${LIBPNG_VERSION}.tar.gz
 cd libpng-${LIBPNG_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
@@ -124,7 +131,8 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-# libjpeg
+# jpeg
+echo '*building jpeg*'
 tar xf jpegsrc.v${JPEG_VERSION}.tar.gz
 cd jpeg-${JPEG_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
@@ -132,7 +140,8 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-# libtiff
+# tiff
+echo '*building tiff*'
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
@@ -141,6 +150,7 @@ make install
 cd ${PACKAGES}
 
 # sqlite
+echo '*building sqlite*'
 tar xf sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 cd sqlite-autoconf-${SQLITE_VERSION}
 export CFLAGS="-DSQLITE_ENABLE_RTREE=1 "$CFLAGS
@@ -152,6 +162,7 @@ cd ${PACKAGES}
 
 <<COMMENT
 # gettext which provides libintl for libpq
+# only need for internationalized error messages
 tar xf gettext-${GETTEXT_VERSION}.tar.gz
 cd gettext-${GETTEXT_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
@@ -164,6 +175,7 @@ cd ${PACKAGES}
 COMMENT
 
 # postgres
+echo '*building postgres for libpq client library*'
 <<COMMENT
 postgres/INSTALL has:
        Client-only installation: If you want to install only the client
@@ -183,6 +195,7 @@ mv postgresql-${POSTGRES_VERSION} postgresql-${POSTGRES_VERSION}-32
 
 
 # 64 bit build
+echo '*building postgres 64 bit*'
 cd ${PACKAGES}
 cd postgresql-${POSTGRES_VERSION}-64
 export ARCHFLAGS='-arch x86_64'
@@ -197,6 +210,7 @@ make -j${JOBS}
 make install
 
 # 32 bit build
+echo '*building postgres 32 bit*'
 cd ${PACKAGES}
 cd postgresql-${POSTGRES_VERSION}-32
 export ARCHFLAGS='-arch i386'
@@ -224,6 +238,8 @@ source ${ROOTDIR}/settings.sh
 
 cd ${PACKAGES}
 
+# gdal
+echo '*building gdal*'
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
