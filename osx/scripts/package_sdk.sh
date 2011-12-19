@@ -1,3 +1,6 @@
+
+echo '...packaging sdk tarball'
+
 # where we are headed
 TARGET_BASENAME="${MAPNIK_TAR_DIR}-osx-sdk"
 LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
@@ -9,7 +12,7 @@ make uninstall
 # package more boost headers
 # (only needed to compile mapnik itself)
 cd ${PACKAGES}/boost*/
-mkdir boost-staging
+mkdir -p boost-staging
 ./dist/bin/bcp \
 boost/system/error_code.hpp \
 boost/cerrno.hpp \
@@ -24,6 +27,7 @@ boost/interprocess/mapped_region.hpp \
 boost/interprocess/file_mapping.hpp \
 boost/interprocess/streams/bufferstream.hpp \
 boost/fusion/include/std_pair.hpp \
+boost/python/detail/api_placeholder.hpp \
 boost-staging/ 1>/dev/null
 cp -r boost-staging/boost ${LOCAL_TARGET}/include/
 

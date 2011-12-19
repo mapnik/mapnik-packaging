@@ -1,3 +1,4 @@
+echo '...packaging DMG'
 install_name_tool -id ${MAPNIK_INSTALL}/lib/libmapnik.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib
 rm ${ROOTDIR}/installer/*dmg
 rm ${ROOTDIR}/installer/pkg/*pkg

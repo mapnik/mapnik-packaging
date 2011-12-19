@@ -1,3 +1,5 @@
+echo '...packaging binary tarball'
+
 cd ${MAPNIK_SOURCE}
 MAPNIK_HASH=`git reflog show HEAD | sed -n '1p' | awk '{ print $1 }'`
 

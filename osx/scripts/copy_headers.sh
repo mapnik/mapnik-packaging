@@ -1,6 +1,6 @@
 # feed the boost beast
 cd ${PACKAGES}/boost*/
-mkdir boost-staging
+mkdir -p boost-staging
 ./dist/bin/bcp \
 boost/thread/mutex.hpp \
 boost/regex.hpp \

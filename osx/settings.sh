@@ -17,7 +17,7 @@ export JOBS="6"
 # -arch i386 breaks icu Collator::createInstance
 #export ARCH_FLAGS="-arch x86_64"
 export ARCH_FLAGS="-arch x86_64 -arch i386"
-export ARCHFLAGS=${ARCHFLAGS}
+export ARCHFLAGS=${ARCH_FLAGS}
 export CORE_CXX="/Developer/usr/bin/clang++"
 export CORE_CC="/Developer/usr/bin/clang"
 export CXX=${CORE_CXX}
@@ -26,6 +26,8 @@ export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to reduce icu library size (18.3)
 export CORE_CFLAGS="${OPTIMIZATION} ${ARCH_FLAGS}"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
 export CORE_LDFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
+# breaks distutils
+#export MACOSX_DEPLOYMENT_TARGET=10.6
 export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
 export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
 #export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"

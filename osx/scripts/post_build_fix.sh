@@ -1,5 +1,7 @@
 # TODO - refactor for re-usability
 
+echo "...fixing install names of mapnik and dependencies"
+
 # -R is needed to preserve symlinks
 cp -R ${BUILD}/lib/libboost_regex-mapnik*.dylib ${MAPNIK_INSTALL}/lib/
 cp -R ${BUILD}/lib/libicuuc*.dylib ${MAPNIK_INSTALL}/lib/
@@ -22,6 +24,9 @@ do
   install_name_tool -change libmapnik.dylib @loader_path/../../libmapnik.dylib ${i}
   install_name_tool -change libicuuc.${ICU_MAJOR_VER}.dylib @loader_path/../../libicuuc.dylib ${i}
 done
+
+# fix pgsql2sqlite
+install_name_tool -change libmapnik.dylib @loader_path/../lib/libmapnik.dylib ${MAPNIK_INSTALL}/bin/pgsql2sqlite
 
 # fix libmapnik
 install_name_tool -change libicuuc.${ICU_MAJOR_VER}.dylib @loader_path/libicuuc.${ICU_MAJOR_VER}.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib
