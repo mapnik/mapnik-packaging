@@ -17,7 +17,7 @@ make
 make install
 
 # python versions
-for i in {"2.6","2.7"}
+for i in {"2.7","2.6"}
 do
     echo "...Updating and building mapnik python bindings for python ${i}"
     # TODO - cpu waste
