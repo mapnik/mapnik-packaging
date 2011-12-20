@@ -1,3 +1,5 @@
+echo '...copying headers needed for node bindings to compile against mapnik'
+
 # feed the boost beast
 cd ${PACKAGES}/boost*/
 mkdir -p boost-staging

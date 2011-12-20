@@ -15,12 +15,11 @@ cd scripts/
 # test mapnik
 ./test_mapnik.sh
 
+# copy minimal headers of deps
+./copy_headers.sh
+
 # package mapnik tarball
 ./package_tarball.sh
-
-# both dmg and sdk need headers of deps
-# so copy them now...
-./copy_headers.sh
 
 # package dmg
 ./package_dmg.sh
