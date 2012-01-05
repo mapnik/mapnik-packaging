@@ -98,6 +98,7 @@ build-project src ;
 
 # input plug-ins
 build-project plugins/input/shape ;
+build-project plugins/input/csv ;
 build-project plugins/input/sqlite ;
 build-project plugins/input/ogr ;
 build-project plugins/input/raster ;
@@ -135,6 +136,7 @@ mapnik.install mapnik
     : src 
     : $(headers)
     : plugins/input/shape
+      plugins/input/csv
       plugins/input/sqlite
       plugins/input/raster	
       plugins/input/postgis
