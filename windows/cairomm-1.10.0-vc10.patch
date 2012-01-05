@@ -366,7 +366,7 @@ diff -rupN cairomm-1.10.0/MSVC_Net2010/cairomm/cairomm.vcxproj cairomm-fixed/MSV
 +  </ItemDefinitionGroup>
 +  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
 +    <ClCompile>
-+      <AdditionalIncludeDirectories>.;../..;d:\mapnik_build\mapnik_deps_vc10\libsigc++;d:\mapnik_build\mapnik_deps_vc10\freetype\include;d:\mapnik_build\mapnik_deps_vc10\freetype\include\freetype;d:\mapnik_build\mapnik_deps_vc10\cairo\src;D:\mapnik_build\mapnik_deps_vc10\libsigc++\MSVC_Net2010;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;../..;../../../libsigc++;../../../freetype/include;../../../freetype/include/freetype;../../../cairo/src;../../../libsigc++/MSVC_Net2010;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CAIROMM_BUILD;CAIRO_HAS_FT_FONT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -386,7 +386,7 @@ diff -rupN cairomm-1.10.0/MSVC_Net2010/cairomm/cairomm.vcxproj cairomm-fixed/MSV
 +      <RandomizedBaseAddress>false</RandomizedBaseAddress>
 +      <DataExecutionPrevention>
 +      </DataExecutionPrevention>
-+      <AdditionalLibraryDirectories>d:\mapnik_build\mapnik_deps_vc10\cairo\src\release;d:\mapnik_build\mapnik_deps_vc10\libsigc++\MSVC_Net2010\Win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <AdditionalLibraryDirectories>../../../cairo/src/release;../../../libsigc++/MSVC_Net2010/Win32/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 +    </Link>
 +  </ItemDefinitionGroup>
 +  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

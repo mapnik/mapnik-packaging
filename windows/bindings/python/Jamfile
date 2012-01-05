@@ -7,9 +7,9 @@ project : source-location $(MAPNIK_SOURCE)/bindings/python
 
 PYTHON_ROOT = "C:/Python27" ;
 
-python-extension _mapnik2 
+python-extension _mapnik 
     : [ glob *.cpp ]
-      ../../src//mapnik2
+      ../../src//mapnik
       ../..//thread
       ../..//icu
       $(PYTHON_ROOT)/libs/python27.lib

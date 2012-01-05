@@ -1,7 +1,7 @@
 MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 project : source-location  $(MAPNIK_SOURCE)/src ;
 		
-lib mapnik2
+lib mapnik
     : 
 	arrow.cpp
 	box2d.cpp

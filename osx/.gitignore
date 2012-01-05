@@ -1,0 +1,7 @@
+build
+mapnik
+packages
+*-contents.xml
+*.pkg
+*.dmg
+installer/pkg/licenses/*/*

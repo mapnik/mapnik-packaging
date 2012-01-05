@@ -45,14 +45,14 @@ lib thread : : <variant>release <name>libboost_thread-vc100-mt-1_48 <search>$(BO
 lib thread : : <variant>debug <name>libboost_thread-vc100-mt-gd-1_48 <search>$(BOOST_LIBS) ;
 
 lib filesystem : : <variant>release <name>libboost_filesystem-vc100-mt-1_48 <search>$(BOOST_LIBS) ;
-lib filesystem : : <variant>debug <name>libboost_filesystem-vc100-mt-gd-1_4 <search>$(BOOST_LIBS) ;
+lib filesystem : : <variant>debug <name>libboost_filesystem-vc100-mt-gd-1_48 <search>$(BOOST_LIBS) ;
 
 lib regex : : <variant>release <name>libboost_regex-vc100-mt-1_48 <search>$(BOOST_LIBS) ;
-lib regex : : <variant>debug  <name>libboost_regex-vc100-mt-gd-1_4 <search>$(BOOST_LIBS) ;
+lib regex : : <variant>debug  <name>libboost_regex-vc100-mt-gd-1_48 <search>$(BOOST_LIBS) ;
 
 lib program_options : : <variant>release <name>libboost_program_options-vc100-mt-1_48 <search>$(BOOST_LIBS) ;
-lib program_options : : <variant>debug <name>libboost_program_options-vc100-mt-gd-1_4 <search>$(BOOST_LIBS) ;
+lib program_options : : <variant>debug <name>libboost_program_options-vc100-mt-gd-1_48 <search>$(BOOST_LIBS) ;
 
 lib python : : <variant>release <name>boost_python-vc100-mt-1_48 <search>$(BOOST_LIBS) ;
-lib python : : <variant>debug <name>boost_python-vc100-mt-gd-1_4 <search>$(BOOST_LIBS) ;
+lib python : : <variant>debug <name>boost_python-vc100-mt-gd-1_48 <search>$(BOOST_LIBS) ;
 

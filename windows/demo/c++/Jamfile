@@ -3,7 +3,7 @@ project : source-location  $(MAPNIK_SOURCE)/demo/c++ ;
 
 exe rundemo :
     rundemo.cpp
-    ../../src//mapnik2
+    ../../src//mapnik
     ../..//thread
     ../..//icu
     ../..//cairo

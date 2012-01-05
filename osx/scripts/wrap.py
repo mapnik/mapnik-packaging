@@ -173,12 +173,12 @@ if __name__ == "__main__":
     sym(join(active,'Programs'),join(framework,'Programs'))
     
     # Datasources
-    sym(join(active,'unix/lib/mapnik2/input'),join(active,'Datasources'))
+    sym(join(active,'unix/lib/mapnik/input'),join(active,'Datasources'))
     sym(join(active,'Datasources'),join(framework,'Datasources'))
     
     # Fonts
     # TODO - move fonts to main level...
-    sym(join(active,'unix/lib/mapnik2/fonts'),join(active,'Fonts'))
+    sym(join(active,'unix/lib/mapnik/fonts'),join(active,'Fonts'))
     sym(join(active,'Fonts'),join(framework,'Fonts'))
     
     # symlinks to user and system font directories.
@@ -187,7 +187,7 @@ if __name__ == "__main__":
     #sym('/System/Library/Fonts', join(fonts,'System'))
     
     # symlink the lib
-    sym(join(active,'unix/lib/libmapnik2.dylib'),join(active,'Mapnik'))
+    sym(join(active,'unix/lib/libmapnik.dylib'),join(active,'Mapnik'))
     sym(join(active,'Mapnik'),join(framework,'Mapnik'))
     
     # Python
@@ -197,10 +197,10 @@ if __name__ == "__main__":
         #    py_dir = join(active,'%s/site-packages' % py)
         if not os.path.exists(join(active,'Python')):
             os.mkdir(join(active,'Python'))
-            os.mkdir(join(active,'Python/mapnik2'))
+            os.mkdir(join(active,'Python/mapnik'))
             if INCLUDE_PYCAIRO:
                 os.mkdir(join(active,'Python/cairo'))
-        shutil.copy('python/mapnik.py',join(active,'Python/mapnik2/__init__.py'))
+        shutil.copy('python/mapnik.py',join(active,'Python/mapnik/__init__.py'))
         if INCLUDE_PYCAIRO:
             if not os.path.exists(join(active,'Python/cairo/')):
                 os.mkdir(join(active,'Python/cairo/'))
@@ -241,7 +241,7 @@ if __name__ == "__main__":
         # so we can simplify install..
         
         # done via scons install...
-        #mapnik_module = join(py_dir,'mapnik2')
+        #mapnik_module = join(py_dir,'mapnik')
         #open(mapnik_module+'/paths.py','w').write(paths_py % locals())
         #shutil.copy('../bindings/python/mapnik/__init__.py',mapnik_module)
         
@@ -253,5 +253,5 @@ if __name__ == "__main__":
         #open('/Library/Python/2.6/site-packages/mapnik.pth','w').write(pth)
     
         # Stash in resources as well
-        open(join(active,'Resources/mapnik2.pth'),'w').write(pth)
+        open(join(active,'Resources/mapnik.pth'),'w').write(pth)
     

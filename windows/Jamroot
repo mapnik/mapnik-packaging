@@ -155,7 +155,7 @@ if  [ python.configured ]
     build-project bindings/python ;
     local python-root =  "c:/Python27" ;  #[ python.root ] ;
     local python-version = "2.7" ; #[ python.python-version $(python-root)/bin/python ] ;
-    local python_bindings_dir = $(prefix)/python/$(python-version)/site-packages/mapnik2 ;
+    local python_bindings_dir = $(prefix)/python/$(python-version)/site-packages/mapnik ;
     echo "Will install Python bindings into " $(python_bindings_dir) ;
     install install-python
         : bindings/python

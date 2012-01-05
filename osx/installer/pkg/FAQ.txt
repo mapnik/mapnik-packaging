@@ -1,0 +1,14 @@
+Frequently Ask Questions
+------------------------
+
+1) Do I need this installer for TileMill?
+
+No, you do not. TileMill bundles its own version of Mapnik inside the .app.
+
+2) What is the purpose of this installer?
+
+Two goals:
+
+ - To support using Mapnik easily from python programs like http://tilestache.org
+ - To support easily compiling external c++ applications like node-mapnik 
+   (https://github.com/mapnik/node-mapnik) without extra installations.

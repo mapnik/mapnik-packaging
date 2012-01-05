@@ -21,14 +21,14 @@ Index: demo/viewer/viewer.pro
  INCLUDEPATH += .
  
 -QMAKE_CXXFLAGS +=' -DDARWIN -Wno-missing-field-initializers -ansi'
--unix:LIBS =  -L/usr/local/lib -L/usr/X11/lib -lmapnik2 -lfreetype
+-unix:LIBS =  -L/usr/local/lib -L/usr/X11/lib -lmapnik -lfreetype
 -unix:LIBS += -lboost_system -licuuc -lboost_filesystem -lboost_regex
 +QMAKE_CXXFLAGS +=' -arch i386 -arch x86_64 -DDARWIN -Wno-missing-field-initializers -ansi'
 +unix:LIBS =  -arch i386
 +unix:LIBS += -arch x86_64
 +unix:LIBS += -headerpad_max_install_names
 +unix:LIBS += -L/Library/Frameworks/Mapnik.framework/unix/lib
-+unix:LIBS += -lmapnik2
++unix:LIBS += -lmapnik
 +unix:LIBS += -L/Library/Frameworks/UnixImageIO.framework/unix/lib
 +unix:LIBS += -L/Library/Frameworks/PROJ.framework/unix/lib
 +unix:LIBS += -lfreetype
@@ -50,8 +50,8 @@ Index: demo/viewer/main.cpp
      
      // register input plug-ins
      QString plugins_dir = settings.value("mapnik/plugins_dir",
--                                         QVariant("/usr/local/lib/mapnik2/input/")).toString();
-+                                         QVariant("/Library/Frameworks/Mapnik.framework/Versions/2.0/unix/lib/mapnik2/input/")).toString();
+-                                         QVariant("/usr/local/lib/mapnik/input/")).toString();
++                                         QVariant("/Library/Frameworks/Mapnik.framework/Versions/2.0/unix/lib/mapnik/input/")).toString();
      datasource_cache::instance()->register_datasources(plugins_dir.toStdString());
      // register fonts
 -    int count = settings.beginReadArray("mapnik/fonts");
@@ -66,7 +66,7 @@ Index: demo/viewer/main.cpp
 +    //{
 +    //    settings.setArrayIndex(index);
 +     //   QString font_dir = settings.value("dir").toString();
-+        freetype_engine::register_fonts("/Library/Frameworks/Mapnik.framework/Versions/2.0/unix/lib/mapnik2/fonts");
++        freetype_engine::register_fonts("/Library/Frameworks/Mapnik.framework/Versions/2.0/unix/lib/mapnik/fonts");
 +    //}
      settings.endArray();
      

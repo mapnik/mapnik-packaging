@@ -1,0 +1,6 @@
+<pkmkdoc spec="1.12"><properties><title>Uninstall-Mapnik</title><build>/Users/dane/projects/mapnik-packaging/osx/installer/pkg/Uninstall-Mapnik.pkg</build><organization>mapnik.org</organization><userSees ui="easy"/><min-target os="3"/><domain anywhere="true"/></properties><distribution><versions min-spec="1.000000"/><scripts></scripts></distribution><contents><choice title="Uninstall Mapnik" id="choice10" starts_selected="true" starts_enabled="true" starts_hidden="true"><pkgref id="mapnik.org.uninstall.pkg"/></choice></contents><resources bg-scale="none" bg-align="topleft"><locale lang="en"><resource mime-type="text/rtf" kind="embedded" type="welcome"><![CDATA[{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf230
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f0\fs26 \cf0 Running this package will uninstall Mapnik.}]]></resource></locale></resources><flags/><item type="file">01.dummy.xml</item><mod>properties.title</mod><mod>properties.anywhereDomain</mod><mod>description</mod></pkmkdoc>

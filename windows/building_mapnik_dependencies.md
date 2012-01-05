@@ -53,9 +53,9 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 ## Download
 
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
-    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairomm-1.10.0-vc10-20111121.patch --no-check-certificate   
-    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml-20111118.patch --no-check-certificate
-    	 
+    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairomm-1.10.0-vc10.patch --no-check-certificate
+    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml.patch --no-check-certificate
+
     cd %PKGDIR%
     curl http://iweb.dl.sourceforge.net/project/boost/boost/1.%BOOST_VERSION%.0/boost_1_%BOOST_VERSION%_0.tar.gz -O
     curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
@@ -176,7 +176,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     set P5=s/\^#ZIP_SUPPORT.*/ZIP_SUPPORT = 1/;
     set P6=s/\^#ZLIBDIR.*/ZLIBDIR = %ROOTDIR:\=\\\%\\\zlib/;
     set P7=s/\^#ZLIB_INCLUDE/ZLIB_INCLUDE/;
-    set P8=s/\^#ZLIB_LIB.*/ZLIB_LIB = \$(ZLIBDIR^)\\\zlib.lib/;                    
+    set P8=s/\^#ZLIB_LIB.*/ZLIB_LIB = \$(ZLIBDIR^)\\\zlib.lib/;
     set PATTERN="%P1%%P2%%P3%%P4%%P5%%P6%%P7%%P8%"
     sed %PATTERN%  nmake.opt > nmake.opt.fixed
     move /Y nmake.opt.fixed nmake.opt
@@ -195,7 +195,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
     bsdtar xvfz %PKGDIR%\cairo-%CAIRO_VERSION%.tar.gz
     rename cairo-%CAIRO_VERSION% cairo
-    cd cairo 
+    cd cairo
     set INCLUDE=%INCLUDE%;%ROOTDIR%\zlib
     set INCLUDE=%INCLUDE%;%ROOTDIR%\libpng
     set INCLUDE=%INCLUDE%;%ROOTDIR%\pixman\pixman
@@ -226,27 +226,32 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 ### LibXML2
 
-    bsdtar xvfz %PKGDIR%\libxml2-%LIBXML2_VERSION%.tar.gz       
+    bsdtar xvfz %PKGDIR%\libxml2-%LIBXML2_VERSION%.tar.gz
     rename libxml2-%LIBXML2_VERSION% libxml2
     cd libxml2\win32
     cscript configure.js compiler=msvc prefix=%ROOTDIR%\libxml2 iconv=no icu=yes include=%ROOTDIR%\icu\include lib=%ROOTDIR%\icu\lib
-    patch  -p1 < ..\libxml-20111118.patch
+    patch  -p1 < ..\libxml.patch
     nmake /f Makefile.msvc
     cd %ROOTDIR%
 
 ### Proj4
 
-TODO: should we be using latest trunk, which has some threading fixes ??
+#### Official release
 
     bsdtar xvfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz 
     rename proj-%PROJ_VERSION% proj
+
+#### Latest trunk (threading fixes)
+
+    svn co http://svn.osgeo.org/metacrs/proj/trunk/proj
+
     cd proj
     nmake /f Makefile.vc
-    cd %ROOTDIR%    
+    cd %ROOTDIR%
 
 ### GDAL
 
-    bsdtar xvfz %PKGDIR%\gdal-%GDAL_VERSION%.tar.gz     
+    bsdtar xvfz %PKGDIR%\gdal-%GDAL_VERSION%.tar.gz
     rename gdal-%GDAL_VERSION% gdal
     cd gdal
 
@@ -254,7 +259,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
     nmake /f makefile.vc MSVC_VER=1500
 
-##### VC++ 2008
+##### VC++ 2010
 
     nmake /f makefile.vc MSVC_VER=1600
  
@@ -273,9 +278,8 @@ TODO: should we be using latest trunk, which has some threading fixes ??
 
 ##### VC++ 2010
 
-    cd libsigc++\MSVC_Net2010   
+    cd libsigc++\MSVC_Net2010
     msbuild "libsigc++2.vcxproj" /t:Rebuild /p:Configuration="Release" /p:Platform=Win32
-    
     
     copy "sigc++config.h" "%ROOTDIR%\libsigc++"
     cd %ROOTDIR%
@@ -290,13 +294,13 @@ TODO: should we be using latest trunk, which has some threading fixes ??
     set INCLUDE=%INCLUDE%;%ROOTDIR%\libsigc++;%ROOTDIR%\freetype\include;%ROOTDIR%\freetype\include\freetype;%ROOTDIR%\cairo\src
     set LIB=%LIB%;%ROOTDIR%\cairo\src\release;%ROOTDIR%\libsigc++\MSVC_Net2008\Win32\Release
     cd cairomm\MSVC_Net2008
-    vcbuild cairomm.sln /useenv "Release|Win32" 
+    vcbuild cairomm.sln /useenv "Release|Win32"
 
 ##### VC++ 2010
 
     cd cairomm
-    patch -p1 < ..\cairomm-1.10.0-vc10-20111121.patch 
-    cd MSVC_Net2010    
+    patch -p1 < ..\cairomm-1.10.0-vc10.patch
+    cd MSVC_Net2010
     msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm-fixed" cairomm.sln
     cd %ROOTDIR%
 
@@ -315,8 +319,7 @@ TODO: should we be using latest trunk, which has some threading fixes ??
     rename boost_1_%BOOST_VERSION%_0 boost
     cd boost
     bootstrap.bat
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-python --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu install release link=static 
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared
+    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu -sICU_LINK=..\\icu\\lib\\icuuc.lib release link=static install
+    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared install
 
-
-
+    

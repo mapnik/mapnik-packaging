@@ -1,3 +1,4 @@
+.DS_Store
 debian-nightlies/git
 debian-nightlies/*/prev.rev
 debian-nightlies/*/*.changelog

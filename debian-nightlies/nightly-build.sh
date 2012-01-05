@@ -5,6 +5,17 @@ set -e
 # Author: Robert Coup <robert@coup.net.nz>
 # License: GPL-2+
 
+# User variables
+DEST="mapnik" # the launchpad account name
+# Build signing info...
+GPGKEY=80B52FF1
+DEBFULLNAME="Robert Coup (Mapnik Nightly Builds)"
+DEBEMAIL="robert+mapniknightly@coup.net.nz"
+#GPGKEY=89DBC525
+#DEBFULLNAME="Dane Springmeyer (Mapnik Nightly Builds)"
+#DEBEMAIL="dane.springmeyer@gmail.com"
+
+
 # Branches to build
 # branch keys here should match the build directory structure (./foo/svn/, ./foo/debian/)
 # branch values are the latest official release from the branch
@@ -15,24 +26,19 @@ BRANCHES["0.7.2-dev"]="0.7.2"
 
 # PPA names, keys are branches
 declare -A PPAS
-PPAS["master"]="ppa:mapnik/nightly-trunk"
-PPAS["0.7.2-dev"]="ppa:mapnik/nightly-0.7"
-PPAS["2.0.x"]="ppa:mapnik/nightly-2.0"
+PPAS["master"]="ppa:$DEST/nightly-trunk"
+PPAS["0.7.2-dev"]="ppa:$DEST/nightly-0.7"
+PPAS["2.0.x"]="ppa:$DEST/nightly-2.0"
 
 # Package names, keys are branches
 declare -A PACKAGES
-PACKAGES["master"]="mapnik2"
-PACKAGES["2.0.x"]="mapnik2"
+PACKAGES["master"]="mapnik"
+PACKAGES["2.0.x"]="mapnik"
 PACKAGES["0.7.2-dev"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
 DISTS="lucid maverick natty oneiric"
-
-# Build signing info...
-GPGKEY=80B52FF1
-DEBFULLNAME="Robert Coup (Mapnik Nightly Builds)"
-DEBEMAIL="robert+mapniknightly@coup.net.nz"
 
 ######### Shouldn't need to edit anything past here #########
 

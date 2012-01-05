@@ -8,7 +8,7 @@ exe shapeindex :
 	$(MAPNIK_SOURCE)/plugins/input/shape/shape_featureset.cpp
 	$(MAPNIK_SOURCE)/plugins/input/shape/shape_index_featureset.cpp
 	$(MAPNIK_SOURCE)/plugins/input/shape/dbfile.cpp
-	../../src//mapnik2
+	../../src//mapnik
 	../..//program_options
 	../..//icu
 	:

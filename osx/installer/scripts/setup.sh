@@ -1,15 +1,6 @@
 #!/bin/bash
 
-# TODO
-# - find safer way to do this: http://trac.mapnik.org/ticket/776
-# - check for ~/.profile so that adding a new bash_profile does not override
-
-# backup bash_profile
-cp ~/.bash_profile ~/.bash_profile.mapnik.backup
-
-# add installer Programs to PATH
-# by appending new entries to bash_profile
-echo '' >> ~/.bash_profile
-echo '# Settings for Mapnik.framework Installer to enable Mapnik programs and python bindings' >> ~/.bash_profile
-echo 'export PATH=/Library/Frameworks/Mapnik.framework/Programs:$PATH' >> ~/.bash_profile
-echo 'export PYTHONPATH=/Library/Frameworks/Mapnik.framework/Python:$PYTHONPATH' >> ~/.bash_profile
+echo "import sys; sys.path.insert(0,'/Library/Frameworks/Mapnik.framework/unix/lib/python2.6/site-packages/')" > /Library/Python/2.6/site-packages/mapnik.pth
+echo "import sys; sys.path.insert(0,'/Library/Frameworks/Mapnik.framework/unix/lib/python2.7/site-packages/')" > /Library/Python/2.7/site-packages/mapnik.pth
+# http://hea-www.harvard.edu/~fine/OSX/path_helper.html
+echo "/Library/Frameworks/Mapnik.framework/unix/bin" > /etc/paths.d/mapnik
