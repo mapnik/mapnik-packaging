@@ -1,0 +1,16 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/plugins/input/csv ;
+local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+
+mapnik-plugin gdal
+    : [ glob *.cpp ]
+    ../../..//src
+    ../../..//thread
+    ../../..//icu
+    :
+    <include>.
+    <link>shared
+    <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
+    <toolset>msvc:<define>_WINDOWS
+    <toolset>msvc:<define>MAPNIK_IMPORTS
+  ;
