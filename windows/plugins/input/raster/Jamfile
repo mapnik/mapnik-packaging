@@ -5,6 +5,7 @@ mapnik-plugin raster
 	: [ glob *.cpp ]
 	../../..//src
 	../../..//thread
+	../../..//icu
 	:
 	<include>.
 	<toolset>msvc:<define>_WINDOWS
