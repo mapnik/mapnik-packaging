@@ -22,15 +22,17 @@ override_dh_auto_configure:
 	scons $(SCONS_FLAGS) CUSTOM_CXXFLAGS="$(CFLAGS)" configure
 	dh_auto_configure
 
-override_dh_auto_build:
-	set -e; \
-	for PYVER in $(shell pyversions -r); do \
-		scons \
-		BOOST_PYTHON_LIB=`echo $$PYVER | sed 's/python\([0-9]\).\([0-9]\)/boost_python-py\1\2/'` \
-		PYTHON=`which $$PYVER`; \
-	done
-
-	dh_auto_build
+# Do no build for every possible python version until this is working properly
+# https://github.com/mapnik/mapnik-packaging/issues/3
+#override_dh_auto_build:
+#	set -e; \
+#	for PYVER in $(shell pyversions -r); do \
+#		scons \
+#		BOOST_PYTHON_LIB=`echo $$PYVER | sed 's/python\([0-9]\).\([0-9]\)/boost_python-py\1\2/'` \
+#		PYTHON=`which $$PYVER`; \
+#	done
+#
+#	dh_auto_build
 
 override_dh_prep:
 	dh_prep -Xdebian/tmp
