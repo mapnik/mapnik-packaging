@@ -50,12 +50,12 @@
 # -------------------
 
 # Configure msvc (default version, searched for in standard locations and PATH).
-# using msvc ;
+using msvc ;
 
 # Configure specific msvc version (searched for in standard locations and PATH).
 
-using msvc : 9.0 ;
-using msvc : 10.0 ;
+#using msvc : 9.0 ;
+#using msvc : 10.0 ;
 
 # ----------------------
 # Borland configuration.
