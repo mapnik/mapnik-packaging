@@ -15,6 +15,7 @@ lib mapnik
 	filter_factory.cpp
 	font_engine_freetype.cpp
 	font_set.cpp
+	gamma_method.cpp
 	glyph_symbolizer.cpp
 	gradient.cpp
 	graphics.cpp
