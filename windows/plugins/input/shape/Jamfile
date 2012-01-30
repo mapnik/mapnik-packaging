@@ -15,5 +15,5 @@ mapnik-plugin shape
       <link>shared
       <toolset>msvc:<define>_WINDOWS
       <toolset>msvc:<define>MAPNIK_IMPORTS
-      <toolset>msvc:<define>SHAPE_MEMORY_MAPPED_FILE
+      #<toolset>msvc:<define>SHAPE_MEMORY_MAPPED_FILE
     ;
