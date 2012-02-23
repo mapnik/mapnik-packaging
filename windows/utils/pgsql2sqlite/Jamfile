@@ -13,6 +13,7 @@ exe pgsql2sqlite :
     ../..//advapi
     ../..//shfolder
     ../..//secur
+	../..//icu
     $(MAPNIK_DEPS_DIR)/sqlite/sqlite3.c
     :
     <include>$(MAPNIK_SOURCE)/plugins/input/postgis
