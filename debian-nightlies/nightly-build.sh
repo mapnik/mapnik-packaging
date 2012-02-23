@@ -22,19 +22,19 @@ DEBEMAIL="robert+mapniknightly@coup.net.nz"
 declare -A BRANCHES
 BRANCHES["master"]="2.0.0"
 BRANCHES["2.0.x"]="2.0.0"
-BRANCHES["0.7.2-dev"]="0.7.2"
+BRANCHES["0.7.x"]="0.7.2"
 
 # PPA names, keys are branches
 declare -A PPAS
 PPAS["master"]="ppa:$DEST/nightly-trunk"
-PPAS["0.7.2-dev"]="ppa:$DEST/nightly-0.7"
+PPAS["0.7.x"]="ppa:$DEST/nightly-0.7"
 PPAS["2.0.x"]="ppa:$DEST/nightly-2.0"
 
 # Package names, keys are branches
 declare -A PACKAGES
 PACKAGES["master"]="mapnik"
 PACKAGES["2.0.x"]="mapnik"
-PACKAGES["0.7.2-dev"]="mapnik"
+PACKAGES["0.7.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
