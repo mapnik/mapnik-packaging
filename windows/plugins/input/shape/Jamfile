@@ -7,6 +7,7 @@ mapnik-plugin shape
       shape_featureset.cpp
       shape_index_featureset.cpp
       shape_io.cpp
+	  shape_utils.cpp
       ../../..//src
       ../../..//thread  
       ../../..//icu
