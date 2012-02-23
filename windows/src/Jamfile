@@ -3,68 +3,93 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
 		
 lib mapnik
     : 
-	arrow.cpp
-	box2d.cpp
-	cairo_renderer.cpp
-	color.cpp
-	datasource_cache.cpp
-	distance.cpp
-	expression_string.cpp
+    color.cpp
+    box2d.cpp
+    building_symbolizer.cpp
+    datasource_cache.cpp
+    deepcopy.cpp
+    expression_string.cpp
+    expression.cpp
+    feature_kv_iterator.cpp
+    feature_type_style.cpp 
+    font_engine_freetype.cpp
+    font_set.cpp
+    gamma_method.cpp
+    gradient.cpp
+    graphics.cpp
+    image_reader.cpp
+    image_util.cpp
+    layer.cpp
+    line_symbolizer.cpp
+    line_pattern_symbolizer.cpp
+    map.cpp
+    load_map.cpp
+    memory.cpp
+    parse_path.cpp
+    palette.cpp
+    placement_finder.cpp
+    plugin.cpp
+    png_reader.cpp
+    point_symbolizer.cpp
+    polygon_pattern_symbolizer.cpp
+    polygon_symbolizer.cpp
+    save_map.cpp
+    shield_symbolizer.cpp
+    text_symbolizer.cpp
+    tiff_reader.cpp
+    wkb.cpp
+    projection.cpp
+    proj_transform.cpp
+    distance.cpp
+    scale_denominator.cpp
+    memory_datasource.cpp
+    stroke.cpp
+    symbolizer.cpp
+    symbolizer_helpers.cpp
+    arrow.cpp
+    unicode.cpp
+    markers_symbolizer.cpp
+    metawriter.cpp
+    raster_colorizer.cpp
+    wkt/wkt_factory.cpp
+    metawriter_inmem.cpp
+    metawriter_factory.cpp
+    mapped_memory_cache.cpp
+    marker_cache.cpp
+    svg_parser.cpp
+    svg_path_parser.cpp
+    svg_points_parser.cpp 
+    svg_transform_parser.cpp
+    warp.cpp
+    json/feature_collection_parser.cpp
+    json/geojson_generator.cpp
+    markers_placement.cpp
+    processed_text.cpp
+    formatting/base.cpp
+    formatting/expression.cpp
+    formatting/list.cpp
+    formatting/text.cpp
+    formatting/format.cpp
+    formatting/registry.cpp
+    text_placements/registry.cpp
+    text_placements/base.cpp
+    text_placements/dummy.cpp
+    text_placements/list.cpp
+    text_placements/simple.cpp
+    text_properties.cpp
+	
+	# others
 	feature_style_processor.cpp
-	feature_type_style.cpp
-	filter_factory.cpp
-	font_engine_freetype.cpp
-	font_set.cpp
-	gamma_method.cpp
-	glyph_symbolizer.cpp
-	gradient.cpp
-	graphics.cpp
-	image_reader.cpp
-	image_util.cpp
-	jpeg_reader.cpp
-	layer.cpp
-	libxml2_loader.cpp
-	line_pattern_symbolizer.cpp
-	line_symbolizer.cpp
-	load_map.cpp
-	map.cpp
 	mapped_memory_cache.cpp
-	marker_cache.cpp
-	markers_symbolizer.cpp
-	memory.cpp
-	memory_datasource.cpp
-	metawriter.cpp
-	metawriter_factory.cpp
-	metawriter_inmem.cpp
-	palette.cpp
-	parse_path.cpp
-	placement_finder.cpp
-	plugin.cpp
-	png_reader.cpp
-	point_symbolizer.cpp
-	polygon_pattern_symbolizer.cpp
-	proj_transform.cpp
-	projection.cpp
-	raster_colorizer.cpp
-	save_map.cpp
-	scale_denominator.cpp
-	shield_symbolizer.cpp
-	stroke.cpp
-	svg_parser.cpp
-	svg_path_parser.cpp
-	svg_points_parser.cpp
-	svg_transform_parser.cpp
-	symbolizer.cpp
-	text_placements.cpp
-	text_symbolizer.cpp
-	tiff_reader.cpp
-	unicode.cpp
-	warp.cpp
-	wkb.cpp
+	jpeg_reader.cpp
+	libxml2_loader.cpp
+	load_map.cpp
+	
+	# cairo
+	cairo_renderer.cpp
 
 	# agg	
     	agg/process_building_symbolizer.cpp
-    	agg/process_glyph_symbolizer.cpp
     	agg/process_line_symbolizer.cpp
     	agg/process_line_pattern_symbolizer.cpp
     	agg/process_text_symbolizer.cpp
@@ -78,7 +103,6 @@ lib mapnik
 	#grid
 	grid/grid_renderer.cpp
 	grid/process_building_symbolizer.cpp
-	grid/process_glyph_symbolizer.cpp
 	grid/process_line_pattern_symbolizer.cpp
 	grid/process_line_symbolizer.cpp
 	grid/process_markers_symbolizer.cpp
