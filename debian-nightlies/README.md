@@ -32,6 +32,13 @@ to the Mapnik nightly build PPAs at https://launchpad.net/~mapnik
 3) Update the nightly-build.sh script with your name/GPG key/etc, and 
 what branches/dists/ppas you want. Set the latest releases correctly too.
 
+Note: if you change the launchpad username then you will also need to ensure your PPA has
+the correctly named PPA's:
+
+    nightly-trunk
+    nightly-0.7
+    nightly-2.0
+
 
 4) Set prev.rev in each branch directory to be the current revision of the branch
 
