@@ -74,7 +74,7 @@ while getopts "fncr:b:d:" OPT; do
         \?)
             echo "Usage: $0 [-f] [-n] [-c] [-b N]" >&2
             echo "  -n         Skip the PPA upload & saving changelog." >&2
-            echo "  -f         Force a build, even if the script doesn't want to. You may " >&2
+            echo "  -f         Force a build, even if the script does not want to. You may " >&2
             echo "             need to clean up debs/etc first." >&2
             echo "  -c         Delete archived builds. Leaves changelogs alone." >&2
             echo "  -r N       Use N as the Debian build revision (default: 1)" >&2
