@@ -5,7 +5,10 @@
 export DH_VERBOSE=1
 
 # scons flags
-SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,csv CAIRO=True PROJ_INCLUDES=/usr/include PROJ_LIBS=/usr/lib SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr LIB_DIR_NAME=/mapnik
+SCONS_FLAGS=INPUT_PLUGINS=raster,sqlite,postgis,ogr,shape,osm,gdal,csv \
+CAIRO=True \
+SYSTEM_FONTS=/usr/share/fonts/truetype \
+DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr
 
 CFLAGS = -g
 
