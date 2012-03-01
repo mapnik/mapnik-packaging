@@ -1,7 +1,7 @@
 source settings.sh
-# setup.sh
-# download_deps.sh
-# build_deps.sh
+# ./scripts/setup.sh
+# ./scripts/download_deps.sh
+# ./scripts/build_deps.sh
 
 rm -rf ${MAPNIK_INSTALL}
 cd scripts/
