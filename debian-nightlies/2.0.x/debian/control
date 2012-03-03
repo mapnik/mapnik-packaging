@@ -42,7 +42,7 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- ttf-dejavu
+ ttf-dejavu,
  ttf-unifont
 Suggests: postgis
 Description: C++/Python toolkit for developing GIS applications (libraries)
