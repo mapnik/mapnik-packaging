@@ -20,7 +20,7 @@ DEBEMAIL="robert+mapniknightly@coup.net.nz"
 # branch keys here should match the build directory structure (./foo/svn/, ./foo/debian/)
 # branch values are the latest official release from the branch
 declare -A BRANCHES
-BRANCHES["master"]="2.0.0"
+BRANCHES["master"]="2.1.0"
 BRANCHES["2.0.x"]="2.0.0"
 BRANCHES["0.7.x"]="0.7.2"
 
@@ -38,7 +38,7 @@ PACKAGES["0.7.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="lucid maverick natty oneiric"
+DISTS="lucid maverick natty oneiric precise"
 
 ######### Shouldn't need to edit anything past here #########
 
