@@ -234,12 +234,13 @@ make -j${JOBS}
 make install
 
 rm ${ROOTDIR}/build/lib/libpq*dylib
-cp ${ROOTDIR}/build/lib/libpq.a ${LOCAL_BUILD}/lib/libpg64.a
-cp ${ROOTDIR}/build/lib/libpgport.a ${LOCAL_BUILD}/lib/libpgport64.a
+rm ${ROOTDIR}/build/lib/libpg*dylib
+#cp ${ROOTDIR}/build/lib/libpq.a ${LOCAL_BUILD}/lib/libpg64.a
+#cp ${ROOTDIR}/build/lib/libpgport.a ${LOCAL_BUILD}/lib/libpgport64.a
 
 # remake universal client lib
-lipo -create ${LOCAL_BUILD}/lib/libpg64.a ${LOCAL_BUILD}/lib/libpq.a -output ${ROOTDIR}/build/lib/libpq.a
-lipo -create ${LOCAL_BUILD}/lib/libpgport64.a ${LOCAL_BUILD}/lib/libpq.a -output ${ROOTDIR}/build/lib/libpgport.a
+#lipo -create ${LOCAL_BUILD}/lib/libpg64.a ${LOCAL_BUILD}/lib/libpq.a -output ${ROOTDIR}/build/lib/libpq.a
+#lipo -create ${LOCAL_BUILD}/lib/libpgport64.a ${LOCAL_BUILD}/lib/libpq.a -output ${ROOTDIR}/build/lib/libpgport.a
 
 # re-set default ARCHFLAGS settings
 source ${ROOTDIR}/settings.sh
