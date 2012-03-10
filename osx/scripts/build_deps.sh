@@ -11,9 +11,10 @@ tar xf icu4c-${ICU_VERSION2}-src.tgz
 cd icu/source
 ./runConfigureICU MacOSX --prefix=${BUILD} \
 --disable-samples \
---disable-static \
---enable-shared \
---with-library-bits=64
+--enable-static \
+--disable-shared \
+--with-library-bits=64 \
+--with-data-packaging=archive
 
 make -j${JOBS}
 make install
@@ -38,18 +39,20 @@ patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
   --with-program_options --with-system --with-chrono \
   toolset=darwin \
   macosx-version=10.6 \
-  address-model=32_64 \
+  address-model=64 \
   architecture=x86 \
   link=static \
   variant=release \
   stage install
 
-# static regex
+# regex separately
 ./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
+  linkflags="$LDFLAGS -L$BUILD/lib -licudata -licuuc" \
+  cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
   --with-regex \
   toolset=darwin \
   macosx-version=10.6 \
-  address-model=32_64 \
+  address-model=64 \
   architecture=x86 \
   link=static \
   variant=release \
@@ -87,14 +90,19 @@ COMMENT
 echo '*building boost python versions*'
 
 python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
-mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.6.dylib
-cp stage/lib/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
-install_name_tool -id @loader_path/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
+mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
+cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
+#mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.6.dylib
+#cp stage/lib/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
+#install_name_tool -id @loader_path/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
 
 python ${ROOTDIR}/scripts/build_boost_pythons.py 2.7 64
-mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.7.dylib
-cp stage/lib/libboost_python27.dylib ${BUILD}/lib/libboost_python-2.7.dylib
-install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboost_python-2.7.dylib
+mv stage/lib/libboost_python.a stage/lib/libboost_python-2.7.a
+cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
+
+#mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.7.dylib
+#cp stage/lib/libboost_python27.dylib ${BUILD}/lib/libboost_python-2.7.dylib
+#install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboost_python-2.7.dylib
 
 #python ${ROOTDIR}/scripts/build_boost_pythons.py 3.2 64
 #mv stage/lib/libboost_python3.dylib stage/lib/libboost_python-3.2.dylib

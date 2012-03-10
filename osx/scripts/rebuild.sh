@@ -24,5 +24,5 @@ cd scripts/
 # package dmg
 ./package_dmg.sh
 
-# the uninstall mapnik and package sdk
+# then uninstall mapnik and package sdk
 ./package_sdk.sh

@@ -3,14 +3,11 @@ cd ${MAPNIK_SOURCE}
 
 echo '...Updating and building mapnik'
 
-git pull
+#git checkout osx-framework
+git pull origin master
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 cat ${ROOTDIR}/patches/config.py >> config.py
-
-# TODO - one time
-#make uninstall
-#git apply ${ROOTDIR}/patches/master.diff
 
 ./configure BINDINGS=''
 make
