@@ -20,25 +20,25 @@ DEBEMAIL="robert+mapniknightly@coup.net.nz"
 # branch keys here should match the build directory structure (./foo/svn/, ./foo/debian/)
 # branch values are the latest official release from the branch
 declare -A BRANCHES
-BRANCHES["master"]="2.0.0"
+BRANCHES["master"]="2.1.0"
 BRANCHES["2.0.x"]="2.0.0"
-BRANCHES["0.7.2-dev"]="0.7.2"
+BRANCHES["0.7.x"]="0.7.2"
 
 # PPA names, keys are branches
 declare -A PPAS
 PPAS["master"]="ppa:$DEST/nightly-trunk"
-PPAS["0.7.2-dev"]="ppa:$DEST/nightly-0.7"
+PPAS["0.7.x"]="ppa:$DEST/nightly-0.7"
 PPAS["2.0.x"]="ppa:$DEST/nightly-2.0"
 
 # Package names, keys are branches
 declare -A PACKAGES
 PACKAGES["master"]="mapnik"
 PACKAGES["2.0.x"]="mapnik"
-PACKAGES["0.7.2-dev"]="mapnik"
+PACKAGES["0.7.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="lucid maverick natty oneiric"
+DISTS="lucid maverick natty oneiric precise"
 
 ######### Shouldn't need to edit anything past here #########
 
@@ -74,7 +74,7 @@ while getopts "fncr:b:d:" OPT; do
         \?)
             echo "Usage: $0 [-f] [-n] [-c] [-b N]" >&2
             echo "  -n         Skip the PPA upload & saving changelog." >&2
-            echo "  -f         Force a build, even if the script doesn't want to. You may " >&2
+            echo "  -f         Force a build, even if the script does not want to. You may " >&2
             echo "             need to clean up debs/etc first." >&2
             echo "  -c         Delete archived builds. Leaves changelogs alone." >&2
             echo "  -r N       Use N as the Debian build revision (default: 1)" >&2

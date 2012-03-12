@@ -5,45 +5,45 @@ Uploaders: Robert Coup <robert@coup.net.nz>
 Build-Depends:
  scons,
  git-core,
- python-support (>= 0.90.0~),
+ python-support (>= 0.8.4),
  debhelper (>= 7.0.50~),
  python-all-dev,
- libboost-thread-dev,
- libboost-filesystem-dev,
- libboost-regex-dev,
- libboost-python-dev,
- libboost-system-dev,
- libboost-iostreams-dev,
- libboost-program-options-dev,
- libpng12-dev,
- libjpeg62-dev,
- libtiff4-dev,
+ libboost-thread-dev (>= 1.42),
+ libboost-filesystem-dev (>= 1.42) ,
+ libboost-regex-dev (>= 1.42),
+ libboost-python-dev (>= 1.42),
+ libboost-system-dev (>= 1.42),
+ libboost-iostreams-dev (>= 1.42),
+ libboost-program-options-dev (>= 1.42),
+ libpng-dev,
+ libjpeg-dev,
+ libtiff-dev,
  zlib1g-dev,
  libfreetype6-dev,
  libpq-dev,
  libproj-dev,
- libltdl-dev,
+ libltdl7-dev,
  libgdal1-dev,
  libxml2-dev,
- libicu-dev,
+ libicu-dev (>= 4.2),
  libcairo2-dev,
  libcairomm-1.0-dev,
  python-cairo-dev,
  libsqlite3-dev,
  libcurl4-gnutls-dev,
- libsigc++-2.0-dev,
- python-epydoc
-Standards-Version: 3.9.2
+ libsigc++-2.0-dev
+Standards-Version: 3.8.4
 Section: libs
 XS-Python-Version: >= 2.5
 Homepage: http://www.mapnik.org/
 
-Package: libmapnik0.7
+Package: libmapnik
 Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- ttf-dejavu
+ ttf-dejavu,
+ ttf-unifont
 Suggests: postgis
 Description: C++/Python toolkit for developing GIS applications (libraries)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
@@ -65,26 +65,27 @@ Section: libdevel
 Architecture: any
 Depends:
  ${misc:Depends},
- libmapnik0.7 (= ${binary:Version}),
+ libmapnik (= ${binary:Version}),
+ mapnik-utils (= ${binary:Version}),
  libc6-dev | libc-dev,
- libboost-thread-dev,
- libboost-filesystem-dev,
- libboost-regex-dev,
- libboost-python-dev,
- libboost-system-dev,
- libboost-iostreams-dev,
- libpng12-dev,
+ libboost-thread-dev (>= 1.42),
+ libboost-filesystem-dev (>= 1.42) ,
+ libboost-regex-dev (>= 1.42),
+ libboost-python-dev (>= 1.42),
+ libboost-system-dev (>= 1.42),
+ libboost-iostreams-dev (>= 1.42),
+ libboost-program-options-dev (>= 1.42),
+ libpng-dev,
  libjpeg62-dev,
  libtiff4-dev,
  zlib1g-dev,
  libfreetype6-dev,
  libpq-dev,
  libproj-dev,
- libltdl-dev,
+ libltdl7-dev,
  libgdal1-dev,
  libxml2-dev,
- libagg-dev,
- libicu-dev,
+ libicu-dev (>= 4.2),
  libcairo2-dev,
  libcairomm-1.0-dev,
  python-cairo-dev,
@@ -114,6 +115,8 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends}
+Conflicts: mapnik-utils
+Replaces: mapnik-utils
 Description: C++/Python toolkit for developing GIS applications (utilities)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
  (Geographic Information Systems) applications. At the core is a C++
@@ -161,6 +164,8 @@ Section: doc
 Architecture: all
 Recommends: libmapnik-dev
 Depends: ${misc:Depends}
+Conflicts: mapnik-docs
+Replaces: mapnik-docs
 Description: C++/Python toolkit for developing GIS applications (doc)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
  (Geographic Information Systems) applications. At the core is a C++

@@ -5,7 +5,7 @@ import feature ;
 import path ;
 import python ; 
 import mapnik ;
-	
+    
 type.register MAPNIK_PLUGIN : :  SHARED_LIB ;
 type.set-generated-target-suffix MAPNIK_PLUGIN : : input ;
 type.set-generated-target-prefix MAPNIK_PLUGIN : : "" ;
@@ -15,38 +15,38 @@ MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
 MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 
 echo "Building Mapnik on " [ os.name ] "..." ;
-echo "dependecies dir:" $(MAPNIK_DEPS_DIR) ;
+echo "dependencies dir:" $(MAPNIK_DEPS_DIR) ;
 
 project mapnik
     : source-location ../
     : requirements
-	<include>$(MAPNIK_SOURCE)/include
-      	<include>$(MAPNIK_SOURCE)/deps/agg/include 
-	<include>$(BOOST_INCLUDES)
-	<include>$(MAPNIK_DEPS_DIR)/icu/include
-	<include>ltdl
-      	<include>$(MAPNIK_DEPS_DIR)/freetype/include
-	<include>$(MAPNIK_DEPS_DIR)/proj/src
-	<include>$(MAPNIK_DEPS_DIR)/libpng
-	<include>$(MAPNIK_DEPS_DIR)/zlib
-	<include>$(MAPNIK_DEPS_DIR)/jpeg
-	<include>$(MAPNIK_DEPS_DIR)/tiff/libtiff	
-	<include>$(MAPNIK_DEPS_DIR)/libxml2/include
-	<include>$(MAPNIK_DEPS_DIR)/cairo/src
-	<include>$(MAPNIK_DEPS_DIR)/cairomm
-	<include>$(MAPNIK_DEPS_DIR)/libsigc++
-	<threading>multi
-	<variant>debug:<define>MAPNIK_DEBUG
-	<define>MAPNIK_THREADSAFE
-	<define>HAVE_LIBXML2
-	<define>HAVE_JPEG
-	<define>HAVE_CAIRO
-	#<define>_HAS_CPP0X=0
-	#<define>LIBXML_STATIC
-	<toolset>gcc:<cxxflags>-fno-strict-aliasing 
-	<toolset>msvc:<define>_WINDOWS
-	<toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
-	<toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS	
+    <include>$(MAPNIK_SOURCE)/include
+    <include>$(MAPNIK_SOURCE)/deps/agg/include 
+    <include>$(BOOST_INCLUDES)
+    <include>$(MAPNIK_DEPS_DIR)/icu/include
+    <include>ltdl
+    <include>$(MAPNIK_DEPS_DIR)/freetype/include
+    <include>$(MAPNIK_DEPS_DIR)/proj/src
+    <include>$(MAPNIK_DEPS_DIR)/libpng
+    <include>$(MAPNIK_DEPS_DIR)/zlib
+    <include>$(MAPNIK_DEPS_DIR)/jpeg
+    <include>$(MAPNIK_DEPS_DIR)/tiff/libtiff
+    <include>$(MAPNIK_DEPS_DIR)/libxml2/include
+    <include>$(MAPNIK_DEPS_DIR)/cairo/src
+    <include>$(MAPNIK_DEPS_DIR)/cairomm
+    <include>$(MAPNIK_DEPS_DIR)/libsigc++
+    <threading>multi
+    <variant>debug:<define>MAPNIK_DEBUG
+    <define>MAPNIK_THREADSAFE
+    <define>HAVE_LIBXML2
+    <define>HAVE_JPEG
+    <define>HAVE_CAIRO
+    #<define>_HAS_CPP0X=0
+    #<define>LIBXML_STATIC
+    <toolset>gcc:<cxxflags>-fno-strict-aliasing 
+    <toolset>msvc:<define>_WINDOWS
+    <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+    <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
     : default-build release
     : build-dir build
     ;
@@ -67,8 +67,8 @@ alias png : /site-config//png : <link>static ;
 alias jpeg : /site-config//jpeg : <link>static ;
 alias tiff : /site-config//tiff : <link>static ;
 alias freetype2 : /site-config//freetype2 : <link>static ;
-alias cairo : /site-config//cairo : <link>shared ;	
-alias cairomm : /site-config//cairomm : <link>shared ;	
+alias cairo : /site-config//cairo : <link>shared ;    
+alias cairomm : /site-config//cairomm : <link>shared ;    
 # alias ltdl : /site-config//ltdl : <link>static ;
 alias proj : /site-config//proj : <link>static ;
 alias icu  : /site-config//icu : <link>shared ;
@@ -88,8 +88,8 @@ alias user : /site-config//user : <link>static ;
 local with-pgsql = [ option.get with-pgsql : "" ] ;
 if $(with-pgsql)
 {
-   # using pgsql : $(with-pgsql[1]) ;	
-   echo "--with-pgsql="$(with-pgsql) ; 	
+   # using pgsql : $(with-pgsql[1]) ;
+   echo "--with-pgsql="$(with-pgsql) ;
 }
 
 # core library
@@ -116,14 +116,14 @@ build-project demo/c++ ;
 # install core lib and plugins
 
 local prefix = [ option.get prefix : "" ] ;
-    
+
 if ! $(prefix)
 {
     if [ modules.peek : NT ] { prefix = C:\\$(name) ; }
-    else if [ modules.peek : UNIX ] { prefix = /usr/local ; }        
+    else if [ modules.peek : UNIX ] { prefix = /usr/local ; }
 }
 
-local headers = [ path.glob-tree $(MAPNIK_SOURCE)/include/mapnik : *.hpp ] ;    
+local headers = [ path.glob-tree $(MAPNIK_SOURCE)/include/mapnik : *.hpp ] ;
 #echo $(headers) ;
 local fonts = [ path.glob-tree $(MAPNIK_SOURCE)/fonts : *.ttf ] ;
 #echo $(fonts) ;
@@ -138,7 +138,7 @@ mapnik.install mapnik
     : plugins/input/shape
       plugins/input/csv
       plugins/input/sqlite
-      plugins/input/raster	
+      plugins/input/raster
       plugins/input/postgis
       plugins/input/gdal
       plugins/input/ogr
@@ -148,9 +148,9 @@ mapnik.install mapnik
 # install c++ demo
 
 install demo : demo/c++//rundemo :
-	  <location>$(prefix)/demo/c++
-	;
-	
+      <location>$(prefix)/demo/c++
+    ;
+
 #  python extensions
 if  [ python.configured ] 
 {
@@ -161,8 +161,8 @@ if  [ python.configured ]
     echo "Will install Python bindings into " $(python_bindings_dir) ;
     install install-python
         : bindings/python
-    	: <location>$(python_bindings_dir)
-   	;
+        : <location>$(python_bindings_dir)
+       ;
 }
 else 
 {

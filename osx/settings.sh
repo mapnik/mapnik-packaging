@@ -15,8 +15,8 @@ export MAPNIK_TAR_DIR="mapnik"
 export OPTIMIZATION="-Os"
 export JOBS="`sysctl -n hw.ncpu`"
 # -arch i386 breaks icu Collator::createInstance
-#export ARCH_FLAGS="-arch x86_64"
-export ARCH_FLAGS="-arch x86_64 -arch i386"
+export ARCH_FLAGS="-arch x86_64"
+#export ARCH_FLAGS="-arch x86_64 -arch i386"
 export ARCHFLAGS=${ARCH_FLAGS}
 export CORE_CXX="/Developer/usr/bin/clang++"
 export CORE_CC="/Developer/usr/bin/clang"
