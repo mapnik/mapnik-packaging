@@ -2,8 +2,9 @@ MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 project : source-location  $(MAPNIK_SOURCE)/src ;
 		
 lib mapnik
-    : 
-    color.cpp
+    :
+	color.cpp
+    conversions.cpp
     box2d.cpp
     building_symbolizer.cpp
     datasource_cache.cpp
