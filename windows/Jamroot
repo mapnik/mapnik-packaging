@@ -152,7 +152,9 @@ install demo : demo/c++//rundemo :
     ;
 
 #  python extensions
-if  [ python.configured ] 
+local python = [ option.get python : "" ] ;
+
+if $(python) 
 {
     build-project bindings/python ;
     local python-root =  "c:/Python27" ;  #[ python.root ] ;
