@@ -21,7 +21,7 @@ DEBEMAIL="robert+mapniknightly@coup.net.nz"
 # branch values are the latest official release from the branch
 declare -A BRANCHES
 BRANCHES["master"]="2.1.0"
-BRANCHES["2.0.x"]="2.0.0"
+BRANCHES["2.0.x"]="2.0.1"
 BRANCHES["0.7.x"]="0.7.2"
 
 # PPA names, keys are branches

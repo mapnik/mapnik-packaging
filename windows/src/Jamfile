@@ -78,12 +78,15 @@ lib mapnik
     text_placements/list.cpp
     text_placements/simple.cpp
     text_properties.cpp
-	
+    xml_tree.cpp
+    config_error.cpp
+
 	# others
 	feature_style_processor.cpp
 	mapped_memory_cache.cpp
 	jpeg_reader.cpp
 	libxml2_loader.cpp
+	#rapidxml_loader.cpp
 	load_map.cpp
 	
 	# cairo
