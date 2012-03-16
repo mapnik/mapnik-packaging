@@ -141,6 +141,7 @@ Depends:
  ${shlibs:Depends},
  ${misc:Depends},
  ${python:Depends},
+ libmapnik (= ${binary:Version}),
  python-cairo
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
