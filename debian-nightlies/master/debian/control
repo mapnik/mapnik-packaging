@@ -114,7 +114,9 @@ Section: utils
 Architecture: any
 Depends:
  ${shlibs:Depends},
- ${misc:Depends}
+ ${misc:Depends},
+ libmapnik (= ${binary:Version}),
+ python-lxml
 Conflicts: mapnik-utils
 Replaces: mapnik-utils
 Description: C++/Python toolkit for developing GIS applications (utilities)
