@@ -26,14 +26,16 @@ export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to reduce icu library size (18.3)
 export CORE_CFLAGS="${OPTIMIZATION} ${ARCH_FLAGS}"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
 export CORE_LDFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
+
 # breaks distutils
 #export MACOSX_DEPLOYMENT_TARGET=10.6
 export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
 export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
 #export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"
-export CFLAGS=$CORE_CFLAGS
-export CXXFLAGS=$CORE_CXXFLAGS
-export LDFLAGS=$CORE_LDFLAGS
+export LDFLAGS="-L${BUILD}/lib "$CORE_LDFLAGS
+export CFLAGS="-I${BUILD}/include "$CORE_CFLAGS
+export CXXFLAGS="-I${BUILD}/include "$CORE_CXXFLAGS
+
 
 # boost regex link:
 # -licui18n -licudata -licuuc    -headerpad_max_install_names -Wl,-dead_strip -no_dead_strip_inits_and_terms -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64
