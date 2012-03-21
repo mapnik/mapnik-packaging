@@ -23,6 +23,21 @@ cd ${PACKAGES}/boost*/
 mkdir -p boost-staging
 echo '...copying boost headers'
 ./dist/bin/bcp \
+boost/thread/mutex.hpp \
+boost/regex.hpp \
+boost/unordered_map.hpp \
+boost/make_shared.hpp \
+boost/variant.hpp \
+boost/algorithm/string.hpp \
+boost/spirit/include/qi.hpp \
+boost/spirit/include/qi_action.hpp \
+boost/ptr_container/ptr_vector.hpp \
+boost/property_map/property_map.hpp \
+boost/math/constants/constants.hpp \
+boost/spirit/include/phoenix_operator.hpp \
+boost/spirit/include/phoenix_fusion.hpp \
+boost/fusion/include/adapt_struct.hpp \
+boost/fusion/include/adapt_adt.hpp \
 boost/system/error_code.hpp \
 boost/cerrno.hpp \
 boost/filesystem/operations.hpp \
@@ -38,6 +53,11 @@ boost/interprocess/streams/bufferstream.hpp \
 boost/fusion/include/std_pair.hpp \
 boost/python/detail/api_placeholder.hpp \
 boost/range/algorithm.hpp \
+boost/spirit/include/karma.hpp \
+boost/spirit/include/phoenix.hpp \
+boost/fusion/include/boost_tuple.hpp \
+boost/spirit/include/support_multi_pass.hpp \
+boost/math/special_functions/round.hpp \
 boost-staging/ 1>/dev/null
 cp -r boost-staging/boost ${LOCAL_TARGET}/include/
 
@@ -73,12 +93,13 @@ cp -R ${BUILD}/lib/lib*.a ${LOCAL_TARGET}/lib/
 #cp -R ${BUILD}/lib/libicu*.dylib ${LOCAL_TARGET}/lib/
 
 
+echo '…moving packaging into place: ${MAPNIK_DIST}"
 # move to dist and package things up
 cd ${MAPNIK_DIST}
 rm -rf ./mapnik-osx-sdk.tar.bz2
 
 # WARNING, target must be relative here
-tar cjf ./mapnik-osx-sdk.tar.bz2 ./${TARGET_BASENAME}
+tar cjf ./${TARGET_BASENAME}.tar.bz2 ./${TARGET_BASENAME}
 
 
 
