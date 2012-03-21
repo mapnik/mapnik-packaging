@@ -4,18 +4,24 @@ echo '...packaging sdk tarball'
 # where we are headed
 TARGET_BASENAME="${MAPNIK_TAR_DIR}-osx-sdk"
 LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
+mkdir -p "${LOCAL_TARGET}"
+
 
 # clear out mapnik
 cd ${MAPNIK_SOURCE}
 make uninstall
-
 # also remove python versions
 rm -rf ${MAPNIK_INSTALL}/lib/python*
+# clear up where wer're going
+rm -rf ${LOCAL_TARGET}/*
+# now establish a base of data
+cp -R ${MAPNIK_INSTALL}/* ${LOCAL_TARGET}/
 
 # package more boost headers
 # (only needed to compile mapnik itself)
 cd ${PACKAGES}/boost*/
 mkdir -p boost-staging
+echo '...copying boost headers'
 ./dist/bin/bcp \
 boost/system/error_code.hpp \
 boost/cerrno.hpp \
@@ -34,19 +40,24 @@ boost/python/detail/api_placeholder.hpp \
 boost-staging/ 1>/dev/null
 cp -r boost-staging/boost ${LOCAL_TARGET}/include/
 
+echo '...copying png headers'
 cp ${BUILD}/include/png* ${LOCAL_TARGET}/include/
 
 # jpeg
+echo '...copying jpeg headers'
 cp ${BUILD}/include/j*.h ${LOCAL_TARGET}/include/
 
 # tiff
+echo '...copying tiff headers'
 cp ${BUILD}/include/tiff* ${LOCAL_TARGET}/include/
 
 # TODO - give up and copy all headers for now
 # postgres,gdal,sqlite,tiff,jpeg
-cp -r ${BUILD}/include/* ${LOCAL_TARGET}/include/
+#echo '...copying all headers'
+#cp -r ${BUILD}/include/* ${LOCAL_TARGET}/include/
 
 # config scripts
+echo '...copying a few config programs'
 cp ${BUILD}/bin/freetype-config ${LOCAL_TARGET}/bin/
 #cp ${BUILD}/bin/xml2-config ${LOCAL_TARGET}/bin/
 cp ${BUILD}/bin/pg_config ${LOCAL_TARGET}/bin/
@@ -54,18 +65,16 @@ cp ${BUILD}/bin/gdal-config ${LOCAL_TARGET}/bin/
 
 
 # libs
+echo '...copying static libs'
 cp -R ${BUILD}/lib/lib*.a ${LOCAL_TARGET}/lib/
 #cp -R ${BUILD}/lib/libboost_regex-mapnik.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
 #install_name_tool -id @loader_path/libboost_regex.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
-cp -R ${BUILD}/lib/libicu*.dylib ${LOCAL_TARGET}/lib/
+#cp -R ${BUILD}/lib/libicu*.dylib ${LOCAL_TARGET}/lib/
 
 
 # move to dist and package things up
 cd ${MAPNIK_DIST}
 rm -rf ./mapnik-osx-sdk.tar.bz2
-mkdir -p $LOCAL_TARGET
-rm -rf $LOCAL_TARGET/*
-cp -R ${MAPNIK_INSTALL}/* ${LOCAL_TARGET}/
 
 # WARNING, target must be relative here
 tar cjf ./mapnik-osx-sdk.tar.bz2 ./${TARGET_BASENAME}
