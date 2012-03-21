@@ -37,6 +37,7 @@ boost/interprocess/file_mapping.hpp \
 boost/interprocess/streams/bufferstream.hpp \
 boost/fusion/include/std_pair.hpp \
 boost/python/detail/api_placeholder.hpp \
+boost/range/algorithm.hpp \
 boost-staging/ 1>/dev/null
 cp -r boost-staging/boost ${LOCAL_TARGET}/include/
 
