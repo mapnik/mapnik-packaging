@@ -260,5 +260,15 @@ make install
 cd ${PACKAGES}
 
 
+<<COMMENT
+otool -L ${ROOTDIR}/build/lib/*dylib
+	/Users/dane/projects/mapnik-packaging/osx/build/lib/libgdal.1.dylib (compatibility version 18.0.0, current version 18.0.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
+	/usr/lib/libexpat.1.dylib (compatibility version 7.0.0, current version 7.2.0)
+	/usr/lib/libz.1.dylib (compatibility version 1.0.0, current version 1.2.5)
+	/usr/lib/libiconv.2.dylib (compatibility version 7.0.0, current version 7.0.0)
+	/usr/lib/libstdc++.6.dylib (compatibility version 7.0.0, current version 52.0.0)
+COMMENT
+
 # clear out shared libs
 rm ${ROOTDIR}/build/lib/*dylib

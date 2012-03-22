@@ -57,7 +57,11 @@ export SQLITE_VERSION="3071100"
 export FREETYPE_VERSION="2.4.9"
 export PROJ_VERSION="4.8.0"
 export PROJ_GRIDS_VERSION="1.5"
-export PIXMAN_VERSION="0.24.4"
+# 0.24.4 will not compile:
+#"_lcg_seed", referenced from:
+#      _main in region-test.o     
+#export PIXMAN_VERSION="0.24.4"
+export PIXMAN_VERSION="0.22.2"
 export CAIRO_VERSION="1.10.2"
 export CAIROMM_VERSION="1.10.0"
 export SIGCPP_VERSION="2.2"

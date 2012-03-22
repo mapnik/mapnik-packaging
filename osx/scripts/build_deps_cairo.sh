@@ -32,6 +32,21 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
+<<COMMENT
+/Developer/usr/bin/clang -DHAVE_CONFIG_H -I. -I.. -I../pixman -I../pixman -I/Users/dane/projects/mapnik-packaging/osx/build/include/libpng15    -DU_CHARSET_IS_UTF8=1  -I/Users/dane/projects/mapnik-packaging/osx/build/include -O3 -arch x86_64 -D_FILE_OFFSET_BITS=64 -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -Wall -fno-strict-aliasing -fvisibility=hidden -D_REENTRANT -c lowlevel-blt-bench.c
+  CCLD   libutils.la
+  CCLD   a1-trap-test
+  CCLD   pdf-op-test
+  CCLD   region-test
+  CCLD   region-translate-test
+Undefined symbols for architecture x86_64:
+  "_lcg_seed", referenced from:
+      _main in region-test.o
+ld: symbol(s) not found for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [region-test] Error 1
+COMMENT
+
 # fontconfig
 echo '*building fontconfig*'
 rm -rf fontconfig-${FONTCONFIG_VERSION}
