@@ -122,7 +122,8 @@ cd ${PACKAGES}
 
 # proj4
 echo '*building proj.4*'
-cd proj-trunk/nad
+tar xf proj-${PROJ_VERSION}.tar.gz
+cd proj-${PROJ_VERSION}/nad
 unzip -o ../../proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
 cd ../
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
@@ -152,9 +153,13 @@ cd ${PACKAGES}
 echo '*building tiff*'
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
+export OLD_CFLAGS=$CFLAGS
+export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
+./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
+--disable-cxx --with-jpeg-include-dir=${BUILD}/include --with-jpeg-lib-dir=${BUILD}/lib
 make -j${JOBS}
 make install
+export CFLAGS=$OLD_CFLAGS
 cd ${PACKAGES}
 
 # sqlite
