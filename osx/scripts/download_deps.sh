@@ -1,4 +1,4 @@
-
+set -e
 cd ${PACKAGES}
 wget http://download.icu-project.org/files/icu4c/${ICU_VERSION}/icu4c-${ICU_VERSION2}-src.tgz
 wget http://voxel.dl.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION2}.tar.bz2
@@ -8,11 +8,7 @@ wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-${LIBPNG_VERSION}.tar
 wget http://www.ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
 wget http://download.osgeo.org/libtiff/tiff-${LIBTIFF_VERSION}.tar.gz
 wget http://download.osgeo.org/proj/proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
-#wget http://download.osgeo.org/proj/proj-4.7.0.tar.gz
-#tar xvf proj-4.7.0.tar.gz
-#cd proj-4.7.0
-# we use trunk instead for better threading support
-svn co http://svn.osgeo.org/metacrs/proj/trunk/proj proj-trunk # at the time pre-release 4.8.0
+wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 wget http://ftp.postgresql.org/pub/source/v${POSTGRES_VERSION}/postgresql-${POSTGRES_VERSION}.tar.bz2
 wget http://download.osgeo.org/gdal/gdal-${GDAL_VERSION}.tar.gz
 

@@ -1,3 +1,5 @@
+set -e
+
 echo '...packaging binary tarball'
 
 cd ${MAPNIK_SOURCE}
