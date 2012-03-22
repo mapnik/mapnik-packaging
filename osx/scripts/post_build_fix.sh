@@ -1,3 +1,5 @@
+set -e
+
 # TODO - refactor for re-usability
 
 echo "...fixing install names of mapnik and dependencies"
@@ -11,7 +13,8 @@ cp -R ${BUILD}/lib/libicui18n*.dylib ${MAPNIK_INSTALL}/lib/
 COMMENT
 mkdir -p ${MAPNIK_INSTALL}/share/
 mkdir -p ${MAPNIK_INSTALL}/share/icu
-cp ${BUILD}/share/icu/4.8.1.1/icudt48l.dat ${MAPNIK_INSTALL}/share/icu/
+# TODO - replace with actual icu version
+cp ${BUILD}/share/icu/*/icudt*.dat ${MAPNIK_INSTALL}/share/icu/
 cp -R ${BUILD}/share/proj ${MAPNIK_INSTALL}/share/proj
 cp -R ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/gdal
 

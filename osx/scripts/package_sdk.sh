@@ -1,4 +1,4 @@
-
+set -e
 echo '...packaging sdk tarball'
 
 # where we are headed
