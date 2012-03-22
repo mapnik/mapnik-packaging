@@ -42,6 +42,7 @@ export CXXFLAGS="-I${BUILD}/include "$CORE_CXXFLAGS
 
 export DYLD_LIBRARY_PATH="${BUILD}/lib"
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
+export PATH="/Developer/usr/bin:$PATH" # to ensure consistent clang version
 export PATH="${BUILD}/bin:$PATH"
 
 # versions

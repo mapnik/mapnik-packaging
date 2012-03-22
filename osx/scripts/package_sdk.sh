@@ -93,7 +93,7 @@ cp -R ${BUILD}/lib/lib*.a ${LOCAL_TARGET}/lib/
 #cp -R ${BUILD}/lib/libicu*.dylib ${LOCAL_TARGET}/lib/
 
 
-echo '…moving packaging into place: ${MAPNIK_DIST}"
+echo "...moving packaging into place: ${MAPNIK_DIST}"
 # move to dist and package things up
 cd ${MAPNIK_DIST}
 rm -rf ./mapnik-osx-sdk.tar.bz2
