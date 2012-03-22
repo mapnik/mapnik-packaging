@@ -254,6 +254,7 @@ cd ${PACKAGES}
 
 # gdal
 echo '*building gdal*'
+#watch out: vtable for __cxxabiv1::__si_class_type_info
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
@@ -273,7 +274,7 @@ cd gdal-${GDAL_VERSION}
 --with-jasper=no \
 --with-gif=no \
 --with-pg=no \
---with-hide-internal-symbols=yes \
+--with-hide-internal-symbols=no \
 --with-vfk=no \
 --with-grib=no
 

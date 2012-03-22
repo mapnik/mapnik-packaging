@@ -26,3 +26,6 @@ cd scripts/
 
 # then uninstall mapnik and package sdk
 ./package_sdk.sh
+
+# uploads
+#./upload.sh
