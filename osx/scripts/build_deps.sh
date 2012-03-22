@@ -166,10 +166,12 @@ cd ${PACKAGES}
 echo '*building sqlite*'
 tar xf sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 cd sqlite-autoconf-${SQLITE_VERSION}
-export CFLAGS="-DSQLITE_ENABLE_RTREE=1 "$CFLAGS
+export OLD_CFLAGS=$CFLAGS
+export CFLAGS="-DSQLITE_ENABLE_RTREE=1 $CFLAGS"
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
 make -j${JOBS}
 make install
+export CFLAGS=$OLD_CFLAGS
 cd ${PACKAGES}
 
 
@@ -202,67 +204,43 @@ COMMENT
 
 cd ${PACKAGES}
 tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
-mv postgresql-${POSTGRES_VERSION} postgresql-${POSTGRES_VERSION}-64
-tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
-mv postgresql-${POSTGRES_VERSION} postgresql-${POSTGRES_VERSION}-32
-
 
 # 64 bit build
 echo '*building postgres 64 bit*'
 cd ${PACKAGES}
-cd postgresql-${POSTGRES_VERSION}-64
-export ARCHFLAGS='-arch x86_64'
-export CFLAGS="${OPTIMIZATION} ${ARCHFLAGS} -D_FILE_OFFSET_BITS=64"
-export CXXFLAGS="${CFLAGS}"
-export LDFLAGS="${OPTIMIZATION} ${ARCHFLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
+cd postgresql-${POSTGRES_VERSION}
 ./configure --prefix=${BUILD} --enable-shared \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --with-libxml \
-LD=${CC}
+--with-bonjour --with-libxml
+# LD=${CC}
 make -j${JOBS}
 make install
-
-# 32 bit build
-echo '*building postgres 32 bit*'
 cd ${PACKAGES}
-cd postgresql-${POSTGRES_VERSION}-32
-export ARCHFLAGS='-arch i386'
-export CFLAGS="${OPTIMIZATION} ${ARCHFLAGS} -D_FILE_OFFSET_BITS=64"
-export CXXFLAGS="${CFLAGS}"
-export LDFLAGS="${OPTIMIZATION} ${ARCHFLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
-LOCAL_BUILD=`pwd`/stage
-./configure --prefix=${LOCAL_BUILD} --enable-shared \
---with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --with-libxml \
-LD=${CC}
-make -j${JOBS}
-make install
 
-rm ${ROOTDIR}/build/lib/libpq*dylib
-rm ${ROOTDIR}/build/lib/libpg*dylib
-#cp ${ROOTDIR}/build/lib/libpq.a ${LOCAL_BUILD}/lib/libpg64.a
-#cp ${ROOTDIR}/build/lib/libpgport.a ${LOCAL_BUILD}/lib/libpgport64.a
+<<COMMENT
+	/Users/dane/projects/mapnik-packaging/osx/build/lib/libpq.5.dylib (compatibility version 5.0.0, current version 5.4.0)
+	/usr/lib/libssl.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)
+	/usr/lib/libcrypto.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)
+	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos (compatibility version 5.0.0, current version 6.0.0)
+	/System/Library/Frameworks/LDAP.framework/Versions/A/LDAP (compatibility version 1.0.0, current version 2.2.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
+COMMENT
 
-# remake universal client lib
-#lipo -create ${LOCAL_BUILD}/lib/libpg64.a ${LOCAL_BUILD}/lib/libpq.a -output ${ROOTDIR}/build/lib/libpq.a
-#lipo -create ${LOCAL_BUILD}/lib/libpgport64.a ${LOCAL_BUILD}/lib/libpq.a -output ${ROOTDIR}/build/lib/libpgport.a
+# clear out shared libs
+rm ${ROOTDIR}/build/lib/*dylib
 
-# re-set default ARCHFLAGS settings
-source ${ROOTDIR}/settings.sh
-
-cd ${PACKAGES}
 
 # gdal
 echo '*building gdal*'
-#watch out: vtable for __cxxabiv1::__si_class_type_info
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
+./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \
---with-sqlite3=no \
+--with-sqlite3=${BUILD} \
+--with-hide-internal-symbols=no \
 --with-spatialite=no \
 --with-curl=no \
 --with-geos=no \
@@ -274,7 +252,6 @@ cd gdal-${GDAL_VERSION}
 --with-jasper=no \
 --with-gif=no \
 --with-pg=no \
---with-hide-internal-symbols=no \
 --with-vfk=no \
 --with-grib=no
 
@@ -282,4 +259,6 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-# TODO - cairo and friends
+
+# clear out shared libs
+rm ${ROOTDIR}/build/lib/*dylib

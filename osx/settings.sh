@@ -25,7 +25,7 @@ export CORE_CC="/Developer/usr/bin/clang"
 export CXX=${CORE_CXX}
 export CC=${CORE_CC}
 export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to reduce icu library size (18.3)
-export CORE_CFLAGS="${OPTIMIZATION} ${ARCH_FLAGS}"
+export CORE_CFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
 export CORE_LDFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
 
