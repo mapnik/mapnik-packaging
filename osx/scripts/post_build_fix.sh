@@ -20,10 +20,10 @@ cp -R ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/gdal
 
 
 # python
-for i in {"2.6","2.7"}
-do
-    cp -R ${BUILD}/lib/libboost_python-${i}.dylib ${MAPNIK_INSTALL}/lib/python${i}/site-packages/mapnik/
-done
+#for i in {"2.6","2.7"}
+#do
+#    cp -R ${BUILD}/lib/libboost_python-${i}.dylib ${MAPNIK_INSTALL}/lib/python${i}/site-packages/mapnik/
+#done
 
 # TODO - make linking dynamic
 for i in $(ls ${MAPNIK_INSTALL}/lib/mapnik/input/*input)
