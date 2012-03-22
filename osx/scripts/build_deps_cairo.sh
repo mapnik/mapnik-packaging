@@ -23,6 +23,7 @@ cd ${PACKAGES}
 
 
 echo '*building pixman*'
+rm -rf pixman-${PIXMAN_VERSION}
 tar xf pixman-${PIXMAN_VERSION}.tar.gz
 cd pixman-${PIXMAN_VERSION}
 ./configure --enable-static --disable-shared \
@@ -33,6 +34,7 @@ cd ${PACKAGES}
 
 # fontconfig
 echo '*building fontconfig*'
+rm -rf fontconfig-${FONTCONFIG_VERSION}
 tar xf fontconfig-${FONTCONFIG_VERSION}.tar.gz
 cd fontconfig-${FONTCONFIG_VERSION}
 ./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD} \
@@ -44,6 +46,7 @@ cd ${PACKAGES}
 
 # cairo
 echo '*building cairo*'
+rm -rf cairo-${CAIRO_VERSION}
 tar xf cairo-${CAIRO_VERSION}.tar.gz
 cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
@@ -99,6 +102,7 @@ cd ${PACKAGES}
 
 # libsigcxx
 echo '*building libsigcxx*'
+rm -rf libsigc++-${SIGCPP_VERSION2}
 tar xf libsigc++-${SIGCPP_VERSION2}.tar.bz2
 cd libsigc++-${SIGCPP_VERSION2}
 ./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD}
@@ -108,6 +112,7 @@ cd ${PACKAGES}
 
 # cairomm
 echo '*building cairomm*'
+rm -rf cairomm-${CAIROMM_VERSION}
 tar xf cairomm-${CAIROMM_VERSION}.tar.gz
 cd cairomm-${CAIROMM_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point

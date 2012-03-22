@@ -12,7 +12,7 @@ export MAPNIK_DIST=${ROOTDIR}/dist
 export PACKAGES=${ROOTDIR}/packages
 export BUILD=${ROOTDIR}/build
 export MAPNIK_TAR_DIR="mapnik"
-export OPTIMIZATION="-Os"
+export OPTIMIZATION="-O3"
 export JOBS="`sysctl -n hw.ncpu`"
 # -arch i386 breaks icu Collator::createInstance
 export ARCH_FLAGS="-arch x86_64"
@@ -32,9 +32,9 @@ export CORE_LDFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -head
 export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
 export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
 #export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"
-export LDFLAGS="-L${BUILD}/lib "$CORE_LDFLAGS
-export CFLAGS="-I${BUILD}/include "$CORE_CFLAGS
-export CXXFLAGS="-I${BUILD}/include "$CORE_CXXFLAGS
+export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $OSX_SDK_LDFLAGS"
+export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $OSX_SDK_CFLAGS"
+export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
 
 
 # boost regex link:
