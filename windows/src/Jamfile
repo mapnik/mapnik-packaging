@@ -3,7 +3,8 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
 		
 lib mapnik
     :
-	color.cpp
+    color.cpp
+	  image_compositing.cpp
     conversions.cpp
     box2d.cpp
     building_symbolizer.cpp
