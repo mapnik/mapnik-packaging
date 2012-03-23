@@ -2,6 +2,18 @@ set -e
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+XCODE_PREFIX=$( xcode-select -print-path )
+if [[ $XCODE_PREFIX == "/Developer" ]]; then
+    SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
+    export PATH=/Developer/usr/bin:$PATH
+    export CORE_CXX="/Developer/usr/bin/clang++"
+    export CORE_CC="/Developer/usr/bin/clang"
+else
+    export CORE_CXX="/usr/bin/clang++"
+    export CORE_CC="/usr/bin/clang"
+    SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
+fi
+
 # needed for Coda.app terminal to act sanely
 # otherwise various tests fail oddly
 #export LANG=en_US.UTF-8
@@ -20,8 +32,6 @@ export JOBS="`sysctl -n hw.ncpu`"
 export ARCH_FLAGS="-arch x86_64"
 #export ARCH_FLAGS="-arch x86_64 -arch i386"
 export ARCHFLAGS=${ARCH_FLAGS}
-export CORE_CXX="/Developer/usr/bin/clang++"
-export CORE_CC="/Developer/usr/bin/clang"
 export CXX=${CORE_CXX}
 export CC=${CORE_CC}
 export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to reduce icu library size (18.3)
@@ -44,7 +54,6 @@ export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
 
 export DYLD_LIBRARY_PATH="${BUILD}/lib"
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
-export PATH="/Developer/usr/bin:$PATH" # to ensure consistent clang version
 export PATH="${BUILD}/bin:$PATH"
 
 # versions
