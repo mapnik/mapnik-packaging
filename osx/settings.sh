@@ -4,14 +4,14 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 XCODE_PREFIX=$( xcode-select -print-path )
 if [[ $XCODE_PREFIX == "/Developer" ]]; then
-    SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
+    export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
     export PATH=/Developer/usr/bin:$PATH
     export CORE_CXX="/Developer/usr/bin/clang++"
     export CORE_CC="/Developer/usr/bin/clang"
 else
     export CORE_CXX="/usr/bin/clang++"
     export CORE_CC="/usr/bin/clang"
-    SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
+    export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
 fi
 
 # needed for Coda.app terminal to act sanely
@@ -41,9 +41,9 @@ export CORE_LDFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -head
 
 # breaks distutils
 #export MACOSX_DEPLOYMENT_TARGET=10.6
-export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
-export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk"
-#export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"
+export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot ${SDK_PATH}"
+export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot ${SDK_PATH}"
+#export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,${SDK_PATH}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $OSX_SDK_LDFLAGS"
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $OSX_SDK_CFLAGS"
 export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
