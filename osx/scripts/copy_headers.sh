@@ -21,6 +21,11 @@ boost/spirit/include/phoenix_operator.hpp \
 boost/spirit/include/phoenix_fusion.hpp \
 boost/fusion/include/adapt_struct.hpp \
 boost/fusion/include/adapt_adt.hpp \
+boost/property_tree/ptree.hpp \
+boost/any.hpp \
+boost/optional.hpp \
+boost/interprocess/mapped_region.hpp \
+boost/multi_index/ordered_index.hpp \
 boost-staging/ 1>/dev/null
 cp -r boost-staging/boost ${MAPNIK_INSTALL}/include/
 

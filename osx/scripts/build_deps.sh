@@ -31,8 +31,23 @@ cd boost_${BOOST_VERSION2}
 patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 ./bootstrap.sh
 
+<<COMMENT
+--- darwin.jam	2012-03-22 18:26:05.000000000 -0700
++++ tools/build/v2/tools/darwin.jam	2012-03-22 18:26:27.000000000 -0700
+@@ -104,7 +104,7 @@
+         bin ?= [ common.get-absolute-tool-path $(command[1]) ] ;
+         if $(bin) = "/usr/bin"
+         {
+-            root ?= /Developer ;
++            root ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer ;
+         }
+         else
+         {
+COMMENT
+
 # static libs
-./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
+./b2 tools/bcp \
+  --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
@@ -62,9 +77,6 @@ patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 #cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 #install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 #ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
-
-# bcp
-./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} stage tools/bcp
 
 # python
 <<COMMENT
@@ -218,6 +230,7 @@ make install
 cd ${PACKAGES}
 
 <<COMMENT
+otool -L ${ROOTDIR}/build/lib/*dylib
 	/Users/dane/projects/mapnik-packaging/osx/build/lib/libpq.5.dylib (compatibility version 5.0.0, current version 5.4.0)
 	/usr/lib/libssl.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)
 	/usr/lib/libcrypto.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)

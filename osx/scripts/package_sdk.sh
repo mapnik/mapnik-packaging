@@ -72,6 +72,8 @@ cp ${BUILD}/include/j*.h ${LOCAL_TARGET}/include/
 echo '...copying tiff headers'
 cp ${BUILD}/include/tiff* ${LOCAL_TARGET}/include/
 
+# todo ogr_frmts
+
 # TODO - give up and copy all headers for now
 # postgres,gdal,sqlite,tiff,jpeg
 #echo '...copying all headers'

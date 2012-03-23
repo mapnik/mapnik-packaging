@@ -11,6 +11,7 @@ if [[ $XCODE_PREFIX == "/Developer" ]]; then
 else
     export CORE_CXX="/usr/bin/clang++"
     export CORE_CC="/usr/bin/clang"
+    # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
     export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
 fi
 
@@ -83,3 +84,5 @@ export GETTEXT_VERSION="0.18.1.1"
 export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.8.0"
 export POSTGRES_VERSION="9.1.3"
+
+set +e
