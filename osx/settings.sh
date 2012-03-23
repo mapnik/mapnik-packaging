@@ -28,7 +28,10 @@ export PACKAGES=${ROOTDIR}/packages
 export BUILD=${ROOTDIR}/build
 export MAPNIK_TAR_DIR="mapnik"
 export OPTIMIZATION="-O3"
-export JOBS="`sysctl -n hw.ncpu`"
+export JOBS=`sysctl -n hw.ncpu`
+if [ $JOBS > 4 ]; then
+    export JOBS=$(expr $JOBS - 2)
+fi
 # -arch i386 breaks icu Collator::createInstance
 export ARCH_FLAGS="-arch x86_64"
 #export ARCH_FLAGS="-arch x86_64 -arch i386"
