@@ -1,4 +1,4 @@
-set -e
+#!/usr/bin/env bash
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -14,6 +14,9 @@ else
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
     export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
 fi
+
+#declare -A PY_VERSIONS
+#PY_VERSIONS["2.7"]="2.7"
 
 # needed for Coda.app terminal to act sanely
 # otherwise various tests fail oddly
@@ -52,10 +55,6 @@ export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $OSX_SDK_LDFLAGS"
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $OSX_SDK_CFLAGS"
 export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
 
-
-# boost regex link:
-# -licui18n -licudata -licuuc    -headerpad_max_install_names -Wl,-dead_strip -no_dead_strip_inits_and_terms -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64
-
 export DYLD_LIBRARY_PATH="${BUILD}/lib"
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
@@ -88,4 +87,3 @@ export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.8.0"
 export POSTGRES_VERSION="9.1.3"
 
-set +e
