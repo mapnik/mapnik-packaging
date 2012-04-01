@@ -1,9 +1,4 @@
-CXX = 'clang++'
-CC = 'clang++'
-CUSTOM_CXXFLAGS = '-arch x86_64 -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk'
-CUSTOM_LDFLAGS = '-Wl,-search_paths_first -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -L../build/lib '
 RUNTIME_LINK = 'static'
-INPUT_PLUGINS = 'csv,gdal,ogr,postgis,shape,sqlite'
 WARNING_CXXFLAGS = '-Wno-array-bounds -Wno-unused-function -Wno-unused-parameter -Wno-missing-field-initializers'
 PATH = '../build/bin/'
 BOOST_INCLUDES = '../build/include'
@@ -20,11 +15,7 @@ TIFF_LIBS = '../build/lib'
 PROJ_INCLUDES = '../build/include'
 PROJ_LIBS = '../build/lib'
 PKG_CONFIG_PATH = '../build/lib/pkgconfig'
-CAIRO = False
 SQLITE_INCLUDES = '../build/include'
 SQLITE_LIBS = '../build/lib'
 FULL_LIB_PATH = False
 BINDINGS = 'python'
-JOBS = 6
-DEMO = True
-PGSQL2SQLITE = True

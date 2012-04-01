@@ -5,4 +5,11 @@ rm ${ROOTDIR}/installer/*dmg
 rm ${ROOTDIR}/installer/pkg/*pkg
 packagemaker --doc ${ROOTDIR}/installer/mapnik.pmdoc --out ${ROOTDIR}/installer/pkg/Mapnik.pkg
 packagemaker --doc ${ROOTDIR}/installer/uninstall.pmdoc --out ${ROOTDIR}/installer/pkg/Uninstall-Mapnik.pkg
-hdiutil create "${ROOTDIR}/installer/mapnik_2.1.0-rc1.dmg" -volname "Mapnik 2.1-dev" -fs HFS+ -srcfolder ${ROOTDIR}/installer/pkg
+FOUND_ACTIVE_VERSION=`mapnik-config --version`
+MAPNIK_DMG_VOL_NAME="Mapnik ${FOUND_ACTIVE_VERSION}"
+MAPNIK_DMG_NAME="${MAPNIK_PACKAGE_PREFIX}_${FOUND_ACTIVE_VERSION}.dmg"
+hdiutil create \
+  "${ROOTDIR}/installer/${MAPNIK_DMG_NAME}" \
+  -volname "${MAPNIK_DMG_VOL_NAME}" \
+  -fs HFS+ \
+  -srcfolder ${ROOTDIR}/installer/pkg

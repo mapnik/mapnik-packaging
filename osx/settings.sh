@@ -1,11 +1,10 @@
-#!/usr/bin/env bash
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 XCODE_PREFIX=$( xcode-select -print-path )
 if [[ $XCODE_PREFIX == "/Developer" ]]; then
     export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
-    export PATH=/Developer/usr/bin:$PATH
+    export PATH="/Developer/usr/bin:${PATH}"
     export CORE_CXX="/Developer/usr/bin/clang++"
     export CORE_CC="/Developer/usr/bin/clang"
 else
@@ -15,22 +14,23 @@ else
     export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
 fi
 
-#declare -A PY_VERSIONS
-#PY_VERSIONS["2.7"]="2.7"
-
 # needed for Coda.app terminal to act sanely
 # otherwise various tests fail oddly
 #export LANG=en_US.UTF-8
 
 # settings
 #export MAPNIK_INSTALL=/opt/mapnik
-export MAPNIK_INSTALL=/Library/Frameworks/Mapnik.framework/unix
-export MAPNIK_SOURCE=${ROOTDIR}/mapnik
-export MAPNIK_DIST=${ROOTDIR}/dist
-export PACKAGES=${ROOTDIR}/packages
-export BUILD=${ROOTDIR}/build
-export MAPNIK_TAR_DIR="mapnik"
-export OPTIMIZATION="-O3"
+export MAPNIK_INSTALL="/Library/Frameworks/Mapnik.framework/unix"
+export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
+export MAPNIK_DIST="${ROOTDIR}/dist"
+export PACKAGES="${ROOTDIR}/packages"
+export BUILD="${ROOTDIR}/build"
+export MAPNIK_PACKAGE_PREFIX="mapnik"
+# cd ${MAPNIK_SOURCE}
+# MAPNIK_HASH=`git reflog show HEAD | sed -n '1p' | awk '{ print $1 }'`
+export MAPNIK_DEV_POSTFIX="-rc3"
+
+export OPTIMIZATION="3"
 export JOBS=`sysctl -n hw.ncpu`
 if [ $JOBS > 4 ]; then
     export JOBS=$(expr $JOBS - 2)
@@ -39,18 +39,19 @@ fi
 export ARCH_FLAGS="-arch x86_64"
 #export ARCH_FLAGS="-arch x86_64 -arch i386"
 export ARCHFLAGS=${ARCH_FLAGS}
-export CXX=${CORE_CXX}
-export CC=${CORE_CC}
-export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to reduce icu library size (18.3)
-export CORE_CFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
+export CORE_CPPFLAGS=""
+export CORE_CFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
-export CORE_LDFLAGS="${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
+export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
 
 # breaks distutils
 #export MACOSX_DEPLOYMENT_TARGET=10.6
 export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot ${SDK_PATH}"
 export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot ${SDK_PATH}"
 #export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,${SDK_PATH}"
+export CXX=${CORE_CXX}
+export CC=${CORE_CC}
+export CPPFLAGS=${CORE_CPPFLAGS}
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $OSX_SDK_LDFLAGS"
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $OSX_SDK_CFLAGS"
 export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
@@ -69,7 +70,7 @@ export SQLITE_VERSION="3071100"
 export FREETYPE_VERSION="2.4.9"
 export PROJ_VERSION="4.8.0"
 export PROJ_GRIDS_VERSION="1.5"
-# 0.24.4 will not compile:
+# 0.24.4 will not link:
 #"_lcg_seed", referenced from:
 #      _main in region-test.o     
 #export PIXMAN_VERSION="0.24.4"

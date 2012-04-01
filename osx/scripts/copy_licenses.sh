@@ -17,7 +17,7 @@ cp ${PACKAGES}/freetype-${FREETYPE_VERSION}/docs/LICENSE.TXT ${LICENSES}/freetyp
 
 # proj4
 mkdir -p ${LICENSES}/proj4/
-cp ${PACKAGES}/proj-trunk/COPYING ${LICENSES}/proj4/
+cp ${PACKAGES}/proj-${PROJ_VERSION}/COPYING ${LICENSES}/proj4/
 
 # libpng
 mkdir -p ${LICENSES}/libpng/

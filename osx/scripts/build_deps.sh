@@ -7,6 +7,8 @@ cd ${PACKAGES}
 echo '*building icu*'
 # *WARNING* do not set an $INSTALL variable
 # it will screw up icu build scripts
+export OLD_CPPFLAGS=${CPPFLAGS}
+export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to try to reduce icu library size (18.3)
 tar xf icu4c-${ICU_VERSION2}-src.tgz
 cd icu/source
 ./runConfigureICU MacOSX --prefix=${BUILD} \
@@ -18,6 +20,7 @@ cd icu/source
 
 make -j${JOBS}
 make install
+export CPPFLAGS=${OLD_CPPFLAGS}
 cd ${PACKAGES}
 
 

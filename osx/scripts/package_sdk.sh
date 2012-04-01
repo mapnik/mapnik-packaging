@@ -2,7 +2,7 @@ set -e
 echo '...packaging sdk tarball'
 
 # where we are headed
-TARGET_BASENAME="${MAPNIK_TAR_DIR}-osx-sdk"
+TARGET_BASENAME="${MAPNIK_PACKAGE_PREFIX}-osx-sdk"
 LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
 mkdir -p "${LOCAL_TARGET}"
 
@@ -90,10 +90,6 @@ cp ${BUILD}/bin/gdal-config ${LOCAL_TARGET}/bin/
 # libs
 echo '...copying static libs'
 cp -R ${BUILD}/lib/lib*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libboost_regex-mapnik.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
-#install_name_tool -id @loader_path/libboost_regex.dylib ${LOCAL_TARGET}/lib/libboost_regex.dylib
-#cp -R ${BUILD}/lib/libicu*.dylib ${LOCAL_TARGET}/lib/
-
 
 echo "...moving packaging into place: ${MAPNIK_DIST}"
 # move to dist and package things up
