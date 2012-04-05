@@ -3,15 +3,19 @@
 *(Visual C++ express 2008 and 2010 32-bit)*
 
 Buiding dependencies on windows can be very tedious. The goal here is to provide
-concise instructions for building individual packages using both VC++ 2008 and 2010.
+concise instructions for building individual packages using either VC++ 2008 and 2010.
+
 Hopefully, this will allow fully automated builds in the future.
 
 ## Prerequisites
 
 * Visual C++ 2008 or 2010 Express
+  * http://www.microsoft.com/visualstudio/en-us/products/2008-editions/visual-basic-express
+  * http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-basic-express
 * GNU Unix tools (GnuWin32) 
       * [bsdtar](http://gnuwin32.sourceforge.net/packages/libarchive.htm) 
       * [make](http://gnuwin32.sourceforge.net/packages/make.htm)
+      * [wget](http://downloads.sourceforge.net/gnuwin32/wget-1.11.4-1-setup.exe)
 * [msysgit](http://msysgit.googlecode.com/files/Git-1.7.7.1-preview20111027.exe) - install into c:/Git to avoid issues with spaces in paths
 * unzip (from [msysgit](http://code.google.com/p/msysgit/))
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
