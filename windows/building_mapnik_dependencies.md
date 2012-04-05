@@ -37,22 +37,23 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 
 ### Packages versions:
 
+    set ICU_VERSION=4.8
+    set BOOST_VERSION=49
     set ZLIB_VERSION=1.2.5
-    set LIBPNG_VERSION=1.5.6
+    set LIBPNG_VERSION=1.5.10
+    set JPEG_VERSION=8d
+    set FREETYPE_VERSION=2.4.9
+    set POSTGRESQL_VERSION=9.1.3
+    set TIFF_VERSION=4.0.0beta7
+    set PROJ_VERSION=4.8.0
+    set PROJ_GRIDS_VERSION=1.5
+    set GDAL_VERSION=1.8.1
+    set LIBXML2_VERSION=2.7.8
     set PIXMAN_VERSION=0.22.2
     set CAIRO_VERSION=1.10.2
-    set JPEG_VERSION=8c
-    set FREETYPE_VERSION=2.4.7
-    set POSTGRESQL_VERSION=9.1.1
-    set TIFF_VERSION=4.0.0beta7
-    set PROJ_VERSION=4.7.0
-    set GDAL_VERSION=1.8.1
-    set ICU_VERSION=4.8
-    set LIBXML2_VERSION=2.7.8
-    set LIBSIGC++_VERSION=2.2.10
     set CAIROMM_VERSION=1.10.0
-    set SQLITE_VERSION=3070900
-    set BOOST_VERSION=49
+    set LIBSIGC++_VERSION=2.2.10
+    set SQLITE_VERSION=3071100
     
 ## Download
 
@@ -77,6 +78,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
     curl http://www.sqlite.org/sqlite-amalgamation-%SQLITE_VERSION%.zip -O
     curl http://download.osgeo.org/proj/proj-%PROJ_VERSION%.tar.gz -O
+    curl http://download.osgeo.org/proj/proj-datumgrid-%PROJ_GRIDS_VERSION%.zip -O
     
     cd %ROOTDIR%
     
@@ -125,7 +127,7 @@ for every build variant.*
 
 ### Freetype 
 
-    bsdtar xvfz "%PKGDIR%\freetype-%FREETYPE_VERSION%.tar.gz"
+    bsdtar xfz "%PKGDIR%\freetype-%FREETYPE_VERSION%.tar.gz"
     rename freetype-%FREETYPE_VERSION% freetype
     cd freetype
 
@@ -137,7 +139,7 @@ for every build variant.*
 
     msbuild builds\win32\vc2010\freetype.sln /p:Configuration=Release /p:Platform=Win32
 
-    move objs\win32\vc2010\freetype247.lib freetype.lib
+    move objs\win32\vc2010\freetype249.lib freetype.lib
     cd %ROOTDIR%
 
 
@@ -252,14 +254,11 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 #### Official release
 
-    bsdtar xvfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz 
+    bsdtar xfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz
     rename proj-%PROJ_VERSION% proj
-
-#### Latest trunk (threading fixes)
-
-    svn co http://svn.osgeo.org/metacrs/proj/trunk/proj
-
-    cd proj
+    cd proj/nad
+    unzip -o ../../proj-datumgrid-%PROJ_GRIDS_VERSION%.zip
+    cd ..\
     nmake /f Makefile.vc
     cd %ROOTDIR%
 
