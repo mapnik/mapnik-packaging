@@ -30,7 +30,7 @@ tools. Please, ensure PATH is setup correctly and GNU tools can be accessed from
 The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 
     set PATH=%PATH%;c:\msysgit\msysgit\bin;c:\cygwin\bin;c:\GnuWin32\bin
-    set ROOTDIR=<mapnik_dependencies_dir>
+    set ROOTDIR=c:\dev2
     cd %ROOTDIR%
     mkdir packages 
     set PKGDIR=%ROOTDIR%/packages
@@ -52,7 +52,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set LIBSIGC++_VERSION=2.2.10
     set CAIROMM_VERSION=1.10.0
     set SQLITE_VERSION=3070900
-    set BOOST_VERSION=48
+    set BOOST_VERSION=49
     
 ## Download
 
@@ -85,6 +85,34 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 *NOTE: Some packages require different commands depending on the VC++ version.
 To avoid run-time clashes, it is a good idea to have a separate %ROOTDIR% 
 for every build variant.*
+
+### ICU
+
+    bsdtar xvfz %PKGDIR%\icu4c-4_8_1_1-src.tgz
+
+##### VC++ 2008
+
+    cd icu/source
+    bash ./runConfigure Cygwin/MSVC --prefix=%ROOTDIR%\icu
+    make install
+
+##### VC++ 2010
+
+    cd icu/
+    msbuild source\allinone\allinone.sln /t:Rebuild  /p:Configuration="Release" /p:Platform=Win32
+
+    cd %ROOTDIR%
+
+### boost
+
+    bsdtar xzf %PKGDIR%/boost_1_%BOOST_VERSION%_0.tar.gz
+    cd boost_1_%BOOST_VERSION%_0
+    set BOOST_PREFIX=boost-%BOOST_VERSION%-vc100
+    bootstrap.bat
+    bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex --with-chrono --disable-filesystem2 -sHAVE_ICU=1 -sICU_PATH=%ROOTDIR%\\icu -sICU_LINK=%ROOTDIR%\\icu\\lib\\icuuc.lib release link=static install
+
+    # if you need python
+    bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-python python=2.7 release link=shared install
 
 ### Jpeg
 
@@ -210,24 +238,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     make -f Makefile.win32 "CFG=release"
     cd %ROOTDIR%
 
-### ICU
-
-    bsdtar xvfz %PKGDIR%\icu4c-4_8_1_1-src.tgz
-
-##### VC++ 2008
-
-    cd icu/source
-    bash ./runConfigure Cygwin/MSVC --prefix=%ROOTDIR%\icu
-    make install
-
-##### VC++ 2010
-
-    cd icu/
-    msbuild source\allinone\allinone.sln /t:Rebuild  /p:Configuration="Release" /p:Platform=Win32
-    
-    cd %ROOTDIR%
-
-
 ### LibXML2
 
     bsdtar xvfz %PKGDIR%\libxml2-%LIBXML2_VERSION%.tar.gz
@@ -315,15 +325,5 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
     unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
     rename sqlite-amalgamation-%SQLITE_VERSION% sqlite
-
-
-### boost
-
-    bsdtar xvzf %PKGDIR%/boost_1_%BOOST_VERSION%_0.tar.gz
-    rename boost_1_%BOOST_VERSION%_0 boost
-    cd boost
-    bootstrap.bat
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex -sHAVE_ICU=1 -sICU_PATH=..\\icu -sICU_LINK=..\\icu\\lib\\icuuc.lib release link=static install
-    bjam toolset=msvc --prefix=..\\boost-vc100 --with-python python=2.7 release link=shared install
 
     
