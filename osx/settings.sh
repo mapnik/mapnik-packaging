@@ -9,6 +9,8 @@ if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
     export CORE_CC="/usr/bin/clang"
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
     export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
+    # http://adcdownload.apple.com/Developer_Tools/auxiliary_tools_for_xcode__february_2012/auxiliary_tools_for_xcode.dmg
+    export PATH=/Applications/PackageMaker.app/Contents/MacOS/:$PATH
 else
     export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
     export PATH="/Developer/usr/bin:${PATH}"
