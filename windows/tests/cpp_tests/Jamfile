@@ -12,7 +12,7 @@ exe font_registration_test :
     ;
 
 exe params_test :
-    params_testcpp
+    params_test.cpp
     ../../src//mapnik
     ../..//thread
     ../..//icu
