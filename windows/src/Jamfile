@@ -1,10 +1,10 @@
 MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 project : source-location  $(MAPNIK_SOURCE)/src ;
-		
+    
 lib mapnik
     :
     color.cpp
-	  image_compositing.cpp
+    image_compositing.cpp
     conversions.cpp
     box2d.cpp
     building_symbolizer.cpp
@@ -82,63 +82,63 @@ lib mapnik
     xml_tree.cpp
     config_error.cpp
 
-	# others
-	feature_style_processor.cpp
-	mapped_memory_cache.cpp
-	jpeg_reader.cpp
-	libxml2_loader.cpp
-	#rapidxml_loader.cpp
-	load_map.cpp
-	
-	# cairo
-	cairo_renderer.cpp
-
-	# agg	
-    	agg/process_building_symbolizer.cpp
-    	agg/process_line_symbolizer.cpp
-    	agg/process_line_pattern_symbolizer.cpp
-    	agg/process_text_symbolizer.cpp
-    	agg/process_point_symbolizer.cpp
-    	agg/process_polygon_symbolizer.cpp
-    	agg/process_polygon_pattern_symbolizer.cpp
-    	agg/process_raster_symbolizer.cpp
-    	agg/process_shield_symbolizer.cpp
-    	agg/process_markers_symbolizer.cpp
-	agg/agg_renderer.cpp
-	#grid
-	grid/grid_renderer.cpp
-	grid/process_building_symbolizer.cpp
-	grid/process_line_pattern_symbolizer.cpp
-	grid/process_line_symbolizer.cpp
-	grid/process_markers_symbolizer.cpp
-	grid/process_point_symbolizer.cpp
-	grid/process_polygon_pattern_symbolizer.cpp
-	grid/process_polygon_symbolizer.cpp
-	grid/process_raster_symbolizer.cpp
-	grid/process_shield_symbolizer.cpp
-	grid/process_text_symbolizer.cpp
-	#wkt
-	wkt/wkt_factory.cpp
-	../deps/agg//agg
-      	..//thread
-      	..//filesystem
-      	..//regex
-      	..//z
-      	..//png
-      	..//jpeg
-      	..//tiff
-      	..//freetype2
-      	../ltdl//ltdl
-        ..//proj
-	..//icu
-	..//xml2
-	..//cairo
-	..//cairomm
-    :   
+    # others
+    feature_style_processor.cpp
+    mapped_memory_cache.cpp
+    jpeg_reader.cpp
+    libxml2_loader.cpp
+    #rapidxml_loader.cpp
+    load_map.cpp
+    
+    # cairo
+    cairo_renderer.cpp
+  
+    # agg
+    agg/process_building_symbolizer.cpp
+    agg/process_line_symbolizer.cpp
+    agg/process_line_pattern_symbolizer.cpp
+    agg/process_text_symbolizer.cpp
+    agg/process_point_symbolizer.cpp
+    agg/process_polygon_symbolizer.cpp
+    agg/process_polygon_pattern_symbolizer.cpp
+    agg/process_raster_symbolizer.cpp
+    agg/process_shield_symbolizer.cpp
+    agg/process_markers_symbolizer.cpp
+    agg/agg_renderer.cpp
+    #grid
+    grid/grid_renderer.cpp
+    grid/process_building_symbolizer.cpp
+    grid/process_line_pattern_symbolizer.cpp
+    grid/process_line_symbolizer.cpp
+    grid/process_markers_symbolizer.cpp
+    grid/process_point_symbolizer.cpp
+    grid/process_polygon_pattern_symbolizer.cpp
+    grid/process_polygon_symbolizer.cpp
+    grid/process_raster_symbolizer.cpp
+    grid/process_shield_symbolizer.cpp
+    grid/process_text_symbolizer.cpp
+    #wkt
+    wkt/wkt_factory.cpp
+    ../deps/agg//agg
+    ..//thread
+    ..//filesystem
+    ..//regex
+    ..//z
+    ..//png
+    ..//jpeg
+    ..//tiff
+    ..//freetype2
+    ../ltdl//ltdl
+    ..//proj
+    ..//icu
+    ..//xml2
+    ..//cairo
+    ..//cairomm
+      :   
         <define>HAVE_XML2
-	<define>MAPNIK_EXPORTS
-      	<link>shared
-	<linkflags>/VERBOSE:LIB
-	<linkflags>/NODEFAULTLIB:libcmt.lib
+        <define>MAPNIK_EXPORTS
+        <link>shared
+        <linkflags>/VERBOSE:LIB
+        <linkflags>/NODEFAULTLIB:libcmt.lib
         <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
     ;
