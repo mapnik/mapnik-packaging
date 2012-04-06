@@ -27,8 +27,9 @@ done
 # fixup c++ programs
 install_name_tool -change libmapnik.dylib @loader_path/../lib/libmapnik.dylib ${MAPNIK_INSTALL}/bin/pgsql2sqlite
 #install_name_tool -change libmapnik.dylib @loader_path/../lib/libmapnik.dylib ${MAPNIK_INSTALL}/bin/svg2png
-install_name_tool -change libmapnik.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib ${MAPNIK_SOURCE}/tests/cpp_tests/font_registration_test
-install_name_tool -change libmapnik.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib ${MAPNIK_SOURCE}/tests/cpp_tests/params_test
+for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
+do install_name_tool -change libmapnik.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib $i;
+done
 
 # fixup python
 
