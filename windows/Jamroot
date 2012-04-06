@@ -113,6 +113,9 @@ build-project utils/pgsql2sqlite ;
 # demo 
 build-project demo/c++ ;
 
+# cpp tests
+build-project tests/cpp_tests ;
+
 # install core lib and plugins
 
 local prefix = [ option.get prefix : "" ] ;

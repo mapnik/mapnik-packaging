@@ -1,0 +1,23 @@
+MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location  $(MAPNIK_SOURCE)/tests/cpp_tests ;
+
+exe font_registration_test :
+    font_registration_test.cpp
+    ../../src//mapnik
+    ../..//thread
+    ../..//icu
+    ../..//cairo
+    ../..//cairomm
+    :
+    ;
+
+exe params_test :
+    params_testcpp
+    ../../src//mapnik
+    ../..//thread
+    ../..//icu
+    ../..//cairo
+    ../..//cairomm
+    :
+    ;
+    
