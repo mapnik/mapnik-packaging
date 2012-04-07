@@ -74,21 +74,25 @@ export SQLITE_VERSION="3071100"
 export FREETYPE_VERSION="2.4.9"
 export PROJ_VERSION="4.8.0"
 export PROJ_GRIDS_VERSION="1.5"
-# 0.24.4 will not link:
-#"_lcg_seed", referenced from:
-#      _main in region-test.o     
-#export PIXMAN_VERSION="0.24.4"
-export PIXMAN_VERSION="0.22.2"
-export CAIRO_VERSION="1.10.2"
-export CAIROMM_VERSION="1.10.0"
-export SIGCPP_VERSION="2.2"
-export SIGCPP_VERSION2="2.2.10"
 export LIBPNG_VERSION="1.5.10"
 export LIBTIFF_VERSION="4.0.1"
 export JPEG_VERSION="8d"
 export GDAL_VERSION="1.9.0"
 export GETTEXT_VERSION="0.18.1.1"
+export POSTGRES_VERSION="9.1.3"
+
+# cairo stuff
+
+# 0.24.4 will not link:
+#"_lcg_seed", referenced from:
+#      _main in region-test.o     
+#export PIXMAN_VERSION="0.24.4"
 export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.8.0"
-export POSTGRES_VERSION="9.1.3"
+export PIXMAN_VERSION="0.22.2"
+export CAIRO_VERSION="1.10.2"
+export CAIROMM_VERSION="1.10.0"
+export SIGCPP_VERSION="2.2"
+export SIGCPP_VERSION2="2.2.10"
+export PY2CAIRO_VERSION="1.10.0"
 
