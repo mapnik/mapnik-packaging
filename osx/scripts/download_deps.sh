@@ -19,3 +19,4 @@ wget http://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCON
 wget http://cairographics.org/releases/cairo-${CAIRO_VERSION}.tar.gz
 wget http://ftp.gnome.org/pub/GNOME/sources/libsigc++/${SIGCPP_VERSION}/libsigc++-${SIGCPP_VERSION2}.tar.bz2
 wget http://cairographics.org/releases/cairomm-${CAIROMM_VERSION}.tar.gz
+wget http://cairographics.org/releases/py2cairo-${PY2CAIRO_VERSION}.tar.bz2

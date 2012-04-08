@@ -140,3 +140,15 @@ export CXXFLAGS="-I${BUILD}/include "$CFLAGS
 make -j${JOBS}
 make install
 cd ${PACKAGES}
+
+# pycairo
+echo '*building pycairo*'
+tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
+cd py2cairo-${PY2CAIRO_VERSION}
+# apply patch
+patch wscript < ${ROOTDIR}/patches/py2cairo-static.diff
+for i in {"2.6","2.7"}
+do
+    python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
+    python$i ./waf install
+done
