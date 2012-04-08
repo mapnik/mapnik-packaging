@@ -41,6 +41,7 @@ project mapnik
     <define>HAVE_LIBXML2
     <define>HAVE_JPEG
     <define>HAVE_CAIRO
+	#<define>MAPNIK_STATS
     #<define>_HAS_CPP0X=0
     #<define>LIBXML_STATIC
     <toolset>gcc:<cxxflags>-fno-strict-aliasing 

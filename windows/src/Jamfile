@@ -9,6 +9,7 @@ lib mapnik
     box2d.cpp
     building_symbolizer.cpp
     datasource_cache.cpp
+	debug.cpp
     deepcopy.cpp
     expression_string.cpp
     expression.cpp
@@ -136,6 +137,7 @@ lib mapnik
     ..//cairomm
       :   
         <define>HAVE_XML2
+		#<define>MAPNIK_STATS
         <define>MAPNIK_EXPORTS
         <link>shared
         <linkflags>/VERBOSE:LIB
