@@ -47,13 +47,14 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set TIFF_VERSION=4.0.0beta7
     set PROJ_VERSION=4.8.0
     set PROJ_GRIDS_VERSION=1.5
-    set GDAL_VERSION=1.8.1
+    set GDAL_VERSION=1.9.0
     set LIBXML2_VERSION=2.7.8
     set PIXMAN_VERSION=0.22.2
     set CAIRO_VERSION=1.10.2
     set CAIROMM_VERSION=1.10.0
     set LIBSIGC++_VERSION=2.2.10
     set SQLITE_VERSION=3071100
+    set EXPAT_VERSION=2.1.0
     
 ## Download
 
@@ -75,6 +76,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://www.cairographics.org/releases/cairomm-%CAIROMM_VERSION%.tar.gz -O
     curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
     curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
+    curl http://iweb.dl.sourceforge.net/project/expat/expat_win32/%EXPAT_VERSION%/expat-win32bin-%EXPAT_VERSION%.exe -O
     curl http://download.osgeo.org/gdal/gdal-%GDAL_VERSION%.tar.gz -O
     curl http://www.sqlite.org/sqlite-amalgamation-%SQLITE_VERSION%.zip -O
     curl http://download.osgeo.org/proj/proj-%PROJ_VERSION%.tar.gz -O
@@ -262,11 +264,19 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     nmake /f Makefile.vc
     cd %ROOTDIR%
 
+### Expat (for GDAL's KML,GPX, GeoRSS read support)
+
+    @rem - run the binary installer
+    start expat-win32bin-%EXPAT_VERSION%.exe
+
 ### GDAL
 
     bsdtar xvfz %PKGDIR%\gdal-%GDAL_VERSION%.tar.gz
     rename gdal-%GDAL_VERSION% gdal
     cd gdal
+
+    @rem Edit the 'name.opt' to point to the location the expat binary was installed to:
+    @rem EXPAT_DIR="C:\Program Files (x86)\Expat 2.1.0"
 
 ##### VC++ 2008
 
