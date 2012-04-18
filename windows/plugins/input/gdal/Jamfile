@@ -11,7 +11,7 @@ mapnik-plugin gdal
 	:
 	<include>.
 	<include>$(MAPNIK_DEPS_DIR)/gdal/port
-        <include>$(MAPNIK_DEPS_DIR)/gdal/gcore		
+        <include>$(MAPNIK_DEPS_DIR)/gdal/gcore
      	<link>shared
 	<variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
       	<toolset>msvc:<define>_WINDOWS

@@ -80,6 +80,7 @@ alias advapi : /site-config//advapi : <link>static ;
 alias shfolder : /site-config//shfolder : <link>static ;
 alias secur : /site-config//secur : <link>static ;
 alias xml2 : /site-config//xml2 : <link>shared ;
+alias expat : /site-config//expat : <link>shared ;
 alias gdal : /site-config//gdal : <link>shared ;
 alias odbc : /site-config//odbc : <link>static ;
 alias odbccp : /site-config//odbccp : <link>static ;

@@ -10,6 +10,7 @@ mapnik-plugin ogr
 	../../..//odbccp
 	../../..//user	
 	../../..//gdal
+	../../..//expat
 	:
 	<include>.
 	<include>$(MAPNIK_DEPS_DIR)/gdal/port
