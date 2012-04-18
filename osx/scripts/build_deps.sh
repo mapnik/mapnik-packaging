@@ -250,6 +250,7 @@ rm ${ROOTDIR}/build/lib/*dylib
 echo '*building gdal*'
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
+# http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 ./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
