@@ -21,7 +21,7 @@ bjam toolset=msvc -j2 --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOS
 copy "C:\Program Files (x86)\Expat 2.1.0\Bin\libexpat.dll" %PREFIX%\lib\
 @rem the rest, needed by libmapnik
 copy %ROOTDIR%\cairo\src\release\cairo.dll %PREFIX%\lib\
-copy %ROOTDIR%\cairomm\MSVC_Net2010\cairomm\Win32\Release %PREFIX%\lib\
+copy %ROOTDIR%\cairomm\MSVC_Net2010\cairomm\Win32\Release\cairomm-vc100-1_0.dll %PREFIX%\lib\
 copy %ROOTDIR%\icu\bin\icuuc48.dll %PREFIX%\lib\
 copy %ROOTDIR%\icu\bin\icudt48.dll %PREFIX%\lib\
 copy %ROOTDIR%\libxml2\win32\bin.msvc\libxml2.dll %PREFIX%\lib\
