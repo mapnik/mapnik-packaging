@@ -31,7 +31,7 @@ def compile_lib(ver,arch='32_64'):
     else:
         # for 2.7 and above hope that python.org provides 64 bit ready binaries...
         open('user-config.jam','w').write(USER_JAM % {'ver':ver,'system':'','variant':''})    
-    cmd = "./bjam -q --with-python -a -j6 --ignore-site-config --user-config=user-config.jam link=static toolset=darwin -d2 address-model=%s architecture=x86 variant=release stage" % arch#linkflags=-search_paths_first
+    cmd = "./b2 -q --with-python -a -j6 --ignore-site-config --user-config=user-config.jam link=static toolset=darwin -d2 address-model=%s architecture=x86 variant=release stage" % arch#linkflags=-search_paths_first
     print cmd
     os.system(cmd)
 
