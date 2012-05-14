@@ -55,6 +55,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set LIBSIGC++_VERSION=2.2.10
     set SQLITE_VERSION=3071100
     set EXPAT_VERSION=2.1.0
+    set GEOS_VERSION=3.3.3
     
 ## Download
 
@@ -81,7 +82,8 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://www.sqlite.org/sqlite-amalgamation-%SQLITE_VERSION%.zip -O
     curl http://download.osgeo.org/proj/proj-%PROJ_VERSION%.tar.gz -O
     curl http://download.osgeo.org/proj/proj-datumgrid-%PROJ_GRIDS_VERSION%.zip -O
-    
+    curl http://download.osgeo.org/geos/geos-%GEOS_VERSION%.tar.bz2 -O
+
     cd %ROOTDIR%
     
 ## Building individual packages
@@ -335,4 +337,18 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
     rename sqlite-amalgamation-%SQLITE_VERSION% sqlite
 
-    
+
+### GEOS
+
+*NOTE: this is optional as GEOS is not used by Mapnik*
+
+    bsdtar xvf geos-%GEOS_VERSION%.tar.bz2
+    rename geos-%GEOS_VERSION% geos
+
+##### VC++ 2010
+
+    cd geos
+    mkdir build
+    cd build
+    cmake -G ..\
+    nmake /f Makefile geos
