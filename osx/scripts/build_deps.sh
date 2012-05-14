@@ -34,7 +34,9 @@ cd boost_${BOOST_VERSION2}
 patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 ./bootstrap.sh
 
-<<COMMENT
+
+
+: '
 --- darwin.jam	2012-03-22 18:26:05.000000000 -0700
 +++ tools/build/v2/tools/darwin.jam	2012-03-22 18:26:27.000000000 -0700
 @@ -104,7 +104,7 @@
@@ -46,7 +48,7 @@ patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
          }
          else
          {
-COMMENT
+'
 
 # static libs
 ./b2 tools/bcp \
@@ -77,12 +79,14 @@ COMMENT
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   stage install
 
+
 #cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 #install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 #ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
 
 # python
-<<COMMENT
+
+: '
 ./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-python \
   toolset=darwin \
@@ -93,7 +97,7 @@ COMMENT
   variant=release \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   stage install
-COMMENT
+'
 
 
 # boost python for various versions are done in python script
@@ -104,6 +108,7 @@ COMMENT
 
 echo '*building boost python versions*'
 
+cd ${PACKAGES}/boost_${BOOST_VERSION2}
 python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
 mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
 cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
@@ -190,7 +195,7 @@ export CFLAGS=$OLD_CFLAGS
 cd ${PACKAGES}
 
 
-<<COMMENT
+: '
 # gettext which provides libintl for libpq
 # only need for internationalized error messages
 tar xf gettext-${GETTEXT_VERSION}.tar.gz
@@ -202,11 +207,12 @@ cd gettext-${GETTEXT_VERSION}
 make -j${JOBS}
 make install
 cd ${PACKAGES}
-COMMENT
+'
 
 # postgres
 echo '*building postgres for libpq client library*'
-<<COMMENT
+
+: '
 postgres/INSTALL has:
        Client-only installation: If you want to install only the client
        applications and interface libraries, then you can use these
@@ -215,7 +221,7 @@ gmake -C src/bin install
 gmake -C src/include install
 gmake -C src/interfaces install
 gmake -C doc install
-COMMENT
+'
 
 cd ${PACKAGES}
 tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
@@ -232,7 +238,7 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-<<COMMENT
+: '
 otool -L ${ROOTDIR}/build/lib/*dylib
 	/Users/dane/projects/mapnik-packaging/osx/build/lib/libpq.5.dylib (compatibility version 5.0.0, current version 5.4.0)
 	/usr/lib/libssl.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)
@@ -240,7 +246,7 @@ otool -L ${ROOTDIR}/build/lib/*dylib
 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos (compatibility version 5.0.0, current version 6.0.0)
 	/System/Library/Frameworks/LDAP.framework/Versions/A/LDAP (compatibility version 1.0.0, current version 2.2.0)
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
-COMMENT
+'
 
 # clear out shared libs
 rm ${ROOTDIR}/build/lib/*dylib
@@ -277,7 +283,7 @@ make install
 cd ${PACKAGES}
 
 
-<<COMMENT
+: '
 otool -L ${ROOTDIR}/build/lib/*dylib
 	/Users/dane/projects/mapnik-packaging/osx/build/lib/libgdal.1.dylib (compatibility version 18.0.0, current version 18.0.0)
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
@@ -285,7 +291,7 @@ otool -L ${ROOTDIR}/build/lib/*dylib
 	/usr/lib/libz.1.dylib (compatibility version 1.0.0, current version 1.2.5)
 	/usr/lib/libiconv.2.dylib (compatibility version 7.0.0, current version 7.0.0)
 	/usr/lib/libstdc++.6.dylib (compatibility version 7.0.0, current version 52.0.0)
-COMMENT
+'
 
 # clear out shared libs
 rm ${ROOTDIR}/build/lib/*dylib
