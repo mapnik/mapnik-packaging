@@ -65,9 +65,8 @@ export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
 
 # versions
-export ICU_VERSION="49.1"
-export ICU_VERSION2="49_1"
-export ICU_MAJOR_VER="48"
+export ICU_VERSION="49.1.1"
+export ICU_VERSION2="49_1_1"
 export BOOST_VERSION="1.49.0"
 export BOOST_VERSION2="1_49_0"
 export SQLITE_VERSION="3071200"
