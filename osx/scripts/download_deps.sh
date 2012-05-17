@@ -1,6 +1,7 @@
 set -e
 cd ${PACKAGES}
 wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-${LIBPNG_VERSION}.tar.gz
+wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 wget http://download.icu-project.org/files/icu4c/${ICU_VERSION}/icu4c-${ICU_VERSION2}-src.tgz
 wget http://voxel.dl.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION2}.tar.bz2
 wget http://www.sqlite.org/sqlite-autoconf-${SQLITE_VERSION}.tar.gz

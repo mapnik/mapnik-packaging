@@ -3,6 +3,17 @@ set -e
 mkdir -p ${BUILD}
 cd ${PACKAGES}
 
+
+# zlib
+echo '*building zlib*'
+tar xf zlib-${ZLIB_VERSION}.tar.gz
+cd zlib-${ZLIB_VERSION}
+./configure --prefix=${BUILD} --static --64
+make -j$JOBS
+make install -i -k
+cd ${PACKAGES}
+
+
 # icu
 echo '*building icu*'
 # *WARNING* do not set an $INSTALL variable

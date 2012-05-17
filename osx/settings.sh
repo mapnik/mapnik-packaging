@@ -70,7 +70,7 @@ export ICU_VERSION2="49_1"
 export ICU_MAJOR_VER="48"
 export BOOST_VERSION="1.49.0"
 export BOOST_VERSION2="1_49_0"
-export SQLITE_VERSION="3071100"
+export SQLITE_VERSION="3071200"
 export FREETYPE_VERSION="2.4.9"
 export PROJ_VERSION="4.8.0"
 export PROJ_GRIDS_VERSION="1.5"
@@ -80,6 +80,7 @@ export JPEG_VERSION="8d"
 export GDAL_VERSION="1.9.0"
 export GETTEXT_VERSION="0.18.1.1"
 export POSTGRES_VERSION="9.1.3"
+export ZLIB_VERSION="1.2.7"
 
 # cairo stuff
 
