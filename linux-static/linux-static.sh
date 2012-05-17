@@ -30,6 +30,7 @@ export LD_LIBRARY_PATH=$MAPNIK_PREFIX/lib:$PREFIX/lib:$LD_LIBRARY_PATH
 apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-server linux-image-server linux-server
+# note: git-core on older ubuntu
 apt-get -y install git subversion build-essential python-dev python-nose curl
 
 # sqlite
@@ -104,12 +105,10 @@ make -j$JOBS
 make install
 cd $DEPS
 
-#TODO - switch to static
+# icu
 wget http://download.icu-project.org/files/icu4c/49.1.1/icu4c-49_1_1-src.tgz
 tar xvf icu4c-49_1_1-src.tgz
 cd icu/source
-#./configure --prefix=$PREFIX \
-#--with-library-bits=64 --enable-release \
 ./configure --prefix=$PREFIX --disable-samples --enable-static \
 --enable-release --disable-shared --with-library-bits=64 \
 --with-data-packaging=archive --disable-icuio --disable-tests --disable-layout \
