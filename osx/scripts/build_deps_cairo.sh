@@ -62,7 +62,8 @@ cd ${PACKAGES}
 # cairo
 echo '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
-tar xf cairo-${CAIRO_VERSION}.tar.gz
+xz -d cairo-${CAIRO_VERSION}.tar.xz
+tar xf cairo-1.12.2.tar
 cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
 export png_CFLAGS="-I${BUILD}/include"
@@ -73,23 +74,24 @@ export png_LIBS="-I${BUILD}/lib -lpng"
   --enable-ft=yes \
   --enable-png=yes \
   --enable-svg=yes \
-  --enable-ps=no \
+  --enable-ps=yes \
   --enable-fc=yes \
+  --enable-interpreter=yes \
+  --enable-quartz=no \
+  --enable-quartz-image=no \
+  --enable-quartz-font=no \
   --enable-trace=no \
   --enable-gtk-doc=no \
   --enable-qt=no \
-  --enable-quartz=no \
-  --enable-quartz-font=no \
-  --enable-quartz-image=no \
   --enable-win32=no \
   --enable-win32-font=no \
   --enable-skia=no \
   --enable-os2=no \
   --enable-beos=no \
   --enable-drm=no \
-  --enable-drm-xr=no \
   --enable-gallium=no \
   --enable-gl=no \
+  --enable-glesv2=no \
   --enable-directfb=no \
   --enable-vg=no \
   --enable-egl=no \
@@ -98,16 +100,13 @@ export png_LIBS="-I${BUILD}/lib -lpng"
   --enable-test-surfaces=no \
   --enable-tee=no \
   --enable-xml=no \
-  --enable-interpreter=no \
   --disable-valgrind \
   --enable-gobject=no \
-  --enable-static=no \
   --enable-xlib=no \
   --enable-xlib-xrender=no \
   --enable-xcb=no \
   --enable-xlib-xcb=no \
   --enable-xcb-shm=no \
-  --enable-xcb-drm=no \
   --disable-dependency-tracking \
   --prefix=${BUILD}
 make -j${JOBS}

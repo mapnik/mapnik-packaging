@@ -17,7 +17,7 @@ wget http://ftp.gnu.org/pub/gnu/gettext/gettext-${GETTEXT_VERSION}.tar.gz
 wget http://pkgconfig.freedesktop.org/releases/pkg-config-${PKG_CONFIG_VERSION}.tar.gz
 wget http://cairographics.org/releases/pixman-${PIXMAN_VERSION}.tar.gz
 wget http://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.gz
-wget http://cairographics.org/releases/cairo-${CAIRO_VERSION}.tar.gz
+wget http://cairographics.org/releases/cairo-${CAIRO_VERSION}.tar.xz
 wget http://ftp.gnome.org/pub/GNOME/sources/libsigc++/${SIGCPP_VERSION}/libsigc++-${SIGCPP_VERSION2}.tar.bz2
 wget http://cairographics.org/releases/cairomm-${CAIROMM_VERSION}.tar.gz
 wget http://cairographics.org/releases/py2cairo-${PY2CAIRO_VERSION}.tar.bz2

@@ -13,9 +13,9 @@ if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
     export PATH=/Applications/PackageMaker.app/Contents/MacOS/:$PATH
 else
     export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
-    export PATH="/Developer/usr/bin:${PATH}"
-    export CORE_CXX="/Developer/usr/bin/clang++"
-    export CORE_CC="/Developer/usr/bin/clang"
+    #export PATH="/Developer/usr/bin:${PATH}"
+    export CORE_CXX="/opt/llvm/bin/clang++"
+    export CORE_CC="/opt/llvm/bin/clang"
 fi
 
 # needed for Coda.app terminal to act sanely
@@ -82,15 +82,14 @@ export POSTGRES_VERSION="9.1.3"
 export ZLIB_VERSION="1.2.7"
 
 # cairo stuff
-
+export PKG_CONFIG_VERSION="0.25"
+export FONTCONFIG_VERSION="2.8.0"
 # 0.24.4 will not link:
 #"_lcg_seed", referenced from:
 #      _main in region-test.o     
 #export PIXMAN_VERSION="0.24.4"
-export PKG_CONFIG_VERSION="0.25"
-export FONTCONFIG_VERSION="2.8.0"
 export PIXMAN_VERSION="0.22.2"
-export CAIRO_VERSION="1.10.2"
+export CAIRO_VERSION="1.12.2"
 export CAIROMM_VERSION="1.10.0"
 export SIGCPP_VERSION="2.2"
 export SIGCPP_VERSION2="2.2.10"
