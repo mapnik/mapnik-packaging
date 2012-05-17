@@ -33,9 +33,9 @@ apt-get -y install linux-headers-server linux-image-server linux-server
 apt-get -y install git subversion build-essential python-dev python-nose curl
 
 # sqlite
-wget http://www.sqlite.org/sqlite-autoconf-3070900.tar.gz
-tar xvf sqlite-autoconf-3070900.tar.gz
-cd sqlite-autoconf-3070900
+wget http://www.sqlite.org/sqlite-autoconf-3071200.tar.gz
+tar xvf sqlite-autoconf-3071200.tar.gz
+cd sqlite-autoconf-3071200
 export CFLAGS="-DSQLITE_ENABLE_RTREE=1 "$CFLAGS
 ./configure --prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
@@ -43,9 +43,9 @@ make install
 cd $DEPS
 
 # freetype
-wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.6.tar.bz2
-tar xvf ../deps/freetype-2.4.6.tar.bz2
-cd freetype-2.4.6
+wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.9.tar.bz2
+tar xvf ../deps/freetype-2.4.9.tar.bz2
+cd freetype-2.4.9
 ./configure --prefix=$PREFIX \
 --enable-static \
 --disable-shared
@@ -55,9 +55,9 @@ cd $DEPS
 
 # proj4
 wget http://download.osgeo.org/proj/proj-datumgrid-1.5.zip
-# we use trunk instead for better threading support
-svn co http://svn.osgeo.org/metacrs/proj/trunk/proj proj-trunk # at the time pre-release 4.8.0
-cd proj-trunk/nad
+wget http://download.osgeo.org/proj/proj-4.8.0.tar.gz
+tar xf proj-4.8.0.tar.gz
+cd proj-4.8.0/nad
 unzip -o ../../proj-datumgrid-1.5.zip
 cd ../
 ./configure --prefix=$PREFIX \
@@ -69,45 +69,44 @@ make install
 cd $DEPS
 
 # zlib
-wget http://zlib.net/zlib-1.2.5.tar.gz
-tar xvf zlib-1.2.5.tar.gz
-cd zlib-1.2.5
+wget http://zlib.net/zlib-1.2.7.tar.gz
+tar xvf zlib-1.2.7.tar.gz
+cd zlib-1.2.7
 ./configure --prefix=$PREFIX --static --64
 make -j$JOBS
-# i and k to avoid some silly cp failure
-make install -i -k
+make install
 cd $DEPS
 
 # libpng
-wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.5.tar.gz
-tar xvf libpng-1.5.5.tar.gz
-cd libpng-1.5.5
+wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.10.tar.gz
+tar xvf libpng-1.5.10.tar.gz
+cd libpng-1.5.10
 ./configure --prefix=$PREFIX --with-zlib-prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
 make install
 cd $DEPS
 
 # libjpeg
-wget http://www.ijg.org/files/jpegsrc.v8c.tar.gz
-tar xvf jpegsrc.v8c.tar.gz
-cd jpeg-8c
+wget http://www.ijg.org/files/jpegsrc.v8d.tar.gz
+tar xvf jpegsrc.v8d.tar.gz
+cd jpeg-8d
 ./configure --prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
 make install
 cd $DEPS
 
 # libtiff
-wget http://download.osgeo.org/libtiff/tiff-3.9.5.tar.gz
-tar xvf tiff-3.9.5.tar.gz
-cd tiff-3.9.5
+wget http://download.osgeo.org/libtiff/tiff-3.9.6.tar.gz
+tar xvf tiff-3.9.6.tar.gz
+cd tiff-3.9.6
 ./configure --prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
 make install
 cd $DEPS
 
 #TODO - switch to static
-wget http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz
-tar xvf icu4c-4_8_1_1-src.tgz
+wget http://download.icu-project.org/files/icu4c/49.1.1/icu4c-49_1_1-src.tgz
+tar xvf icu4c-49_1_1-src.tgz
 cd icu/source
 #./configure --prefix=$PREFIX \
 #--with-library-bits=64 --enable-release \
@@ -122,9 +121,9 @@ make install
 cd $DEPS
 
 
-wget http://voxel.dl.sourceforge.net/project/boost/boost/1.47.0/boost_1_47_0.tar.bz2
-tar xjvf boost_1_47_0.tar.bz2
-cd boost_1_47_0
+wget http://voxel.dl.sourceforge.net/project/boost/boost/1.49.0/boost_1_49_0.tar.bz2
+tar xjvf boost_1_49_0.tar.bz2
+cd boost_1_49_0
 ./bootstrap.sh
 # problems with icu configure check?
 # cat bin.v2/config.log
@@ -171,7 +170,7 @@ make install
 cd $DEPS
 
 # libxml2
-wget ftp://xmlsoft.org/libxml2//libxml2-2.7.8.tar.gz
+wget ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz
 tar xvf libxml2-2.7.8.tar.gz
 cd libxml2-2.7.8
 ./configure --prefix=$PREFIX --enable-static --disable-shared
@@ -181,9 +180,9 @@ cd $DEPS
 
 
 # gdal 1.8.1
-wget http://download.osgeo.org/gdal/gdal-1.8.1.tar.gz
-tar xvf gdal-1.8.1.tar.gz
-cd gdal-1.8.1
+wget http://download.osgeo.org/gdal/gdal-1.9.0.tar.gz
+tar xvf gdal-1.9.0.tar.gz
+cd gdal-1.9.0
 
 ./configure --prefix=$PREFIX --enable-static --disable-shared \
 --with-libtiff=$PREFIX \
