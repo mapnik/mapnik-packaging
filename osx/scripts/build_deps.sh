@@ -157,7 +157,8 @@ tar xf proj-${PROJ_VERSION}.tar.gz
 cd proj-${PROJ_VERSION}/nad
 unzip -o ../../proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
 cd ../
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
+./configure --prefix=${BUILD} --without-mutex \
+--enable-static --disable-shared --disable-dependency-tracking
 make -j${JOBS}
 make install
 cd ${PACKAGES}
