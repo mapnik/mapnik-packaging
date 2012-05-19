@@ -45,21 +45,9 @@ cd boost_${BOOST_VERSION2}
 patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 ./bootstrap.sh
 
-
-
-: '
---- darwin.jam	2012-03-22 18:26:05.000000000 -0700
-+++ tools/build/v2/tools/darwin.jam	2012-03-22 18:26:27.000000000 -0700
-@@ -104,7 +104,7 @@
-         bin ?= [ common.get-absolute-tool-path $(command[1]) ] ;
-         if $(bin) = "/usr/bin"
-         {
--            root ?= /Developer ;
-+            root ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer ;
-         }
-         else
-         {
-'
+if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
+    patch tools/build/v2/tools/darwin.jam ../../patches/boost_sdk.diff
+fi
 
 # static libs
 ./b2 tools/bcp \
