@@ -32,7 +32,7 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-<<COMMENT
+: '
 /Developer/usr/bin/clang -DHAVE_CONFIG_H -I. -I.. -I../pixman -I../pixman -I/Users/dane/projects/mapnik-packaging/osx/build/include/libpng15    -DU_CHARSET_IS_UTF8=1  -I/Users/dane/projects/mapnik-packaging/osx/build/include -O3 -arch x86_64 -D_FILE_OFFSET_BITS=64 -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -Wall -fno-strict-aliasing -fvisibility=hidden -D_REENTRANT -c lowlevel-blt-bench.c
   CCLD   libutils.la
   CCLD   a1-trap-test
@@ -45,7 +45,7 @@ Undefined symbols for architecture x86_64:
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 make[2]: *** [region-test] Error 1
-COMMENT
+'
 
 # fontconfig
 echo '*building fontconfig*'
@@ -62,7 +62,8 @@ cd ${PACKAGES}
 # cairo
 echo '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
-tar xf cairo-${CAIRO_VERSION}.tar.gz
+xz -d cairo-${CAIRO_VERSION}.tar.xz
+tar xf cairo-1.12.2.tar
 cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
 export png_CFLAGS="-I${BUILD}/include"
@@ -73,23 +74,24 @@ export png_LIBS="-I${BUILD}/lib -lpng"
   --enable-ft=yes \
   --enable-png=yes \
   --enable-svg=yes \
-  --enable-ps=no \
+  --enable-ps=yes \
   --enable-fc=yes \
+  --enable-interpreter=yes \
+  --enable-quartz=no \
+  --enable-quartz-image=no \
+  --enable-quartz-font=no \
   --enable-trace=no \
   --enable-gtk-doc=no \
   --enable-qt=no \
-  --enable-quartz=no \
-  --enable-quartz-font=no \
-  --enable-quartz-image=no \
   --enable-win32=no \
   --enable-win32-font=no \
   --enable-skia=no \
   --enable-os2=no \
   --enable-beos=no \
   --enable-drm=no \
-  --enable-drm-xr=no \
   --enable-gallium=no \
   --enable-gl=no \
+  --enable-glesv2=no \
   --enable-directfb=no \
   --enable-vg=no \
   --enable-egl=no \
@@ -98,16 +100,13 @@ export png_LIBS="-I${BUILD}/lib -lpng"
   --enable-test-surfaces=no \
   --enable-tee=no \
   --enable-xml=no \
-  --enable-interpreter=no \
   --disable-valgrind \
   --enable-gobject=no \
-  --enable-static=no \
   --enable-xlib=no \
   --enable-xlib-xrender=no \
   --enable-xcb=no \
   --enable-xlib-xcb=no \
   --enable-xcb-shm=no \
-  --enable-xcb-drm=no \
   --disable-dependency-tracking \
   --prefix=${BUILD}
 make -j${JOBS}

@@ -1,5 +1,4 @@
 RUNTIME_LINK = 'static'
-WARNING_CXXFLAGS = '-Wno-array-bounds -Wno-unused-function -Wno-unused-parameter -Wno-missing-field-initializers'
 PATH = '../build/bin/'
 BOOST_INCLUDES = '../build/include'
 BOOST_LIBS = '../build/lib'
