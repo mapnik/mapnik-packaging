@@ -337,6 +337,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     unzip %PKGDIR%\sqlite-amalgamation-%SQLITE_VERSION%.zip
     rename sqlite-amalgamation-%SQLITE_VERSION% sqlite
 
+If you want to build sqlite standalone you might be interested in: https://skydrive.live.com/view.aspx?resid=A737583042956228!1940&cid=a737583042956228
 
 ### GEOS
 
