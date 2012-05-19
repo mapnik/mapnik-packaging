@@ -7,6 +7,7 @@ wget http://savannah.spinellicreations.com/freetype/freetype-${FREETYPE_VERSION}
 wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-${LIBPNG_VERSION}.tar.gz
 wget http://www.ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz
 wget http://download.osgeo.org/libtiff/tiff-${LIBTIFF_VERSION}.tar.gz
+wget http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
 wget http://download.osgeo.org/proj/proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
 wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 wget http://ftp.postgresql.org/pub/source/v${POSTGRES_VERSION}/postgresql-${POSTGRES_VERSION}.tar.bz2

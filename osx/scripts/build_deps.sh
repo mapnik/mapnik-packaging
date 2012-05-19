@@ -253,6 +253,7 @@ cd gdal-${GDAL_VERSION}
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 ./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
+--with-geotiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \
