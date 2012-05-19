@@ -121,7 +121,7 @@ cd $DEPS
 
 
 wget http://voxel.dl.sourceforge.net/project/boost/boost/1.49.0/boost_1_49_0.tar.bz2
-tar xjvf boost_1_49_0.tar.bz2
+tar xjf boost_1_49_0.tar.bz2
 cd boost_1_49_0
 ./bootstrap.sh
 # problems with icu configure check?
@@ -129,7 +129,7 @@ cd boost_1_49_0
 # iculink does not work since it comes after first start/end group
 #   -sICU_LINK="-Wl,--start-group -Wl,-L$PREFIX/lib -Wl,-Bstatic -licudata -Wl,-Bstatic -licuuc -Wl,-ldl -Wl,--end-group" \
 
-./bjam -d2 \
+./b2 -d2 \
   linkflags="$LDFLAGS -L$PREFIX/lib -Bstatic -licudata -Bstatic -licuuc -Bdynamic -ldl" \
   cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
   --prefix=$PREFIX --with-python \
@@ -143,7 +143,7 @@ cd boost_1_49_0
   variant=release \
   stage -a
 
-./bjam -d2 \
+./b2 -d2 \
   linkflags="$LDFLAGS -L$PREFIX/lib -Bstatic -licudata -Bstatic -licuuc -Bdynamic -ldl" \
   cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
   --prefix=$PREFIX --with-python \
@@ -178,7 +178,7 @@ make install
 cd $DEPS
 
 
-# gdal 1.8.1
+# gdal
 wget http://download.osgeo.org/gdal/gdal-1.9.0.tar.gz
 tar xvf gdal-1.9.0.tar.gz
 cd gdal-1.9.0
@@ -211,13 +211,24 @@ cd $DEPS
 # CUSTOM_CXXFLAGS="-static-libstdc++ -static-libgcc" \
 # CXX="g++ -L$PREFIX/lib -Bstatic -lboost_regex -Bstatic -licudata -Bstatic -licuuc" \
 #-DU_STATIC_IMPLEMENTATION=1 -DBOOST_ALL_NO_LIB=1 -DBOOST_HAS_ICU=1
+
+# TODO - appears linking needs to be at the end of the compiler line...
+# or at least *after* -lmapnik
+# but still cannot link Collator::createInstance for regex, so have to
+# tag -licui18n and -licuuc on the end
+
 cd $DEPS/../
 git clone git://github.com/mapnik/mapnik.git mapnik
 cd mapnik
-python scons/scons.py RUNTIME_LINK=static \
+python scons/scons.py configure \
+RUNTIME_LINK=static \
+LINKING="static" \
 INPUT_PLUGINS=gdal,ogr,osm,postgis,raster,shape,sqlite \
-CUSTOM_CXXFLAGS="-fPIC " \
-CUSTOM_LDFLAGS="" \
+CXX="g++ -L$PREFIX/lib -Bstatic -lboost_regex -Bstatic -licudata -Bstatic -licuuc" \
+CUSTOM_CXXFLAGS="-fPIC -DU_STATIC_IMPLEMENTATION=1 -DBOOST_ALL_NO_LIB=1 -DBOOST_HAS_ICU=1 " \
+CUSTOM_LDFLAGS="-L$PREFIX/lib -Bdynamic -ldl" \
+PATH_REMOVE="/usr/lib" \
+PATH_REPLACE="/usr/local/lib:$PREFIX/lib"
 PREFIX=$MAPNIK_PREFIX \
 PYTHON_PREFIX=$MAPNIK_PREFIX \
 PATH_INSERT=$PREFIX/bin \
@@ -229,9 +240,9 @@ make && make install
 
 
 # node
-wget http://nodejs.org/dist/node-v0.4.12.tar.gz
-tar xvf node-v0.4.12.tar.gz
-cd node-v0.4.12
+wget http://nodejs.org/dist/node-v0.6.18.tar.gz
+tar xvf node-v0.6.18.tar.gz
+cd node-v0.6.18
 ./configure
 make && make install
 cd $DEPS
