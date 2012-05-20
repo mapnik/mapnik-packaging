@@ -1,8 +1,8 @@
 source settings.sh
-# ./scripts/setup.sh
-# ./scripts/download_deps.sh
-# ./scripts/build_deps.sh
-# ./scripts/build_deps_cairo.sh
+./scripts/setup.sh
+./scripts/download_deps.sh
+./scripts/build_deps.sh
+./scripts/build_deps_cairo.sh
 
 rm -rf ${MAPNIK_INSTALL}
 cd scripts/

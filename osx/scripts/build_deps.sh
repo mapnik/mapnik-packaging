@@ -4,13 +4,22 @@ mkdir -p ${BUILD}
 cd ${PACKAGES}
 
 
+# xz
+echo '*building xz*'
+tar xf xz-5.0.3.tar.bz2
+cd xz-5.0.3
+./configure --prefix=${BUILD}
+make -j$JOBS
+make install
+cd ${PACKAGES}
+
 # zlib
 echo '*building zlib*'
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}
 ./configure --prefix=${BUILD} --static --64
 make -j$JOBS
-make install -i -k
+make install
 cd ${PACKAGES}
 
 
@@ -251,12 +260,28 @@ otool -L ${ROOTDIR}/build/lib/*dylib
 # clear out shared libs
 rm ${ROOTDIR}/build/lib/*dylib
 
+# geotiff
+echo '*building geotiff*'
+tar xf libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
+cd libgeotiff-${LIBGEOTIFF_VERSION}
+./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
+--with-libtiff=${BUILD} \
+--with-jpeg=${BUILD} \
+--with-zip=${BUILD} \
+--with-proj=${BUILD}
+make -j${JOBS}
+make install
+cd ${PACKAGES}
+
 
 # gdal
 echo '*building gdal*'
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
+# not bigtiff check will fail…
+# fix bigtiff check
+patch configure ../../patches/bigtiff_check.diff
 ./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
 --with-geotiff=${BUILD} \
