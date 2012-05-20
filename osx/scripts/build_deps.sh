@@ -8,7 +8,7 @@ cd ${PACKAGES}
 echo '*building xz*'
 tar xf xz-5.0.3.tar.bz2
 cd xz-5.0.3
-./configure --prefix=${BUILD}
+./configure
 make -j$JOBS
 make install
 cd ${PACKAGES}
@@ -184,8 +184,15 @@ tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
 export OLD_CFLAGS=$CFLAGS
 export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
---disable-cxx --with-jpeg-include-dir=${BUILD}/include --with-jpeg-lib-dir=${BUILD}/lib
+./configure --prefix=${BUILD} \
+--enable-static --disable-shared \
+--disable-dependency-tracking \
+--disable-cxx \
+--with-jpeg-include-dir=${BUILD}/include --with-jpeg-lib-dir=${BUILD}/lib \
+--with-zlib-include-dir=${BUILD}/include --with-zlib-lib-dir=${BUILD}/lib \
+--disable-lzma --disable-jbig --disable-mdi \
+--without-x \
+
 make -j${JOBS}
 make install
 export CFLAGS=$OLD_CFLAGS
