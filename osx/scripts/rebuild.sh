@@ -1,6 +1,6 @@
 source settings.sh
 ./scripts/setup.sh
-#./scripts/download_deps.sh
+./scripts/download_deps.sh
 ./scripts/build_deps.sh
 ./scripts/build_deps_cairo.sh
 
