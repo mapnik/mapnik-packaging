@@ -32,6 +32,7 @@ project mapnik
     <include>$(MAPNIK_DEPS_DIR)/jpeg
     <include>$(MAPNIK_DEPS_DIR)/tiff/libtiff
     <include>$(MAPNIK_DEPS_DIR)/libxml2/include
+    <include>$(MAPNIK_DEPS_DIR)/cairo
     <include>$(MAPNIK_DEPS_DIR)/cairo/src
     <include>$(MAPNIK_DEPS_DIR)/cairomm
     <include>$(MAPNIK_DEPS_DIR)/libsigc++
