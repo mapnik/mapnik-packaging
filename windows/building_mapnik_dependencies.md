@@ -238,10 +238,15 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     set INCLUDE=%INCLUDE%;%ROOTDIR%\libpng
     set INCLUDE=%INCLUDE%;%ROOTDIR%\pixman\pixman
     set INCLUDE=%INCLUDE%;%ROOTDIR%\cairo\boilerplate
+    set INCLUDE=%INCLUDE%;%ROOTDIR%\cairo
     set INCLUDE=%INCLUDE%;%ROOTDIR%\cairo\src
     set INCLUDE=%INCLUDE%;%ROOTDIR%\freetype\include
     patch -p1 < ..\cairo-win32.patch
     make -f Makefile.win32 "CFG=release"
+    @rem - delete bogus cairo-version.h
+    @rem https://github.com/mapnik/mapnik-packaging/issues/56
+    del src\cairo-version.h
+    del
     cd %ROOTDIR%
 
 ### LibXML2
