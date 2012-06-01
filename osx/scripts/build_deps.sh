@@ -22,6 +22,13 @@ make -j$JOBS
 make install
 cd ${PACKAGES}
 
+# libtool - for libltdl
+tar xvf libtool-${LIBTOOL_VERSION}.tar.gz
+cd libtool-${LIBTOOL_VERSION}
+./configure --prefix=${BUILD} --enable-static --disable-shared
+make -j$JOBS
+make install
+cd ${PACKAGES}
 
 # icu
 echo '*building icu*'

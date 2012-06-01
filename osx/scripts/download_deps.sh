@@ -1,5 +1,6 @@
 set -e
 cd ${PACKAGES}
+wget http://mirror.anl.gov/pub/gnu/libtool/libtool-${LIBTOOL_VERSION}.tar.gz
 wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-${LIBPNG_VERSION}.tar.gz
 wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 wget http://download.icu-project.org/files/icu4c/${ICU_VERSION}/icu4c-${ICU_VERSION2}-src.tgz

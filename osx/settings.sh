@@ -81,6 +81,7 @@ export GDAL_VERSION="1.9.0"
 export GETTEXT_VERSION="0.18.1.1"
 export POSTGRES_VERSION="9.1.3"
 export ZLIB_VERSION="1.2.7"
+export LIBTOOL_VERSION="2.4.2"
 
 # cairo stuff
 export PKG_CONFIG_VERSION="0.25"
