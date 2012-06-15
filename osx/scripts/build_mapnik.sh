@@ -16,11 +16,10 @@ cat ${ROOTDIR}/patches/config.py >> config.py
 
 ./configure \
   BINDINGS='' \
-  INPUT_PLUGINS=csv,gdal,ogr,postgis,shape,sqlite,osm \
+  INPUT_PLUGINS=gdal,ogr,postgis,shape,sqlite,osm \
   CAIRO=True \
   JOBS=6 \
-  DEMO=True \
-  PGSQL2SQLITE=True
+  DEMO=True
 make # so cpp tests get built
 make install
 
