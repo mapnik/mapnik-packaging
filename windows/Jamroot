@@ -20,6 +20,7 @@ echo "dependencies dir:" $(MAPNIK_DEPS_DIR) ;
 project mapnik
     : source-location ../
     : requirements
+    <include>$(MAPNIK_SOURCE)/ # for local boost stuff
     <include>$(MAPNIK_SOURCE)/include
     <include>$(MAPNIK_SOURCE)/deps/agg/include 
     <include>$(BOOST_INCLUDES)
