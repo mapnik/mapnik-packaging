@@ -9,8 +9,9 @@ if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
     export CORE_CC="/usr/bin/clang"
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
     export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
+    # search for 'auxiliary' at https://developer.apple.com/downloads/index.action
     # http://adcdownload.apple.com/Developer_Tools/auxiliary_tools_for_xcode__february_2012/auxiliary_tools_for_xcode.dmg
-    export PATH=/Applications/PackageMaker.app/Contents/MacOS/:$PATH
+    export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 else
     export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
     #export PATH="/Developer/usr/bin:${PATH}"
@@ -32,7 +33,7 @@ export BUILD="${ROOTDIR}/build"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 # cd ${MAPNIK_SOURCE}
 # MAPNIK_HASH=`git reflog show HEAD | sed -n '1p' | awk '{ print $1 }'`
-export MAPNIK_DEV_POSTFIX="-rc3"
+export MAPNIK_DEV_POSTFIX=""
 
 export OPTIMIZATION="3"
 export JOBS=`sysctl -n hw.ncpu`
@@ -70,11 +71,11 @@ export ICU_VERSION2="49_1_2"
 export BOOST_VERSION="1.49.0"
 export BOOST_VERSION2="1_49_0"
 export SQLITE_VERSION="3071300"
-export FREETYPE_VERSION="2.4.9"
+export FREETYPE_VERSION="2.4.10"
 export PROJ_VERSION="4.8.0"
 export PROJ_GRIDS_VERSION="1.5"
 export LIBPNG_VERSION="1.5.11"
-export LIBTIFF_VERSION="4.0.1"
+export LIBTIFF_VERSION="4.0.2"
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export GDAL_VERSION="1.9.1"
