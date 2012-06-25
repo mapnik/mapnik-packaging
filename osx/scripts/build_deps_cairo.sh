@@ -27,7 +27,8 @@ rm -rf pixman-${PIXMAN_VERSION}
 tar xf pixman-${PIXMAN_VERSION}.tar.gz
 cd pixman-${PIXMAN_VERSION}
 ./configure --enable-static --disable-shared \
---disable-dependency-tracking --prefix=${BUILD}
+--disable-dependency-tracking --prefix=${BUILD} \
+--disable-mmx
 make -j${JOBS}
 make install
 cd ${PACKAGES}
