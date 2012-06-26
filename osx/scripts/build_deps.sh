@@ -317,7 +317,8 @@ patch configure ../../patches/bigtiff_check.diff
 --with-gif=no \
 --with-pg=no \
 --with-vfk=no \
---with-grib=no
+--with-grib=no \
+--with-freexl=no
 
 make -j${JOBS}
 make install
