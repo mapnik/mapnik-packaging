@@ -17,7 +17,7 @@ DEPS=$PREFIX/../deps
 mkdir -p $DEPS
 mkdir -p $MAPNIK_PREFIX
 cd $DEPS
-JOBS=2
+JOBS=8
 
 export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 export PATH=$MAPNIK_PREFIX/bin:$PREFIX/bin:$PATH
@@ -29,14 +29,14 @@ export LD_LIBRARY_PATH=$MAPNIK_PREFIX/lib:$PREFIX/lib:$LD_LIBRARY_PATH
 
 apt-get -y update
 apt-get -y upgrade
-apt-get -y install linux-headers-server linux-image-server linux-server
+#apt-get -y install linux-headers-server linux-image-server linux-server
 # note: git-core on older ubuntu
-apt-get -y install git subversion build-essential python-dev python-nose curl
+apt-get -y install git subversion build-essential pkg-config python-dev python-nose python-imaging curl
 
 # sqlite
-wget http://www.sqlite.org/sqlite-autoconf-3071200.tar.gz
-tar xvf sqlite-autoconf-3071200.tar.gz
-cd sqlite-autoconf-3071200
+wget http://www.sqlite.org/sqlite-autoconf-3071300.tar.gz
+tar xvf sqlite-autoconf-3071300.tar.gz
+cd sqlite-autoconf-3071300
 export CFLAGS="-DSQLITE_ENABLE_RTREE=1 "$CFLAGS
 ./configure --prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
@@ -44,9 +44,9 @@ make install
 cd $DEPS
 
 # freetype
-wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.9.tar.bz2
-tar xvf ../deps/freetype-2.4.9.tar.bz2
-cd freetype-2.4.9
+wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.10.tar.bz2
+tar xvf ../deps/freetype-2.4.10.tar.bz2
+cd freetype-2.4.10
 ./configure --prefix=$PREFIX \
 --enable-static \
 --disable-shared
@@ -79,9 +79,9 @@ make install
 cd $DEPS
 
 # libpng
-wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.10.tar.gz
-tar xvf libpng-1.5.10.tar.gz
-cd libpng-1.5.10
+wget http://download.sourceforge.net/libpng/libpng-1.5.11.tar.gz
+tar xvf libpng-1.5.11.tar.gz
+cd libpng-1.5.11
 ./configure --prefix=$PREFIX --with-zlib-prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
 make install
@@ -97,24 +97,23 @@ make install
 cd $DEPS
 
 # libtiff
-wget http://download.osgeo.org/libtiff/tiff-3.9.6.tar.gz
-tar xvf tiff-3.9.6.tar.gz
-cd tiff-3.9.6
+wget http://download.osgeo.org/libtiff/tiff-4.0.2.tar.gz
+tar xvf tiff-4.0.2.tar.gz
+cd tiff-4.0.2
 ./configure --prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
 make install
 cd $DEPS
 
 # icu
-wget http://download.icu-project.org/files/icu4c/49.1.1/icu4c-49_1_1-src.tgz
-tar xvf icu4c-49_1_1-src.tgz
+wget http://download.icu-project.org/files/icu4c/49.1.2/icu4c-49_1_2-src.tgz
+tar xvf icu4c-49_1_2-src.tgz
 cd icu/source
 ./configure --prefix=$PREFIX --disable-samples --enable-static \
 --enable-release --disable-shared --with-library-bits=64 \
 --with-data-packaging=archive --disable-icuio --disable-tests --disable-layout \
---disable-extras \
---enable-rpath
-# icu.dat will go into: /usr/local/src/mapnik-sdk/share/icu/4.8.1.1
+--disable-extras
+# icu.dat will go into: /usr/local/src/mapnik-sdk/share/icu/49.1.2
 make -j$JOBS
 make install
 cd $DEPS
@@ -169,9 +168,9 @@ make install
 cd $DEPS
 
 # libxml2
-wget ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz
-tar xvf libxml2-2.7.8.tar.gz
-cd libxml2-2.7.8
+wget ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz
+tar xvf libxml2-2.8.0.tar.gz
+cd libxml2-2.8.0
 ./configure --prefix=$PREFIX --enable-static --disable-shared
 make -j$JOBS
 make install
@@ -179,9 +178,9 @@ cd $DEPS
 
 
 # gdal
-wget http://download.osgeo.org/gdal/gdal-1.9.0.tar.gz
-tar xvf gdal-1.9.0.tar.gz
-cd gdal-1.9.0
+wget http://download.osgeo.org/gdal/gdal-1.9.1.tar.gz
+tar xvf gdal-1.9.1.tar.gz
+cd gdal-1.9.1
 
 ./configure --prefix=$PREFIX --enable-static --disable-shared \
 --with-libtiff=$PREFIX \
@@ -222,33 +221,67 @@ git clone git://github.com/mapnik/mapnik.git mapnik
 cd mapnik
 python scons/scons.py configure \
 RUNTIME_LINK=static \
-LINKING="static" \
+LINKING="shared" \
 INPUT_PLUGINS=gdal,ogr,osm,postgis,raster,shape,sqlite \
-CXX="g++ -L$PREFIX/lib -Bstatic -lboost_regex -Bstatic -licudata -Bstatic -licuuc" \
+CXX="g++ -L$PREFIX/lib -Bstatic -lboost_regex -Bstatic -licudata -Bstatic -licuuc -Bstatic -licudata" \
 CUSTOM_CXXFLAGS="-fPIC -DU_STATIC_IMPLEMENTATION=1 -DBOOST_ALL_NO_LIB=1 -DBOOST_HAS_ICU=1 " \
 CUSTOM_LDFLAGS="-L$PREFIX/lib -Bdynamic -ldl" \
 PATH_REMOVE="/usr/lib" \
-PATH_REPLACE="/usr/local/lib:$PREFIX/lib"
+PATH_REPLACE="/usr/local/lib:$PREFIX/lib" \
 PREFIX=$MAPNIK_PREFIX \
 PYTHON_PREFIX=$MAPNIK_PREFIX \
 PATH_INSERT=$PREFIX/bin \
 BOOST_INCLUDES=$PREFIX/include \
 BOOST_LIBS=$PREFIX/lib \
-JOBS=$JOBS configure
-make && make install
+JOBS=$JOBS
 
+# icu regex check will likely fail, but this worked (manually formed):
+: '
+g++ -L/usr/local/src/mapnik-sdk/lib -Bstatic -lboost_regex -Bstatic -licudata -Bstatic -licuuc -o .sconf_temp/conftest_18 -L/usr/local/s
+rc/mapnik-sdk/lib -Bdynamic -ldl .sconf_temp/conftest_18.o -Lsrc -L/usr/local/lib -L/usr/local/src/mapnik-sdk/lib -L/usr/lib -lfreetype -lm -lltdl -lpng -ltiff -lz -lproj -licuuc -ljpeg -lboost_system -lboost_filesystem -lboost_regex -lboost_program_options -lboost_thread -licui18n -licuuc -licudata
+'
+
+# -i and -k to force past any minor failures
+python scons/scons.py -i -k
 
 
 # node
-wget http://nodejs.org/dist/node-v0.6.18.tar.gz
-tar xvf node-v0.6.18.tar.gz
-cd node-v0.6.18
+apt-get install libssl-dev
+wget http://nodejs.org/dist/v0.6.19/node-v0.6.19.tar.gz
+tar xvf node-v0.6.19.tar.gz
+cd node-v0.6.19
 ./configure
 make && make install
 cd $DEPS
 
-# npm
-curl http://npmjs.org/install.sh | sh
+# node-mapnik
+git clone https://github.com/mapnik/node-mapnik.git
+cd node-mapnik
+export MAPNIK_INPUT_PLUGINS="path.join(__dirname, 'mapnik/input')"
+export MAPNIK_FONTS="path.join(__dirname, 'mapnik/fonts')"
+./configure && make
+npm install mocha
+make test
+
+# repackage node-mapnik
+sudo apt-get install chrpath
+LIBMAPNIK_PATH=${MAPNIK_PREFIX}/lib
+cp ${LIBMAPNIK_PATH}/libmapnik* lib/
+cp -r ${LIBMAPNIK_PATH}/mapnik lib/
+mkdir -p lib/share
+cp -r $PREFIX/share/proj lib/share/
+cp -r $PREFIX/share/proj lib/share/
+mkdir lib/share/icu
+cp $PREFIX/share/icu/49.1.2/icudt49l.dat lib/share/icu
+
+echo "
+module.exports.env = {
+    'ICU_DATA':path.join(__dirname,'share/icu'),
+    'PROJ_LIB':path.join(__dirname,'share/proj'),
+    'GDAL_DATA':path.join(__dirname,'share/gdal')
+}
+" >> lib/mapnik_settings.js
+
 
 
 # tilemill
