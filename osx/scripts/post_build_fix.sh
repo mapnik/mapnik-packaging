@@ -25,7 +25,9 @@ do
 done
 
 # fixup c++ programs
-install_name_tool -change libmapnik.dylib @loader_path/../lib/libmapnik.dylib ${MAPNIK_INSTALL}/bin/pgsql2sqlite
+if [ -d "${MAPNIK_INSTALL}/bin/pgsql2sqlite" ]; then
+    install_name_tool -change libmapnik.dylib @loader_path/../lib/libmapnik.dylib ${MAPNIK_INSTALL}/bin/pgsql2sqlite
+fi
 #install_name_tool -change libmapnik.dylib @loader_path/../lib/libmapnik.dylib ${MAPNIK_INSTALL}/bin/svg2png
 for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
 do install_name_tool -change libmapnik.dylib ${MAPNIK_INSTALL}/lib/libmapnik.dylib $i;
