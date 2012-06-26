@@ -16,14 +16,14 @@ cd scripts/
 # test mapnik
 ./test_mapnik.sh
 
+# package dmg
+./package_dmg.sh
+
 # copy minimal headers of deps
 ./copy_headers.sh
 
 # package mapnik tarball
 ./package_tarball.sh
-
-# package dmg
-./package_dmg.sh
 
 # then uninstall mapnik and package sdk
 ./package_sdk.sh
