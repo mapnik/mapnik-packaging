@@ -5,6 +5,7 @@ lib mapnik
     :
     color.cpp
     image_compositing.cpp
+	image_scaling.cpp
     conversions.cpp
     box2d.cpp
     building_symbolizer.cpp
