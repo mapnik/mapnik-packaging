@@ -110,6 +110,7 @@ lib mapnik
     agg/process_markers_symbolizer.cpp
     agg/agg_renderer.cpp
     #grid
+	grid/grid.cpp
     grid/grid_renderer.cpp
     grid/process_building_symbolizer.cpp
     grid/process_line_pattern_symbolizer.cpp
