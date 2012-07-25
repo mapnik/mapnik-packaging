@@ -1,5 +1,6 @@
 @echo off
 
+set STARTTIME=%TIME%
 set ROOTDIR=c:\dev2
 @rem note - MAPNIK_DEPS_DIR and MAPNIK_SOURCE
 @rem are needed by bjam files
@@ -27,3 +28,4 @@ copy %ROOTDIR%\icu\bin\icudt48.dll %PREFIX%\lib\
 copy %ROOTDIR%\libxml2\win32\bin.msvc\libxml2.dll %PREFIX%\lib\
 copy %ROOTDIR%\proj\src\proj.dll %PREFIX%\lib\
 copy "%ROOTDIR%\libsigc++\MSVC_Net2010\Win32\Release\sigc-vc100-2_0.dll" %PREFIX%\lib\
+echo Started at %STARTTIME%, finished at %TIME%
