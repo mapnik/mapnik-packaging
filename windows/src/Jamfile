@@ -4,19 +4,23 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
 lib mapnik
     :
     color.cpp
-    image_compositing.cpp
-	image_scaling.cpp
+    css_color_grammar.cpp
     conversions.cpp
+    image_compositing.cpp
+    image_scaling.cpp
     box2d.cpp
     building_symbolizer.cpp
     datasource_cache.cpp
-	debug.cpp
+    debug.cpp
     deepcopy.cpp
+    expression_node.cpp
+    expression_grammar.cpp
     expression_string.cpp
     expression.cpp
-	transform_expression.cpp
+    transform_expression_grammar.cpp
+    transform_expression.cpp
     feature_kv_iterator.cpp
-    feature_type_style.cpp 
+    feature_type_style.cpp
     font_engine_freetype.cpp
     font_set.cpp
     gamma_method.cpp
@@ -31,8 +35,9 @@ lib mapnik
     load_map.cpp
     memory.cpp
     parse_path.cpp
-	parse_transform.cpp
+    parse_transform.cpp
     palette.cpp
+    path_expression_grammar.cpp
     placement_finder.cpp
     plugin.cpp
     png_reader.cpp
@@ -44,6 +49,7 @@ lib mapnik
     text_symbolizer.cpp
     tiff_reader.cpp
     wkb.cpp
+    wkb_generator.cpp
     projection.cpp
     proj_transform.cpp
     distance.cpp
@@ -63,9 +69,10 @@ lib mapnik
     marker_cache.cpp
     svg_parser.cpp
     svg_path_parser.cpp
-    svg_points_parser.cpp 
+    svg_points_parser.cpp
     svg_transform_parser.cpp
     warp.cpp
+    json/feature_grammar.cpp
     json/feature_collection_parser.cpp
     json/geojson_generator.cpp
     markers_placement.cpp
@@ -109,7 +116,7 @@ lib mapnik
     agg/process_markers_symbolizer.cpp
     agg/agg_renderer.cpp
     #grid
-	grid/grid.cpp
+    grid/grid.cpp
     grid/grid_renderer.cpp
     grid/process_building_symbolizer.cpp
     grid/process_line_pattern_symbolizer.cpp
@@ -138,9 +145,9 @@ lib mapnik
     ..//xml2
     ..//cairo
     ..//cairomm
-      :   
+      :
         <define>HAVE_XML2
-		#<define>MAPNIK_STATS
+        #<define>MAPNIK_STATS
         <define>MAPNIK_EXPORTS
         <link>shared
         <linkflags>/VERBOSE:LIB
