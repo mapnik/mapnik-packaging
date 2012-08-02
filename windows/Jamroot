@@ -44,6 +44,7 @@ project mapnik
     <define>HAVE_JPEG
     <define>HAVE_CAIRO
 	<cxxflags>/wd4345
+	<cxxflags>/wd4661
 	#<define>MAPNIK_STATS
     #<define>_HAS_CPP0X=0
     #<define>LIBXML_STATIC
