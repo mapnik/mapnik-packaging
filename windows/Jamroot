@@ -114,6 +114,7 @@ build-project plugins/input/gdal ;
 # utils
 
 build-project utils/shapeindex ;
+build-project utils/svg2png ;
 build-project utils/pgsql2sqlite ;
 
 # demo 
