@@ -1,6 +1,7 @@
 # release a mapnik tag on launchpad
 
 # first create a new PPA like ppa:mapnik/v2.1.0, then run these commands
+# copy boost packages over to it, if needed
 
 GPGKEY=89DBC525
 DEBFULLNAME="Dane Springmeyer (Mapnik Releases)"
