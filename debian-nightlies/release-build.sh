@@ -2,6 +2,8 @@
 
 # first create a new PPA like ppa:mapnik/v2.1.0, then run these commands
 # copy boost packages over to it, if needed
+# https://launchpad.net/~mapnik/+archive/boost/+copy-packages
+# WARNING: only copy 2 boost packages at a time to avoid likely timeouts
 
 GPGKEY=89DBC525
 DEBFULLNAME="Dane Springmeyer (Mapnik Releases)"
