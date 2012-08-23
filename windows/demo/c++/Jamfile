@@ -1,4 +1,4 @@
-MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 project : source-location  $(MAPNIK_SOURCE)/demo/c++ ;
 
 exe rundemo :

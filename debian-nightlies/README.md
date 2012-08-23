@@ -52,15 +52,15 @@ the correctly named PPA's:
     git log -1 --pretty=format:%h > ../2.0.x/prev.rev
     cd ../
     
-5) Run ./nightly-build.sh -f -d to make sure it works (you should see usage)
+5) Run `./nightly-build.sh -f -d` to make sure it works (you should see usage)
 
-6) Run ./nightly-build.sh -f to force the first build & upload
+6) Run `./nightly-build.sh -f` to force the first build & upload
 
-7) Run ./nightly-build.sh -c to delete what you just built
+7) Run `./nightly-build.sh -c` to delete what you just built
 
-8) After that, run ./nightly-build.sh and it'll regenerate and upload source packages if something's changed.
+8) After that, run `./nightly-build.sh` and it'll regenerate and upload source packages if something's changed.
 
-9) Run ./nightly-build.sh -c to cleanup occasionally
+9) Run `./nightly-build.sh -c` to cleanup occasionally
 
 10) Re-run a single trunk build because you've fixed debian/ stuff, do
    
@@ -69,7 +69,7 @@ the correctly named PPA's:
 
 ## Notes
 
-debian/ directories are taken from the appropriate directory for each branch, 
+`debian/` directories are taken from the appropriate directory for each branch, 
 except for the changelog which is built dynamically.
 
 

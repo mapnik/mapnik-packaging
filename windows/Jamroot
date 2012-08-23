@@ -43,6 +43,8 @@ project mapnik
     <define>HAVE_LIBXML2
     <define>HAVE_JPEG
     <define>HAVE_CAIRO
+	<cxxflags>/wd4345
+	<cxxflags>/wd4661
 	#<define>MAPNIK_STATS
     #<define>_HAS_CPP0X=0
     #<define>LIBXML_STATIC
@@ -112,6 +114,7 @@ build-project plugins/input/gdal ;
 # utils
 
 build-project utils/shapeindex ;
+build-project utils/svg2png ;
 build-project utils/pgsql2sqlite ;
 
 # demo 
