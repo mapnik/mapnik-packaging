@@ -205,6 +205,10 @@ make -j$JOBS
 make install
 cd $DEPS
 
+# postgres
+# just grab the client from packages
+sudo apt-get install postgresql libpq-dev
+
 # mapnik
 # http://www.trilithium.com/johan/2005/06/static-libstdc/
 # CUSTOM_CXXFLAGS="-static-libstdc++ -static-libgcc" \

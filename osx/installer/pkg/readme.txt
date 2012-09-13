@@ -24,7 +24,7 @@ You should be able to:
 
 ## Installation Details
 
-This installer only works for Intel 64 bit enabled OS X 10.6 and 10.7.
+This installer only works for Intel 64 bit enabled OS X 10.6, 10.7, and 10.8.
 
 This installer places Mapnik at:
 

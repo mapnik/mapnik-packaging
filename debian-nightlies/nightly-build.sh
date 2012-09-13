@@ -119,6 +119,9 @@ for BRANCH in ${BRANCHES_TO_BUILD}; do
     REV_PREV="$(cat ../${BRANCH}/prev.rev)"
     echo "Previous revision was ${REV_PREV}"
 
+    echo "placing GIT_REVISION file for launchpad build"
+    git rev-list --max-count=1 HEAD > GIT_REVISION
+
     # Shall we build or not ? 
     if [ "$REV" == "${REV_PREV}" ]; then
         echo "No need to build!"

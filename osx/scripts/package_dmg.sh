@@ -7,7 +7,7 @@ packagemaker --doc ${ROOTDIR}/installer/mapnik.pmdoc --out ${ROOTDIR}/installer/
 packagemaker --doc ${ROOTDIR}/installer/uninstall.pmdoc --out ${ROOTDIR}/installer/pkg/Uninstall-Mapnik.pkg
 FOUND_ACTIVE_VERSION=`${MAPNIK_INSTALL}/bin/mapnik-config --version`
 MAPNIK_DMG_VOL_NAME="Mapnik ${FOUND_ACTIVE_VERSION}"
-MAPNIK_DMG_NAME="${MAPNIK_PACKAGE_PREFIX}_${FOUND_ACTIVE_VERSION}.dmg"
+MAPNIK_DMG_NAME="${MAPNIK_PACKAGE_PREFIX}-v${FOUND_ACTIVE_VERSION}.dmg"
 hdiutil create \
   "${ROOTDIR}/installer/${MAPNIK_DMG_NAME}" \
   -volname "${MAPNIK_DMG_VOL_NAME}" \
