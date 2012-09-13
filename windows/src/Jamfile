@@ -3,7 +3,9 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
     
 lib mapnik
     :
+    color_factory.cpp
     color.cpp
+    config_error.cpp
     css_color_grammar.cpp
     conversions.cpp
     image_compositing.cpp
@@ -65,10 +67,10 @@ lib mapnik
     wkt/wkt_generator.cpp
     mapped_memory_cache.cpp
     marker_cache.cpp
-    svg_parser.cpp
-    svg_path_parser.cpp
-    svg_points_parser.cpp
-    svg_transform_parser.cpp
+    svg/svg_parser.cpp
+    svg/svg_path_parser.cpp
+    svg/svg_points_parser.cpp
+    svg/svg_transform_parser.cpp
     warp.cpp
     json/geometry_grammar.cpp
     json/geometry_parser.cpp
@@ -89,7 +91,6 @@ lib mapnik
     text_placements/simple.cpp
     text_properties.cpp
     xml_tree.cpp
-    config_error.cpp
 
     # others
     feature_style_processor.cpp
