@@ -6,6 +6,7 @@ Build-Depends:
  scons,
  git-core,
  python-support (>= 0.8.4),
+ python-nose,
  debhelper (>= 7.0.50~),
  python-all-dev,
  libboost-thread-dev (>= 1.42),
