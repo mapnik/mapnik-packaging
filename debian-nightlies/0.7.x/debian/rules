@@ -15,8 +15,14 @@ else
 	export CFLAGS += -O3
 endif
 
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 override_dh_auto_test:
-	
+else:
+override_dh_auto_test:
+	# the test suite does not 100% pass on all platforms/boost versions,
+	# but the output is useful :)
+	dh_auto_test; echo "Overall Test Exit Code: $?"
+endif
 
 override_dh_auto_configure:
 	scons $(SCONS_FLAGS) CUSTOM_CXXFLAGS="$(CFLAGS)" configure
