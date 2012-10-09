@@ -3,9 +3,7 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
     
 lib mapnik
     :
-    color_factory.cpp
     color.cpp
-    config_error.cpp
     css_color_grammar.cpp
     conversions.cpp
     image_compositing.cpp
@@ -47,6 +45,7 @@ lib mapnik
     point_symbolizer.cpp
     polygon_pattern_symbolizer.cpp
     polygon_symbolizer.cpp
+    rule.cpp
     save_map.cpp
     shield_symbolizer.cpp
     text_symbolizer.cpp
@@ -56,6 +55,7 @@ lib mapnik
     proj_transform.cpp
     distance.cpp
     scale_denominator.cpp
+    simplify.cpp
     memory_datasource.cpp
     stroke.cpp
     symbolizer.cpp
@@ -63,6 +63,7 @@ lib mapnik
     unicode.cpp
     markers_symbolizer.cpp
     raster_colorizer.cpp
+    raster_symbolizer.cpp
     wkt/wkt_factory.cpp
     wkt/wkt_generator.cpp
     mapped_memory_cache.cpp
@@ -91,6 +92,8 @@ lib mapnik
     text_placements/simple.cpp
     text_properties.cpp
     xml_tree.cpp
+    config_error.cpp
+    color_factory.cpp
 
     # others
     feature_style_processor.cpp
