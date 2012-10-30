@@ -9,6 +9,8 @@ exe svg2png :
 	../..//icu
     ../..//cairo
     ../..//cairomm
+	../../deps/agg//agg
+	../..//xml2
 	:
 	;
 
