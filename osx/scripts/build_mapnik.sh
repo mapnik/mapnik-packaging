@@ -14,6 +14,8 @@ echo "CUSTOM_LDFLAGS = '${LDFLAGS}'" >> config.py
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 cat ${ROOTDIR}/patches/config.py >> config.py
 
+#rm plugins/input/*input
+#rm src/*dylib
 ./configure \
   BINDINGS='' \
   INPUT_PLUGINS=csv,gdal,ogr,postgis,shape,sqlite,osm \

@@ -4,6 +4,12 @@ source settings.sh
 ./scripts/build_deps.sh
 ./scripts/build_deps_cairo.sh
 
+# update mapnik
+cd mapnik
+git fetch
+git checkout v2.1.0
+cd ../
+
 rm -rf ${MAPNIK_INSTALL}
 cd scripts/
 
@@ -15,6 +21,10 @@ cd scripts/
 
 # test mapnik
 ./test_mapnik.sh
+
+# manually edit mapnik-config if this is not
+# a full SDK build
+# /Library/Frameworks/Mapnik.framework/unix/bin/mapnik-config
 
 # package dmg
 ./package_dmg.sh
