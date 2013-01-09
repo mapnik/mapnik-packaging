@@ -27,11 +27,9 @@ Build-Depends:
  libxml2-dev,
  libicu-dev (>= 4.2),
  libcairo2-dev,
- libcairomm-1.0-dev,
  python-cairo-dev,
  libsqlite3-dev,
- libcurl4-gnutls-dev,
- libsigc++-2.0-dev
+ libcurl4-gnutls-dev
 Standards-Version: 3.8.4
 Section: libs
 XS-Python-Version: >= 2.5
@@ -86,11 +84,9 @@ Depends:
  libxml2-dev,
  libicu-dev (>= 4.2),
  libcairo2-dev,
- libcairomm-1.0-dev,
  python-cairo-dev,
  libsqlite3-dev,
- libcurl4-gnutls-dev,
- libsigc++-2.0-dev
+ libcurl4-gnutls-dev
 Recommends: mapnik-doc
 Description: C++/Python toolkit for developing GIS applications (devel)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
