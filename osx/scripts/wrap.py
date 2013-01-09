@@ -92,25 +92,18 @@ if __name__ == "__main__":
         # install cairo libs and deps
         copy_all_items('sources/lib/libcairo*dylib',join(active,'unix/lib'),recursive=True)
         copy_all_items('sources/lib/libfontconfig*dylib',join(active,'unix/lib'),recursive=True)
-        copy_all_items('sources/lib/libsigc-2.0*dylib',join(active,'unix/lib'),recursive=True)
         copy_all_items('sources/lib/libpixman*dylib',join(active,'unix/lib'),recursive=True)
     
         # install cairo includes
         if INCLUDE_HEADERS:
             # what is layout?
-            for group in ['cairo','cairomm-1.0','fontconfig','pixman-1','pycairo','sigc++-2.0','layout']:
+            for group in ['cairo','fontconfig','pixman-1','pycairo','layout']:
                 if not os.path.exists(join(active,'unix/include/%s' % group)):
                     os.mkdir(join(active,'unix/include/%s' % group))
                 copy_all_items('sources/include/%s/*' % group,join(active,'unix/include/%s' % group),recursive=True)
             
             if not INCLUDE_PYCAIRO:
                 drop('rm -rf %s' % join(active,'unix/include/pycairo'))
-
-            # likely uneeded
-            if not os.path.exists(join(active,'unix/lib/sigc++-2.0')):
-                os.mkdir(join(active,'unix/lib/sigc++-2.0'))
-            copy_all_items('sources/lib/sigc++-2.0/*',join(active,'unix/lib/sigc++-2.0'),recursive=True)
-            
     
     # install icu libs
     copy_all_items('sources/lib/libicuu*dylib',join(active,'unix/lib'),recursive=True)

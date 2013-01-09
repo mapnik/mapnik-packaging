@@ -255,32 +255,3 @@ export png_LIBS="-I$PREFIX/lib -lpng12"
 make -j4
 make install
 cd ../
-
-
-# libsigcxx
-wget http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2/libsigc++-2.2.10.tar.bz2
-tar xvf libsigc++-2.2.10.tar.bz2
-cd libsigc++-2.2.10
-./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=$PREFIX
-make -j4
-make install
-cd ../
-
-wget http://cairographics.org/releases/cairomm-1.10.0.tar.gz
-tar xvf cairomm-1.10.0.tar.gz
-cd cairomm-1.10.0
-# NOTE: PKG_CONFIG_PATH must be correctly set by this point
-export CFLAGS="-O3 -arch x86_64"
-export CXXFLAGS="-O3 -arch x86_64"
-export LDFLAGS="-arch x86_64"
-export LDFLAGS="-L$PREFIX/lib -lcairo -lfontconfig -lsigc-2.0 "$LDFLAGS
-export CFLAGS="-I$PREFIX/include -I$PREFIX/include/cairo -I$PREFIX/include/freetype2 -I$PREFIX/include/fontconfig -I$PREFIX/lib/sigc++-2.0/include -I$PREFIX/include/sigc++-2.0 -I$PREFIX/include/sigc++-2.0/sigc++ "$CFLAGS
-# undef CAIRO_HAS_FT_FONT in include/cairo/cairo-features.h
-#mv ../../sources/lib/pkgconfig/cairo-ft.pc ../../sources/lib/pkgconfig/_cairo-ft.pc
-#export CFLAGS="-DNCAIRO_HAS_FT_FONT -I$PREFIX/include -I$PREFIX/include/cairo -I$PREFIX/lib/sigc++-2.0/include -I$PREFIX/include/sigc++-2.0 -I$PREFIX/include/sigc++-2.0/sigc++ "
-export CXXFLAGS="-I$PREFIX/include "$CFLAGS
-
-./configure --enable-static --disable-shared \
-    --disable-dependency-tracking --prefix=$PREFIX
-make -j4
-make install

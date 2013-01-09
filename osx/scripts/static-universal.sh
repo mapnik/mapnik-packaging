@@ -214,34 +214,6 @@ make -j${JOBS}
 make install
 cd ../
 
-
-# libsigcxx
-
-tar xvf libsigc++-${SIGCPP_VERSION2}.tar.bz2
-cd libsigc++-${SIGCPP_VERSION2}
-export CFLAGS=$CORE_CFLAGS
-export CXXFLAGS=$CORE_CXXFLAGS
-export LDFLAGS=$CORE_LDFLAGS
-./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD}
-make -j${JOBS}
-make install
-cd ../
-
-# cairomm
-
-tar xvf cairomm-${CAIROMM_VERSION}.tar.gz
-cd cairomm-${CAIROMM_VERSION}
-# NOTE: PKG_CONFIG_PATH must be correctly set by this point
-export LDFLAGS="-L${BUILD}/lib -lcairo -lfontconfig -lsigc-2.0 "$CORE_LDFLAGS
-export CFLAGS="-I${BUILD}/include -I${BUILD}/include/cairo -I${BUILD}/include/freetype2 -I${BUILD}/include/fontconfig -I${BUILD}/lib/sigc++-2.0/include -I${BUILD}/include/sigc++-2.0 -I${BUILD}/include/sigc++-2.0/sigc++ "$CORE_CFLAGS
-export CXXFLAGS="-I${BUILD}/include "$CFLAGS
-
-./configure --enable-static --disable-shared \
-    --disable-dependency-tracking --prefix=${BUILD}
-make -j${JOBS}
-make install
-cd ../
-
 # mapnik
 
 # config.py

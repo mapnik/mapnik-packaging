@@ -99,33 +99,6 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-
-# libsigcxx
-echo '*building libsigcxx*'
-rm -rf libsigc++-${SIGCPP_VERSION2}
-tar xf libsigc++-${SIGCPP_VERSION2}.tar.bz2
-cd libsigc++-${SIGCPP_VERSION2}
-./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD}
-make -j${JOBS}
-make install
-cd ${PACKAGES}
-
-# cairomm
-echo '*building cairomm*'
-rm -rf cairomm-${CAIROMM_VERSION}
-tar xf cairomm-${CAIROMM_VERSION}.tar.gz
-cd cairomm-${CAIROMM_VERSION}
-# NOTE: PKG_CONFIG_PATH must be correctly set by this point
-export LDFLAGS="-L${BUILD}/lib -lcairo -lfontconfig -lsigc-2.0 "$CORE_LDFLAGS
-export CFLAGS="-I${BUILD}/include -I${BUILD}/include/cairo -I${BUILD}/include/freetype2 -I${BUILD}/include/fontconfig -I${BUILD}/lib/sigc++-2.0/include -I${BUILD}/include/sigc++-2.0 -I${BUILD}/include/sigc++-2.0/sigc++ "$CORE_CFLAGS
-export CXXFLAGS="-I${BUILD}/include "$CFLAGS
-
-./configure --enable-static --disable-shared \
-    --disable-dependency-tracking --prefix=${BUILD}
-make -j${JOBS}
-make install
-cd ${PACKAGES}
-
 # pycairo
 echo '*building pycairo*'
 tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2

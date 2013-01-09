@@ -37,8 +37,5 @@ cp -r ${BUILD}/include/ft2build.h ${MAPNIK_INSTALL}/include/ft2build.h
 # if cairo is installed
 if [ -f ${BUILD}/include/cairo/cairo.h ]; then
     cp -r ${BUILD}/include/cairo ${MAPNIK_INSTALL}/include/
-    cp -r ${BUILD}/include/cairomm-1.0 ${MAPNIK_INSTALL}/include/
-    cp -r ${BUILD}/include/sigc++-2.0 ${MAPNIK_INSTALL}/include/
-    cp -r ${BUILD}/lib/sigc++-2.0/include/sigc++config.h ${MAPNIK_INSTALL}/include/sigc++config.h
     cp -r ${BUILD}/include/fontconfig ${MAPNIK_INSTALL}/include/
 fi

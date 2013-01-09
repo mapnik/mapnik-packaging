@@ -11,9 +11,6 @@ Index: demo/viewer/viewer.pro
 -INCLUDEPATH += /usr/X11/include/freetype2
 +INCLUDEPATH += /Library/Frameworks/Mapnik.framework/unix/include
 +INCLUDEPATH += /Library/Frameworks/Mapnik.framework/unix/include/cairo
-+INCLUDEPATH += /Library/Frameworks/Mapnik.framework/unix/include/cairomm-1.0
-+INCLUDEPATH += /Library/Frameworks/Mapnik.framework/unix/include/sigc++-2.0
-+INCLUDEPATH += /Library/Frameworks/Mapnik.framework/unix/lib/sigc++-2.0/include/
 +INCLUDEPATH += /Library/Frameworks/Mapnik.framework/unix/include/freetype2
 +INCLUDEPATH += /Library/Frameworks/UnixImageIO.framework/unix/include
 +INCLUDEPATH += /Library/Frameworks/PROJ.framework/unix/include
@@ -37,7 +34,6 @@ Index: demo/viewer/viewer.pro
 +unix:LIBS += -lboost_regex
 +unix:LIBS += -lboost_thread
 +unix:LIBS += -lboost_system
-+unix:LIBS += -lcairomm-1.0
 +unix:LIBS += -lcairo
  
  # Input
