@@ -61,8 +61,9 @@ cd boost_${BOOST_VERSION2}
 patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 ./bootstrap.sh
 
+# https://svn.boost.org/trac/boost/ticket/6686
 if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-    patch tools/build/v2/tools/darwin.jam ../../patches/boost_sdk.diff
+    patch tools/build/v2/tools/darwin.jam ${ROOTDIR}/patches/boost_sdk.diff
 fi
 
 # static libs
