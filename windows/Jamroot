@@ -35,8 +35,6 @@ project mapnik
     <include>$(MAPNIK_DEPS_DIR)/libxml2/include
     <include>$(MAPNIK_DEPS_DIR)/cairo
     <include>$(MAPNIK_DEPS_DIR)/cairo/src
-    <include>$(MAPNIK_DEPS_DIR)/cairomm
-    <include>$(MAPNIK_DEPS_DIR)/libsigc++
     <threading>multi
     <variant>debug:<define>MAPNIK_DEBUG
     <define>MAPNIK_THREADSAFE
@@ -73,7 +71,6 @@ alias jpeg : /site-config//jpeg : <link>static ;
 alias tiff : /site-config//tiff : <link>static ;
 alias freetype2 : /site-config//freetype2 : <link>static ;
 alias cairo : /site-config//cairo : <link>shared ;    
-alias cairomm : /site-config//cairomm : <link>shared ;    
 # alias ltdl : /site-config//ltdl : <link>static ;
 alias proj : /site-config//proj : <link>static ;
 alias icu  : /site-config//icu : <link>shared ;

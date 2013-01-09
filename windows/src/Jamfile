@@ -149,7 +149,6 @@ lib mapnik
     ..//icu
     ..//xml2
     ..//cairo
-    ..//cairomm
       :
         <define>HAVE_XML2
         #<define>MAPNIK_STATS

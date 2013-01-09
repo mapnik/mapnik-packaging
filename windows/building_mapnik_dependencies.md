@@ -51,8 +51,6 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set LIBXML2_VERSION=2.7.8
     set PIXMAN_VERSION=0.22.2
     set CAIRO_VERSION=1.10.2
-    set CAIROMM_VERSION=1.10.0
-    set LIBSIGC++_VERSION=2.2.10
     set SQLITE_VERSION=3071100
     set EXPAT_VERSION=2.1.0
     set GEOS_VERSION=3.3.3
@@ -60,7 +58,6 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 ## Download
 
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairo-win32.patch --no-check-certificate
-    wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/cairomm-1.10.0-vc10.patch --no-check-certificate
     wget https://raw.github.com/mapnik/mapnik-packaging/master/windows/libxml.patch --no-check-certificate
 
     cd %PKGDIR%
@@ -72,9 +69,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
     curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
     curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
-    curl http://caesar.acc.umu.se/pub/GNOME/sources/libsigc++/2.2/libsigc++-%LIBSIGC++_VERSION%.tar.bz2 -O
     curl http://www.cairographics.org/releases/cairo-%CAIRO_VERSION%.tar.gz -O
-    curl http://www.cairographics.org/releases/cairomm-%CAIROMM_VERSION%.tar.gz -O
     curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
     curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
     curl http://iweb.dl.sourceforge.net/project/expat/expat_win32/%EXPAT_VERSION%/expat-win32bin-%EXPAT_VERSION%.exe -O
@@ -293,45 +288,6 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
     nmake /f makefile.vc MSVC_VER=1600
  
-    cd %ROOTDIR%
-
-
-### libsigc++
-
-    bsdtar xvfj %PKGDIR%\libsigc++-%LIBSIGC++_VERSION%.tar.bz2
-    rename libsigc++-%LIBSIGC++_VERSION% libsigc++
-
-##### VC++ 2008
-
-    cd libsigc++\MSVC_Net2008
-    vcbuild "libsigc++2.vcproj" "Release|Win32"
-
-##### VC++ 2010
-
-    cd libsigc++\MSVC_Net2010
-    msbuild "libsigc++2.vcxproj" /t:Rebuild /p:Configuration="Release" /p:Platform=Win32
-    
-    copy "sigc++config.h" "%ROOTDIR%\libsigc++"
-    cd %ROOTDIR%
-
-### cairomm
-
-    bsdtar xvzf %PKGDIR%/cairomm-%CAIROMM_VERSION%.tar.gz
-    rename cairomm-%CAIROMM_VERSION% cairomm
-
-##### VC++ 2008
-
-    set INCLUDE=%INCLUDE%;%ROOTDIR%\libsigc++;%ROOTDIR%\freetype\include;%ROOTDIR%\freetype\include\freetype;%ROOTDIR%\cairo\src
-    set LIB=%LIB%;%ROOTDIR%\cairo\src\release;%ROOTDIR%\libsigc++\MSVC_Net2008\Win32\Release
-    cd cairomm\MSVC_Net2008
-    vcbuild cairomm.sln /useenv "Release|Win32"
-
-##### VC++ 2010
-
-    cd cairomm
-    patch -p1 < ..\cairomm-1.10.0-vc10.patch
-    cd MSVC_Net2010
-    msbuild /p:Configuration="Release" /p:Platform=Win32 /t:"cairomm-fixed" cairomm.sln
     cd %ROOTDIR%
 
 

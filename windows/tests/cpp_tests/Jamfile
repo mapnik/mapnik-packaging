@@ -7,7 +7,6 @@ exe font_registration_test :
     ../..//thread
     ../..//icu
     ../..//cairo
-    ../..//cairomm
     :
     ;
 
@@ -17,7 +16,6 @@ exe params_test :
     ../..//thread
     ../..//icu
     ../..//cairo
-    ../..//cairomm
     :
     ;
     

@@ -25,8 +25,6 @@ lib pq : : <name>libpq <search>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libp
 
 # Cairo
 lib cairo : : <name>cairo <search>$(MAPNIK_DEPS_DIR)/cairo/src/release ;
-#lib cairomm : : <name>cairomm-vc90-1_0 <search>$(MAPNIK_DEPS_DIR)/cairomm/MSVC_Net2008/cairomm/Win32/Release ;
-lib cairomm : : <name>cairomm-vc100-1_0 <search>$(MAPNIK_DEPS_DIR)/cairomm/MSVC_Net2010/cairomm/Win32/Release ;
 
 lib expat : : <name>libexpat <search>"C:/Program Files (x86)/Expat 2.1.0/bin" ;
 lib gdal : : <name>gdal <search>$(MAPNIK_DEPS_DIR)/gdal ;
