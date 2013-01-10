@@ -3,6 +3,8 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
     
 lib mapnik
     :
+    params.cpp
+    image_filter_types.cpp
     miniz_png.cpp
     color.cpp
     css_color_grammar.cpp
@@ -106,6 +108,7 @@ lib mapnik
     
     # cairo
     cairo_renderer.cpp
+	cairo_context.cpp
   
     # agg
     agg/process_building_symbolizer.cpp
