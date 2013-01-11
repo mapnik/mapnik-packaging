@@ -19,6 +19,7 @@ bjam toolset=msvc -j2 --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOS
 
 @rem copy sparsehash - TODO add this copy to the Jamroot
 xcopy /i /s %MAPNIK_SOURCE%\deps\mapnik\sparsehash %PREFIX%\include\mapnik\sparsehash
+xcopy /i /s %MAPNIK_SOURCE%\deps\agg\include %PREFIX%\include\mapnik\agg
 
 @rem copy all libs of dependencies
 @rem expat, needed by ogr plugin
