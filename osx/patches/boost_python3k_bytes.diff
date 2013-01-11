@@ -1,8 +1,6 @@
-Index: libs/python/src/converter/builtin_converters.cpp
-===================================================================
---- libs/python/src/converter/builtin_converters.cpp	(revision 67415)
-+++ libs/python/src/converter/builtin_converters.cpp	(working copy)
-@@ -375,7 +375,8 @@
+--- libs/python/src/converter/builtin_converters.cpp	2013-01-09 15:02:42.000000000 -0800
++++ libs/python/src/converter/builtin_converters.cpp	2013-01-09 15:02:44.000000000 -0800
+@@ -377,7 +377,8 @@
        static unaryfunc* get_slot(PyObject* obj)
        {
  #if PY_VERSION_HEX >= 0x03000000

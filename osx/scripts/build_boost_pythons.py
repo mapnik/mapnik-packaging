@@ -23,7 +23,7 @@ libraries = --with-python ;
 """
 
 def compile_lib(ver,arch='32_64'):
-    if ver in ('3.2'):
+    if ver in ('3.2','3.3'):
         open('user-config.jam','w').write(USER_JAM % {'ver':ver,'system':'','variant':'m'})
     elif ver in ('2.5','2.6','2.7'):
         # build against system pythons so we can reliably link against FAT binaries

@@ -22,6 +22,38 @@ make -j$JOBS
 make install
 cd ${PACKAGES}
 
+# libxml2
+echo '*building libxml2*'
+tar xf libxml2-${LIBXML2_VERSION}.tar.gz
+cd libxml2-${LIBXML2_VERSION}
+patch threads.c ../../patches/libxml2-pthread.diff
+./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
+--enable-static --disable-shared \
+--with-icu=${PREFIX} \
+--with-xptr \
+--with-xpath \
+--with-xinclude \
+--with-threads \
+--with-tree \
+--with-catalog \
+--without-legacy \
+--without-iconv \
+--without-debug \
+--without-docbook \
+--without-ftp \
+--without-html \
+--without-http \
+--without-sax1 \
+--without-schemas \
+--without-schematron \
+--without-valid \
+--without-writer \
+--without-modules \
+--without-lzma \
+--without-readline \
+--without-regexps \
+--without-c14n
+
 # libtool - for libltdl
 tar xvf libtool-${LIBTOOL_VERSION}.tar.gz
 cd libtool-${LIBTOOL_VERSION}
@@ -125,9 +157,9 @@ fi
 echo '*building boost python versions*'
 
 cd ${PACKAGES}/boost_${BOOST_VERSION2}
-python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
-mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
-cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
+#python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
+#mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
+#cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
 #mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.6.dylib
 #cp stage/lib/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
 #install_name_tool -id @loader_path/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
@@ -140,10 +172,10 @@ cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
 #cp stage/lib/libboost_python27.dylib ${BUILD}/lib/libboost_python-2.7.dylib
 #install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboost_python-2.7.dylib
 
-#python ${ROOTDIR}/scripts/build_boost_pythons.py 3.2 64
-#mv stage/lib/libboost_python3.dylib stage/lib/libboost_python-3.2.dylib
-#cp stage/lib/libboost_python-3.2.dylib ${BUILD}/lib/libboost_python-3.2.dylib
-#install_name_tool -id @loader_path/libboost_python-3.2.dylib ${BUILD}/lib/libboost_python-3.2.dylib
+patch libs/python/src/converter/builtin_converters.cpp ${ROOTDIR}/patches/boost_python3k_bytes.diff
+python ${ROOTDIR}/scripts/build_boost_pythons.py 3.3 64
+mv stage/lib/libboost_python3.a stage/lib/libboost_python-3.3.a
+cp stage/lib/libboost_python-3.3.a ${BUILD}/lib/libboost_python-3.3.a
 
 cd ${PACKAGES}
 
@@ -200,7 +232,7 @@ export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
 --with-jpeg-include-dir=${BUILD}/include --with-jpeg-lib-dir=${BUILD}/lib \
 --with-zlib-include-dir=${BUILD}/include --with-zlib-lib-dir=${BUILD}/lib \
 --disable-lzma --disable-jbig --disable-mdi \
---without-x \
+--without-x
 
 make -j${JOBS}
 make install
@@ -289,6 +321,14 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
+# expat for gdal to avoid linking against system expat in /usr/lib
+echo '*building expat*'
+tar xf expat-${EXPAT_VERSION}.tar.gz
+cd expat-${EXPAT_VERSION}
+./configure --prefix=${BUILD} --enable-static --disable-shared
+make -j${JOBS}
+make install
+cd ${PACKAGES}
 
 # gdal
 echo '*building gdal*'

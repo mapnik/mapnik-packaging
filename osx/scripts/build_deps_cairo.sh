@@ -39,7 +39,7 @@ rm -rf fontconfig-${FONTCONFIG_VERSION}
 tar xf fontconfig-${FONTCONFIG_VERSION}.tar.gz
 cd fontconfig-${FONTCONFIG_VERSION}
 ./configure --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD} \
-    --with-freetype-config=${BUILD}/bin/freetype-config
+    --with-expat=${BUILD}
 make -j${JOBS}
 make install
 cd ${PACKAGES}
@@ -49,7 +49,7 @@ cd ${PACKAGES}
 echo '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
 xz -d cairo-${CAIRO_VERSION}.tar.xz
-tar xf cairo-1.12.2.tar
+tar xf cairo-${CAIRO_VERSION}.tar
 cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
 export png_CFLAGS="-I${BUILD}/include"
@@ -99,14 +99,27 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-# pycairo
-echo '*building pycairo*'
+# py2cairo
+echo '*building py2cairo*'
 tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
 cd py2cairo-${PY2CAIRO_VERSION}
 # apply patch
 patch wscript < ${ROOTDIR}/patches/py2cairo-static.diff
-for i in {"2.6","2.7"}
+for i in {"2.7",}
 do
-    python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
-    python$i ./waf install
+    PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
+    PYTHON=python$i ./waf install
+done
+
+# py3cairo
+echo '*building py3cairo*'
+tar xf pycairo-${PY3CAIRO_VERSION}.tar.bz2
+cd pycairo-${PY3CAIRO_VERSION}
+# apply patch
+patch wscript < ${ROOTDIR}/patches/py3cairo-static.diff
+export PATH=/Library/Frameworks/Python.framework/Versions/3.3/bin/:$PATH
+for i in {"3.3",}
+do
+    PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
+    PYTHON=python$i ./waf install
 done
