@@ -28,6 +28,7 @@ copy "C:\Program Files (x86)\Expat 2.1.0\Bin\libexpat.dll" %PREFIX%\lib\
 copy %ROOTDIR%\cairo\src\release\cairo.dll %PREFIX%\lib\
 copy %ROOTDIR%\icu\bin\icuuc48.dll %PREFIX%\lib\
 copy %ROOTDIR%\icu\bin\icudt48.dll %PREFIX%\lib\
+copy %ROOTDIR%\icu\bin\icuin48.dll %PREFIX%\lib\
 copy %ROOTDIR%\libxml2\win32\bin.msvc\libxml2.dll %PREFIX%\lib\
 copy %ROOTDIR%\proj\src\proj.dll %PREFIX%\lib\
 echo Started at %STARTTIME%, finished at %TIME%
