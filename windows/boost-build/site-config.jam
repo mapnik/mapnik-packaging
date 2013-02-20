@@ -17,6 +17,8 @@ lib png : z : <name>libpng <search>$(MAPNIK_DEPS_DIR)/libpng ;
 lib jpeg : : <name>libjpeg <search>$(MAPNIK_DEPS_DIR)/jpeg ;
 lib tiff : : <name>libtiff <search>$(MAPNIK_DEPS_DIR)/tiff/libtiff ;
 lib icu : : <name>icuuc <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
+lib icui18n : : <name>icuin <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
+lib icudata : : <name>icudt <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
 lib xml2 : : <name>libxml2 <search>$(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc ;
 lib freetype2 : : <name>freetype <search>$(MAPNIK_DEPS_DIR)/freetype ;
 # lib ltdl : : <name>libltdl <search>ltdl/bin/msvc/release/link-static/threading-multi ;

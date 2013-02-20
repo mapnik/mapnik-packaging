@@ -42,6 +42,10 @@ project mapnik
     <define>BIGINT
     <define>HAVE_LIBXML2
     <define>HAVE_JPEG
+    <define>HAVE_PNG
+    <define>HAVE_TIFF
+    <define>MAPNIK_USE_PROJ4
+    <define>BOOST_REGEX_HAS_ICU
     <define>HAVE_CAIRO
 	<cxxflags>/wd4345
 	<cxxflags>/wd4661
@@ -77,6 +81,8 @@ alias cairo : /site-config//cairo : <link>shared ;
 # alias ltdl : /site-config//ltdl : <link>static ;
 alias proj : /site-config//proj : <link>static ;
 alias icu  : /site-config//icu : <link>shared ;
+alias icudata  : /site-config//icudata : <link>shared ;
+alias icui18n  : /site-config//icui18n : <link>shared ;
 alias pq : /site-config//pq : <link>static ;
 alias wsock : /site-config//wsock : <link>static ;
 alias ws2 : /site-config//ws2 : <link>static ;

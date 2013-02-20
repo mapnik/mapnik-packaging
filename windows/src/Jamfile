@@ -151,6 +151,7 @@ lib mapnik
     ../ltdl//ltdl
     ..//proj
     ..//icu
+	..//icui18n
     ..//xml2
     ..//cairo
       :
