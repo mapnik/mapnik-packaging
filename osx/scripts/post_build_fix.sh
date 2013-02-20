@@ -11,7 +11,7 @@ cp -r ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/
 
 
 # py2cairo
-for i in {"2.6","2.7"}
+for i in {"2.6","2.7","3.3"}
 do
     if [ -d "${BUILD}/lib/python${i}/site-packages/cairo" ];then
         cp -R ${BUILD}/lib/python${i}/site-packages/cairo ${MAPNIK_INSTALL}/lib/python${i}/site-packages/
@@ -35,7 +35,7 @@ done
 
 # fixup python
 
-for i in {"2.6","2.7"}
+for i in {"2.6","2.7","3.3"}
 do
     if [ -d "${MAPNIK_INSTALL}/lib/python${i}/site-packages/mapnik" ];then
         install_name_tool -change libmapnik.dylib @loader_path/../../../libmapnik.dylib ${MAPNIK_INSTALL}/lib/python${i}/site-packages/mapnik/_mapnik.so
