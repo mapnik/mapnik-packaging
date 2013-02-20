@@ -5,8 +5,12 @@
 export DH_VERBOSE=1
 
 # scons flags
-SCONS_FLAGS=INPUT_PLUGINS=python,raster,sqlite,postgis,ogr,shape,osm,gdal,csv \
+SCONS_FLAGS=INPUT_PLUGINS=all \
 CAIRO=True \
+COLOR_PRINT=False \
+DEMO=True \
+SVG_RENDERER = True
+
 SYSTEM_FONTS=/usr/share/fonts/truetype \
 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr
 
@@ -28,7 +32,7 @@ override_dh_auto_test:
 endif
 
 override_dh_auto_configure:
-	scons $(SCONS_FLAGS) CUSTOM_CXXFLAGS="$(CFLAGS)" configure
+	./configure $(SCONS_FLAGS) CUSTOM_CXXFLAGS="$(CFLAGS)"
 	dh_auto_configure
 
 # Do no build for every possible python version until this is working properly
@@ -47,17 +51,11 @@ override_dh_prep:
 	dh_prep -Xdebian/tmp
 
 override_dh_install:
-	scons install
+	make install
 	dh_install
 
 override_dh_auto_clean:
-	-scons --clean
-	find -name '*.pyc' -exec rm -f {} \;
-	find -name '.sconsign*' -exec rm -f {} \;
-	find -name '*.o' -exec rm -f {} \;
-	rm -rf .sconf_temp config.log bindings/python/mapnik/paths.py \
-		utils/shapeindex/shapeindex config.py config.cache \
-		docs/api_docs/python/*
+	-make clean
 
 #	dh_auto_clean
 
