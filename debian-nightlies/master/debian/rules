@@ -9,8 +9,8 @@ SCONS_FLAGS=INPUT_PLUGINS=all \
 CAIRO=True \
 COLOR_PRINT=False \
 DEMO=True \
-SVG_RENDERER = True
-
+SVG_RENDERER = True \
+PGSQL2SQLITE = True \
 SYSTEM_FONTS=/usr/share/fonts/truetype \
 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr
 
