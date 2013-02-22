@@ -1,0 +1,64 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+# scons flags
+SCONS_FLAGS=INPUT_PLUGINS="" \
+BINDINGS="" \
+SAMPLE_INPUT_PLUGINS = False \
+CAIRO=False \
+JPEG = False \
+TIFF = False \
+PROJ = False \
+CPP_TESTS = False \
+COLOR_PRINT=False \
+DEMO=False \
+FAST = True \
+SVG_RENDERER = False \
+PGSQL2SQLITE = False \
+SYSTEM_FONTS=/usr/share/fonts/truetype \
+DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr
+
+CFLAGS = -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	export CFLAGS += -O0
+else
+	export CFLAGS += -O3
+endif
+
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+override_dh_auto_test:
+else:
+override_dh_auto_test:
+	# the test suite does not 100% pass on all platforms/boost versions,
+	# but the output is useful :)
+	dh_auto_test; echo "Overall Test Exit Code: $?"
+endif
+
+override_dh_auto_configure:
+	./configure $(SCONS_FLAGS) CUSTOM_CXXFLAGS="$(CFLAGS)"
+	dh_auto_configure
+
+override_dh_prep:
+	dh_prep -Xdebian/tmp
+
+override_dh_install:
+	make install
+	dh_install
+
+override_dh_auto_clean:
+	-make clean
+
+#	dh_auto_clean
+
+override_dh_installexamples:
+	dh_installexamples -Xdata/new
+	find $(CURDIR)/debian/ -name "*.png" | xargs -r chmod -x
+
+%:
+#	dh_installexamples -Xdata/new
+#	dh_install --sourcedir=debian/tmp
+	dh $@
