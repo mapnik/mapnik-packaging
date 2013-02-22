@@ -24,6 +24,7 @@ BRANCHES["master"]="2.2.0"
 BRANCHES["2.1.x"]="2.1.1"
 BRANCHES["2.0.x"]="2.0.1"
 BRANCHES["0.7.x"]="0.7.2"
+BRANCHES["minimal-mapnik"]="2.2.0"
 
 # PPA names, keys are branches
 declare -A PPAS
@@ -31,6 +32,7 @@ PPAS["master"]="ppa:$DEST/nightly-trunk"
 PPAS["2.1.x"]="ppa:$DEST/nightly-2.1"
 PPAS["2.0.x"]="ppa:$DEST/nightly-2.0"
 PPAS["0.7.x"]="ppa:$DEST/nightly-0.7"
+PPAS["minimal-mapnik"]="ppa:$DEST/nightly-minimal-master"
 
 # Package names, keys are branches
 declare -A PACKAGES
@@ -38,6 +40,7 @@ PACKAGES["master"]="mapnik"
 PACKAGES["2.1.x"]="mapnik"
 PACKAGES["2.0.x"]="mapnik"
 PACKAGES["0.7.x"]="mapnik"
+PACKAGES["minimal-mapnik"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
