@@ -7,17 +7,19 @@ export DH_VERBOSE=1
 # scons flags
 SCONS_FLAGS=INPUT_PLUGINS="" \
 BINDINGS="" \
-SAMPLE_INPUT_PLUGINS = False \
+SAMPLE_INPUT_PLUGINS=False \
 CAIRO=False \
-JPEG = False \
-TIFF = False \
-PROJ = False \
-CPP_TESTS = False \
+JPEG=False \
+TIFF=False \
+PROJ=False \
+SVG2PNG=False \
+SHPINDEX=False \
+CPP_TESTS=False \
 COLOR_PRINT=False \
 DEMO=False \
-FAST = True \
-SVG_RENDERER = False \
-PGSQL2SQLITE = False \
+FAST=True \
+SVG_RENDERER=False \
+PGSQL2SQLITE=False \
 SYSTEM_FONTS=/usr/share/fonts/truetype \
 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr
 
