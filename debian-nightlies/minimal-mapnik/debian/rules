@@ -5,7 +5,7 @@
 export DH_VERBOSE=1
 
 # scons flags
-SCONS_FLAGS=INPUT_PLUGINS="" \
+SCONS_FLAGS=INPUT_PLUGINS="shape" \
 BINDINGS="" \
 SAMPLE_INPUT_PLUGINS=False \
 CAIRO=False \
@@ -13,7 +13,7 @@ JPEG=False \
 TIFF=False \
 PROJ=False \
 SVG2PNG=False \
-SHPINDEX=False \
+SHAPEINDEX=False \
 CPP_TESTS=False \
 COLOR_PRINT=False \
 DEMO=False \
