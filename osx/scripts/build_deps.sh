@@ -174,7 +174,8 @@ cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
 #cp stage/lib/libboost_python27.dylib ${BUILD}/lib/libboost_python-2.7.dylib
 #install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboost_python-2.7.dylib
 
-patch libs/python/src/converter/builtin_converters.cpp ${ROOTDIR}/patches/boost_python3k_bytes.diff
+# this landed in boost at 1.53 or there-abouts
+#patch libs/python/src/converter/builtin_converters.cpp ${ROOTDIR}/patches/boost_python3k_bytes.diff
 python ${ROOTDIR}/scripts/build_boost_pythons.py 3.3 64
 mv stage/lib/libboost_python3.a stage/lib/libboost_python-3.3.a
 cp stage/lib/libboost_python-3.3.a ${BUILD}/lib/libboost_python-3.3.a
