@@ -179,6 +179,15 @@ cp stage/lib/libboost_python-3.3.a ${BUILD}/lib/libboost_python-3.3.a
 
 cd ${PACKAGES}
 
+# nose
+wget http://pypi.python.org/packages/source/n/nose/nose-1.2.1.tar.gz
+tar xf nose-1.2.1.tar.gz
+cd nose-1.2.1
+rm distribute_setup.py
+wget http://python-distribute.org/distribute_setup.py
+python3.3 setup.py install
+python setup.py install
+
 # freetype
 echo '*building freetype*'
 tar xf freetype-${FREETYPE_VERSION}.tar.bz2

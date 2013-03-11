@@ -5,12 +5,21 @@
 export DH_VERBOSE=1
 
 # scons flags
-SCONS_FLAGS=INPUT_PLUGINS=all \
-CAIRO=True \
+SCONS_FLAGS=INPUT_PLUGINS="shape" \
+BINDINGS="" \
+SAMPLE_INPUT_PLUGINS=False \
+CAIRO=False \
+JPEG=False \
+TIFF=False \
+PROJ=False \
+SVG2PNG=False \
+SHAPEINDEX=False \
+CPP_TESTS=False \
 COLOR_PRINT=False \
-DEMO=True \
-SVG_RENDERER = True \
-PGSQL2SQLITE = True \
+DEMO=False \
+FAST=True \
+SVG_RENDERER=False \
+PGSQL2SQLITE=False \
 SYSTEM_FONTS=/usr/share/fonts/truetype \
 DESTDIR=$(CURDIR)/debian/tmp PREFIX=/usr
 
@@ -34,18 +43,6 @@ endif
 override_dh_auto_configure:
 	./configure $(SCONS_FLAGS) CUSTOM_CXXFLAGS="$(CFLAGS)"
 	dh_auto_configure
-
-# Do no build for every possible python version until this is working properly
-# https://github.com/mapnik/mapnik-packaging/issues/3
-#override_dh_auto_build:
-#	set -e; \
-#	for PYVER in $(shell pyversions -r); do \
-#		scons \
-#		BOOST_PYTHON_LIB=`echo $$PYVER | sed 's/python\([0-9]\).\([0-9]\)/boost_python-py\1\2/'` \
-#		PYTHON=`which $$PYVER`; \
-#	done
-#
-#	dh_auto_build
 
 override_dh_prep:
 	dh_prep -Xdebian/tmp

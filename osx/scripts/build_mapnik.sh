@@ -18,7 +18,7 @@ cat ${ROOTDIR}/patches/config.py >> config.py
 #rm src/*dylib
 ./configure \
   BINDINGS='' \
-  INPUT_PLUGINS=csv,gdal,ogr,postgis,shape,sqlite,osm \
+  INPUT_PLUGINS=all \
   CAIRO=True \
   JOBS=6 \
   DEMO=True \
@@ -29,10 +29,14 @@ make install
 # python versions
 for i in {"2.6","2.7"}
 do
-    echo "...Updating and building mapnik python bindings for python ${i}"
-    # TODO - cpu waste
-    #rm -f bindings/python/*os
-    #rm -f bindings/python/mapnik/_mapnik.so
-    ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-    make install
+  echo "...Updating and building mapnik python bindings for python ${i}"
+  ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+  make install
 done
+
+export i="3.3"
+echo "...Updating and building mapnik python bindings for python ${i}"
+rm -f bindings/python/*os
+rm -f bindings/python/mapnik/_mapnik.so
+./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+make install
