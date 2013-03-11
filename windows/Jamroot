@@ -22,7 +22,8 @@ project mapnik
     : requirements
     <include>$(MAPNIK_SOURCE)/ # for local boost stuff
     <include>$(MAPNIK_SOURCE)/include
-    <include>$(MAPNIK_SOURCE)/deps/agg/include 
+    <include>$(MAPNIK_SOURCE)/deps/agg/include
+	<include>$(MAPNIK_SOURCE)/deps/clipper/include
     <include>$(MAPNIK_SOURCE)/deps/
     <include>$(BOOST_INCLUDES)
     <include>$(MAPNIK_DEPS_DIR)/icu/include
@@ -173,7 +174,7 @@ local python = [ option.get python : "" ] ;
 if $(python) 
 {
     build-project bindings/python ;
-    local python-root =  "c:/Python27" ;  #[ python.root ] ;
+    local python-root =  "c:/Python27-32" ;  #[ python.root ] ;
     local python-version = "2.7" ; #[ python.python-version $(python-root)/bin/python ] ;
     local python_bindings_dir = $(prefix)/python/$(python-version)/site-packages/mapnik ;
     echo "Will install Python bindings into " $(python_bindings_dir) ;

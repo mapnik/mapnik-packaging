@@ -3,6 +3,7 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
     
 lib mapnik
     :
+	request.cpp
     well_known_srs.cpp
 	params.cpp
     image_filter_types.cpp
@@ -139,7 +140,8 @@ lib mapnik
     grid/process_text_symbolizer.cpp
     #wkt
     wkt/wkt_factory.cpp
-    ../deps/agg//agg
+    ..//deps//agg//agg
+	..//deps//clipper//clipper
     ..//thread
     ..//filesystem
     ..//regex
@@ -148,7 +150,7 @@ lib mapnik
     ..//jpeg
     ..//tiff
     ..//freetype2
-    ../ltdl//ltdl
+    ..//ltdl//ltdl
     ..//proj
     ..//icu
 	..//icui18n
