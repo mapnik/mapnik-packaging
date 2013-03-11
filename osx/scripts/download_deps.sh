@@ -1,11 +1,12 @@
 set -e
 cd ${PACKAGES}
+
 wget http://mirror.anl.gov/pub/gnu/libtool/libtool-${LIBTOOL_VERSION}.tar.gz
 wget http://download.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz
 wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 wget ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz
 wget http://download.icu-project.org/files/icu4c/${ICU_VERSION}/icu4c-${ICU_VERSION2}-src.tgz
-wget http://voxel.dl.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION2}.tar.bz2
+wget http://iweb.dl.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION2}.tar.bz2
 wget http://www.sqlite.org/sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 wget http://savannah.spinellicreations.com/freetype/freetype-${FREETYPE_VERSION}.tar.bz2
 wget http://www.ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz

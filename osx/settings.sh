@@ -1,6 +1,10 @@
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
+# /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
+export MIN_SDK_VERSION="10.7"
+
 XCODE_PREFIX=$( xcode-select -print-path )
 #if [[ $XCODE_PREFIX == "/Developer" ]]; then
 if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
@@ -8,12 +12,12 @@ if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
     export CORE_CXX="/usr/bin/clang++"
     export CORE_CC="/usr/bin/clang"
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
-    export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk" ## >= 4.3.1 from MAC
+    export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MIN_SDK_VERSION}.sdk" ## >= 4.3.1 from MAC
     # search for 'auxiliary' at https://developer.apple.com/downloads/index.action
     # http://adcdownload.apple.com/Developer_Tools/auxiliary_tools_for_xcode__february_2012/auxiliary_tools_for_xcode.dmg
     export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 else
-    export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX10.6.sdk" ## Xcode 4.2
+    export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX${MIN_SDK_VERSION}.sdk" ## Xcode 4.2
     #export PATH="/Developer/usr/bin:${PATH}"
     export CORE_CXX="/opt/llvm/bin/clang++"
     export CORE_CC="/opt/llvm/bin/clang"
@@ -50,10 +54,10 @@ export CORE_CXXFLAGS=${CORE_CFLAGS}
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
 
 # breaks distutils
-#export MACOSX_DEPLOYMENT_TARGET=10.6
-export OSX_SDK_CFLAGS="-mmacosx-version-min=10.6 -isysroot ${SDK_PATH}"
-export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -isysroot ${SDK_PATH}"
-#export OSX_SDK_LDFLAGS="-mmacosx-version-min=10.6 -Wl,-syslibroot,${SDK_PATH}"
+#export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION}
+export OSX_SDK_CFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
+export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
+#export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -Wl,-syslibroot,${SDK_PATH}"
 export CXX=${CORE_CXX}
 export CC=${CORE_CC}
 export CPPFLAGS=${CORE_CPPFLAGS}
@@ -66,22 +70,22 @@ export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
 
 # versions
-export ICU_VERSION="50.1.1"
-export ICU_VERSION2="50_1_1"
-export BOOST_VERSION="1.52.0"
-export BOOST_VERSION2="1_52_0"
+export ICU_VERSION="50.1.2"
+export ICU_VERSION2="50_1_2"
+export BOOST_VERSION="1.53.0"
+export BOOST_VERSION2="1_53_0"
 export SQLITE_VERSION="3071502"
 export FREETYPE_VERSION="2.4.11"
 export PROJ_VERSION="4.8.0"
 export PROJ_GRIDS_VERSION="1.5"
-export LIBPNG_VERSION="1.5.13"
+export LIBPNG_VERSION="1.5.14"
 export LIBTIFF_VERSION="4.0.3"
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export EXPAT_VERSION="2.1.0"
 export GDAL_VERSION="1.9.2"
 export GETTEXT_VERSION="0.18.1.1"
-export POSTGRES_VERSION="9.2.2"
+export POSTGRES_VERSION="9.2.3"
 export ZLIB_VERSION="1.2.7"
 export LIBTOOL_VERSION="2.4.2"
 export LIBXML2_VERSION="2.9.0"
@@ -90,7 +94,7 @@ export LIBXML2_VERSION="2.9.0"
 export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.10.0"
 export PIXMAN_VERSION="0.28.2"
-export CAIRO_VERSION="1.12.8"
+export CAIRO_VERSION="1.12.14"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 
