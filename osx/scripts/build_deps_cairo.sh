@@ -110,6 +110,7 @@ do
     PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
     PYTHON=python$i ./waf install
 done
+cd ${PACKAGES}
 
 # py3cairo
 echo '*building py3cairo*'
@@ -123,3 +124,4 @@ do
     PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
     PYTHON=python$i ./waf install
 done
+cd ${PACKAGES}
