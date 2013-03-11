@@ -190,6 +190,7 @@ rm distribute_setup.py
 wget http://python-distribute.org/distribute_setup.py
 python3.3 setup.py install
 python setup.py install
+cd ${PACKAGES}
 
 # freetype
 echo '*building freetype*'
@@ -241,8 +242,10 @@ export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
 --disable-dependency-tracking \
 --disable-cxx \
 --enable-defer-strile-load \
---with-jpeg-include-dir=${BUILD}/include --with-jpeg-lib-dir=${BUILD}/lib \
---with-zlib-include-dir=${BUILD}/include --with-zlib-lib-dir=${BUILD}/lib \
+--with-jpeg-include-dir=${BUILD}/include \
+--with-jpeg-lib-dir=${BUILD}/lib \
+--with-zlib-include-dir=${BUILD}/include \
+--with-zlib-lib-dir=${BUILD}/lib \
 --disable-lzma --disable-jbig --disable-mdi \
 --without-x
 
@@ -301,7 +304,7 @@ cd ${PACKAGES}
 cd postgresql-${POSTGRES_VERSION}
 ./configure --prefix=${BUILD} --enable-shared \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --with-libxml
+--with-bonjour --without-libxml
 # LD=${CC}
 make -j${JOBS}
 make install
