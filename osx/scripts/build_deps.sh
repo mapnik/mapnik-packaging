@@ -53,9 +53,12 @@ patch threads.c ../../patches/libxml2-pthread.diff
 --without-readline \
 --without-regexps \
 --without-c14n
+make -j${JOBS}
+make install
+cd ${PACKAGES}
 
 # libtool - for libltdl
-tar xvf libtool-${LIBTOOL_VERSION}.tar.gz
+tar xf libtool-${LIBTOOL_VERSION}.tar.gz
 cd libtool-${LIBTOOL_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared
 make -j$JOBS
@@ -76,7 +79,6 @@ cd icu/source
 --disable-shared \
 --with-library-bits=64 \
 --with-data-packaging=archive
-
 make -j${JOBS}
 make install
 export CPPFLAGS=${OLD_CPPFLAGS}
