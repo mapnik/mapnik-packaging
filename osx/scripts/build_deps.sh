@@ -166,6 +166,10 @@ cd ${PACKAGES}/boost_${BOOST_VERSION2}
 #cp stage/lib/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
 #install_name_tool -id @loader_path/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
 
+python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
+mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
+cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
+
 python ${ROOTDIR}/scripts/build_boost_pythons.py 2.7 64
 mv stage/lib/libboost_python.a stage/lib/libboost_python-2.7.a
 cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
@@ -188,8 +192,8 @@ tar xf nose-1.2.1.tar.gz
 cd nose-1.2.1
 rm distribute_setup.py
 wget http://python-distribute.org/distribute_setup.py
-python3.3 setup.py install
-python setup.py install
+#sudo python3.3 setup.py install
+sudo python setup.py install
 cd ${PACKAGES}
 
 # freetype

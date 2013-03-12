@@ -7,7 +7,7 @@ source settings.sh
 # update mapnik
 cd mapnik
 git fetch
-git checkout v2.1.0
+#git checkout v2.1.0
 cd ../
 
 rm -rf ${MAPNIK_INSTALL}
@@ -27,7 +27,8 @@ cd scripts/
 # /Library/Frameworks/Mapnik.framework/unix/bin/mapnik-config
 
 # package dmg
-./package_dmg.sh
+# packagemaker is borked in recent xcode upgrade
+#./package_dmg.sh
 
 # copy minimal headers of deps
 ./copy_headers.sh

@@ -61,6 +61,7 @@ boost/math/special_functions/round.hpp \
 boost-staging/ 1>/dev/null
 cp -r boost-staging/boost ${LOCAL_TARGET}/include/
 
+# png
 echo '...copying png headers'
 cp ${BUILD}/include/png* ${LOCAL_TARGET}/include/
 
