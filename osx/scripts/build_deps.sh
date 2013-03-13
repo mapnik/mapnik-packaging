@@ -108,27 +108,32 @@ fi
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
   toolset=darwin \
-  macosx-version=10.6 \
+  macosx-version=${MIN_SDK_VERSION} \
   address-model=64 \
   architecture=x86 \
   link=static \
   variant=release \
-  stage install
+  stage install \
+  linkflags="$LDFLAGS -L$BUILD/lib -licudata -licuuc" \
+  cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
+  -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
+  --with-regex
 
 # regex separately
+: '
 ./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   linkflags="$LDFLAGS -L$BUILD/lib -licudata -licuuc" \
   cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
   --with-regex \
   toolset=darwin \
-  macosx-version=10.6 \
+  macosx-version=${MIN_SDK_VERSION} \
   address-model=64 \
   architecture=x86 \
   link=static \
   variant=release \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   stage install
-
+'
 
 #cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
 #install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
@@ -140,7 +145,7 @@ fi
 ./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --with-python \
   toolset=darwin \
-  macosx-version=10.6 \
+  macosx-version=${MIN_SDK_VERSION} \
   address-model=32_64 \
   architecture=x86 \
   link=shared \
