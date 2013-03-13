@@ -13,6 +13,14 @@ make -j$JOBS
 make install
 cd ${PACKAGES}
 
+# bzip2
+echo '*building bzip2'
+tar xf bzip2-${BZIP2_VERSION}.tar.gz
+cd bzip2-${BZIP2_VERSION}
+make
+make install PREFIX=${BUILD} CC="$CC" CFLAGS="$CFLAGS"
+cd ${PACKAGES}
+
 # zlib
 echo '*building zlib*'
 tar xf zlib-${ZLIB_VERSION}.tar.gz

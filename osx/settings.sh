@@ -89,6 +89,7 @@ export POSTGRES_VERSION="9.2.3"
 export ZLIB_VERSION="1.2.7"
 export LIBTOOL_VERSION="2.4.2"
 export LIBXML2_VERSION="2.9.0"
+export BZIP2_VERSION="1.0.6"
 
 # cairo stuff
 export PKG_CONFIG_VERSION="0.25"

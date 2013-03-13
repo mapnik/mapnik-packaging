@@ -1,6 +1,7 @@
 set -e
 cd ${PACKAGES}
 
+wget http://www.bzip.org/${BZIP2_VERSION}/bzip2-${BZIP2_VERSION}.tar.gz
 wget http://mirror.anl.gov/pub/gnu/libtool/libtool-${LIBTOOL_VERSION}.tar.gz
 wget http://download.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz
 wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
