@@ -28,7 +28,7 @@ cp -R ${MAPNIK_INSTALL}/include/ ${LOCAL_TARGET}/include/
 mkdir ${LOCAL_TARGET}/share/icu
 cp -R ${BUILD}/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/icu/
 
-# feed the boost beast - 42 instead of 113 MB
+# feed the boost beast - 16 MB instead of 113 MB
 echo '...packaging boost headers'
 cd ${PACKAGES}/boost*/
 mkdir -p ${STAGING_DIR}
@@ -47,56 +47,8 @@ boost/variant.hpp \
 ${STAGING_DIR}/ 1>/dev/null
 cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 
-
-boost/thread/mutex.hpp \
-boost/regex.hpp \
-boost/unordered_map.hpp \
-boost/make_shared.hpp \
-boost/variant.hpp \
-boost/algorithm/string.hpp \
-boost/spirit/include/qi.hpp \
-boost/spirit/include/qi_action.hpp \
-boost/property_map/property_map.hpp \
-boost/math/constants/constants.hpp \
-boost/spirit/include/phoenix_operator.hpp \
-boost/spirit/include/phoenix_fusion.hpp \
-boost/fusion/include/adapt_struct.hpp \
-boost/fusion/include/adapt_adt.hpp \
-boost/property_tree/ptree.hpp \
-boost/any.hpp \
-boost/optional.hpp \
-boost/interprocess/mapped_region.hpp \
-boost/multi_index/ordered_index.hpp \
-${STAGING_DIR}/ 1>/dev/null
-cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
-
-# png
-echo '...copying png headers'
-cp ${BUILD}/include/png* ${LOCAL_TARGET}/include/
-
-# jpeg
-echo '...copying jpeg headers'
-cp ${BUILD}/include/j*.h ${LOCAL_TARGET}/include/
-
+# icu
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
-cp -r ${BUILD}/include/freetype2 ${LOCAL_TARGET}/include/
-cp -r ${BUILD}/include/ft2build.h ${LOCAL_TARGET}/include/ft2build.h
-cp -r ${BUILD}/include/libxml2 ${LOCAL_TARGET}/include/
-
-# libs
-echo '...copying static libs'
-#cp -R ${BUILD}/lib/libltdl*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libpng*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libz*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libicuuc*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libicui18n*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libicudata*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libfreetype*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libxml2*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libboost_filesystem*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libboost_regex*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libboost_thread*.a ${LOCAL_TARGET}/lib/
-#cp -R ${BUILD}/lib/libboost_system*.a ${LOCAL_TARGET}/lib/
 
 cd ${MAPNIK_DIST}
 rm -f ./${PACKAGE_NAME}*.tar.bz2
