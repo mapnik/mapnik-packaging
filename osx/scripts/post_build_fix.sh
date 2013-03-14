@@ -6,9 +6,12 @@ mkdir -p ${MAPNIK_INSTALL}/share/
 mkdir -p ${MAPNIK_INSTALL}/share/icu
 # TODO - replace with actual icu version
 cp ${BUILD}/share/icu/*/icudt*.dat ${MAPNIK_INSTALL}/share/icu/
-cp -r ${BUILD}/share/proj ${MAPNIK_INSTALL}/share/
+if [ -d ${BUILD}/share/proj ];then
+  cp -r ${BUILD}/share/proj ${MAPNIK_INSTALL}/share/
+fi
+if [ -d ${BUILD}/share/gdal ];then
 cp -r ${BUILD}/share/gdal ${MAPNIK_INSTALL}/share/
-
+fi
 
 # py2cairo
 for i in {"2.6","2.7","3.3"}
