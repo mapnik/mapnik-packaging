@@ -1,4 +1,7 @@
 
+# set clean PATH
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
@@ -31,6 +34,7 @@ fi
 #export MAPNIK_INSTALL=/opt/mapnik
 export MAPNIK_INSTALL="/Library/Frameworks/Mapnik.framework/unix"
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
+export PATH=${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}
 export MAPNIK_DIST="${ROOTDIR}/dist"
 export PACKAGES="${ROOTDIR}/packages"
 export BUILD="${ROOTDIR}/build"
@@ -55,9 +59,12 @@ export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -he
 
 # breaks distutils
 #export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION}
-export OSX_SDK_CFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
-export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
+#export OSX_SDK_CFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
+#export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
 #export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -Wl,-syslibroot,${SDK_PATH}"
+export OSX_SDK_CFLAGS=""
+export OSX_SDK_LDFLAGS=""
+export OSX_SDK_LDFLAGS=""
 export CXX=${CORE_CXX}
 export CC=${CORE_CC}
 export CPPFLAGS=${CORE_CPPFLAGS}
