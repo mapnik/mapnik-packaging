@@ -1,0 +1,9 @@
+MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/deps/clipper ;
+
+lib clipper 
+    : [ glob src/*.cpp ] 
+    : <include>include 
+      <link>static 
+      <toolset>gcc:<cxxflags>-fPIC 
+    ;
