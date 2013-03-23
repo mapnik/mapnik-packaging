@@ -14,15 +14,12 @@ make install
 cd ${PACKAGES}
 
 # nose
-wget http://pypi.python.org/packages/source/n/nose/nose-1.2.1.tar.gz
-tar xf nose-1.2.1.tar.gz
-cd nose-1.2.1
-rm distribute_setup.py
-wget http://python-distribute.org/distribute_setup.py
+#tar xf nose-1.2.1.tar.gz
+#cd nose-1.2.1
 #sudo python3.3 setup.py install
 # sudo will hang script
 #sudo python setup.py install
-cd ${PACKAGES}
+#cd ${PACKAGES}
 
 # bzip2
 echo '*building bzip2'
@@ -36,7 +33,7 @@ cd ${PACKAGES}
 echo '*building zlib*'
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}
-./configure --prefix=${BUILD} --static --64
+./configure --prefix=${BUILD} --static
 make -j$JOBS
 make install
 cd ${PACKAGES}
@@ -115,7 +112,6 @@ cd icu/source
 --disable-samples \
 --enable-static \
 --disable-shared \
---with-library-bits=64 \
 --with-data-packaging=archive
 make -j${JOBS}
 make install
@@ -151,7 +147,6 @@ fi
   --with-filesystem \
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
-  address-model=64 \
   architecture=x86 \
   link=static \
   variant=release \
@@ -160,3 +155,5 @@ fi
   cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   --with-regex
+
+lipo -info build/lib/*.a | grep arch

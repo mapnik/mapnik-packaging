@@ -2,6 +2,8 @@ set -e
 cd ${PACKAGES}
 
 S3_BASE="http://mapnik.s3.amazonaws.com/deps"
+wget http://pypi.python.org/packages/source/n/nose/nose-1.2.1.tar.gz
+wget http://python-distribute.org/distribute_setup.py
 wget ${S3_BASE}/bzip2-${BZIP2_VERSION}.tar.gz
 wget ${S3_BASE}/libtool-${LIBTOOL_VERSION}.tar.gz
 wget ${S3_BASE}/libpng-${LIBPNG_VERSION}.tar.gz
