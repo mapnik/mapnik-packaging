@@ -132,62 +132,31 @@ cd boost_${BOOST_VERSION2}
 # patch python build to ensure we do not link boost_python to python
 patch tools/build/v2/tools/python.jam < ${ROOTDIR}/patches/python_jam.diff
 ./bootstrap.sh
+echo 'using clang-darwin ;' > user-config.jam
 
 # https://svn.boost.org/trac/boost/ticket/6686
 if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
     patch tools/build/v2/tools/darwin.jam ${ROOTDIR}/patches/boost_sdk.diff
 fi
 
+# HINT: problems with icu configure check?
+# cat bin.v2/config.log to see problems
+
 # static libs
 ./b2 tools/bcp \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
+  --ignore-site-config --user-config=user-config.jam \
+  toolset=clang \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
-  toolset=darwin \
   address-model=64 \
   architecture=x86 \
   link=static \
   variant=release \
   stage install \
-  linkflags="$LDFLAGS -L$BUILD/lib -licudata -licuuc" \
+  linkflags="$LDFLAGS -L$BUILD/lib -licuuc -licui18n -licudata" \
   cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   --with-regex
-
-# regex separately
-: '
-./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
-  linkflags="$LDFLAGS -L$BUILD/lib -licudata -licuuc" \
-  cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
-  --with-regex \
-  toolset=darwin \
-  macosx-version=${MIN_SDK_VERSION} \
-  address-model=64 \
-  architecture=x86 \
-  link=static \
-  variant=release \
-  -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
-  stage install
-'
-
-#cp stage/lib/libboost_regex.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
-#install_name_tool -id @loader_path/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex-mapnik.dylib
-#ln -s ${BUILD}/lib/libboost_regex-mapnik.dylib ${BUILD}/lib/libboost_regex.dylib
-
-# python
-
-: '
-./b2 --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
-  --with-python \
-  toolset=darwin \
-  macosx-version=${MIN_SDK_VERSION} \
-  address-model=32_64 \
-  architecture=x86 \
-  link=shared \
-  variant=release \
-  -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
-  stage install
-'
-

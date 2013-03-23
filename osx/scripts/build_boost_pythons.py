@@ -9,7 +9,7 @@ import option ;
 import feature ;
 if ! darwin in [ feature.values <toolset> ]
 {
-    using darwin ; 
+    using clang-darwin ;
 }
 project : default-build <toolset>darwin ;
 using python
