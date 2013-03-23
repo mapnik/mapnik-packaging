@@ -11,13 +11,13 @@ if ! darwin in [ feature.values <toolset> ]
 {
     using clang-darwin ;
 }
-project : default-build <toolset>darwin ;
+project : default-build <toolset>clang-darwin ;
 using python
      : %(ver)s # version
      : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/bin/python%(ver)s%(variant)s # cmd-or-prefix
      : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/include/python%(ver)s%(variant)s # includes
      : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/lib/python%(ver)s/config%(variant)s # a lib actually symlink
-     : <toolset>darwin # condition
+     : <toolset>clang-darwin # condition
      ;
 libraries = --with-python ;
 """
