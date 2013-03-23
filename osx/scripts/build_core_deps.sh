@@ -3,36 +3,20 @@ set -e
 mkdir -p ${BUILD}
 cd ${PACKAGES}
 
-
-# xz
-echo '*building xz*'
-tar xf xz-5.0.3.tar.bz2
-cd xz-5.0.3
-./configure
-make -j$JOBS
-make install
-cd ${PACKAGES}
-
-# nose
-#tar xf nose-1.2.1.tar.gz
-#cd nose-1.2.1
-#sudo python3.3 setup.py install
-# sudo will hang script
-#sudo python setup.py install
-#cd ${PACKAGES}
-
 # bzip2
 echo '*building bzip2'
+rm -rf bzip2-${BZIP2_VERSION}
 tar xf bzip2-${BZIP2_VERSION}.tar.gz
 cd bzip2-${BZIP2_VERSION}
-make
-make install PREFIX=${BUILD} CC="$CC" CFLAGS="$CFLAGS"
+make install PREFIX=${BUILD} CC="$CC" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 cd ${PACKAGES}
 
 # zlib
 echo '*building zlib*'
+rm -rf zlib-${ZLIB_VERSION}
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}
+patch < ${ROOTDIR}/patches/zlib-configure.diff
 ./configure --prefix=${BUILD} --static
 make -j$JOBS
 make install
@@ -40,30 +24,71 @@ cd ${PACKAGES}
 
 # freetype
 echo '*building freetype*'
+rm -rf freetype-${FREETYPE_VERSION}
 tar xf freetype-${FREETYPE_VERSION}.tar.bz2
 cd freetype-${FREETYPE_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
+./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG}
 make -j${JOBS}
 make install
 cd ${PACKAGES}
 
 # libpng
 echo '*building libpng*'
+rm -rf libpng-${LIBPNG_VERSION}
 tar xf libpng-${LIBPNG_VERSION}.tar.gz
 cd libpng-${LIBPNG_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
+./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} --disable-dependency-tracking
 make -j${JOBS}
 make install
+cd ${PACKAGES}
+
+# libtool - for libltdl
+echo '*building libltdl'
+rm -rf libtool-${LIBTOOL_VERSION}
+tar xf libtool-${LIBTOOL_VERSION}.tar.gz
+cd libtool-${LIBTOOL_VERSION}
+./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG}
+make -j$JOBS
+make install
+cd ${PACKAGES}
+
+
+# icu
+echo '*building icu*'
+rm -rf icu/source-${ARCH_NAME}
+# *WARNING* do not set an $INSTALL variable
+# it will screw up icu build scripts
+export OLD_CPPFLAGS=${CPPFLAGS}
+# U_CHARSET_IS_UTF8 is added to try to reduce icu library size (18.3)
+# custom include paths are needed for cross-build
+export CPPFLAGS="-DU_CHARSET_IS_UTF8=1 -I$(pwd)/icu/source-${ARCH_NAME}/common -I$(pwd)/icu/source-${ARCH_NAME}/tools/tzcode/"
+tar xf icu4c-${ICU_VERSION2}-src.tgz
+mv icu/source icu/source-${ARCH_NAME}
+cd icu/source-${ARCH_NAME}
+if [ $ARCH_NAME = "armv7" ]; then
+    export CROSS_FLAGS="--with-cross-build=$(pwd)/../source-i386"
+else
+    export CROSS_FLAGS=""
+fi
+./configure ${HOST_ARG} $CROSS_FLAGS --prefix=${BUILD} \
+--disable-samples \
+--enable-static \
+--disable-shared \
+--with-data-packaging=archive
+make -j${JOBS}
+make install
+export CPPFLAGS=${OLD_CPPFLAGS}
 cd ${PACKAGES}
 
 
 # libxml2
 echo '*building libxml2*'
+rm -rf libxml2-${LIBXML2_VERSION}
 tar xf libxml2-${LIBXML2_VERSION}.tar.gz
 cd libxml2-${LIBXML2_VERSION}
-patch threads.c ../../patches/libxml2-pthread.diff
+patch threads.c ${ROOTDIR}/patches/libxml2-pthread.diff -N
 ./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
---enable-static --disable-shared \
+--enable-static --disable-shared ${HOST_ARG} \
 --with-icu=${PREFIX} \
 --with-xptr \
 --with-xpath \
@@ -92,37 +117,11 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-# libtool - for libltdl
-tar xf libtool-${LIBTOOL_VERSION}.tar.gz
-cd libtool-${LIBTOOL_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared
-make -j$JOBS
-make install
-cd ${PACKAGES}
-
-# icu
-echo '*building icu*'
-# *WARNING* do not set an $INSTALL variable
-# it will screw up icu build scripts
-export OLD_CPPFLAGS=${CPPFLAGS}
-export CPPFLAGS="-DU_CHARSET_IS_UTF8=1" # to try to reduce icu library size (18.3)
-tar xf icu4c-${ICU_VERSION2}-src.tgz
-cd icu/source
-./runConfigureICU MacOSX --prefix=${BUILD} \
---disable-samples \
---enable-static \
---disable-shared \
---with-data-packaging=archive
-make -j${JOBS}
-make install
-export CPPFLAGS=${OLD_CPPFLAGS}
-cd ${PACKAGES}
-
-
 # boost
 echo '*building boost*'
-B2_VERBOSE=""
+B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
+rm -rf boost_${BOOST_VERSION2}
 tar xjf boost_${BOOST_VERSION2}.tar.bz2
 cd boost_${BOOST_VERSION2}
 # patch python build to ensure we do not link boost_python to python
@@ -147,13 +146,13 @@ fi
   --with-filesystem \
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
-  architecture=x86 \
+  architecture=${BOOST_ARCH} \
   link=static \
   variant=release \
   stage install \
-  linkflags="$LDFLAGS -L$BUILD/lib -licuuc -licui18n -licudata" \
-  cxxflags="$CXXFLAGS -DU_STATIC_IMPLEMENTATION=1" \
+  linkflags="${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata" \
+  cxxflags="${CXXFLAGS} -DU_STATIC_IMPLEMENTATION=1" \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
   --with-regex
 
-lipo -info build/lib/*.a | grep arch
+lipo -info ${BUILD}/lib/*.a | grep arch

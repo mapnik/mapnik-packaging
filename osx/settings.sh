@@ -1,35 +1,48 @@
 
+# start from here
+export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # set clean PATH
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 
-export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
 # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
+
 # Target Platform
 export PLATFORM="MacOSX"
 export MIN_SDK_VERSION="10.7"
 export HOST_ARG=""
-#export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION} # breaks distutils
+export ARCH_NAME="x86_64"
+export BOOST_ARCH="x86"
 export MIN_SDK_VERSION_FLAG="-mmacosx-version-min=${MIN_SDK_VERSION}"
-#export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -Wl,-syslibroot,${SDK_PATH}"
-#export OSX_SDK_CFLAGS=""
-#export OSX_SDK_LDFLAGS=""
-# -arch i386 breaks icu Collator::createInstance
-#export ARCH_FLAGS="-arch x86_64"
-#export ARCH_FLAGS="-arch x86_64 -arch i386"
+#export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION} # breaks distutils
 
 # iphone
-#export PLATFORM="iPhoneOS"
-#export MIN_SDK_VERSION="5.1" # 6.1
-#export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=2.2"
-#export ARCH_FLAGS="-arch armv7"
-#export HOST_ARG="-host=arm-apple-darwin"
 # -pipe -no-cpp-precomp
 
+# armv7 device
+: '
+export MIN_SDK_VERSION="5.1" # 6.1
+export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=2.2"
+
+export PLATFORM="iPhoneOS"
+export ARCH_NAME="armv7"
+export BOOST_ARCH="arm"
+export HOST_ARG="--host=arm-apple-darwin"
+
+# simulator
+export PLATFORM="iPhoneSimulator"
+export ARCH_NAME="i386"
+export BOOST_ARCH="x86"
+export HOST_ARG="--host=i686-apple-darwin11"
+'
+
 export XCODE_PREFIX=$( xcode-select -print-path )
-# set this up with: sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-# man xcrun for more info
+export ARCH_FLAGS="-arch ${ARCH_NAME}"
+# set this up with:
+#   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+# for more info
+#   man xcrun
 export CORE_CC="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
 export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
 export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
@@ -45,16 +58,13 @@ export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 #export LANG=en_US.UTF-8
 
 # settings
-#export MAPNIK_INSTALL=/opt/mapnik
 export MAPNIK_INSTALL="/Library/Frameworks/Mapnik.framework/unix"
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 export PATH=${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}
 export MAPNIK_DIST="${ROOTDIR}/dist"
 export PACKAGES="${ROOTDIR}/packages"
-export BUILD="${ROOTDIR}/build"
+export BUILD="${ROOTDIR}/build-${ARCH_NAME}"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
-# cd ${MAPNIK_SOURCE}
-# MAPNIK_HASH=`git reflog show HEAD | sed -n '1p' | awk '{ print $1 }'`
 export MAPNIK_DEV_POSTFIX=""
 
 export OPTIMIZATION="3"
@@ -80,34 +90,3 @@ export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
 export DYLD_LIBRARY_PATH="${BUILD}/lib"
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
-
-# versions
-export ICU_VERSION="50.1.2"
-export ICU_VERSION2="50_1_2"
-export BOOST_VERSION="1.53.0"
-export BOOST_VERSION2="1_53_0"
-export SQLITE_VERSION="3071502"
-export FREETYPE_VERSION="2.4.11"
-export PROJ_VERSION="4.8.0"
-export PROJ_GRIDS_VERSION="1.5"
-export LIBPNG_VERSION="1.5.14"
-export LIBTIFF_VERSION="4.0.3"
-export LIBGEOTIFF_VERSION="1.4.0"
-export JPEG_VERSION="8d"
-export EXPAT_VERSION="2.1.0"
-export GDAL_VERSION="1.9.2"
-export GETTEXT_VERSION="0.18.1.1"
-export POSTGRES_VERSION="9.2.3"
-export ZLIB_VERSION="1.2.7"
-export LIBTOOL_VERSION="2.4.2"
-export LIBXML2_VERSION="2.9.0"
-export BZIP2_VERSION="1.0.6"
-
-# cairo stuff
-export PKG_CONFIG_VERSION="0.25"
-export FONTCONFIG_VERSION="2.10.0"
-export PIXMAN_VERSION="0.28.2"
-export CAIRO_VERSION="1.12.14"
-export PY2CAIRO_VERSION="1.10.0"
-export PY3CAIRO_VERSION="1.10.0"
-
