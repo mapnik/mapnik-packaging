@@ -6,25 +6,39 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
 # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
+# Target Platform
+export PLATFORM="MacOSX"
 export MIN_SDK_VERSION="10.7"
+export HOST_ARG=""
+#export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION} # breaks distutils
+export MIN_SDK_VERSION_FLAG="-mmacosx-version-min=${MIN_SDK_VERSION}"
+#export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -Wl,-syslibroot,${SDK_PATH}"
+#export OSX_SDK_CFLAGS=""
+#export OSX_SDK_LDFLAGS=""
+# -arch i386 breaks icu Collator::createInstance
+#export ARCH_FLAGS="-arch x86_64"
+#export ARCH_FLAGS="-arch x86_64 -arch i386"
 
-XCODE_PREFIX=$( xcode-select -print-path )
-#if [[ $XCODE_PREFIX == "/Developer" ]]; then
-if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-    export XCODE_PREFIX="/Applications/Xcode.app/Contents/Developer"
-    export CORE_CXX="/usr/bin/clang++"
-    export CORE_CC="/usr/bin/clang"
-    # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
-    export SDK_PATH="${XCODE_PREFIX}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MIN_SDK_VERSION}.sdk" ## >= 4.3.1 from MAC
-    # search for 'auxiliary' at https://developer.apple.com/downloads/index.action
-    # http://adcdownload.apple.com/Developer_Tools/auxiliary_tools_for_xcode__february_2012/auxiliary_tools_for_xcode.dmg
-    export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
-else
-    export SDK_PATH="${XCODE_PREFIX}/SDKs/MacOSX${MIN_SDK_VERSION}.sdk" ## Xcode 4.2
-    #export PATH="/Developer/usr/bin:${PATH}"
-    export CORE_CXX="/opt/llvm/bin/clang++"
-    export CORE_CC="/opt/llvm/bin/clang"
-fi
+# iphone
+#export PLATFORM="iPhoneOS"
+#export MIN_SDK_VERSION="5.1" # 6.1
+#export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=2.2"
+#export ARCH_FLAGS="-arch armv7"
+#export HOST_ARG="-host=arm-apple-darwin"
+# -pipe -no-cpp-precomp
+
+export XCODE_PREFIX=$( xcode-select -print-path )
+# set this up with: sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+# man xcrun for more info
+export CORE_CC="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
+export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
+# /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
+export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"
+export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
+# search for 'auxiliary' at https://developer.apple.com/downloads/index.action
+# http://adcdownload.apple.com/Developer_Tools/auxiliary_tools_for_xcode__february_2012/auxiliary_tools_for_xcode.dmg
+export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 
 # needed for Coda.app terminal to act sanely
 # otherwise various tests fail oddly
@@ -48,26 +62,17 @@ export JOBS=`sysctl -n hw.ncpu`
 if [[ $JOBS > 4 ]]; then
     export JOBS=$(expr $JOBS - 2)
 fi
-# -arch i386 breaks icu Collator::createInstance
-export ARCH_FLAGS="-arch x86_64"
-#export ARCH_FLAGS="-arch x86_64 -arch i386"
 export ARCHFLAGS=${ARCH_FLAGS}
 export CORE_CPPFLAGS=""
 export CORE_CFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
-export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names"
+export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names -Wl,-dead_strip"
 
-# breaks distutils
-#export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION}
-#export OSX_SDK_CFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
-#export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -isysroot ${SDK_PATH}"
-#export OSX_SDK_LDFLAGS="-mmacosx-version-min=${MIN_SDK_VERSION} -Wl,-syslibroot,${SDK_PATH}"
-export OSX_SDK_CFLAGS=""
-export OSX_SDK_LDFLAGS=""
-export OSX_SDK_LDFLAGS=""
 export CXX=${CORE_CXX}
 export CC=${CORE_CC}
 export CPPFLAGS=${CORE_CPPFLAGS}
+export OSX_SDK_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+export OSX_SDK_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $OSX_SDK_LDFLAGS"
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $OSX_SDK_CFLAGS"
 export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
