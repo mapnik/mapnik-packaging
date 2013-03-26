@@ -65,7 +65,7 @@ export CPPFLAGS="-DU_CHARSET_IS_UTF8=1 -I$(pwd)/icu/source-${ARCH_NAME}/common -
 tar xf icu4c-${ICU_VERSION2}-src.tgz
 mv icu/source icu/source-${ARCH_NAME}
 cd icu/source-${ARCH_NAME}
-if [ $ARCH_NAME = "armv7" ]; then
+if [ $BOOST_ARCH = "arm" ]; then
     export CROSS_FLAGS="--with-cross-build=$(pwd)/../source-i386"
 else
     export CROSS_FLAGS=""
