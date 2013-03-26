@@ -4,6 +4,7 @@ cd ${MAPNIK_SOURCE}
 echo '...Updating and building mapnik minimal'
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
+echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
 echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
@@ -21,6 +22,8 @@ echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
 
 ./configure \
+  PATH_REMOVE="/usr/include" \
+  HOST=${ARCH_NAME} \
   FULL_LIB_PATH=False \
   BINDINGS='' \
   INPUT_PLUGINS=shape \

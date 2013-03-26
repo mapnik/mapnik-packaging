@@ -27,6 +27,7 @@ env = {
 " > bindings/python/mapnik/mapnik_settings.py
 
 ./configure \
+  PATH_REMOVE="/usr/include" \
   BINDINGS='' \
   INPUT_PLUGINS=all \
   CAIRO=True \
