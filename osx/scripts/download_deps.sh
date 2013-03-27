@@ -32,3 +32,7 @@ wget ${S3_BASE}/cairo-${CAIRO_VERSION}.tar.xz
 wget ${S3_BASE}/py2cairo-${PY2CAIRO_VERSION}.tar.bz2
 wget ${S3_BASE}/pycairo-${PY3CAIRO_VERSION}.tar.bz2
 
+wget ${S3_BASE}/protobuf-${PROTOBUF_VERSION}.tar.bz2
+wget ${S3_BASE}/geos-${GEOS_VERSION}.tar.bz2
+wget ${S3_BASE}/protobuf-c-${PROTOBUF_C_VERSION}.tar.bz2
+

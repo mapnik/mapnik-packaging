@@ -9,7 +9,6 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
 
 # Target Platform
-: '
 export PLATFORM="MacOSX"
 export MIN_SDK_VERSION="10.7"
 export HOST_ARG=""
@@ -17,7 +16,7 @@ export ARCH_NAME="x86_64"
 export BOOST_ARCH="x86"
 export MIN_SDK_VERSION_FLAG="-mmacosx-version-min=${MIN_SDK_VERSION}"
 #export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION} # breaks distutils
-'
+
 # iphone
 # -pipe -no-cpp-precomp
 
@@ -72,6 +71,7 @@ export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 export PATH=${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}
 export MAPNIK_DIST="${ROOTDIR}/dist"
 export PACKAGES="${ROOTDIR}/packages"
+export STAGING="${ROOTDIR}/staging"
 export BUILD_UNIVERSAL="${ROOTDIR}/build-universal"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 export MAPNIK_DEV_POSTFIX=""
@@ -126,3 +126,7 @@ export PIXMAN_VERSION="0.28.2"
 export CAIRO_VERSION="1.12.14"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
+export GEOS_VERSION="3.3.8"
+export PROTOBUF_VERSION="2.5.0"
+export PROTOBUF_C_VERSION="0.15"
+
