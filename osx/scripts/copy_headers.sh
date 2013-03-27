@@ -27,15 +27,15 @@ boost/optional.hpp \
 boost/interprocess/mapped_region.hpp \
 boost/multi_index/ordered_index.hpp \
 boost-staging/ 1>/dev/null
-cp -r boost-staging/boost ${MAPNIK_INSTALL}/include/
+cp -r boost-staging/boost ${MAPNIK_BIN_SOURCE}/include/
 
-cp -r ${BUILD}/include/proj_api.h ${MAPNIK_INSTALL}/include/proj_api.h
-cp -r ${BUILD}/include/unicode ${MAPNIK_INSTALL}/include/
-cp -r ${BUILD}/include/freetype2 ${MAPNIK_INSTALL}/include/
-cp -r ${BUILD}/include/ft2build.h ${MAPNIK_INSTALL}/include/ft2build.h
+cp -r ${BUILD}/include/proj_api.h ${MAPNIK_BIN_SOURCE}/include/proj_api.h
+cp -r ${BUILD}/include/unicode ${MAPNIK_BIN_SOURCE}/include/
+cp -r ${BUILD}/include/freetype2 ${MAPNIK_BIN_SOURCE}/include/
+cp -r ${BUILD}/include/ft2build.h ${MAPNIK_BIN_SOURCE}/include/ft2build.h
 
 # if cairo is installed
 if [ -f ${BUILD}/include/cairo/cairo.h ]; then
-    cp -r ${BUILD}/include/cairo ${MAPNIK_INSTALL}/include/
-    cp -r ${BUILD}/include/fontconfig ${MAPNIK_INSTALL}/include/
+    cp -r ${BUILD}/include/cairo ${MAPNIK_BIN_SOURCE}/include/
+    cp -r ${BUILD}/include/fontconfig ${MAPNIK_BIN_SOURCE}/include/
 fi

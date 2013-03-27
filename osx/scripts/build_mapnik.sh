@@ -6,6 +6,7 @@ echo '...Updating and building mapnik'
 #git checkout osx-framework
 #git pull origin master
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
+echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
@@ -48,7 +49,7 @@ rm -f bindings/python/*os
 rm -f bindings/python/mapnik/_mapnik.so
 ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
 make
-mv plugins/input/python.input ${MAPNIK_INSTALL}/lib/mapnik/input/python${i}.input
+mv plugins/input/python.input ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/python${i}.input
 make install
 
 for i in {"2.6","2.7"}

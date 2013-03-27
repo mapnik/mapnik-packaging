@@ -11,11 +11,11 @@ mkdir -p "${LOCAL_TARGET}"
 cd ${MAPNIK_SOURCE}
 make uninstall
 # also remove python versions
-rm -rf ${MAPNIK_INSTALL}/lib/python*
+rm -rf ${MAPNIK_BIN_SOURCE}/lib/python*
 # clear up where wer're going
 rm -rf ${LOCAL_TARGET}/*
 # now establish a base of data
-cp -R ${MAPNIK_INSTALL}/* ${LOCAL_TARGET}/
+cp -R ${MAPNIK_BIN_SOURCE}/* ${LOCAL_TARGET}/
 
 # package more boost headers
 # (only needed to compile mapnik itself)

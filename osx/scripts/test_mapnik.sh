@@ -7,7 +7,7 @@ export DYLD_LIBRARY_PATH=`pwd`/src
 
 for i in {"2.6","2.7"}
 do
-  export PYTHONPATH=${MAPNIK_INSTALL}/lib/python${i}/site-packages/
-  export PATH=${MAPNIK_INSTALL}/bin:$PATH
+  export PYTHONPATH=${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/
+  export PATH=${MAPNIK_BIN_SOURCE}/bin:$PATH
   make test
 done

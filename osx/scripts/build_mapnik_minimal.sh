@@ -23,6 +23,7 @@ echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
 
 ./configure \
   PATH_REMOVE="/usr/include" \
+  LINKING='static' \
   HOST=${ARCH_NAME} \
   FULL_LIB_PATH=False \
   BINDINGS='' \

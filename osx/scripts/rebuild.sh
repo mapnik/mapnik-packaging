@@ -10,7 +10,7 @@ source settings.sh
 #git checkout v2.1.0
 #cd ../
 
-rm -rf ${MAPNIK_INSTALL}
+rm -rf ${MAPNIK_BIN_SOURCE}
 cd scripts/
 
 # build mapnik

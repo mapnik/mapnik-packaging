@@ -20,7 +20,7 @@ make clean
 make uninstall
 cd ../
 
-rm -rf ${MAPNIK_INSTALL}
+rm -rf ${MAPNIK_BIN_SOURCE}
 cd scripts/
 ./build_mapnik_minimal.sh
 ./package_minimal_binary_sdk.sh

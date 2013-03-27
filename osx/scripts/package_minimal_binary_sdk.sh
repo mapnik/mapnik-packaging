@@ -21,14 +21,14 @@ mkdir ${LOCAL_TARGET}/share
 mkdir ${LOCAL_TARGET}/bin
 
 echo '...copying over mapnik'
-cp -R ${MAPNIK_INSTALL}/bin/mapnik-config ${LOCAL_TARGET}/bin/
-cp -R ${MAPNIK_INSTALL}/lib/libmapnik.dylib ${LOCAL_TARGET}/lib/
-cp -R ${MAPNIK_INSTALL}/include/ ${LOCAL_TARGET}/include/
+cp -R ${MAPNIK_BIN_SOURCE}/bin/mapnik-config ${LOCAL_TARGET}/bin/
+cp -R ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib ${LOCAL_TARGET}/lib/
+cp -R ${MAPNIK_BIN_SOURCE}/include/ ${LOCAL_TARGET}/include/
 mkdir -p ${LOCAL_TARGET}/share/icu
 cp -R ${BUILD}/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/icu/
 # shape plugin
 mkdir -p ${LOCAL_TARGET}/lib/mapnik/input
-cp ${MAPNIK_INSTALL}/lib/mapnik/input/shape.input ${LOCAL_TARGET}/lib/mapnik/input/
+cp ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/shape.input ${LOCAL_TARGET}/lib/mapnik/input/
 
 # feed the boost beast - 16 MB instead of 113 MB
 echo '...packaging boost headers'
