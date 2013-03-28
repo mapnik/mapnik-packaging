@@ -1,0 +1,55 @@
+--- configure	2013-03-22 20:13:09.000000000 -0700
++++ _configure	2013-03-22 20:12:21.000000000 -0700
+@@ -678,52 +678,6 @@
+   fi
+ fi
+ 
+-# see if we can hide zlib internal symbols that are linked between separate source files
+-if test "$gcc" -eq 1; then
+-  echo >> configure.log
+-  cat > $test.c <<EOF
+-#define ZLIB_INTERNAL __attribute__((visibility ("hidden")))
+-int ZLIB_INTERNAL foo;
+-int main()
+-{
+-  return 0;
+-}
+-EOF
+-  if tryboth $CC -c $CFLAGS $test.c; then
+-    CFLAGS="$CFLAGS -DHAVE_HIDDEN"
+-    SFLAGS="$SFLAGS -DHAVE_HIDDEN"
+-    echo "Checking for attribute(visibility) support... Yes." | tee -a configure.log
+-  else
+-    echo "Checking for attribute(visibility) support... No." | tee -a configure.log
+-  fi
+-fi
+-
+-echo >> configure.log
+-
+-# find a four-byte unsiged integer type for crc calculations
+-cat > $test.c <<EOF
+-#include <stdio.h>
+-#define is32(n,t) for(n=1,k=0;n;n<<=1,k++);if(k==32){puts(t);return 0;}
+-int main() {
+-    int k;
+-    unsigned i;
+-    unsigned long l;
+-    unsigned short s;
+-    is32(i, "unsigned")
+-    is32(l, "unsigned long")
+-    is32(s, "unsigned short")
+-    return 1;
+-}
+-EOF
+-Z_U4=""
+-if try $CC $CFLAGS $test.c -o $test && Z_U4=`./$test` && test -n "$Z_U4"; then
+-  sed < zconf.h "/#define Z_U4/s/\/\* \.\/configure may/#define Z_U4 $Z_U4   \/* .\/configure put the/" > zconf.temp.h
+-  mv zconf.temp.h zconf.h
+-  echo "Looking for a four-byte integer type... Found." | tee -a configure.log
+-else
+-  echo "Looking for a four-byte integer type... Not found." | tee -a configure.log
+-fi
+-
+ # clean up files produced by running the compiler and linker
+ rm -f $test.[co] $test $test$shared_ext $test.gcno
+ 
