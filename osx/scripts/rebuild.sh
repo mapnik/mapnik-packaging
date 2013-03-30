@@ -1,3 +1,4 @@
+source MacOSX.sh
 source settings.sh
 #./scripts/setup.sh
 #./scripts/download_deps.sh

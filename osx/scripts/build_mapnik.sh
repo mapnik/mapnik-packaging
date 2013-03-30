@@ -14,7 +14,7 @@ echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 echo "CUSTOM_LDFLAGS = '${LDFLAGS}'" >> config.py
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
-cat ${ROOTDIR}/patches/config.py >> config.py
+cat ${PATCHES}/config.py >> config.py
 
 # write mapnik_settings.py
 echo "

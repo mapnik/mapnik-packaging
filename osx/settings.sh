@@ -8,40 +8,6 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
 # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
 
-# Target Platform
-export PLATFORM="MacOSX"
-export MIN_SDK_VERSION="10.7"
-export HOST_ARG=""
-export ARCH_NAME="x86_64"
-export BOOST_ARCH="x86"
-export MIN_SDK_VERSION_FLAG="-mmacosx-version-min=${MIN_SDK_VERSION}"
-#export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION} # breaks distutils
-
-# iphone
-# -pipe -no-cpp-precomp
-
-# armv7s device
-: '
-export MIN_SDK_VERSION="6.1"
-export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=${MIN_SDK_VERSION}"
-
-export PLATFORM="iPhoneOS"
-export ARCH_NAME="armv7s"
-export BOOST_ARCH="arm"
-export HOST_ARG="--host=arm-apple-darwin"
-'
-# todo need: -stdlib=libc++ in cflags as well as linker flags
-#-x objective-c++ -fmessage-length=0 -std=gnu++11 -stdlib=libc++ -fobjc-arc -Wno-trigraphs -fpascal-strings -Wno-missing-field-initializers -Wno-missing-prototypes -Wreturn-type -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wduplicate-method-match -Wformat -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wenum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -fvisibility-inlines-hidden -Wno-sign-conversion
-
-# learn about arm: http://wanderingcoder.net/2010/07/19/ought-arm/
-# simulator
-: '
-export PLATFORM="iPhoneSimulator"
-export ARCH_NAME="i386"
-export BOOST_ARCH="x86"
-export HOST_ARG="--host=i686-apple-darwin11"
-'
-
 export XCODE_PREFIX=$( xcode-select -print-path )
 export ARCH_FLAGS="-arch ${ARCH_NAME}"
 # set this up with:
@@ -63,18 +29,25 @@ export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 #export LANG=en_US.UTF-8
 
 # settings
-export BUILD="${ROOTDIR}/build-${ARCH_NAME}"
+export BUILD="${ROOTDIR}/out/build-${ARCH_NAME}"
+export MAPNIK_DIST="${ROOTDIR}/out/dist"
+export PACKAGES="${ROOTDIR}/out/packages"
+export PATCHES="${ROOTDIR}/patches"
+export STAGING="${ROOTDIR}/out/staging"
+export BUILD_UNIVERSAL="${ROOTDIR}/out/build-universal"
+
+export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
+
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_INSTALL="/Library/Frameworks/Mapnik.framework/unix"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}/${MAPNIK_INSTALL}"
-export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 export PATH=${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}
-export MAPNIK_DIST="${ROOTDIR}/dist"
-export PACKAGES="${ROOTDIR}/packages"
-export STAGING="${ROOTDIR}/staging"
-export BUILD_UNIVERSAL="${ROOTDIR}/build-universal"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
-export MAPNIK_DEV_POSTFIX=""
+
+export DYLD_LIBRARY_PATH="${BUILD}/lib"
+export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
+export PATH="${BUILD}/bin:$PATH"
+
 
 export OPTIMIZATION="3"
 export JOBS=`sysctl -n hw.ncpu`
@@ -95,10 +68,6 @@ export OSX_SDK_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $OSX_SDK_LDFLAGS"
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $OSX_SDK_CFLAGS"
 export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $OSX_SDK_CFLAGS"
-
-export DYLD_LIBRARY_PATH="${BUILD}/lib"
-export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
-export PATH="${BUILD}/bin:$PATH"
 
 export ICU_VERSION="50.1.2"
 export ICU_VERSION2="50_1_2"

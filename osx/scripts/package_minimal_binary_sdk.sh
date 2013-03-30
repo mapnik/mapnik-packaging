@@ -10,7 +10,7 @@ LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
 mkdir -p "${LOCAL_TARGET}"
 STAGING_DIR="boost-staging-minimal"
 
-# clear up where wer're going
+# clear up where we're going
 rm -rf ${LOCAL_TARGET}/*
 
 echo '...creating base directories'
@@ -22,14 +22,15 @@ mkdir ${LOCAL_TARGET}/bin
 
 echo '...copying over mapnik'
 cp -R ${MAPNIK_BIN_SOURCE}/bin/mapnik-config ${LOCAL_TARGET}/bin/
-cp -R ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib ${LOCAL_TARGET}/lib/
+cp -R ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
 cp -R ${MAPNIK_BIN_SOURCE}/include/ ${LOCAL_TARGET}/include/
 mkdir -p ${LOCAL_TARGET}/share/icu
 cp -R ${BUILD}/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/icu/
 # shape plugin
-mkdir -p ${LOCAL_TARGET}/lib/mapnik/input
-cp ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/shape.input ${LOCAL_TARGET}/lib/mapnik/input/
-
+if [ -d ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ ];then
+  mkdir -p ${LOCAL_TARGET}/lib/mapnik/input
+  cp ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/* ${LOCAL_TARGET}/lib/mapnik/input/
+fi
 # feed the boost beast - 16 MB instead of 113 MB
 echo '...packaging boost headers'
 cd ${PACKAGES}/boost*/
@@ -84,6 +85,6 @@ echo "...creating tarball of mapnik build"
 TEMP_SYMLINK="${MAPNIK_DIST}/${PACKAGE_NAME}"
 ln -s ${LOCAL_TARGET} ${TEMP_SYMLINK}
 tar cjfH ${MAPNIK_DIST}/mapnik-osx-x86_64-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
-/usr/local/bin/s3cmd --acl-public put mapnik*tar.bz2 s3://mapnik/dist/
+#/usr/local/bin/s3cmd --acl-public put mapnik*tar.bz2 s3://mapnik/dist/
 # cleanup symlink
 rm ${TEMP_SYMLINK}

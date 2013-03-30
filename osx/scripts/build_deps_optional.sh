@@ -30,7 +30,7 @@ cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
 #install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboost_python-2.7.dylib
 
 # this landed in boost at 1.53 or there-abouts
-#patch libs/python/src/converter/builtin_converters.cpp ${ROOTDIR}/patches/boost_python3k_bytes.diff
+#patch libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python3k_bytes.diff
 python ${ROOTDIR}/scripts/build_boost_pythons.py 3.3 64
 mv stage/lib/libboost_python3.a stage/lib/libboost_python-3.3.a
 cp stage/lib/libboost_python-3.3.a ${BUILD}/lib/libboost_python-3.3.a
@@ -211,7 +211,7 @@ cd ${PACKAGES}
 
 
 : '
-otool -L ${ROOTDIR}/build/lib/*dylib
+otool -L ${BUILD}/lib/*dylib
 	/Users/dane/projects/mapnik-packaging/osx/build/lib/libgdal.1.dylib (compatibility version 18.0.0, current version 18.0.0)
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
 	/usr/lib/libexpat.1.dylib (compatibility version 7.0.0, current version 7.2.0)
@@ -221,7 +221,7 @@ otool -L ${ROOTDIR}/build/lib/*dylib
 '
 
 # clear out shared libs
-rm ${ROOTDIR}/build/lib/*dylib
+rm ${BUILD}/lib/*dylib
 
 echo '*building pkg-config*'
 tar xf pkg-config-${PKG_CONFIG_VERSION}.tar.gz
@@ -325,7 +325,7 @@ echo '*building py2cairo*'
 tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
 cd py2cairo-${PY2CAIRO_VERSION}
 # apply patch
-patch wscript < ${ROOTDIR}/patches/py2cairo-static.diff
+patch wscript < ${PATCHES}/py2cairo-static.diff
 for i in {"2.7",}
 do
     PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
@@ -338,7 +338,7 @@ echo '*building py3cairo*'
 tar xf pycairo-${PY3CAIRO_VERSION}.tar.bz2
 cd pycairo-${PY3CAIRO_VERSION}
 # apply patch
-patch wscript < ${ROOTDIR}/patches/py3cairo-static.diff
+patch wscript < ${PATCHES}/py3cairo-static.diff
 export PATH=/Library/Frameworks/Python.framework/Versions/3.3/bin/:$PATH
 for i in {"3.3",}
 do

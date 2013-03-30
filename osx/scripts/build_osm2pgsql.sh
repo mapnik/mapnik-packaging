@@ -1,3 +1,4 @@
+source MacOSX.sh
 source settings.sh
 
 cd ${PACKAGES}
@@ -36,7 +37,7 @@ cd ${PACKAGES}
 echo '*building osm2pgsql*'
 #svn co http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/
 cd ${ROOTDIR}/osm2pgsql
-patch configure.ac ${ROOTDIR}/patches/osm2pgsql-configure.diff -N
+patch configure.ac ${PATCHES}/osm2pgsql-configure.diff -N
 ./autogen.sh
 OLD_LDFLAGS=$LDFLAGS
 export LDFLAGS="${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"

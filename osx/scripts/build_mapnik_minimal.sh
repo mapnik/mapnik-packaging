@@ -21,23 +21,22 @@ echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
 
+make uninstall
 ./configure \
   PATH_REMOVE="/usr/include" \
-  LINKING='static' \
   HOST=${ARCH_NAME} \
   FULL_LIB_PATH=False \
   BINDINGS='' \
   INPUT_PLUGINS=shape,csv \
   SAMPLE_INPUT_PLUGINS=False \
-  SHAPE_MEMORY_MAPPED_FILE=False \
   CAIRO=False \
   JPEG=False \
   TIFF=False \
   PROJ=False \
   SVG2PNG=False \
   SHAPEINDEX=False \
-  CPP_TESTS=False \
-  DEMO=False \
+  CPP_TESTS=True \
+  DEMO=True \
   SVG_RENDERER=False \
   PGSQL2SQLITE=False \
   SYSTEM_FONTS=/System/Library/Fonts
