@@ -16,7 +16,7 @@ echo '*building zlib*'
 rm -rf zlib-${ZLIB_VERSION}
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}
-patch < ${PATCHES}/zlib-configure.diff
+patch -N < ${PATCHES}/zlib-configure.diff
 ./configure --prefix=${BUILD} --static
 make -j$JOBS
 make install
@@ -86,7 +86,7 @@ echo '*building libxml2*'
 rm -rf libxml2-${LIBXML2_VERSION}
 tar xf libxml2-${LIBXML2_VERSION}.tar.gz
 cd libxml2-${LIBXML2_VERSION}
-patch threads.c ${PATCHES}/libxml2-pthread.diff -N
+patch -N threads.c ${PATCHES}/libxml2-pthread.diff
 ./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
 --enable-static --disable-shared ${HOST_ARG} \
 --with-icu=${PREFIX} \
@@ -125,13 +125,13 @@ rm -rf boost_${BOOST_VERSION2}
 tar xjf boost_${BOOST_VERSION2}.tar.bz2
 cd boost_${BOOST_VERSION2}
 # patch python build to ensure we do not link boost_python to python
-patch tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
+patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
 ./bootstrap.sh
 echo 'using clang-darwin ;' > user-config.jam
 
 # https://svn.boost.org/trac/boost/ticket/6686
 if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-    patch tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff
+    patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff
 fi
 
 # HINT: problems with icu configure check?
@@ -141,12 +141,12 @@ fi
 ./b2 tools/bcp \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --ignore-site-config --user-config=user-config.jam \
+  architecture=${BOOST_ARCH} \
   toolset=clang \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
   --with-program_options --with-system --with-chrono \
-  architecture=${BOOST_ARCH} \
   link=static \
   variant=release \
   stage install \

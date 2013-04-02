@@ -4,8 +4,8 @@ echo '...packaging minmal binary sdk tarball'
 
 # where we are headed
 cd ${MAPNIK_DIST}
-PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}"
-TARGET_BASENAME="${PACKAGE_NAME}-osx-sdk"
+PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-osx"
+TARGET_BASENAME="${PACKAGE_NAME}-sdk"
 LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
 mkdir -p "${LOCAL_TARGET}"
 STAGING_DIR="boost-staging-minimal"
@@ -84,7 +84,7 @@ echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
 echo "...creating tarball of mapnik build"
 TEMP_SYMLINK="${MAPNIK_DIST}/${PACKAGE_NAME}"
 ln -s ${LOCAL_TARGET} ${TEMP_SYMLINK}
-tar cjfH ${MAPNIK_DIST}/mapnik-osx-x86_64-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
+tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
 #/usr/local/bin/s3cmd --acl-public put mapnik*tar.bz2 s3://mapnik/dist/
 # cleanup symlink
 rm ${TEMP_SYMLINK}

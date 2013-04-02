@@ -29,7 +29,8 @@ export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 #export LANG=en_US.UTF-8
 
 # settings
-export BUILD="${ROOTDIR}/out/build-${ARCH_NAME}"
+export BUILD_ROOT="${ROOTDIR}/out/build"
+export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DIST="${ROOTDIR}/out/dist"
 export PACKAGES="${ROOTDIR}/out/packages"
 export PATCHES="${ROOTDIR}/patches"
@@ -56,9 +57,10 @@ if [[ $JOBS > 4 ]]; then
 fi
 export ARCHFLAGS=${ARCH_FLAGS}
 export CORE_CPPFLAGS=""
-export CORE_CFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
+export DEBUG_FLAGS="-DNDEBUG -g"
+export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
-export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first -headerpad_max_install_names -Wl,-dead_strip"
+export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first"
 
 export CXX=${CORE_CXX}
 export CC=${CORE_CC}

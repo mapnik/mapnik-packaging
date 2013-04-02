@@ -21,7 +21,8 @@ echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
 
-make uninstall
+rm -rf ${MAPNIK_BIN_SOURCE}
+make clean
 ./configure \
   PATH_REMOVE="/usr/include" \
   HOST=${ARCH_NAME} \
