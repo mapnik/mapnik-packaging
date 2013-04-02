@@ -50,14 +50,14 @@ export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
 
 
-export OPTIMIZATION="3"
+export OPTIMIZATION="2"
 export JOBS=`sysctl -n hw.ncpu`
 if [[ $JOBS > 4 ]]; then
     export JOBS=$(expr $JOBS - 2)
 fi
 export ARCHFLAGS=${ARCH_FLAGS}
 export CORE_CPPFLAGS=""
-export DEBUG_FLAGS="-DNDEBUG -g"
+export DEBUG_FLAGS="-DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden"
 export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS=${CORE_CFLAGS}
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first"
