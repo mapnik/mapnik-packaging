@@ -55,22 +55,22 @@ cd ${PACKAGES}
 
 # icu
 echo '*building icu*'
-rm -rf icu/source-${ARCH_NAME}
+rm -rf icu-${ARCH_NAME}
 # *WARNING* do not set an $INSTALL variable
 # it will screw up icu build scripts
 export OLD_CPPFLAGS=${CPPFLAGS}
 # U_CHARSET_IS_UTF8 is added to try to reduce icu library size (18.3)
-# custom include paths are needed for cross-build
-export CPPFLAGS="-DU_CHARSET_IS_UTF8=1 -I$(pwd)/icu/source-${ARCH_NAME}/common -I$(pwd)/icu/source-${ARCH_NAME}/tools/tzcode/"
+export CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
 tar xf icu4c-${ICU_VERSION2}-src.tgz
-mv icu/source icu/source-${ARCH_NAME}
-cd icu/source-${ARCH_NAME}
+mv icu icu-${ARCH_NAME}
+cd icu-${ARCH_NAME}/source
 if [ $BOOST_ARCH = "arm" ]; then
     export CROSS_FLAGS="--with-cross-build=$(pwd)/../source-i386"
+    export CPPFLAGS="${CPPFLAGS} -I$(pwd)/common -I$(pwd)/tools/tzcode/"
 else
     export CROSS_FLAGS=""
 fi
-./configure ${HOST_ARG} $CROSS_FLAGS --prefix=${BUILD} \
+./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
 --disable-samples \
 --enable-static \
 --disable-shared \
@@ -121,13 +121,14 @@ cd ${PACKAGES}
 echo '*building boost*'
 B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
-rm -rf boost_${BOOST_VERSION2}
+rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
 tar xjf boost_${BOOST_VERSION2}.tar.bz2
-cd boost_${BOOST_VERSION2}
+mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
+cd boost_${BOOST_VERSION2}-${ARCH_NAME}
 # patch python build to ensure we do not link boost_python to python
 patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
-./bootstrap.sh
 echo 'using clang-darwin ;' > user-config.jam
+./bootstrap.sh
 
 # https://svn.boost.org/trac/boost/ticket/6686
 if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
@@ -137,8 +138,36 @@ fi
 # HINT: problems with icu configure check?
 # cat bin.v2/config.log to see problems
 
+if [ $BOOST_ARCH = "arm" ]; then
+    export CROSS_FLAGS=""
+    export EXTRA_LIBS_ARGS=""
+else
+    export CROSS_FLAGS="tools/bcp"
+    export EXTRA_LIBS_ARGS="--with-program_options --with-chrono"
+fi
+
 # static libs
-./b2 tools/bcp \
+echo '#error' > libs/regex/build/has_icu_test.cpp
+./b2 ${CROSS_FLAGS} \
+  --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
+  --ignore-site-config --user-config=user-config.jam \
+  architecture=${BOOST_ARCH} \
+  toolset=clang \
+  --with-thread \
+  --with-filesystem \
+  --disable-filesystem2 \
+  --with-system \
+  $EXTRA_LIBS_ARGS \
+  --disable-icu \
+  --with-regex \
+  link=static \
+  variant=release \
+  linkflags="${LDFLAGS}" \
+  cxxflags="${CXXFLAGS}" \
+  stage install
+
+: '
+./b2 ${CROSS_FLAGS} \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --ignore-site-config --user-config=user-config.jam \
   architecture=${BOOST_ARCH} \
@@ -149,10 +178,11 @@ fi
   --with-program_options --with-system --with-chrono \
   link=static \
   variant=release \
-  stage install \
   linkflags="${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata" \
   cxxflags="${CXXFLAGS} -DU_STATIC_IMPLEMENTATION=1" \
   -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
-  --with-regex
+  --with-regex \
+  stage install
+'
 
 lipo -info ${BUILD}/lib/*.a | grep arch
