@@ -3,6 +3,33 @@ set -e
 mkdir -p ${BUILD}
 cd ${PACKAGES}
 
+# icu
+echo '*building icu*'
+rm -rf icu-${ARCH_NAME}
+# *WARNING* do not set an $INSTALL variable
+# it will screw up icu build scripts
+export OLD_CPPFLAGS=${CPPFLAGS}
+# U_CHARSET_IS_UTF8 is added to try to reduce icu library size (18.3)
+export CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
+tar xf icu4c-${ICU_VERSION2}-src.tgz
+mv icu icu-${ARCH_NAME}
+cd icu-${ARCH_NAME}/source
+if [ $BOOST_ARCH = "arm" ]; then
+    export CROSS_FLAGS="--with-cross-build=$(pwd)/../../icu-i386/source"
+    export CPPFLAGS="${CPPFLAGS} -I$(pwd)/common -I$(pwd)/tools/tzcode/"
+else
+    export CROSS_FLAGS=""
+fi
+./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
+--disable-samples \
+--enable-static \
+--disable-shared \
+--with-data-packaging=archive
+make -j${JOBS}
+make install
+export CPPFLAGS=${OLD_CPPFLAGS}
+cd ${PACKAGES}
+
 # bzip2
 echo '*building bzip2'
 rm -rf bzip2-${BZIP2_VERSION}
@@ -50,34 +77,6 @@ cd libtool-${LIBTOOL_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG}
 make -j$JOBS
 make install
-cd ${PACKAGES}
-
-
-# icu
-echo '*building icu*'
-rm -rf icu-${ARCH_NAME}
-# *WARNING* do not set an $INSTALL variable
-# it will screw up icu build scripts
-export OLD_CPPFLAGS=${CPPFLAGS}
-# U_CHARSET_IS_UTF8 is added to try to reduce icu library size (18.3)
-export CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
-tar xf icu4c-${ICU_VERSION2}-src.tgz
-mv icu icu-${ARCH_NAME}
-cd icu-${ARCH_NAME}/source
-if [ $BOOST_ARCH = "arm" ]; then
-    export CROSS_FLAGS="--with-cross-build=$(pwd)/../source-i386"
-    export CPPFLAGS="${CPPFLAGS} -I$(pwd)/common -I$(pwd)/tools/tzcode/"
-else
-    export CROSS_FLAGS=""
-fi
-./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
---disable-samples \
---enable-static \
---disable-shared \
---with-data-packaging=archive
-make -j${JOBS}
-make install
-export CPPFLAGS=${OLD_CPPFLAGS}
 cd ${PACKAGES}
 
 
