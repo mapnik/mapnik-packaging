@@ -1,6 +1,5 @@
 set -e
 cd ${PACKAGES}
-S3_BASE="http://mapnik.s3.amazonaws.com/deps"
 
 # build deps
 wget ${S3_BASE}/xz-5.0.3.tar.bz2
@@ -34,5 +33,5 @@ wget ${S3_BASE}/pycairo-${PY3CAIRO_VERSION}.tar.bz2
 
 wget ${S3_BASE}/protobuf-${PROTOBUF_VERSION}.tar.bz2
 wget ${S3_BASE}/geos-${GEOS_VERSION}.tar.bz2
-wget ${S3_BASE}/protobuf-c-${PROTOBUF_C_VERSION}.tar.bz2
+wget ${S3_BASE}/protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
 
