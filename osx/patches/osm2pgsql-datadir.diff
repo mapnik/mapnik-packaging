@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index 215aaf2..fb864cf 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -36,7 +36,7 @@ BUILT_SOURCES = \
+ 
+ endif
+ 
+-osm2pgsqldir = $(datadir)/osm2pgsql
++osm2pgsqldir = /usr/local/share/osm2pgsql
+ 
+ AM_CFLAGS = @PTHREAD_CFLAGS@ @LFS_CFLAGS@ @POSTGRESQL_CFLAGS@ @XML2_CFLAGS@ @BZIP2_CFLAGS@  @GEOS_CFLAGS@ @PROJ_CFLAGS@  @PROTOBUF_C_CFLAGS@ -DOSM2PGSQL_DATADIR='"$(osm2pgsqldir)"' -DVERSION='"@PACKAGE_VERSION@"' 
+ AM_CPPFLAGS = @PTHREAD_CFLAGS@ @POSTGRESQL_CFLAGS@ @XML2_CFLAGS@ @BZIP2_CFLAGS@  @GEOS_CFLAGS@ @PROJ_CFLAGS@ -DOSM2PGSQL_DATADIR='"$(osm2pgsqldir)"' -Igeos-fallback
