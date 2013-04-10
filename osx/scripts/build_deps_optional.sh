@@ -40,6 +40,7 @@ cd ${PACKAGES}
 
 # proj4
 echo '*building proj.4*'
+rm -rf proj-${PROJ_VERSION}
 tar xf proj-${PROJ_VERSION}.tar.gz
 cd proj-${PROJ_VERSION}/nad
 unzip -o ../../proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
@@ -124,19 +125,18 @@ gmake -C src/interfaces install
 gmake -C doc install
 '
 
-cd ${PACKAGES}
-tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
-
 # 64 bit build
 echo '*building postgres 64 bit*'
 cd ${PACKAGES}
+tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 ./configure --prefix=${BUILD} --enable-shared \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
 --with-bonjour --without-libxml
 # LD=${CC}
-make -j${JOBS}
-make install
+# TODO - linking problems for unknown reasons...
+make -j${JOBS} -i -k
+make install -i -k
 cd ${PACKAGES}
 
 : '

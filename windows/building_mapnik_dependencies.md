@@ -110,10 +110,10 @@ for every build variant.*
     cd boost_1_%BOOST_VERSION%_0
     set BOOST_PREFIX=boost-%BOOST_VERSION%-vc100
     bootstrap.bat
-    bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex --with-chrono --disable-filesystem2 -sHAVE_ICU=1 -sICU_PATH=%ROOTDIR%\\icu -sICU_LINK=%ROOTDIR%\\icu\\lib\\icuuc.lib release link=static install
+    bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-thread --with-filesystem --with-date_time --with-system --with-program_options --with-regex --with-chrono --disable-filesystem2 -sHAVE_ICU=1 -sICU_PATH=%ROOTDIR%\\icu -sICU_LINK=%ROOTDIR%\\icu\\lib\\icuuc.lib release link=static install --build-type=complete
 
     # if you need python
-    bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-python python=2.7 release link=shared install
+    bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-python python=2.7 release link=static --build-type=complete install
 
 ### Jpeg
 

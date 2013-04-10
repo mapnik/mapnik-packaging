@@ -28,6 +28,8 @@ export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 # otherwise various tests fail oddly
 #export LANG=en_US.UTF-8
 
+export S3_BASE="http://mapnik.s3.amazonaws.com/deps"
+
 # settings
 export BUILD_ROOT="${ROOTDIR}/out/build"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
