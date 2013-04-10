@@ -27,7 +27,6 @@ project mapnik
     <include>$(MAPNIK_SOURCE)/deps/
     <include>$(BOOST_INCLUDES)
     <include>$(MAPNIK_DEPS_DIR)/icu/include
-    <include>ltdl
     <include>$(MAPNIK_DEPS_DIR)/freetype/include
     <include>$(MAPNIK_DEPS_DIR)/proj/src
     <include>$(MAPNIK_DEPS_DIR)/libpng
@@ -79,7 +78,6 @@ alias jpeg : /site-config//jpeg : <link>static ;
 alias tiff : /site-config//tiff : <link>static ;
 alias freetype2 : /site-config//freetype2 : <link>static ;
 alias cairo : /site-config//cairo : <link>shared ;    
-# alias ltdl : /site-config//ltdl : <link>static ;
 alias proj : /site-config//proj : <link>static ;
 alias icu  : /site-config//icu : <link>shared ;
 alias icudata  : /site-config//icudata : <link>shared ;

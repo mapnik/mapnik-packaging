@@ -21,7 +21,6 @@ lib icui18n : : <name>icuin <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
 lib icudata : : <name>icudt <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
 lib xml2 : : <name>libxml2 <search>$(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc ;
 lib freetype2 : : <name>freetype <search>$(MAPNIK_DEPS_DIR)/freetype ;
-# lib ltdl : : <name>libltdl <search>ltdl/bin/msvc/release/link-static/threading-multi ;
 lib proj : : <name>proj <search>$(MAPNIK_DEPS_DIR)/proj/src ;
 lib pq : : <name>libpq <search>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libpq/Release  ;
 

@@ -150,7 +150,6 @@ lib mapnik
     ..//jpeg
     ..//tiff
     ..//freetype2
-    ..//ltdl//ltdl
     ..//proj
     ..//icu
 	..//icui18n
