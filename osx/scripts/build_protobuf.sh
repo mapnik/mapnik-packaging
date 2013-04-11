@@ -1,4 +1,7 @@
 cd ${PACKAGES}
+
+curl -O ${S3_BASE}/protobuf-${PROTOBUF_VERSION}.tar.bz2
+
 echo '*building protobuf C++*'
 rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2

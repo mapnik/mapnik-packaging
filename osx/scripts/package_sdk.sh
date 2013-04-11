@@ -5,7 +5,7 @@ echo '...packaging sdk tarball'
 TARGET_BASENAME="${MAPNIK_PACKAGE_PREFIX}-osx-sdk"
 LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
 mkdir -p "${LOCAL_TARGET}"
-
+mkdir -p ${MAPNIK_DIST}
 
 # clear out mapnik
 cd ${MAPNIK_SOURCE}

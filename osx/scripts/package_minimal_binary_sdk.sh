@@ -3,6 +3,7 @@ set -e
 echo '...packaging minmal binary sdk tarball'
 
 # where we are headed
+mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-osx"
 TARGET_BASENAME="${PACKAGE_NAME}-sdk"
@@ -85,6 +86,6 @@ echo "...creating tarball of mapnik build"
 TEMP_SYMLINK="${MAPNIK_DIST}/${PACKAGE_NAME}"
 ln -s ${LOCAL_TARGET} ${TEMP_SYMLINK}
 tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
-#/usr/local/bin/s3cmd --acl-public put mapnik*tar.bz2 s3://mapnik/dist/
+/usr/local/bin/s3cmd --acl-public put mapnik*tar.bz2 s3://mapnik/dist/
 # cleanup symlink
 rm ${TEMP_SYMLINK}

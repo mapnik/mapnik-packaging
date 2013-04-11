@@ -1,6 +1,5 @@
 cd "$( dirname $( dirname "$0" ))"
 source MacOSX.sh
-source settings.sh
 # update mapnik
 cd mapnik
 echo 'pulling from git'
