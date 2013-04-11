@@ -46,47 +46,62 @@ make install
 export LDFLAGS="$OLD_LDFLAGS"
 export DESTDIR=
 
-# add docs for installing
+/usr/local/bin/freeze ${ROOTDIR}/installer/osm2pgsql/osm2pgsql.packproj
+
+# add docs
 echo '
 osm2pgsql os x binary
 ---------------------
 
-1) Installing
-
 osm2pgsql is a command line program.
 
-To use it you open the Terminal.app in /Applications/Utilities.
+1) Installing
 
-We recommended putting osm2pgsql into /usr/local/bin/osm2pgsql which is where the program
-would be installed by default if you build it from source.
-
-Then put the "default.style" in /usr/local/share/osm2pgsql/default.style.
-
-Alternatively you can run osm2pgsql from anywhere and pass the -S option to point to
-the location of the default.style.
-
-For example if you just want to use osm2pgsql locally (within the directory structure
-found beside this README.txt) you could put this directory on your Desktop, open Terminal.app
-and the type the following commands to test osm2pgsql can be run from the command line:
-
-    cd ~/Desktop/osm2pgsql-osx
-    cd usr/local/bin
-    ./osm2pgsql -v # should show the version
+Double click on the "osm2pgsql.pkg" and follow all the prompts.
 
 2) Usage
 
-This assumes osm2pgsql is in /usr/local/bin/
+Open the Terminal.app in /Applications/Utilities and type:
 
-Get help:
+    osm2pgsql
 
-    /usr/local/bin/osm2pgsql -h
+You should see:
+
+    osm2pgsql SVN version 0.81.0 (64bit id space)
+
+    Usage error. For further information see:
+	    osm2pgsql -h|--help
+
+This installer placed osm2pgsql at /usr/local/bin/osm2pgsql. You can confirm this
+by typing into your terminal:
+
+    which osm2pgsql
+
+You should see:
+
+    /usr/local/bin/osm2pgsql
+
+The installer also put the "default.style" in /usr/local/share/osm2pgsql/default.style.
+
+More usage:
+
+    osm2pgsql -h
 
 Show the version:
 
-    /usr/local/bin/osm2pgsql -v
+    osm2pgsql -v
 
-Import an .osm file named 'test.osm' into a postgres named 'osm':
+Import an .osm file named 'test.osm' into a postgres database named 'osm':
 
-    /usr/local/bin/osm2pgsql -d osm  test.osm
+    osm2pgsql -d osm  test.osm
 
-' > ${OSM2PGSQL_TARGET}/README.txt
+' > "${ROOTDIR}/installer/osm2pgsql/build/README.txt"
+
+DMG_VOL_NAME="osm2pgsql"
+DMG_NAME="osm2pgsql.dmg"
+rm -rf "${ROOTDIR}/installer/osm2pgsql/build/${DMG_NAME}"
+hdiutil create \
+  "${ROOTDIR}/installer/osm2pgsql/build/${DMG_NAME}" \
+  -volname "${DMG_VOL_NAME}" \
+  -fs HFS+ \
+  -srcfolder "${ROOTDIR}/installer/osm2pgsql/build/"
