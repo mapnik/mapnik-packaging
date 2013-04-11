@@ -3,6 +3,9 @@ cd ${MAPNIK_SOURCE}
 
 echo '...Updating and building mapnik minimal'
 
+rm -rf ${MAPNIK_BIN_SOURCE}
+make clean
+
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
@@ -21,8 +24,6 @@ echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
 
-rm -rf ${MAPNIK_BIN_SOURCE}
-make clean
 ./configure \
   PATH_REMOVE="/usr/include" \
   HOST=${ARCH_NAME} \

@@ -3,6 +3,7 @@ set -e
 echo '...packaging minmal binary sdk tarball'
 
 # where we are headed
+mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-osx"
 TARGET_BASENAME="${PACKAGE_NAME}-sdk"

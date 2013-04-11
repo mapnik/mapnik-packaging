@@ -69,17 +69,6 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-# libtool - for libltdl
-echo '*building libltdl'
-rm -rf libtool-${LIBTOOL_VERSION}
-tar xf libtool-${LIBTOOL_VERSION}.tar.gz
-cd libtool-${LIBTOOL_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG}
-make -j$JOBS
-make install
-cd ${PACKAGES}
-
-
 # libxml2
 echo '*building libxml2*'
 rm -rf libxml2-${LIBXML2_VERSION}

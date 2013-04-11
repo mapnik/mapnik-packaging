@@ -2,6 +2,9 @@ source MacOSX.sh
 
 cd ${PACKAGES}
 
+curl -O ${S3_BASE}/geos-${GEOS_VERSION}.tar.bz2
+curl -O ${S3_BASE}/protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
+
 echo '*building geos*'
 rm -rf geos-${GEOS_VERSION}
 tar xf geos-${GEOS_VERSION}.tar.bz2

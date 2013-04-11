@@ -1,7 +1,7 @@
 set -e
 
 echo '...packaging binary tarball'
-
+mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 rm -rf ./${MAPNIK_PACKAGE_PREFIX}*.tar.bz2
 FOUND_VERSION=`mapnik-config --version`

@@ -59,9 +59,12 @@ if [[ $JOBS > 4 ]]; then
 fi
 export ARCHFLAGS=${ARCH_FLAGS}
 export CORE_CPPFLAGS=""
-export DEBUG_FLAGS="-DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden"
+export DEBUG_FLAGS="-DNDEBUG"
+# breaks mapnik
+#export CXX_VISIBILITY_FLAGS="-fvisibility=hidden -fvisibility-inlines-hidden"
+export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
 export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
-export CORE_CXXFLAGS=${CORE_CFLAGS}
+export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first"
 
 export CXX=${CORE_CXX}
@@ -90,7 +93,6 @@ export GDAL_VERSION="1.9.2"
 export GETTEXT_VERSION="0.18.1.1"
 export POSTGRES_VERSION="9.2.3"
 export ZLIB_VERSION="1.2.7"
-export LIBTOOL_VERSION="2.4.2"
 export LIBXML2_VERSION="2.9.0"
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
@@ -102,4 +104,6 @@ export PY3CAIRO_VERSION="1.10.0"
 export GEOS_VERSION="3.3.8"
 export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
+export XZ_VERSION="5.0.3"
+export NOSE_VERSION="1.2.1"
 
