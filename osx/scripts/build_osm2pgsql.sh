@@ -1,5 +1,6 @@
 source MacOSX.sh
 
+mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 curl -O ${S3_BASE}/geos-${GEOS_VERSION}.tar.bz2

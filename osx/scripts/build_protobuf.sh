@@ -1,3 +1,4 @@
+mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 curl -O ${S3_BASE}/protobuf-${PROTOBUF_VERSION}.tar.bz2

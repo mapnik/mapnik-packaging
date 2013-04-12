@@ -1,6 +1,6 @@
 set -e 
 
-mkdir -p ${BUILD}
+mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # icu

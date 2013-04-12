@@ -1,5 +1,6 @@
 set -e 
 
+mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # optional deps
