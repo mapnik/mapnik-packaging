@@ -72,10 +72,6 @@ cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 # icu
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
 
-# ltdl
-cp -r ${BUILD}/include/libltdl ${LOCAL_TARGET}/include/
-cp -r ${BUILD}/include/ltdl.h ${LOCAL_TARGET}/include/
-
 cd ${MAPNIK_DIST}
 rm -f ./${PACKAGE_NAME}*.tar.bz2
 FOUND_VERSION=`mapnik-config --version`
