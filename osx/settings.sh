@@ -3,7 +3,7 @@
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # set clean PATH
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
 # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
 # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/

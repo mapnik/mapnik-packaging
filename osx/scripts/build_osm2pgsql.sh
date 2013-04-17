@@ -37,7 +37,7 @@ make distclean
 OLD_LDFLAGS=$LDFLAGS
 export LDFLAGS="${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
 export OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
-export DESTDIR=OSM2PGSQL_TARGET
+export DESTDIR=${OSM2PGSQL_TARGET}
 ./configure --prefix=/usr/local \
 --with-zlib=${BUILD} \
 --with-bzip2=${BUILD} \
@@ -45,12 +45,15 @@ export DESTDIR=OSM2PGSQL_TARGET
 --with-proj=${BUILD} \
 --with-protobuf-c=${BUILD} \
 --with-postgresql=${BUILD}/bin/pg_config
-make -j${JOBS}
+make
 make install
 export LDFLAGS="$OLD_LDFLAGS"
 export DESTDIR=
 
 /usr/local/bin/freeze ${ROOTDIR}/installer/osm2pgsql/osm2pgsql.packproj
+
+# TODO dump git describe once it is working
+
 
 # add docs
 echo '
