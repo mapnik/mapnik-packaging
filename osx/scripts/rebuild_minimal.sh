@@ -21,6 +21,6 @@ make uninstall
 cd ../
 
 rm -rf ${MAPNIK_BIN_SOURCE}
-cd scripts/
-./build_mapnik_minimal.sh
-./package_minimal_binary_sdk.sh
+./scripts/build_protobuf.sh
+./scripts/build_mapnik_minimal.sh
+./scripts/package_minimal_binary_sdk.sh

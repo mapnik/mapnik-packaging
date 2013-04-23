@@ -70,7 +70,16 @@ ${STAGING_DIR}/ 1>/dev/null
 cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 
 # icu
+echo "...copying icu headers"
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
+
+# protobuf
+echo "...copying protobuf files"
+cp -r ${BUILD}/include/google ${LOCAL_TARGET}/include/
+cp -r ${BUILD}/lib/libproto*.a ${LOCAL_TARGET}/lib
+mkdir -p ${LOCAL_TARGET}/lib/pkgconfig
+cp -r ${BUILD}/lib/pkgconfig/*proto* ${LOCAL_TARGET}/lib/pkgconfig/
+cp -r ${BUILD}/bin/protoc ${LOCAL_TARGET}/bin/
 
 cd ${MAPNIK_DIST}
 rm -f ./${PACKAGE_NAME}*.tar.bz2
