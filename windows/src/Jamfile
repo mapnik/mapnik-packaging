@@ -142,7 +142,7 @@ lib mapnik
     #wkt
     wkt/wkt_factory.cpp
     ..//deps//agg//agg
-	..//deps//clipper//clipper
+    ..//deps//clipper//clipper
     ..//thread
     ..//filesystem
     ..//regex

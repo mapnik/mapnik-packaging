@@ -23,7 +23,7 @@ project mapnik
     <include>$(MAPNIK_SOURCE)/ # for local boost stuff
     <include>$(MAPNIK_SOURCE)/include
     <include>$(MAPNIK_SOURCE)/deps/agg/include
-	<include>$(MAPNIK_SOURCE)/deps/clipper/include
+    <include>$(MAPNIK_SOURCE)/deps/clipper/include
     <include>$(MAPNIK_SOURCE)/deps/
     <include>$(BOOST_INCLUDES)
     <include>$(MAPNIK_DEPS_DIR)/icu/include
