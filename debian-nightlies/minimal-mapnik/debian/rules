@@ -6,6 +6,7 @@ export DH_VERBOSE=1
 
 # scons flags
 SCONS_FLAGS=INPUT_PLUGINS="shape" \
+CUSTOM_CXXFLAGS="-fvisibility=hidden" \
 BINDINGS="" \
 SAMPLE_INPUT_PLUGINS=False \
 CAIRO=False \
