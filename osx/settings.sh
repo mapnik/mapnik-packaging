@@ -62,7 +62,7 @@ export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
 # breaks mapnik
 #export CXX_VISIBILITY_FLAGS="-fvisibility=hidden -fvisibility-inlines-hidden"
-export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+export CXX_VISIBILITY_FLAGS="-fvisibility=hidden -fvisibility-inlines-hidden"
 export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS} -Wl,-search_paths_first"
