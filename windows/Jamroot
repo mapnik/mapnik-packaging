@@ -153,6 +153,7 @@ mapnik.install mapnik
     : $(headers)
     : plugins/input/shape
       plugins/input/csv
+      plugins/input/geojson
       plugins/input/sqlite
       plugins/input/raster
       plugins/input/postgis
