@@ -2,23 +2,21 @@ local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 project : source-location $(MAPNIK_SOURCE)/plugins/input/ogr ;
 local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
 mapnik-plugin ogr
-	: [ glob *.cpp ]
-	../../..//src
-	../../..//thread
-	../../..//icu
-	../../..//odbc
-	../../..//odbccp
-	../../..//user	
-	../../..//gdal
-	../../..//expat
-	:
-	<include>.
-	<include>$(MAPNIK_DEPS_DIR)/gdal/port
-        <include>$(MAPNIK_DEPS_DIR)/gdal/gcore
-	<include>$(MAPNIK_DEPS_DIR)/gdal/ogr	
-	<include>$(MAPNIK_DEPS_DIR)/gdal/ogr/ogrsf_frmts
-     	<link>shared
-	<variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
-      	<toolset>msvc:<define>_WINDOWS
-      	<toolset>msvc:<define>MAPNIK_IMPORTS
-    	;
+    : [ glob *.cpp ]
+    ../../..//src
+    ../../..//thread
+    ../../..//icu
+    ../../..//odbc
+    ../../..//odbccp
+    ../../..//user    
+    ../../..//gdal
+    ../../..//expat
+    :
+    <include>.
+    <include>$(MAPNIK_DEPS_DIR)/gdal/port
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gcore
+    <include>$(MAPNIK_DEPS_DIR)/gdal/ogr
+    <include>$(MAPNIK_DEPS_DIR)/gdal/ogr/ogrsf_frmts
+    <link>shared
+    <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
+    ;

@@ -47,10 +47,10 @@ project mapnik
     <define>MAPNIK_USE_PROJ4
     <define>BOOST_REGEX_HAS_ICU
     <define>HAVE_CAIRO
-	<cxxflags>/wd4345
-	<cxxflags>/wd4661
-	<cxxflags>/wd4018
-	#<define>MAPNIK_STATS
+    <cxxflags>/wd4345
+    <cxxflags>/wd4661
+    <cxxflags>/wd4018
+    #<define>MAPNIK_STATS
     #<define>_HAS_CPP0X=0
     #<define>LIBXML_STATIC
     <toolset>gcc:<cxxflags>-fno-strict-aliasing 

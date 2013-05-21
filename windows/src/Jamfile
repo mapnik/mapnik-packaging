@@ -18,7 +18,7 @@ lib mapnik
     box2d.cpp
     building_symbolizer.cpp
     datasource_cache.cpp
-	datasource_cache_static.cpp
+    datasource_cache_static.cpp
     debug.cpp
     deepcopy.cpp
     expression_node.cpp
@@ -158,8 +158,6 @@ lib mapnik
     ..//xml2
     ..//cairo
       :
-        <define>HAVE_XML2
-        #<define>MAPNIK_STATS
         <define>MAPNIK_EXPORTS
         <link>shared
         <linkflags>/VERBOSE:LIB

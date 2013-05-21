@@ -11,6 +11,4 @@ mapnik-plugin csv
     <include>.
     <link>shared
     <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
-    <toolset>msvc:<define>_WINDOWS
-    <toolset>msvc:<define>MAPNIK_IMPORTS
   ;

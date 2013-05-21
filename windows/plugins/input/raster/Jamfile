@@ -2,15 +2,13 @@ local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
 project : source-location $(MAPNIK_SOURCE)/plugins/input/raster ;
 
 mapnik-plugin raster
-	: [ glob *.cpp ]
-	../../..//src
-	../../..//thread
-	../../..//icu
-	:
-	<include>.
-	<toolset>msvc:<define>_WINDOWS
-      	<toolset>msvc:<define>MAPNIK_IMPORTS
-	<linkflags>/VERBOSE:LIB
-	<variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib	
-	<link>shared
-    	;
+    : [ glob *.cpp ]
+    ../../..//src
+    ../../..//thread
+    ../../..//icu
+    :
+    <include>.
+    <linkflags>/VERBOSE:LIB
+    <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
+    <link>shared
+    ;

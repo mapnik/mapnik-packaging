@@ -7,14 +7,13 @@ mapnik-plugin shape
       shape_featureset.cpp
       shape_index_featureset.cpp
       shape_io.cpp
-	  shape_utils.cpp
+      shape_utils.cpp
       ../../..//src
-      ../../..//thread  
+      ../../..//thread
       ../../..//icu
     : 
       <include>.
       <link>shared
-      <toolset>msvc:<define>_WINDOWS
-      <toolset>msvc:<define>MAPNIK_IMPORTS
+      # intentionally disabled for windows
       #<toolset>msvc:<define>SHAPE_MEMORY_MAPPED_FILE
     ;
