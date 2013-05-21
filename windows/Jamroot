@@ -110,6 +110,7 @@ build-project src ;
 # input plug-ins
 build-project plugins/input/shape ;
 build-project plugins/input/csv ;
+build-project plugins/input/geojson ;
 build-project plugins/input/sqlite ;
 build-project plugins/input/ogr ;
 build-project plugins/input/raster ;

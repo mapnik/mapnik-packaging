@@ -1,0 +1,14 @@
+local MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+project : source-location $(MAPNIK_SOURCE)/plugins/input/geojson ;
+local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
+
+mapnik-plugin geojson
+    : [ glob *.cpp ]
+    ../../..//src
+    ../../..//thread
+    ../../..//icu
+    :
+    <include>.
+    <link>shared
+    <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
+  ;
