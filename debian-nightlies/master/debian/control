@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: Mapnik Developers <mapnik@googlegroups.com>
 Uploaders: Robert Coup <robert@coup.net.nz>
 Build-Depends:
- scons,
+ make,
  git-core,
  python-support (>= 0.8.4),
  python-nose,
