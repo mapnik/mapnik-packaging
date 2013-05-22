@@ -18,6 +18,7 @@ set PATH=%ROOTDIR%\boost_1_%BOOST_VERSION%_0;%PATH%
 @rem copy sparsehash - TODO add this copy to the Jamroot
 xcopy /i /s %MAPNIK_SOURCE%\deps\mapnik\sparsehash %PREFIX%\include\mapnik\sparsehash /Y
 xcopy /i /s %MAPNIK_SOURCE%\deps\agg\include %PREFIX%\include\mapnik\agg /Y
+xcopy /i /s %MAPNIK_SOURCE%\deps\clipper\include %PREFIX%\include\mapnik\agg /Y
 
 @rem copy all libs of dependencies
 @rem expat, needed by ogr plugin
