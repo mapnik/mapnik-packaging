@@ -3,6 +3,7 @@ project : source-location  $(MAPNIK_SOURCE)/src ;
     
 lib mapnik
     :
+    debug_symbolizer.cpp
     utils.cpp
     request.cpp
     well_known_srs.cpp
