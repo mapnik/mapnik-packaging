@@ -41,7 +41,7 @@ PACKAGES["0.7.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="lucid natty oneiric precise quantal raring"
+DISTS="lucid natty oneiric precise quantal raring saucy"
 
 ######### Shouldn't need to edit anything past here #########
 

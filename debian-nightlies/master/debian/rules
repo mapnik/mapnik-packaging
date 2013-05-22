@@ -28,7 +28,7 @@ else:
 override_dh_auto_test:
 	# the test suite does not 100% pass on all platforms/boost versions,
 	# but the output is useful :)
-	dh_auto_test; echo "Overall Test Exit Code: $?"
+	make test-local; echo "Overall Test Exit Code: $?"
 endif
 
 override_dh_auto_configure:
