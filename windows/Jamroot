@@ -144,11 +144,18 @@ local headers = [ path.glob-tree $(MAPNIK_SOURCE)/include/mapnik : *.hpp ] ;
 local fonts = [ path.glob-tree $(MAPNIK_SOURCE)/fonts : *.ttf ] ;
 #echo $(fonts) ;
 
+#local upgrade_map_xml = $(MAPNIK_SOURCE)/utils/upgrade_map_xml/upgrade_map_xml.py ;
+
+install upgrade_map_xml : $(MAPNIK_SOURCE)/utils/upgrade_map_xml/upgrade_map_xml.py :
+      <location>$(prefix)/bin
+    ;
+
 mapnik.install mapnik
     : $(MAPNIK_SOURCE)
     : <install-dir>$(prefix)
     : utils/shapeindex
       utils/pgsql2sqlite
+      utils/svg2png
     : src 
     : $(headers)
     : plugins/input/shape
