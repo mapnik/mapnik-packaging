@@ -300,6 +300,24 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 
 If you want to build sqlite standalone you might be interested in: https://skydrive.live.com/view.aspx?resid=A737583042956228!1940&cid=a737583042956228
 
+### protobuf
+*NOTE: only needed if building node-mapnik with vector tiles support
+
+Download https://protobuf.googlecode.com/files/protobuf-2.5.0.zip and unzip
+
+    rename protobuf-2.5.0 protobuf
+    cd protobuf\vcprojects
+    vcupgrade libprotobuf-lite.vcproj
+    vcupgrade libprotobuf.vcproj
+    vcupgrade protoc.vcproj
+    msbuild libprotobuf-lite.vcxproj /p:Configuration="Release" /p:Platform=Win32
+    msbuild libprotobuf.vcxproj /p:Configuration="Release" /p:Platform=Win32
+    # fails linking so I used binary from google code
+    #msbuild protoc.vcxproj /p:Configuration="Release" /p:Platform=Win32
+    extract_includes.bat
+    
+    
+    
 ### GEOS
 
 *NOTE: this is optional as GEOS is not used by Mapnik*
