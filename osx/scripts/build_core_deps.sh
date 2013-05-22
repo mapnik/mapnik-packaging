@@ -59,6 +59,15 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
+# jpeg
+echo '*building jpeg*'
+tar xf jpegsrc.v${JPEG_VERSION}.tar.gz
+cd jpeg-${JPEG_VERSION}
+./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
+make -j${JOBS}
+make install
+cd ${PACKAGES}
+
 # libpng
 echo '*building libpng*'
 rm -rf libpng-${LIBPNG_VERSION}

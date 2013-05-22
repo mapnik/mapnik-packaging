@@ -4,7 +4,6 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # optional deps
-curl -O ${S3_BASE}/jpegsrc.v${JPEG_VERSION}.tar.gz
 curl -O ${S3_BASE}/tiff-${LIBTIFF_VERSION}.tar.gz
 curl -O ${S3_BASE}/sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 curl -O ${S3_BASE}/libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
@@ -71,15 +70,6 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-
-# jpeg
-echo '*building jpeg*'
-tar xf jpegsrc.v${JPEG_VERSION}.tar.gz
-cd jpeg-${JPEG_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
-make -j${JOBS}
-make install
-cd ${PACKAGES}
 
 # tiff
 echo '*building tiff*'

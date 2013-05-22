@@ -7,10 +7,11 @@ export DH_VERBOSE=1
 # scons flags
 SCONS_FLAGS=INPUT_PLUGINS="shape" \
 CUSTOM_CXXFLAGS="-fvisibility=hidden" \
+PNG=True \
+JPEG=True \
 BINDINGS="" \
 SAMPLE_INPUT_PLUGINS=False \
 CAIRO=False \
-JPEG=False \
 TIFF=False \
 PROJ=False \
 SVG2PNG=False \

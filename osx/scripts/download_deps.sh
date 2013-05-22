@@ -12,6 +12,7 @@ curl -O http://python-distribute.org/distribute_setup.py
 
 # core deps
 curl -O ${S3_BASE}/bzip2-${BZIP2_VERSION}.tar.gz
+curl -O ${S3_BASE}/jpegsrc.v${JPEG_VERSION}.tar.gz
 curl -O ${S3_BASE}/libpng-${LIBPNG_VERSION}.tar.gz
 curl -O ${S3_BASE}/zlib-${ZLIB_VERSION}.tar.gz
 curl -O ${S3_BASE}/libxml2-${LIBXML2_VERSION}.tar.gz

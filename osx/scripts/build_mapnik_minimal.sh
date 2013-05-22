@@ -27,12 +27,13 @@ echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
 ./configure \
   PATH_REMOVE="/usr/include" \
   HOST=${ARCH_NAME} \
+  INPUT_PLUGINS=shape,csv \
+  PNG=True \
+  JPEG=True \
   FULL_LIB_PATH=False \
   BINDINGS='' \
-  INPUT_PLUGINS=shape,csv \
   SAMPLE_INPUT_PLUGINS=False \
   CAIRO=False \
-  JPEG=False \
   TIFF=False \
   PROJ=False \
   SVG2PNG=False \
