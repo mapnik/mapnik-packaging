@@ -12,7 +12,7 @@ set BOOST_VERSION=49
 set BOOST_PREFIX=boost-%BOOST_VERSION%-vc100
 set BOOST_INCLUDES=%ROOTDIR%\%BOOST_PREFIX%\include\boost-1_%BOOST_VERSION%
 set BOOST_LIBS=%ROOTDIR%\%BOOST_PREFIX%\lib
-set PREFIX=c:\mapnik-2.0
+set PREFIX=c:\mapnik-2.2.0
 set PATH=%ROOTDIR%\boost_1_%BOOST_VERSION%_0;%PATH%
 
 @rem copy sparsehash - TODO add this copy to the Jamroot
