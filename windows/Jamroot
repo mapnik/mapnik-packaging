@@ -144,7 +144,9 @@ local headers = [ path.glob-tree $(MAPNIK_SOURCE)/include/mapnik : *.hpp ] ;
 local fonts = [ path.glob-tree $(MAPNIK_SOURCE)/fonts : *.ttf ] ;
 #echo $(fonts) ;
 
-#local upgrade_map_xml = $(MAPNIK_SOURCE)/utils/upgrade_map_xml/upgrade_map_xml.py ;
+install mapnik-config : $(MAPNIK_SOURCE)/utils/mapnik-config/mapnik-config.bat :
+      <location>$(prefix)/bin
+    ;
 
 install upgrade_map_xml : $(MAPNIK_SOURCE)/utils/upgrade_map_xml/upgrade_map_xml.py :
       <location>$(prefix)/bin
