@@ -1,6 +1,7 @@
 ###
 MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
-PYTHON_ROOT = "C:/Python27-32" ;
+PYTHON_VERSION = [ modules.peek : PYTHON_VERSION ] ;
+PYTHON_ROOT = [ modules.peek : PYTHON_ROOT ] ;
 project : source-location $(MAPNIK_SOURCE)/bindings/python
 	: requirements <library>../..//python ;
 
@@ -10,7 +11,7 @@ python-extension _mapnik
       ../..//thread
       ../..//icu
       ../..//icui18n
-      $(PYTHON_ROOT)/libs/python27.lib
+      $(PYTHON_ROOT)/libs/python$(PYTHON_VERSION).lib
     : 
       <include>.
       <include>$(PYTHON_ROOT)/include

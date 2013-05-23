@@ -11,8 +11,10 @@ type.set-generated-target-suffix MAPNIK_PLUGIN : : input ;
 type.set-generated-target-prefix MAPNIK_PLUGIN : : "" ;
 
 BOOST_INCLUDES = [ modules.peek : BOOST_INCLUDES ] ;
+BOOST_LIBS = [ modules.peek : BOOST_LIBS ] ;
 MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
 MAPNIK_SOURCE = [ modules.peek : MAPNIK_SOURCE ] ;
+PYTHON_VERSION = [ modules.peek : PYTHON_VERSION ] ;
 
 echo "Building Mapnik on " [ os.name ] "..." ;
 echo "dependencies dir:" $(MAPNIK_DEPS_DIR) ;
@@ -171,25 +173,181 @@ mapnik.install mapnik
     : $(fonts)
 ;
 
+# copy more headers
+install install-aux-headers-1
+    : $(MAPNIK_SOURCE)\deps\mapnik\sparsehash
+    : <location>$(prefix)\include\mapnik\sparsehash
+   ;
+
+install install-aux-headers-2
+    : $(MAPNIK_SOURCE)\deps\agg\include
+    : <location>$(prefix)\include\mapnik\agg
+   ;
+
+install install-aux-headers-3
+    : $(MAPNIK_SOURCE)\deps\clipper\include
+    : <location>$(prefix)\include\mapnik\agg
+   ;
+
 # install c++ demo
 
 install demo : demo/c++//rundemo :
       <location>$(prefix)/demo/c++
     ;
 
+local dll = [ option.get sdk : true ] ;
+
+if $(dll)
+{
+    install install-expat-dll
+        : C:\Program Files (x86)\Expat 2.1.0\Bin\libexpat.dll
+        : <location>$(prefix)\lib
+       ;
+
+    install install-cairo-dll
+        : $(MAPNIK_DEPS_DIR)\cairo\src\release\cairo.dll
+        : <location>$(prefix)\lib
+       ;
+
+    install install-icu-dll1
+        : $(MAPNIK_DEPS_DIR)\icu\bin\icuuc48.dll
+        : <location>$(prefix)\lib
+       ;
+
+    install install-icu-dll2
+        : $(MAPNIK_DEPS_DIR)\icu\bin\icudt48.dll
+        : <location>$(prefix)\lib
+       ;
+
+    install install-icu-dll3
+        : $(MAPNIK_DEPS_DIR)\icu\bin\icuin48.dll
+        : <location>$(prefix)\lib
+       ;
+
+    install install-xml2-dll
+        : $(MAPNIK_DEPS_DIR)\libxml2\win32\bin.msvc\libxml2.dll
+        : <location>$(prefix)\lib
+       ;
+
+    install install-xml2-dll
+        : $(MAPNIK_DEPS_DIR)\proj\src\proj.dll
+        : <location>$(prefix)\lib
+       ;
+}
+
+
+local sdk = [ option.get sdk : "" ] ;
+
+if $(sdk)
+{
+    install install-boost-headers
+        : $(MAPNIK_DEPS_DIR)\boost-49-vc100\include\boost-1_49\boost
+        : <location>$(prefix)\include
+       ;
+
+    install install-icu-headers
+        : $(MAPNIK_DEPS_DIR)\icu\include\unicode
+        : <location>$(prefix)\include
+       ;
+
+    install install-cairo1
+        : $(MAPNIK_DEPS_DIR)\cairo\cairo-version.h
+        : <location>$(prefix)\include
+       ;
+
+    install install-cairo2
+        : $(MAPNIK_DEPS_DIR)\cairo\cairo-deprecated.h
+        : <location>$(prefix)\include
+       ;
+
+    install install-cairo3
+        : $(MAPNIK_DEPS_DIR)\cairo\cairo-features.h
+        : <location>$(prefix)\include
+       ;
+
+    install install-freetype
+        : $(MAPNIK_DEPS_DIR)\freetype\include\freetype
+        : <location>$(prefix)\include
+       ;
+
+    install install-freetype2
+        : $(MAPNIK_DEPS_DIR)\freetype\include\ft2build.h
+        : <location>$(prefix)\include
+       ;
+
+    install install-mapnik-lib
+        : build\src\msvc-10.0\release\threading-multi\mapnik.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-mapnik-lib
+        : build\src\msvc-10.0\release\threading-multi\mapnik.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-icu-lib1
+        : $(MAPNIK_DEPS_DIR)\icu\lib\icuin.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-icu-lib2
+        : build\src\msvc-10.0\release\threading-multi\mapnik.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-cairo-lib
+        : $(MAPNIK_DEPS_DIR)\cairo\src\release\cairo.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-boost-lib1
+        : $(MAPNIK_DEPS_DIR)\boost-49-vc100\lib\libboost_system-vc100-mt-s-1_49.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-boost-lib2
+        : $(MAPNIK_DEPS_DIR)\boost-49-vc100\lib\libboost_thread-vc100-mt-1_49.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-boost-lib3
+        : $(MAPNIK_DEPS_DIR)\boost-49-vc100\lib\libboost_date_time-vc100-mt-1_49.lib
+        : <location>$(prefix)\lib
+       ;
+
+    install install-boost-lib4
+        : $(MAPNIK_DEPS_DIR)\boost-49-vc100\lib\libboost_regex-vc100-mt-1_49.lib
+        : <location>$(prefix)\lib
+       ;
+}
+
+
 #  python extensions
 local python = [ option.get python : "" ] ;
 
-if $(python) 
+if $(python)
 {
     build-project bindings/python ;
-    local python-root =  "c:/Python27-32" ;  #[ python.root ] ;
-    local python-version = "2.7" ; #[ python.python-version $(python-root)/bin/python ] ;
-    local python_bindings_dir = $(prefix)/python/$(python-version)/site-packages/mapnik ;
+    local python_bindings_dir = $(prefix)/python/$(PYTHON_VERSION)/site-packages/mapnik ;
     echo "Will install Python bindings into " $(python_bindings_dir) ;
     install install-python
         : bindings/python
         : <location>$(python_bindings_dir)
+       ;
+
+    install init-python
+        : $(MAPNIK_SOURCE)/bindings/python/mapnik/__init__.py :
+         <location>$(python_bindings_dir)
+       ;
+
+    install printing-python
+        : $(MAPNIK_SOURCE)/bindings/python/mapnik/printing.py :
+         <location>$(python_bindings_dir)
+       ;
+
+    install boost-python
+        : $(BOOST_LIBS)\boost_python-vc100-mt-1_49.dll :
+         <location>$(python_bindings_dir)
        ;
 }
 else 
