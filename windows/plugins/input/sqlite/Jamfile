@@ -13,6 +13,4 @@ mapnik-plugin sqlite
       <include>$(MAPNIK_DEPS_DIR)/sqlite
       <link>shared
       <define>SQLITE_ENABLE_RTREE=1
-      <toolset>msvc:<define>_WINDOWS
-      <toolset>msvc:<define>MAPNIK_IMPORTS
     ;  

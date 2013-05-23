@@ -13,9 +13,9 @@ exe pgsql2sqlite :
     ../..//advapi
     ../..//shfolder
     ../..//secur
-	../..//icu
+    ../..//icu
     ../..//thread
-	../../src//mapnik
+    ../../src//mapnik
     $(MAPNIK_DEPS_DIR)/sqlite/sqlite3.c
     :
     <include>$(MAPNIK_SOURCE)/plugins/input/postgis
@@ -23,7 +23,5 @@ exe pgsql2sqlite :
     <include>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libpq
     <include>$(MAPNIK_DEPS_DIR)/postgresql/src/include	
     <define>SQLITE_ENABLE_RTREE=1
-    #<toolset>msvc:<define>_WINDOWS
-    #<toolset>msvc:<define>MAPNIK_EXPORTS
     ;
 
