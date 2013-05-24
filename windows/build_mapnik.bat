@@ -5,8 +5,9 @@ set ROOTDIR=c:\dev2
 @rem critical global variables needed by bjam
 set MAPNIK_DEPS_DIR=%ROOTDIR%
 set MAPNIK_SOURCE=%ROOTDIR%\mapnik
-set PYTHON_VERSION="27"
-set PYTHON_ROOT=C:\\Python%PYTHON_VERSION%;
+set PYTHON_VERSION=2.7
+set PYTHON_VERSION2=27
+set PYTHON_ROOT=C:\\Python%PYTHON_VERSION2%
 
 @rem other variables
 set BOOST_VERSION=49
@@ -16,6 +17,10 @@ set BOOST_LIBS=%ROOTDIR%\%BOOST_PREFIX%\lib
 set PREFIX=c:\mapnik-v2.2.0
 set PATH=%ROOTDIR%\boost_1_%BOOST_VERSION%_0;%PATH%
 set STARTTIME=%TIME%
+
+xcopy /i /d /s %MAPNIK_SOURCE%\deps\mapnik\sparsehash %PREFIX%\include\mapnik\sparsehash /Y
+xcopy /i /d /s %MAPNIK_SOURCE%\deps\agg\include %PREFIX%\include\mapnik\agg /Y
+xcopy /i /d /s %MAPNIK_SOURCE%\deps\clipper\include %PREFIX%\include\mapnik\agg /Y
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
 

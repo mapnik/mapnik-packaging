@@ -175,22 +175,6 @@ mapnik.install mapnik
     : $(fonts)
 ;
 
-# copy more headers
-install install-aux-headers-1
-    : $(MAPNIK_SOURCE)/deps/mapnik/sparsehash
-    : <location>$(prefix)/include/mapnik/sparsehash
-   ;
-
-install install-aux-headers-2
-    : $(MAPNIK_SOURCE)/deps/agg/include
-    : <location>$(prefix)/include/mapnik/agg
-   ;
-
-install install-aux-headers-3
-    : $(MAPNIK_SOURCE)/deps/clipper/include
-    : <location>$(prefix)/include/mapnik/agg
-   ;
-
 # install c++ demo
 
 install demo : demo/c++//rundemo :
@@ -202,7 +186,7 @@ local dll = [ option.get sdk : true ] ;
 if $(dll)
 {
     install install-expat-dll
-        : C:/Program Files (x86)/Expat 2.1.0/Bin/libexpat.dll
+        : "C:/Program Files (x86)/Expat 2.1.0/Bin/libexpat.dll"
         : <location>$(prefix)/lib
        ;
 
@@ -231,7 +215,7 @@ if $(dll)
         : <location>$(prefix)/lib
        ;
 
-    install install-xml2-dll
+    install install-proj-dll
         : $(MAPNIK_DEPS_DIR)/proj/src/proj.dll
         : <location>$(prefix)/lib
        ;

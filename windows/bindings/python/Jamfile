@@ -11,7 +11,7 @@ python-extension _mapnik
       ../..//thread
       ../..//icu
       ../..//icui18n
-      $(PYTHON_ROOT)/libs/python$(PYTHON_VERSION).lib
+      $(PYTHON_ROOT)/libs/python$(PYTHON_VERSION2).lib
     : 
       <include>.
       <include>$(PYTHON_ROOT)/include
