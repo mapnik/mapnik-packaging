@@ -321,6 +321,16 @@ if $(python)
         : $(BOOST_LIBS)/boost_python-vc100-mt-1_49.dll :
          <location>$(python_bindings_dir)
        ;
+
+    install python-mapnik-settings
+        : $(TOP)/mapnik_settings.py :
+         <location>$(python_bindings_dir)
+       ;
+
+    install python-mapnik-paths
+        : $(TOP)/paths.py :
+         <location>$(python_bindings_dir)
+       ;
 }
 else 
 {

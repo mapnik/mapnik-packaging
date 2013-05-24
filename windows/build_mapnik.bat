@@ -28,6 +28,27 @@ xcopy /i /d /s /q %ROOTDIR%\boost-49-vc100\include\boost-1_49\boost %PREFIX%\inc
 xcopy /i /d /s %ROOTDIR%\icu\include\unicode %PREFIX%\include\unicode /Y
 xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include\freetype /Y
 
+xcopy /i /d /s %ROOTDIR%\proj\nad %PREFIX%\share\proj
+xcopy /i /d /s %ROOTDIR%\gdal\data %PREFIX%\share\gdal
+
+echo "
+from os import path
+mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/'))
+env = {
+    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
+    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
+}
+__all__ = [env]
+" > mapnik_settings.py
+
+echo "
+from os import path
+mapniklibpath = path.normpath(path.join(__file__,'../../../../../lib/'))
+inputpluginspath = path.join(mapniklibpath,'input')
+fontscollectionpath = path.join(mapniklibpath,'fonts')
+__all__ = [mapniklibpath,inputpluginspath,fontscollectionpath]
+" > paths.py
+
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
 
