@@ -258,7 +258,7 @@ if $(sdk)
        ;
 
     install install-icu-lib1
-        : $(MAPNIK_DEPS_DIR)/icu/lib/icuin.lib
+        : $(MAPNIK_DEPS_DIR)/icu/lib/icuuc.lib
         : <location>$(prefix)/lib
        ;
 
