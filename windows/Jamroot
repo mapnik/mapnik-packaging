@@ -222,19 +222,10 @@ if $(dll)
 }
 
 
-local sdk = [ option.get sdk : "" ] ;
+local sdk = [ option.get sdk : true ] ;
 
 if $(sdk)
 {
-    install install-boost-headers
-        : $(MAPNIK_DEPS_DIR)/boost-49-vc100/include/boost-1_49/boost
-        : <location>$(prefix)/include
-       ;
-
-    install install-icu-headers
-        : $(MAPNIK_DEPS_DIR)/icu/include/unicode
-        : <location>$(prefix)/include
-       ;
 
     install install-cairo1
         : $(MAPNIK_DEPS_DIR)/cairo/cairo-version.h
@@ -242,17 +233,12 @@ if $(sdk)
        ;
 
     install install-cairo2
-        : $(MAPNIK_DEPS_DIR)/cairo/cairo-deprecated.h
+        : $(MAPNIK_DEPS_DIR)/cairo/src/cairo-deprecated.h
         : <location>$(prefix)/include
        ;
 
     install install-cairo3
-        : $(MAPNIK_DEPS_DIR)/cairo/cairo-features.h
-        : <location>$(prefix)/include
-       ;
-
-    install install-freetype
-        : $(MAPNIK_DEPS_DIR)/freetype/include/freetype
+        : $(MAPNIK_DEPS_DIR)/cairo/src/cairo-features.h
         : <location>$(prefix)/include
        ;
 
@@ -266,18 +252,13 @@ if $(sdk)
         : <location>$(prefix)/lib
        ;
 
-    install install-mapnik-lib
-        : $(TOP)/build/src/msvc-10.0/release/threading-multi/mapnik.lib
-        : <location>$(prefix)/lib
-       ;
-
     install install-icu-lib1
         : $(MAPNIK_DEPS_DIR)/icu/lib/icuin.lib
         : <location>$(prefix)/lib
        ;
 
     install install-icu-lib2
-        : $(TOP)/build/src/msvc-10.0/release/threading-multi/mapnik.lib
+        : $(MAPNIK_DEPS_DIR)/icu/lib/icuin.lib
         : <location>$(prefix)/lib
        ;
 
