@@ -24,9 +24,9 @@ set STARTTIME=%TIME%
 xcopy /i /d /s %MAPNIK_SOURCE%\deps\mapnik\sparsehash %PREFIX%\include\mapnik\sparsehash /Y
 xcopy /i /d /s %MAPNIK_SOURCE%\deps\agg\include %PREFIX%\include\mapnik\agg /Y
 xcopy /i /d /s %MAPNIK_SOURCE%\deps\clipper\include %PREFIX%\include\mapnik\agg /Y
-xcopy /i /d /s /q %ROOTDIR%\boost-49-vc100\include\boost-1_49\boost %PREFIX%\include /Y
-xcopy /i /d /s %ROOTDIR%\icu\include\unicode %PREFIX%\include /Y
-xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include /Y
+xcopy /i /d /s /q %ROOTDIR%\boost-49-vc100\include\boost-1_49\boost %PREFIX%\include\boost /Y
+xcopy /i /d /s %ROOTDIR%\icu\include\unicode %PREFIX%\include\unicode /Y
+xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include\freetype /Y
 
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
