@@ -252,11 +252,6 @@ if $(sdk)
         : <location>$(prefix)/include
        ;
 
-    install install-mapnik-lib
-        : $(TOP)/build/src/msvc-10.0/release/threading-multi/mapnik.lib
-        : <location>$(prefix)/lib
-       ;
-
     install install-icu-lib1
         : $(MAPNIK_DEPS_DIR)/icu/lib/icuuc.lib
         : <location>$(prefix)/lib
@@ -279,6 +274,11 @@ if $(sdk)
 
     install install-boost-lib2
         : $(MAPNIK_DEPS_DIR)/boost-49-vc100/lib/libboost_thread-vc100-mt-1_49.lib
+        : <location>$(prefix)/lib
+       ;
+
+    install install-boost-lib2b
+        : $(MAPNIK_DEPS_DIR)/boost-49-vc100/lib/libboost_thread-vc100-mt-s-1_49.lib
         : <location>$(prefix)/lib
        ;
 
