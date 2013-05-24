@@ -21,7 +21,7 @@ Hopefully, this will allow fully automated builds in the future.
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
 * sed (from [msysgit](http://code.google.com/p/msysgit/))
 * curl (from [msysgit](http://code.google.com/p/msysgit/))
-* [cygwin](http://www.cygwin.org) (bash,make,ar ...) - needed to build pixman and icu (vs 2008)
+* [cygwin](http://www.cygwin.org) (install bash,make,coreutils) - needed to build pixman and icu (vs 2008)
 
 ## Environment
 
