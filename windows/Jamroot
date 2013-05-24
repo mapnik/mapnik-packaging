@@ -52,6 +52,9 @@ project mapnik
     <cxxflags>/wd4345
     <cxxflags>/wd4661
     <cxxflags>/wd4018
+    # should ideally re-enable
+    <cxxflags>/wd4005 # INT macro conflict between icu and msvs
+    <cxxflags>/wd4244 # signed/unsigned conversion - "loss of data"
     #<define>MAPNIK_STATS
     #<define>_HAS_CPP0X=0
     #<define>LIBXML_STATIC
