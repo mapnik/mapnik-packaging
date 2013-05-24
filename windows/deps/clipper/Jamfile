@@ -5,6 +5,6 @@ lib clipper
     : [ glob src/*.cpp ] 
     : <include>include 
       <link>static 
-        <define>MAPNIK_EXPORTS
+      <define>MAPNIK_EXPORTS
       <toolset>gcc:<cxxflags>-fPIC 
     ;
