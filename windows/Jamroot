@@ -242,6 +242,11 @@ if $(sdk)
         : <location>$(prefix)/include
        ;
 
+    install install-cairo4
+        : $(MAPNIK_DEPS_DIR)/cairo/src/cairo.h
+        : <location>$(prefix)/include
+       ;
+
     install install-freetype2
         : $(MAPNIK_DEPS_DIR)/freetype/include/ft2build.h
         : <location>$(prefix)/include
