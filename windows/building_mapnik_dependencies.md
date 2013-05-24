@@ -230,8 +230,11 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     %PKGDIR%\cairo-%CAIRO_VERSION%.tar.xz
     rename cairo-%CAIRO_VERSION% cairo
     cd cairo
+    @rem edit the buid\Makefile.win32.features
+    @rem enable CAIRO_HAS_FT_FONT=1
     @rem edit the build\Makefile.win32.common
-    @rem changing zdll.lib to zlib.lib
+    @rem change zdll.lib to zlib.lib
+    @rem add freetype lib path and freetype.lib to CAIRO_LIBS variable
     set INCLUDE=%INCLUDE%;%ROOTDIR%\zlib
     set INCLUDE=%INCLUDE%;%ROOTDIR%\libpng
     set INCLUDE=%INCLUDE%;%ROOTDIR%\pixman\pixman
