@@ -31,26 +31,25 @@ xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include\freetype /Y
 xcopy /i /d /s %ROOTDIR%\proj\nad %PREFIX%\share\proj
 xcopy /i /d /s %ROOTDIR%\gdal\data %PREFIX%\share\gdal
 
-echo "
-from os import path
-mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/'))
-env = {
-    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
-    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
-}
-__all__ = [env]
-" > mapnik_settings.py
+echo from os import path > mapnik_settings.py
+echo mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/')) >> mapnik_settings.py
+echo env = { >> mapnik_settings.py
+echo     'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'), >> mapnik_settings.py
+echo     'PROJ_LIB': path.join(mapnik_data_dir, 'proj') >> mapnik_settings.py
+echo } >> mapnik_settings.py
+echo __all__ = [env] >> mapnik_settings.py
 
-echo "
-from os import path
-mapniklibpath = path.normpath(path.join(__file__,'../../../../../lib/'))
-inputpluginspath = path.join(mapniklibpath,'input')
-fontscollectionpath = path.join(mapniklibpath,'fonts')
-__all__ = [mapniklibpath,inputpluginspath,fontscollectionpath]
-" > paths.py
+echo from os import path > paths.py
+echo mapniklibpath = path.normpath(path.join(__file__,'../../../../../lib/')) >> paths.py
+echo inputpluginspath = path.join(mapniklibpath,'mapnik/input') >> paths.py
+echo fontscollectionpath = path.join(mapniklibpath,'mapnik/fonts') >> paths.py
+echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> paths.py
+
 
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
+
+copy build/src/msvc-10.0/release/threading-multi/mapnik.lib %PREFIX%/lib
 
 echo Started at %STARTTIME%, finished at %TIME%
 

@@ -21,7 +21,7 @@ Hopefully, this will allow fully automated builds in the future.
 * patch (from [msysgit](http://code.google.com/p/msysgit/))
 * sed (from [msysgit](http://code.google.com/p/msysgit/))
 * curl (from [msysgit](http://code.google.com/p/msysgit/))
-* [cygwin](http://www.cygwin.org) (bash,make,ar ...) - to build ICU using vc++ 2008 FIXME!
+* [cygwin](http://www.cygwin.org) (install bash,make,coreutils) - needed to build pixman and icu (vs 2008)
 
 ## Environment
 
@@ -49,8 +49,8 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set PROJ_GRIDS_VERSION=1.5
     set GDAL_VERSION=1.9.0
     set LIBXML2_VERSION=2.7.8
-    set PIXMAN_VERSION=0.22.2
-    set CAIRO_VERSION=1.10.2
+    set PIXMAN_VERSION=0.28.2
+    set CAIRO_VERSION=1.12.14
     set SQLITE_VERSION=3071100
     set EXPAT_VERSION=2.1.0
     set GEOS_VERSION=3.3.3
@@ -69,7 +69,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
     curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
     curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
-    curl http://www.cairographics.org/releases/cairo-%CAIRO_VERSION%.tar.gz -O
+    curl http://www.cairographics.org/releases/cairo-%CAIRO_VERSION%.tar.xz -O
     curl http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz -O
     curl ftp://xmlsoft.org/libxml2/libxml2-%LIBXML2_VERSION%.tar.gz -O
     curl http://iweb.dl.sourceforge.net/project/expat/expat_win32/%EXPAT_VERSION%/expat-win32bin-%EXPAT_VERSION%.exe -O
@@ -226,9 +226,12 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     
 ### Cairo
 
-    bsdtar xvfz %PKGDIR%\cairo-%CAIRO_VERSION%.tar.gz
+    @rem extract with 7zip GUI
+    %PKGDIR%\cairo-%CAIRO_VERSION%.tar.xz
     rename cairo-%CAIRO_VERSION% cairo
     cd cairo
+    @rem edit the build\Makefile.win32.common
+    @rem changing zdll.lib to zlib.lib
     set INCLUDE=%INCLUDE%;%ROOTDIR%\zlib
     set INCLUDE=%INCLUDE%;%ROOTDIR%\libpng
     set INCLUDE=%INCLUDE%;%ROOTDIR%\pixman\pixman
@@ -236,12 +239,10 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     set INCLUDE=%INCLUDE%;%ROOTDIR%\cairo
     set INCLUDE=%INCLUDE%;%ROOTDIR%\cairo\src
     set INCLUDE=%INCLUDE%;%ROOTDIR%\freetype\include
-    patch -p1 < ..\cairo-win32.patch
     make -f Makefile.win32 "CFG=release"
     @rem - delete bogus cairo-version.h
     @rem https://github.com/mapnik/mapnik-packaging/issues/56
     del src\cairo-version.h
-    del
     cd %ROOTDIR%
 
 ### LibXML2
