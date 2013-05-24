@@ -41,8 +41,8 @@ echo __all__ = [env] >> mapnik_settings.py
 
 echo from os import path > paths.py
 echo mapniklibpath = path.normpath(path.join(__file__,'../../../../../lib/')) >> paths.py
-echo inputpluginspath = path.join(mapniklibpath,'input') >> paths.py
-echo fontscollectionpath = path.join(mapniklibpath,'fonts') >> paths.py
+echo inputpluginspath = path.join(mapniklibpath,'mapnik/input') >> paths.py
+echo fontscollectionpath = path.join(mapniklibpath,'mapnik/fonts') >> paths.py
 echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> paths.py
 
 
