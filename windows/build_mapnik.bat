@@ -49,7 +49,7 @@ echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> paths.py
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
 
-copy build/src/msvc-10.0/release/threading-multi/mapnik.lib %PREFIX%/lib
+xcopy /d /s build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\mapnik.lib
 
 echo Started at %STARTTIME%, finished at %TIME%
 
