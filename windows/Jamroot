@@ -275,6 +275,11 @@ if $(sdk)
         : <location>$(prefix)/lib
        ;
 
+    install install-boost-lib1b
+        : $(MAPNIK_DEPS_DIR)/boost-49-vc100/lib/libboost_system-vc100-mt-1_49.lib
+        : <location>$(prefix)/lib
+       ;
+
     install install-boost-lib2
         : $(MAPNIK_DEPS_DIR)/boost-49-vc100/lib/libboost_thread-vc100-mt-1_49.lib
         : <location>$(prefix)/lib
@@ -294,6 +299,12 @@ if $(sdk)
         : $(MAPNIK_DEPS_DIR)/boost-49-vc100/lib/libboost_regex-vc100-mt-1_49.lib
         : <location>$(prefix)/lib
        ;
+
+	install install-boost-lib5
+        : $(MAPNIK_DEPS_DIR)/boost-49-vc100/lib/libboost_filesystem-vc100-mt-1_49.lib
+        : <location>$(prefix)/lib
+       ;
+
 }
 
 
