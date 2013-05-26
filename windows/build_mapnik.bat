@@ -57,5 +57,7 @@ xcopy /d /s %MAPNIK_SOURCE%\demo\python\rundemo.py %PREFIX%\demo\python\rundemo.
 
 echo running CPP tests
 for %%t in (build\tests\cpp_tests\msvc-10.0\release\threading-multi\*.exe) do ( %%t -d %MAPNIK_SOURCE% )
+
+@rem 7z a mapnik-v2.2.0-win32-py27.zip %PREFIX%
 echo Started at %STARTTIME%, finished at %TIME%
 
