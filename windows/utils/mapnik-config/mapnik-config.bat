@@ -140,25 +140,25 @@ if /i "%1"=="--includes" (
 
 if /i "%1"=="--all-flags" (
   @rem nothing here yet
-  echo
+  echo ""
   set hit="yes"
 )
 
 if /i "%1"=="--cxx" (
   @rem nothing here yet
-  echo
+  echo ""
   set hit="yes"
 )
 
 if /i "%1"=="--cflags" (
-  @rem nothing here yet
-  echo
+  @rem nothing here yet 
+  echo ""
   set hit="yes"
 )
 
 if /i "%1"=="--dep-includes" (
   @rem nothing here yet
-  echo
+  echo ""
   set hit="yes"
 )
 
@@ -166,6 +166,8 @@ if /i "%1"=="--dep-includes" (
 if /i %hit%=="" (
   echo unknown option %1 1>&2
 )
+
+goto exit_ok
 
 :help
 echo Usage: mapnik-config 
@@ -182,11 +184,9 @@ echo   --fonts           : provide path to fonts directory
 
 
 :exit_error
-echo here
 @rem exit /b 1
 goto :EOF
 
 :exit_ok
 @rem exit /b 0
-@rem goto :EOF
-@rem goto :EOF
+goto :EOF
