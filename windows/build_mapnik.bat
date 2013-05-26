@@ -51,6 +51,10 @@ bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_IN
 
 xcopy /d /s build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\mapnik.lib /Y
 
+@rem demo files
+xcopy /d /s %MAPNIK_SOURCE%\demo\data %PREFIX%\demo\data /Y /i
+xcopy /d /s %MAPNIK_SOURCE%\demo\python\rundemo.py %PREFIX%\demo\python\rundemo.py /Y
+
 echo running CPP tests
 for %%t in (build\tests\cpp_tests\msvc-10.0\release\threading-multi\*.exe) do ( %%t -d %MAPNIK_SOURCE% )
 echo Started at %STARTTIME%, finished at %TIME%
