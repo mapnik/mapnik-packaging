@@ -49,7 +49,9 @@ echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> paths.py
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
 
-xcopy /d /s build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\mapnik.lib
+xcopy /d /s build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\mapnik.lib /Y
 
+echo running CPP tests
+for %%t in (build\tests\cpp_tests\msvc-10.0\release\threading-multi\*.exe) do ( %%t -d %MAPNIK_SOURCE% )
 echo Started at %STARTTIME%, finished at %TIME%
 
