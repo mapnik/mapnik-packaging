@@ -174,7 +174,7 @@ cd gdal-${GDAL_VERSION}
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 # not bigtiff check will fail…
 # fix bigtiff check
-patch configure ../../patches/bigtiff_check.diff
+patch configure ${PATCHES}/bigtiff_check.diff
 ./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
 --with-geotiff=${BUILD} \
@@ -199,7 +199,8 @@ patch configure ../../patches/bigtiff_check.diff
 --with-freexl=no
 
 make -j${JOBS}
-make install
+# gdal 1.10 command line tools will not link, so force it since libgdal works
+make install -i -k
 cd ${PACKAGES}
 
 
@@ -319,7 +320,7 @@ tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
 cd py2cairo-${PY2CAIRO_VERSION}
 # apply patch
 patch wscript < ${PATCHES}/py2cairo-static.diff
-for i in {"2.7",}
+for i in {"2.6","2.7"}
 do
     PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
     PYTHON=python$i ./waf install
