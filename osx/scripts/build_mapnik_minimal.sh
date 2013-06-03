@@ -1,9 +1,11 @@
 set -e 
 cd ${MAPNIK_SOURCE}
 
-echo '...Updating and building mapnik minimal'
+echo 'Building mapnik minimal'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
+rm -f src/libmapnik* # ensure both .a and .dylib are cleared
+rm -f tests/cpp_tests/*-bin
 make clean
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
@@ -23,10 +25,11 @@ echo "ICU_INCLUDES = '${BUILD}/include'" >> config.py
 echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
+echo "JPEG_INCLUDES = '${BUILD}/include'" >> config.py
+echo "JPEG_LIBS = '${BUILD}/lib'" >> config.py
 
 ./configure \
   PATH_REMOVE="/usr/include" \
-  HOST=${ARCH_NAME} \
   INPUT_PLUGINS=shape,csv \
   PNG=True \
   JPEG=True \

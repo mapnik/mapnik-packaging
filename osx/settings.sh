@@ -14,15 +14,14 @@ export ARCH_FLAGS="-arch ${ARCH_NAME}"
 #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
 # for more info
 #   man xcrun
-export CORE_CC="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
+export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+export PATH=${TOOLCHAIN_ROOT}:$PATH
+export CORE_CC="${TOOLCHAIN_ROOT}/clang"
 export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
 export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
 # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
 export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"
 export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-# search for 'auxiliary' at https://developer.apple.com/downloads/index.action
-# http://adcdownload.apple.com/Developer_Tools/auxiliary_tools_for_xcode__february_2012/auxiliary_tools_for_xcode.dmg
-export PATH="/Applications/PackageMaker.app/Contents/MacOS:${PATH}"
 
 # needed for Coda.app terminal to act sanely
 # otherwise various tests fail oddly

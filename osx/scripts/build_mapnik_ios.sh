@@ -1,9 +1,11 @@
 set -e 
 cd ${MAPNIK_SOURCE}
 
-echo 'Building mapnik minimal'
+echo 'Building mapnik minimal ios'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
+rm -f src/libmapnik* # ensure both .a and .dylib are cleared
+rm -f tests/cpp_tests/*-bin
 make clean
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py

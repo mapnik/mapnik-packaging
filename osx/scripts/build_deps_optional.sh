@@ -11,7 +11,7 @@ cd ${PACKAGES}
 
 echo '*building boost python versions*'
 
-cd ${PACKAGES}/boost_${BOOST_VERSION2}
+cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}
 #python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
 #mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
 #cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a

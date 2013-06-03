@@ -7,17 +7,13 @@ import sys
 USER_JAM = """
 import option ;
 import feature ;
-if ! darwin in [ feature.values <toolset> ]
-{
-    using clang-darwin ;
-}
-project : default-build <toolset>clang-darwin ;
+project : default-build <toolset>clang ;
 using python
      : %(ver)s # version
      : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/bin/python%(ver)s%(variant)s # cmd-or-prefix
      : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/include/python%(ver)s%(variant)s # includes
      : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/lib/python%(ver)s/config%(variant)s # a lib actually symlink
-     : <toolset>clang-darwin # condition
+     : <toolset>clang # condition
      ;
 libraries = --with-python ;
 """
@@ -31,7 +27,7 @@ def compile_lib(ver,arch='32_64'):
     else:
         # for 2.7 and above hope that python.org provides 64 bit ready binaries...
         open('user-config.jam','w').write(USER_JAM % {'ver':ver,'system':'','variant':''})    
-    cmd = "./b2 -q --with-python -a -j6 --ignore-site-config --user-config=user-config.jam link=static toolset=darwin -d2 address-model=%s architecture=x86 variant=release stage" % arch
+    cmd = "./b2 -q --with-python -a -j6 --ignore-site-config --user-config=user-config.jam link=static toolset=clang -d2 address-model=%s architecture=x86 variant=release stage" % arch
     cmd += ' linkflags="%s"' % os.environ['LDFLAGS']
     cmd += ' cxxflags="%s"' % os.environ['CXXFLAGS']
     print cmd
