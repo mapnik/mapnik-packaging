@@ -40,7 +40,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 ./configure \
   PATH_REMOVE="/usr/include" \
   BINDINGS='' \
-  INPUT_PLUGINS=all \
+  INPUT_PLUGINS='csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite' \
   CAIRO=True \
   JOBS=6 \
   DEMO=True \
@@ -54,25 +54,19 @@ make install
 # python versions
 export i="3.3"
 echo "...Updating and building mapnik python bindings for python ${i}"
-rm -f plugins/input/python.input
-rm -f plugins/input/python/*os
 rm -f bindings/python/*os
 rm -f bindings/python/mapnik/_mapnik.so
 ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
 make
-mv plugins/input/python.input ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/python${i}.input
 make install
 
 for i in {"2.6","2.7"}
 do
   echo "...Updating and building mapnik python bindings for python ${i}"
-  rm -f plugins/input/python.input
-  rm -f plugins/input/python/*os
   rm -f bindings/python/*os
   rm -f bindings/python/mapnik/_mapnik.so
   ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
   make
-  mv plugins/input/python.input ${MAPNIK_INSTALL}/lib/mapnik/input/python${i}.input
   make install
 done
 # clear for now
