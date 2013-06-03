@@ -33,18 +33,9 @@ echo "SQLITE_INCLUDES = '${BUILD}/include'" >> config.py
 echo "SQLITE_LIBS = '${BUILD}/lib'" >> config.py
 echo "PROJ_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PROJ_LIBS = '${BUILD}/lib'" >> config.py
+echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
+echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
-
-# write mapnik_settings.py
-echo "
-from os import path
-mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/'))
-env = {
-    'ICU_DATA': path.join(mapnik_data_dir, 'icu'),
-    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
-    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
-}
-" > bindings/python/mapnik/mapnik_settings.py
 
 ./configure \
   PATH_REMOVE="/usr/include" \
@@ -54,8 +45,9 @@ env = {
   JOBS=6 \
   DEMO=True \
   PGSQL2SQLITE=True \
-  FRAMEWORK_PYTHON=False \ # so linking works to custom framework despite use of -isysroot
+  FRAMEWORK_PYTHON=False \
   BOOST_PYTHON_LIB=boost_python-2.7
+# note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
 make
 make install
 
@@ -86,4 +78,18 @@ done
 # clear for now
 rm -f ${MAPNIK_INSTALL}/lib/mapnik/input/python*input
 rm -f plugins/input/python*input
+
+# write mapnik_settings.py
+# TODO - set up local symlinks so that this does not break make test-local?
+# https://github.com/mapnik/mapnik/issues/1892
+echo "
+from os import path
+mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/'))
+env = {
+    'ICU_DATA': path.join(mapnik_data_dir, 'icu'),
+    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
+    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
+}
+" > bindings/python/mapnik/mapnik_settings.py
+
 
