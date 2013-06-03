@@ -83,7 +83,6 @@ echo '*building libxml2*'
 rm -rf libxml2-${LIBXML2_VERSION}
 tar xf libxml2-${LIBXML2_VERSION}.tar.gz
 cd libxml2-${LIBXML2_VERSION}
-patch -N threads.c ${PATCHES}/libxml2-pthread.diff
 ./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
 --enable-static --disable-shared ${HOST_ARG} \
 --with-icu=${PREFIX} \
@@ -140,11 +139,22 @@ if [ $BOOST_ARCH = "arm" ]; then
     export EXTRA_LIBS_ARGS=""
 else
     export CROSS_FLAGS="tools/bcp"
-    export EXTRA_LIBS_ARGS="--with-program_options --with-chrono"
+    export EXTRA_LIBS_ARGS="--with-program_options"
+fi
+
+# only build with icudata library support on mac
+if [ $BOOST_ARCH = "x86" ]; then
+    export BOOST_LDFLAGS="${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
+    export BOOST_CXXFLAGS="${CXXFLAGS} -DU_STATIC_IMPLEMENTATION=1"
+    export ICU_DETAILS='-sHAVE_ICU=1 -sICU_PATH=${BUILD}'
+else
+    echo '#error' > libs/regex/build/has_icu_test.cpp
+    export BOOST_LDFLAGS="${LDFLAGS}"
+    export BOOST_CXXFLAGS="${CXXFLAGS}"
+    export ICU_DETAILS=""
 fi
 
 # static libs
-echo '#error' > libs/regex/build/has_icu_test.cpp
 ./b2 ${CROSS_FLAGS} \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --ignore-site-config --user-config=user-config.jam \
@@ -155,31 +165,13 @@ echo '#error' > libs/regex/build/has_icu_test.cpp
   --disable-filesystem2 \
   --with-system \
   $EXTRA_LIBS_ARGS \
-  --disable-icu \
+  $ICU_DETAILS \
   --with-regex \
   link=static \
   variant=release \
-  linkflags="${LDFLAGS}" \
-  cxxflags="${CXXFLAGS}" \
+  linkflags="${BOOST_LDFLAGS}" \
+  cxxflags="${BOOST_CXXFLAGS}" \
   stage install
 
-: '
-./b2 ${CROSS_FLAGS} \
-  --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
-  --ignore-site-config --user-config=user-config.jam \
-  architecture=${BOOST_ARCH} \
-  toolset=clang \
-  --with-thread \
-  --with-filesystem \
-  --disable-filesystem2 \
-  --with-program_options --with-system --with-chrono \
-  link=static \
-  variant=release \
-  linkflags="${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata" \
-  cxxflags="${CXXFLAGS} -DU_STATIC_IMPLEMENTATION=1" \
-  -sHAVE_ICU=1 -sICU_PATH=${BUILD} \
-  --with-regex \
-  stage install
-'
 
 lipo -info ${BUILD}/lib/*.a | grep arch

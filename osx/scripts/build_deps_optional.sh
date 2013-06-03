@@ -3,23 +3,6 @@ set -e
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-# optional deps
-curl -O ${S3_BASE}/tiff-${LIBTIFF_VERSION}.tar.gz
-curl -O ${S3_BASE}/sqlite-autoconf-${SQLITE_VERSION}.tar.gz
-curl -O ${S3_BASE}/libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
-curl -O ${S3_BASE}/proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
-curl -O ${S3_BASE}/proj-${PROJ_VERSION}.tar.gz
-curl -O ${S3_BASE}/postgresql-${POSTGRES_VERSION}.tar.bz2
-curl -O ${S3_BASE}/expat-${EXPAT_VERSION}.tar.gz
-curl -O ${S3_BASE}/gdal-${GDAL_VERSION}.tar.gz
-curl -O ${S3_BASE}/gettext-${GETTEXT_VERSION}.tar.gz
-curl -O ${S3_BASE}/pkg-config-${PKG_CONFIG_VERSION}.tar.gz
-curl -O ${S3_BASE}/pixman-${PIXMAN_VERSION}.tar.gz
-curl -O ${S3_BASE}/fontconfig-${FONTCONFIG_VERSION}.tar.gz
-curl -O ${S3_BASE}/cairo-${CAIRO_VERSION}.tar.xz
-curl -O ${S3_BASE}/py2cairo-${PY2CAIRO_VERSION}.tar.bz2
-curl -O ${S3_BASE}/pycairo-${PY3CAIRO_VERSION}.tar.bz2
-
 # boost python for various versions are done in python script
 #python ${ROOTDIR}/scripts/build_boost_pythons.py 2.5 64
 #mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.5.dylib
