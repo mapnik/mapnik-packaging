@@ -1,7 +1,8 @@
 mkdir -p "${BUILD_UNIVERSAL}"
 
 echo '*making universal libs*'
-for i in {"icudata","icui18n","icuuc","protobuf","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_program_options","boost_thread","boost_chrono","png","xml2","z","freetype","bz2"}
+# TODO - make this list more generic
+for i in {"icudata","icui18n","icuuc","protobuf","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_thread","png","jpeg","xml2","z","freetype","bz2"}
 do
     echo '*making universal '$i'*'
     lipo -create -output \

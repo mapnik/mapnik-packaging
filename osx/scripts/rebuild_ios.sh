@@ -42,7 +42,6 @@ source iPhoneOSs.sh
 ./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
-
 # done now package
 ./scripts/make_universal.sh
 # TODO 
