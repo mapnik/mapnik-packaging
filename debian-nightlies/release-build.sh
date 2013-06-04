@@ -13,7 +13,6 @@ DISTS="saucy raring quantal precise oneiric natty maverick lucid"
 #DISTS="quantal"
 PACKAGE="mapnik"
 BUILD_VERSION="2.1.0"
-BUILD_SERIES="2.1.x"
 DATE_REPR=$(date -R)
 SOURCE="${PACKAGE}_${BUILD_VERSION}"
 ORIG_TAR="${SOURCE}.orig.tar.bz2"
@@ -22,19 +21,18 @@ PPA="ppa:${DEST}/v${BUILD_VERSION}"
 mkdir deb-packaging
 cd deb-packaging
 
-wget https://github.com/downloads/mapnik/mapnik/mapnik-v${BUILD_VERSION}.tar.bz2
+wget http://mapnik.s3.amazonaws.com/dist/v${BUILD_VERSION}/mapnik-v${BUILD_VERSION}.tar.bz2
 tar xf mapnik-v${BUILD_VERSION}.tar.bz2
 mv mapnik-v${BUILD_VERSION} "${SOURCE}"
 tar cjf "${ORIG_TAR}" "${SOURCE}/"
 
 git clone https://github.com/mapnik/mapnik-packaging
-# TODO - use $BUILD_SERIES
 cp -r "mapnik-packaging/debian-nightlies/master/debian" "${SOURCE}/"
 
 CHANGELOG_NOTE="v${BUILD_VERSION} release (https://github.com/mapnik/mapnik/wiki/Release${BUILD_VERSION})"
 
 for DIST in ${DISTS}; do
-  DIST_VERSION="${BUILD_VERSION}-ubuntu1~${DIST}2";
+  DIST_VERSION="${BUILD_VERSION}-ubuntu1~${DIST}1";
   echo "${PACKAGE} (${DIST_VERSION}) ${DIST}; urgency=medium" > "${SOURCE}/debian/changelog"
   echo  >> "${SOURCE}/debian/changelog"
   echo "  * ${CHANGELOG_NOTE}" >> "${SOURCE}/debian/changelog"
