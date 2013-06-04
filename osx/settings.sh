@@ -41,7 +41,7 @@ export BUILD_UNIVERSAL="${ROOTDIR}/out/build-universal"
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
-export MAPNIK_INSTALL="/Library/Frameworks/Mapnik.framework/unix"
+export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}/${MAPNIK_INSTALL}"
 export PATH=${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}
 export MAPNIK_PACKAGE_PREFIX="mapnik"

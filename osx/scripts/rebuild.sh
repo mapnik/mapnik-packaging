@@ -25,9 +25,7 @@ cd scripts/
 
 ./package_minimal_binary_sdk.sh
 
-# manually edit mapnik-config if this is not
-# a full SDK build
-# /Library/Frameworks/Mapnik.framework/unix/bin/mapnik-config
+# manually edit mapnik-config if this is not a full SDK build
 
 # package dmg
 # packagemaker is borked in recent xcode upgrade

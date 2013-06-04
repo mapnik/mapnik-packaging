@@ -52,6 +52,9 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 make
 make install
 
+# https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
+export PYTHONPATH=""
+
 # python versions
 export i="3.3"
 echo "...Updating and building mapnik python bindings for python ${i}"
