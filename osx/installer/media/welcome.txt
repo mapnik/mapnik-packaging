@@ -1,10 +1,9 @@
 This package will install Mapnik into /usr/local/.
 
-To enable the python bindings you need to put the Mapnik python bindings on your path.
+To enable the python bindings you need to manually put them on your PYTHONPATH like:
 
-For example, if you are using Python 2.7 you would do:
-
-    export PYTHONPATH=/usr/local/lib/python2.7/site-packages/$PYTHONPATH
+    py_version=$(python -c "import sys;print('%s.%s' % (sys.version_info[0],sys.version_info[1]))")
+    export PYTHONPATH=/usr/local/lib/python${py_version}/site-packages/:$PYTHONPATH
 
 These are the files the installer places:
 

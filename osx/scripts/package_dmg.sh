@@ -15,7 +15,6 @@ MAPNIK_DMG_NAME="${MAPNIK_PACKAGE_PREFIX}-osx-v${FOUND_VERSION}.dmg"
 hdiutil create \
   "${ROOTDIR}/installer/${MAPNIK_DMG_NAME}" \
   -volname "${MAPNIK_DMG_VOL_NAME}" \
-  -fs HFS+ \
   -srcfolder ${ROOTDIR}/installer/build
 # upload
 UPLOAD="s3://mapnik/dist/v${FOUND_VERSION}/${MAPNIK_DMG_NAME}"
