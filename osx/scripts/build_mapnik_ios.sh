@@ -26,19 +26,33 @@ echo "ICU_INCLUDES = '${BUILD}/include'" >> config.py
 echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PNG_LIBS = '${BUILD}/lib'" >> config.py
+echo "JPEG_INCLUDES = '${BUILD}/include'" >> config.py
+echo "JPEG_LIBS = '${BUILD}/lib'" >> config.py
+
+# disable configure checks for all except OS X
+if [ $BOOST_ARCH = "x86" ]; then
+    export HOST_ARGS_FOR_IOS=""
+else
+    export HOST_ARGS_FOR_IOS='HOST=${ARCH_NAME}'
+fi
+
+rm -f bindings/python/mapnik/_mapnik.so
 
 ./configure \
   PATH_REMOVE="/usr/include" \
+  INPUT_PLUGINS=shape,csv,geojson,sqlite \
+  PNG=True \
+  JPEG=True \
+  BENCHMARK=False \
   LINKING='static' \
-  HOST=${ARCH_NAME} \
+  $HOST_ARGS_FOR_IOS \
   FULL_LIB_PATH=False \
   BINDINGS='' \
-  INPUT_PLUGINS=shape,csv,geojson,sqlite,raster \
+  INPUT_PLUGINS=shape,csv,geojson,sqlite \
   PLUGIN_LINKING='static' \
   SAMPLE_INPUT_PLUGINS=False \
   SHAPE_MEMORY_MAPPED_FILE=False \
   CAIRO=False \
-  JPEG=False \
   TIFF=False \
   PROJ=False \
   SVG2PNG=False \

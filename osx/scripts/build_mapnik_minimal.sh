@@ -30,9 +30,10 @@ echo "JPEG_LIBS = '${BUILD}/lib'" >> config.py
 
 ./configure \
   PATH_REMOVE="/usr/include" \
-  INPUT_PLUGINS=shape,csv \
+  INPUT_PLUGINS=shape,csv,geojson,sqlite \
   PNG=True \
   JPEG=True \
+  BENCHMARK=False \
   FULL_LIB_PATH=False \
   BINDINGS='' \
   SAMPLE_INPUT_PLUGINS=False \
