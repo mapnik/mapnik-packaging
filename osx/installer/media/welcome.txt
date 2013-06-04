@@ -1,0 +1,21 @@
+This package will install mapnik into /usr/local/ giving you:
+
+  - mapnik-config and other programs in /usr/local/bin
+  
+  - libmapnik in /usr/local/lib
+  
+  - mapnik datasource plugins and fonts at:
+  
+    /usr/local/lib/mapnik/
+  
+  - mapnik and cairo python bindings in:
+   
+    /usr/local/lib/python2.6/site-packages/
+    /usr/local/lib/python2.7/site-packages/
+    /usr/local/lib/python3.3/site-packages/
+
+  - mapnik data needed for proj4, gdal, and unicode support:
+
+    /usr/local/share/mapnik
+       
+    
