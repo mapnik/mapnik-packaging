@@ -1,7 +1,13 @@
-This package will install mapnik into /usr/local/ giving you:
+This package will install Mapnik into /usr/local/.
 
-  - mapnik-config and other programs in /usr/local/bin
-  
+To enable the python bindings you need to put the Mapnik python bindings on your path.
+
+For example, if you are using Python 2.7 you would do:
+
+    export PYTHONPATH=/usr/local/lib/python2.7/site-packages/$PYTHONPATH
+
+These are the files the installer places:
+
   - libmapnik in /usr/local/lib
   
   - mapnik datasource plugins and fonts at:
@@ -17,5 +23,5 @@ This package will install mapnik into /usr/local/ giving you:
   - mapnik data needed for proj4, gdal, and unicode support:
 
     /usr/local/share/mapnik
-       
-    
+
+  - mapnik-config and other programs in /usr/local/bin

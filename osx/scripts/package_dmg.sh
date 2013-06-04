@@ -8,8 +8,8 @@ FOUND_VERSION=`${MAPNIK_BIN_SOURCE}/bin/mapnik-config --version`
 echo "Mapnik v${FOUND_VERSION}" > ${ROOTDIR}/installer/build/build.log
 echo "Build on `date`" >> ${ROOTDIR}/installer/build/build.log
 echo "clang --version:" >> ${ROOTDIR}/installer/build/build.log
-clang -v >> ${ROOTDIR}/installer/build/build.log 2>&1
-
+${CXX} -v >> ${ROOTDIR}/installer/build/build.log 2>&1
+cp ${ROOTDIR}/installer/media/welcome.txt ${ROOTDIR}/installer/build/README.txt
 MAPNIK_DMG_VOL_NAME="Mapnik ${FOUND_VERSION}"
 MAPNIK_DMG_NAME="${MAPNIK_PACKAGE_PREFIX}-osx-v${FOUND_VERSION}.dmg"
 hdiutil create \
