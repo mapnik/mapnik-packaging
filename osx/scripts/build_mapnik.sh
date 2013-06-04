@@ -55,6 +55,16 @@ make install
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
 export PYTHONPATH=""
 
+echo "
+from os import path
+mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/mapnik/'))
+env = {
+    'ICU_DATA': path.join(mapnik_data_dir, 'icu'),
+    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
+    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
+}
+" > bindings/python/mapnik/mapnik_settings.py
+
 # python versions
 export i="3.3"
 echo "...Updating and building mapnik python bindings for python ${i}"
@@ -73,18 +83,3 @@ do
   make
   make install
 done
-
-# write mapnik_settings.py
-# TODO - set up local symlinks so that this does not break make test-local?
-# https://github.com/mapnik/mapnik/issues/1892
-echo "
-from os import path
-mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/'))
-env = {
-    'ICU_DATA': path.join(mapnik_data_dir, 'icu'),
-    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
-    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
-}
-" > bindings/python/mapnik/mapnik_settings.py
-
-

@@ -1,7 +1,7 @@
 set -e
 
-export PROJ_LIB=${MAPNIK_BIN_SOURCE}/share/proj
-export GDAL_DATA=${MAPNIK_BIN_SOURCE}/share/gdal
+export PROJ_LIB=${MAPNIK_BIN_SOURCE}/share/mapnik/proj
+export GDAL_DATA=${MAPNIK_BIN_SOURCE}/share/mapnik/gdal
 #export DYLD_LIBRARY_PATH=${MAPNIK_INSTALL}/lib
 
 cd ${MAPNIK_SOURCE}

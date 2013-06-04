@@ -17,16 +17,16 @@ echo '...creating base directories'
 
 mkdir ${LOCAL_TARGET}/lib
 mkdir ${LOCAL_TARGET}/include
-mkdir ${LOCAL_TARGET}/share
+mkdir ${LOCAL_TARGET}/share/mapnik
 mkdir ${LOCAL_TARGET}/bin
 
 echo '...copying over mapnik'
 cp ${MAPNIK_BIN_SOURCE}/bin/mapnik-config ${LOCAL_TARGET}/bin/
 cp ${BUILD_ROOT}-i386/bin/protoc ${LOCAL_TARGET}/bin/
 cp -R ${MAPNIK_BIN_SOURCE}/include/ ${LOCAL_TARGET}/include/
-#mkdir -p ${LOCAL_TARGET}/share/icu
+#mkdir -p ${LOCAL_TARGET}/share/mapnik/icu
 #if [ $BOOST_ARCH = "x86" ]; then
-#  cp -R ${BUILD_ROOT}-i386/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/icu/
+#  cp -R ${BUILD_ROOT}-i386/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/mapnik/icu/
 #fi
 # shape plugin
 #if [ -d ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ ];then

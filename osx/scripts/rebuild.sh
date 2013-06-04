@@ -23,7 +23,7 @@ cd scripts/
 # test mapnik
 ./test_mapnik.sh
 
-./package_minimal_binary_sdk.sh
+# ./package_minimal_binary_sdk.sh
 
 # manually edit mapnik-config if this is not a full SDK build
 

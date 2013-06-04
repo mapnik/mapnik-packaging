@@ -2,15 +2,15 @@ set -e
 
 echo "...fixing install names of mapnik and dependencies"
 
-mkdir -p ${MAPNIK_BIN_SOURCE}/share/
-mkdir -p ${MAPNIK_BIN_SOURCE}/share/icu
+mkdir -p ${MAPNIK_BIN_SOURCE}/share/mapnik/
+mkdir -p ${MAPNIK_BIN_SOURCE}/share/mapnik/icu
 # TODO - replace with actual icu version
-cp ${BUILD}/share/icu/*/icudt*.dat ${MAPNIK_BIN_SOURCE}/share/icu/
+cp ${BUILD}/share/icu/*/icudt*.dat ${MAPNIK_BIN_SOURCE}/share/mapnik/icu/
 if [ -d ${BUILD}/share/proj ];then
-  cp -r ${BUILD}/share/proj ${MAPNIK_BIN_SOURCE}/share/
+  cp -r ${BUILD}/share/proj ${MAPNIK_BIN_SOURCE}/share/mapnik/
 fi
 if [ -d ${BUILD}/share/gdal ];then
-cp -r ${BUILD}/share/gdal ${MAPNIK_BIN_SOURCE}/share/
+cp -r ${BUILD}/share/gdal ${MAPNIK_BIN_SOURCE}/share/mapnik/
 fi
 
 # py2cairo

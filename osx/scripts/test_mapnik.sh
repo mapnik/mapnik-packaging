@@ -1,17 +1,17 @@
-# setup 'share' symlink
-TEMP_SYMLINK="`pwd`/../share"
-ln -s ${MAPNIK_BIN_SOURCE}/share ${TEMP_SYMLINK}
-
-cd ${MAPNIK_SOURCE}
-echo '*** testing locally'
-make test-local
 
 echo '*** testing install'
+cd ${MAPNIK_SOURCE}
+# setup 'share' symlink
+SHARE_DIR="`pwd`/../../share"
+mkdir -p $SHARE_DIR
+TEMP_SYMLINK="$SHARE_DIR/mapnik"
+ln -s ${MAPNIK_BIN_SOURCE}/share/mapnik ${TEMP_SYMLINK}
+
 export DYLD_LIBRARY_PATH=`pwd`/src
 export MAPNIK_FONT_DIRECTORY=`pwd`/fonts/dejavu-fonts-ttf-2.33/ttf/
 export MAPNIK_INPUT_PLUGINS_DIRECTORY=`pwd`/plugins/input/
 
-for i in {"2.6","2.7"}
+for i in {"2.7","2.6"}
 do
   export PYTHONPATH=${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/
   export PATH=${MAPNIK_BIN_SOURCE}/bin:$PATH
