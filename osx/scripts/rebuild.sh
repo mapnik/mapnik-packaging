@@ -28,8 +28,7 @@ cd scripts/
 # manually edit mapnik-config if this is not a full SDK build
 
 # package dmg
-# packagemaker is borked in recent xcode upgrade
-#./package_dmg.sh
+./package_dmg.sh
 
 # copy minimal headers of deps
 #./copy_headers.sh

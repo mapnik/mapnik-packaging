@@ -83,3 +83,6 @@ do
   make
   make install
 done
+
+# remove headers for now
+rm -rf ${MAPNIK_BIN_SOURCE}/include
