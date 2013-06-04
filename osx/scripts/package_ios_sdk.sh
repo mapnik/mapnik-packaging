@@ -21,7 +21,7 @@ mkdir ${LOCAL_TARGET}/include
 mkdir ${LOCAL_TARGET}/bin
 
 echo '...copying over mapnik'
-cp ${BUILD_ROOT}-i386-mapnik/bin/mapnik-config ${LOCAL_TARGET}/bin/
+cp ${BUILD_ROOT}-i386-mapnik${MAPNIK_INSTALL}/bin/mapnik-config ${LOCAL_TARGET}/bin/
 cp ${BUILD_ROOT}-i386/bin/protoc ${LOCAL_TARGET}/bin/
 cp -R ${MAPNIK_BIN_SOURCE}/include/ ${LOCAL_TARGET}/include/
 #mkdir -p ${LOCAL_TARGET}/share/mapnik/icu
