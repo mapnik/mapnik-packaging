@@ -61,9 +61,10 @@ cd ${PACKAGES}
 
 # jpeg
 echo '*building jpeg*'
+rm -rf jpeg-${JPEG_VERSION}
 tar xf jpegsrc.v${JPEG_VERSION}.tar.gz
 cd jpeg-${JPEG_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking
+./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} --disable-dependency-tracking
 make -j${JOBS}
 make install
 cd ${PACKAGES}
@@ -124,6 +125,7 @@ cd boost_${BOOST_VERSION2}-${ARCH_NAME}
 # patch python build to ensure we do not link boost_python to python
 patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
 echo 'using clang-darwin ;' > user-config.jam
+echo '*bootstrapping boost*'
 ./bootstrap.sh
 
 # https://svn.boost.org/trac/boost/ticket/6686
@@ -154,6 +156,7 @@ else
     export ICU_DETAILS=""
 fi
 
+echo '*compiling boost*'
 # static libs
 ./b2 ${CROSS_FLAGS} \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
@@ -173,5 +176,6 @@ fi
   cxxflags="${BOOST_CXXFLAGS}" \
   stage install
 
+echo '*done compiling boost*'
 
 lipo -info ${BUILD}/lib/*.a | grep arch

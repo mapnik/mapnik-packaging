@@ -23,6 +23,14 @@ source MacOSX.sh
 ./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
+# i386
+source iPhoneSimulator.sh
+# required first for cross compiling later on arm
+./scripts/build_core_deps.sh
+./scripts/build_protobuf.sh
+./scripts/build_mapnik_ios.sh
+
+# armv7
 source iPhoneOS.sh
 ./scripts/build_core_deps.sh
 ./scripts/build_protobuf.sh
@@ -34,11 +42,6 @@ source iPhoneOSs.sh
 ./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
-# i386
-source iPhoneSimulator.sh
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
-./scripts/build_mapnik_ios.sh
 
 # done now package
 ./scripts/make_universal.sh
