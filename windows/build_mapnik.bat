@@ -2,6 +2,7 @@
 
 set ROOTDIR=c:\\dev2
 set PREFIX=c:\\mapnik-v2.2.0
+set PREFIX2=c:\mapnik-v2.2.0
 
 @rem critical global variables needed by bjam
 set MAPNIK_DEPS_DIR=%ROOTDIR%
@@ -58,6 +59,15 @@ xcopy /d /s %MAPNIK_SOURCE%\demo\python\rundemo.py %PREFIX%\demo\python\rundemo.
 echo running CPP tests
 for %%t in (build\tests\cpp_tests\msvc-10.0\release\threading-multi\*.exe) do ( %%t -d %MAPNIK_SOURCE% )
 
-@rem 7z a mapnik-v2.2.0-win32-py27.zip %PREFIX%
+@rem no need for lib files for plugins
+del c:\mapnik-v2.2.0\lib\mapnik\input\*lib
+
+del mapnik-win-sdk-v2.2.0.zip
+7z a mapnik-win-sdk-v2.2.0.zip %PREFIX%
+rd %PREFIX2%\include /s /q
+@ rem - note: prefix has c:\\ which screws up del
+del c:\mapnik-v2.2.0\lib\*lib
+del mapnik-win-v2.2.0.zip
+7z a mapnik-win-v2.2.0.zip %PREFIX%
 echo Started at %STARTTIME%, finished at %TIME%
 
