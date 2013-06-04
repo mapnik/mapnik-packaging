@@ -15,7 +15,7 @@ rm -rf ${MAPNIK_BIN_SOURCE}
 cd scripts/
 
 # build mapnik
-./build_mapnik_minimal.sh
+./build_mapnik.sh
 
 # make portable
 ./post_build_fix.sh

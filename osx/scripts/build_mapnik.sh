@@ -45,6 +45,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   JOBS=6 \
   DEMO=True \
   PGSQL2SQLITE=True \
+  SVG2PNG=False \
   FRAMEWORK_PYTHON=False \
   BOOST_PYTHON_LIB=boost_python-2.7
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
@@ -69,9 +70,6 @@ do
   make
   make install
 done
-# clear for now
-rm -f ${MAPNIK_INSTALL}/lib/mapnik/input/python*input
-rm -f plugins/input/python*input
 
 # write mapnik_settings.py
 # TODO - set up local symlinks so that this does not break make test-local?

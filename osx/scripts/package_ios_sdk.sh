@@ -79,13 +79,13 @@ echo "*copying other headers*"
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
 
 # jpeg
-cp -r ${BUILD}/include/*j ${LOCAL_TARGET}/include/
+cp -r ${BUILD}/include/j* ${LOCAL_TARGET}/include/
 
 # png
-cp -r ${BUILD}/include/*p ${LOCAL_TARGET}/include/
+cp -r ${BUILD}/include/p* ${LOCAL_TARGET}/include/
 
 # zlib
-cp -r ${BUILD}/include/*z ${LOCAL_TARGET}/include/
+cp -r ${BUILD}/include/z* ${LOCAL_TARGET}/include/
 
 # protobuf
 cp -r ${BUILD}/include/google ${LOCAL_TARGET}/include/
@@ -103,6 +103,8 @@ echo "...creating tarball of mapnik build"
 TEMP_SYMLINK="${MAPNIK_DIST}/${PACKAGE_NAME}"
 ln -s ${LOCAL_TARGET} ${TEMP_SYMLINK}
 tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
-echo "*uploading*"
-#/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 s3://mapnik/dist/v${FOUND_VERSION}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2
+UPLOAD="s3://mapnik/dist/v${FOUND_VERSION}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2"
+echo "*uploading ${UPLOAD}"
+/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${UPLOAD}
 rm ${TEMP_SYMLINK}
+# update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9

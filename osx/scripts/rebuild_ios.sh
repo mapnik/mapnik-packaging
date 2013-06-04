@@ -3,7 +3,7 @@ cd "$( dirname $( dirname "$0" ))"
 # update mapnik
 cd mapnik
 echo 'pulling from git'
-git pull
+#git pull
 echo
 echo
 cd ../
@@ -19,27 +19,27 @@ fi
 # x86_64
 source MacOSX.sh
 # required for bcp header copy
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
+#./scripts/build_core_deps.sh
+#./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
 # i386
 source iPhoneSimulator.sh
 # required first for cross compiling later on arm
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
+#./scripts/build_core_deps.sh
+#./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
 # armv7
 source iPhoneOS.sh
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
+#./scripts/build_core_deps.sh
+#./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
 # armv7s
 source iPhoneOSs.sh
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
+#./scripts/build_core_deps.sh
+#./scripts/build_protobuf.sh
 ./scripts/build_mapnik_ios.sh
 
 # done now package
