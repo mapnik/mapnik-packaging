@@ -32,7 +32,7 @@ echo freetype-${FREETYPE_VERSION}
 curl -s -S -f -O ${S3_BASE}/freetype-${FREETYPE_VERSION}.tar.bz2
 
 # protobuf
-curl -O ${S3_BASE}/protobuf-${PROTOBUF_VERSION}.tar.bz2
+curl -s -S -f -O  ${S3_BASE}/protobuf-${PROTOBUF_VERSION}.tar.bz2
 
 # optional deps
 curl -s -S -f -O ${S3_BASE}/tiff-${LIBTIFF_VERSION}.tar.gz
