@@ -1,8 +1,13 @@
+set -e 
+
+mkdir -p ${PACKAGES}
+cd ${PACKAGES}
+
 # xz
 echo '*building xz*'
 tar xf xz-5.0.3.tar.bz2
 cd xz-5.0.3
-./configure
+./configure --prefix=${BUILD}
 make -j$JOBS
 make install
 cd ${PACKAGES}

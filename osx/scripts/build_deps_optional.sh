@@ -3,43 +3,6 @@ set -e
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-# boost python for various versions are done in python script
-#python ${ROOTDIR}/scripts/build_boost_pythons.py 2.5 64
-#mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.5.dylib
-#cp stage/lib/libboost_python-2.5.dylib ${BUILD}/lib/libboost_python-2.5.dylib
-#install_name_tool -id @loader_path/libboost_python-2.5.dylib ${BUILD}/lib/libboost_python-2.5.dylib
-
-echo '*building boost python versions*'
-
-cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}
-#python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
-#mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
-#cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
-#mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.6.dylib
-#cp stage/lib/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
-#install_name_tool -id @loader_path/libboost_python-2.6.dylib ${BUILD}/lib/libboost_python-2.6.dylib
-
-python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 64
-mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
-cp stage/lib/libboost_python-2.6.a ${BUILD}/lib/libboost_python-2.6.a
-
-python ${ROOTDIR}/scripts/build_boost_pythons.py 2.7 64
-mv stage/lib/libboost_python.a stage/lib/libboost_python-2.7.a
-cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
-
-#mv stage/lib/libboost_python.dylib stage/lib/libboost_python-2.7.dylib
-#cp stage/lib/libboost_python27.dylib ${BUILD}/lib/libboost_python-2.7.dylib
-#install_name_tool -id @loader_path/libboost_python-2.7.dylib ${BUILD}/lib/libboost_python-2.7.dylib
-
-# this landed in boost at 1.53 or there-abouts
-#patch libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python3k_bytes.diff
-python ${ROOTDIR}/scripts/build_boost_pythons.py 3.3 64
-mv stage/lib/libboost_python3.a stage/lib/libboost_python-3.3.a
-cp stage/lib/libboost_python-3.3.a ${BUILD}/lib/libboost_python-3.3.a
-
-cd ${PACKAGES}
-
-
 # proj4
 echo '*building proj.4*'
 rm -rf proj-${PROJ_VERSION}
@@ -56,6 +19,7 @@ cd ${PACKAGES}
 
 # tiff
 echo '*building tiff*'
+rm -rf tiff-${LIBTIFF_VERSION}
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
 export OLD_CFLAGS=$CFLAGS
@@ -79,6 +43,7 @@ cd ${PACKAGES}
 
 # sqlite
 echo '*building sqlite*'
+rm -rf sqlite-autoconf-${SQLITE_VERSION}
 tar xf sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 cd sqlite-autoconf-${SQLITE_VERSION}
 export OLD_CFLAGS=$CFLAGS
@@ -121,6 +86,7 @@ gmake -C doc install
 # 64 bit build
 echo '*building postgres 64 bit*'
 cd ${PACKAGES}
+rm -rf postgresql-${POSTGRES_VERSION}
 tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 ./configure --prefix=${BUILD} --enable-shared \
@@ -147,6 +113,7 @@ rm ${BUILD}/lib/*dylib
 
 # geotiff
 echo '*building geotiff*'
+rm -rf libgeotiff-${LIBGEOTIFF_VERSION}
 tar xf libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
 cd libgeotiff-${LIBGEOTIFF_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared --disable-dependency-tracking \
@@ -160,6 +127,7 @@ cd ${PACKAGES}
 
 # expat for gdal to avoid linking against system expat in /usr/lib
 echo '*building expat*'
+rm -rf expat-${EXPAT_VERSION}
 tar xf expat-${EXPAT_VERSION}.tar.gz
 cd expat-${EXPAT_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared
@@ -169,6 +137,7 @@ cd ${PACKAGES}
 
 # gdal
 echo '*building gdal*'
+rm -rf gdal-${GDAL_VERSION}
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
@@ -218,6 +187,7 @@ otool -L ${BUILD}/lib/*dylib
 rm ${BUILD}/lib/*dylib
 
 echo '*building pkg-config*'
+rm -rf pkg-config-${PKG_CONFIG_VERSION}
 tar xf pkg-config-${PKG_CONFIG_VERSION}.tar.gz
 cd pkg-config-${PKG_CONFIG_VERSION}
 # patch glib.h
@@ -316,6 +286,7 @@ cd ${PACKAGES}
 
 # py2cairo
 echo '*building py2cairo*'
+rm -rf py2cairo-${PY2CAIRO_VERSION}
 tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
 cd py2cairo-${PY2CAIRO_VERSION}
 # apply patch
@@ -329,6 +300,7 @@ cd ${PACKAGES}
 
 # py3cairo
 echo '*building py3cairo*'
+rm -rf pycairo-${PY3CAIRO_VERSION}
 tar xf pycairo-${PY3CAIRO_VERSION}.tar.bz2
 cd pycairo-${PY3CAIRO_VERSION}
 # apply patch
