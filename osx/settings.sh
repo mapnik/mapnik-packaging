@@ -94,7 +94,7 @@ export LIBTIFF_VERSION="4.0.3"
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export EXPAT_VERSION="2.1.0"
-# http://download.osgeo.org/gdal/
+# http://download.osgeo.org/gdal/CURRENT/
 export GDAL_VERSION="1.10.0"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
