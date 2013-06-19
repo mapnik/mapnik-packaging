@@ -87,6 +87,7 @@ cd libxml2-${LIBXML2_VERSION}
 ./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
 --enable-static --disable-shared ${HOST_ARG} \
 --with-icu=${PREFIX} \
+--without-python \
 --with-xptr \
 --with-xpath \
 --with-xinclude \
