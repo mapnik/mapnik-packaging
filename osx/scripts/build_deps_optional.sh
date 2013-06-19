@@ -94,8 +94,10 @@ cd postgresql-${POSTGRES_VERSION}
 --with-bonjour --without-libxml
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
+set +e
 make -j${JOBS} -i -k
 make install -i -k
+set -e
 cd ${PACKAGES}
 
 : '
@@ -170,6 +172,7 @@ patch configure ${PATCHES}/bigtiff_check.diff
 make -j${JOBS}
 # gdal 1.10 command line tools will not link, so force it since libgdal works
 set +e
+make -j${JOBS} -i -k
 make install -i -k
 set -e
 cd ${PACKAGES}
@@ -216,8 +219,10 @@ cd pixman-${PIXMAN_VERSION}
 ./configure --enable-static --disable-shared \
 --disable-dependency-tracking --prefix=${BUILD} \
 --disable-mmx
+set +e
 make -j${JOBS} -i -k
 make install -i -k
+set -e
 cd ${PACKAGES}
 
 # fontconfig
