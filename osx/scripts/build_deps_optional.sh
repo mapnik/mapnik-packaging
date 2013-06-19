@@ -295,32 +295,3 @@ export png_LIBS="-I${BUILD}/lib -lpng"
 make -j${JOBS}
 make install
 cd ${PACKAGES}
-
-# py2cairo
-echo '*building py2cairo*'
-rm -rf py2cairo-${PY2CAIRO_VERSION}
-tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
-cd py2cairo-${PY2CAIRO_VERSION}
-# apply patch
-patch wscript < ${PATCHES}/py2cairo-static.diff
-for i in {"2.6","2.7"}
-do
-    PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
-    PYTHON=python$i ./waf install
-done
-cd ${PACKAGES}
-
-# py3cairo
-echo '*building py3cairo*'
-rm -rf pycairo-${PY3CAIRO_VERSION}
-tar xf pycairo-${PY3CAIRO_VERSION}.tar.bz2
-cd pycairo-${PY3CAIRO_VERSION}
-# apply patch
-patch wscript < ${PATCHES}/py3cairo-static.diff
-export PATH=/Library/Frameworks/Python.framework/Versions/3.3/bin/:$PATH
-for i in {"3.3",}
-do
-    PYTHON=python$i ./waf configure --prefix=${BUILD} --nopyc --nopyo
-    PYTHON=python$i ./waf install
-done
-cd ${PACKAGES}
