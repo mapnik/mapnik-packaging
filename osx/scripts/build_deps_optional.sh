@@ -169,7 +169,9 @@ patch configure ${PATCHES}/bigtiff_check.diff
 
 make -j${JOBS}
 # gdal 1.10 command line tools will not link, so force it since libgdal works
+set +e
 make install -i -k
+set -e
 cd ${PACKAGES}
 
 
