@@ -29,6 +29,7 @@ if [ $UNAME = 'Darwin' ]; then
     export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
+    export CXX_VISIBILITY_FLAGS="-fvisibility=hidden -fvisibility-inlines-hidden"
 else # linux
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
@@ -37,6 +38,7 @@ else # linux
     export CORE_CXX="g++"
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
 fi
 
 # settings
@@ -67,7 +69,6 @@ fi
 export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
-export CXX_VISIBILITY_FLAGS="-fvisibility=hidden -fvisibility-inlines-hidden"
 export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
