@@ -74,7 +74,9 @@ echo '*building libpng*'
 rm -rf libpng-${LIBPNG_VERSION}
 tar xf libpng-${LIBPNG_VERSION}.tar.gz
 cd libpng-${LIBPNG_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} --disable-dependency-tracking
+./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
+  --disable-dependency-tracking \
+  --with-zlib-prefix=${BUILD}
 make -j${JOBS}
 make install
 cd ${PACKAGES}
