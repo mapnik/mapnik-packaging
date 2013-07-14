@@ -23,7 +23,11 @@ rm -rf tiff-${LIBTIFF_VERSION}
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
 export OLD_CFLAGS=$CFLAGS
-export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
+
+if [ $UNAME = 'Darwin' ]; then
+    export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
+fi
+
 ./configure --prefix=${BUILD} \
 --enable-static --disable-shared \
 --disable-dependency-tracking \
@@ -91,7 +95,7 @@ tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 ./configure --prefix=${BUILD} --enable-shared \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --without-libxml
+--with-bonjour --without-libxml --without-readline
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
 set +e
@@ -111,7 +115,7 @@ otool -L ${BUILD}/lib/*dylib
 '
 
 # clear out shared libs
-rm ${BUILD}/lib/*dylib
+rm -f ${BUILD}/lib/{*.so,*.dylib}
 
 # geotiff
 echo '*building geotiff*'
@@ -169,8 +173,8 @@ patch configure ${PATCHES}/bigtiff_check.diff
 --with-grib=no \
 --with-freexl=no
 
-make -j${JOBS}
-# gdal 1.10 command line tools will not link, so force it since libgdal works
+# gdal 1.10 command line tools will not link if -fvisibility=hidden is used
+# so force it since libgdal still works
 set +e
 make -j${JOBS} -i -k
 make install -i -k
@@ -189,7 +193,7 @@ otool -L ${BUILD}/lib/*dylib
 '
 
 # clear out shared libs
-rm ${BUILD}/lib/*dylib
+rm -f ${BUILD}/lib/{*.so,*.dylib}
 
 echo '*building pkg-config*'
 rm -rf pkg-config-${PKG_CONFIG_VERSION}

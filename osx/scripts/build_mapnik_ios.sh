@@ -4,7 +4,7 @@ cd ${MAPNIK_SOURCE}
 echo 'Building mapnik minimal ios'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
-rm -f src/libmapnik* # ensure both .a and .dylib are cleared
+rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 #make clean
 

@@ -123,16 +123,20 @@ rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
 tar xjf boost_${BOOST_VERSION2}.tar.bz2
 mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
 cd boost_${BOOST_VERSION2}-${ARCH_NAME}
-# patch python build to ensure we do not link boost_python to python
-patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
-echo 'using clang-darwin ;' > user-config.jam
+
+if [ $UNAME = 'Darwin' ]; then
+  # patch python build to ensure we do not link boost_python to python
+  patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
+  # https://svn.boost.org/trac/boost/ticket/6686
+  if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
+      patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff
+  fi
+fi
+
+echo "using ${BOOST_TOOLSET} ;" > user-config.jam
+
 echo '*bootstrapping boost*'
 ./bootstrap.sh
-
-# https://svn.boost.org/trac/boost/ticket/6686
-if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-    patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff
-fi
 
 # HINT: problems with icu configure check?
 # cat bin.v2/config.log to see problems
@@ -144,6 +148,8 @@ else
     export CROSS_FLAGS="tools/bcp"
     export EXTRA_LIBS_ARGS="--with-program_options"
 fi
+
+# TODO set address-model ?
 
 # only build with icudata library support on mac
 if [ $BOOST_ARCH = "x86" ]; then
@@ -162,14 +168,14 @@ echo '*compiling boost*'
 ./b2 ${CROSS_FLAGS} \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
   --ignore-site-config --user-config=user-config.jam \
-  architecture=${BOOST_ARCH} \
-  toolset=clang \
+  architecture="${BOOST_ARCH}" \
+  toolset="${BOOST_TOOLSET}" \
   --with-thread \
   --with-filesystem \
   --disable-filesystem2 \
   --with-system \
-  $EXTRA_LIBS_ARGS \
-  $ICU_DETAILS \
+  "${EXTRA_LIBS_ARGS}" \
+  "${ICU_DETAILS}" \
   --with-regex \
   link=static \
   variant=release \
@@ -179,4 +185,6 @@ echo '*compiling boost*'
 
 echo '*done compiling boost*'
 
-lipo -info ${BUILD}/lib/*.a | grep arch
+if [ $UNAME = 'Darwin' ]; then
+    lipo -info ${BUILD}/lib/*.a | grep arch
+fi
