@@ -16,7 +16,7 @@ echo "CC = '${CC}'" >> config.py
 echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 if [ $UNAME = 'Linux' ]; then
-  echo "CUSTOM_LDFLAGS = '${LDFLAGS} -pthread -ldl'" >> config.py
+  echo "CUSTOM_LDFLAGS = '${LDFLAGS} -pthread'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${LDFLAGS}'" >> config.py
 fi
