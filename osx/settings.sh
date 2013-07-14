@@ -110,7 +110,8 @@ export GDAL_VERSION="1.10.0"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 export POSTGRES_VERSION="9.2.4"
-export ZLIB_VERSION="1.2.7"
+# http://zlib.net/zlib-1.2.8.tar.gz
+export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
 export LIBXML2_VERSION="2.9.1"
 export BZIP2_VERSION="1.0.6"
