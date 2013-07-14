@@ -4,39 +4,52 @@
 import os
 import sys
 
-USER_JAM = """
-import option ;
-import feature ;
-project : default-build <toolset>%(toolset)s ;
-using python
-     : %(ver)s # version
-     : %(system)s%(platform_root)s%(ver)s/bin/python%(ver)s%(variant)s # cmd-or-prefix
-     : %(system)s%(platform_root)s%(ver)s/include/python%(ver)s%(variant)s # includes
-     : %(system)s%(platform_root)s%(ver)s/lib/python%(ver)s/config%(variant)s # a lib actually symlink
-     : <toolset>%(toolset)s # condition
-     ;
-libraries = --with-python ;
-"""
+USER_JAM = ''
 
+if os.uname()[0] == 'Darwin':
+    USER_JAM = """
+    import option ;
+    import feature ;
+    project : default-build <toolset>%(toolset)s ;
+    using python
+         : %(ver)s # version
+         : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/bin/python%(ver)s%(variant)s # cmd-or-prefix
+         : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/include/python%(ver)s%(variant)s # includes
+         : %(system)s/Library/Frameworks/Python.framework/Versions/%(ver)s/lib/python%(ver)s/config%(variant)s # a lib actually symlink
+         : <toolset>%(toolset)s # condition
+         ;
+    libraries = --with-python ;
+    """
+else:
+    USER_JAM = """
+    import option ;
+    import feature ;
+    project : default-build <toolset>%(toolset)s ;
+    using python
+         : %(ver)s # version
+         : /usr/bin/python%(ver)s%(variant)s # cmd-or-prefix
+         : /usr/include/python%(ver)s # includes
+         : /usr/lib/python%(ver)s/config%(variant)s
+         : <toolset>%(toolset)s # condition
+         ;
+    libraries = --with-python ;
+    """
 # arch: ='32_64'
-
-# TODO - figure out linux
-OSX_PLATFORM_ROOT="/Library/Frameworks/Python.framework/Versions/"
 
 def compile_lib(ver,toolset,addr_model,arch):
     if ver in ('3.2','3.3'):
         open('user-config.jam','w').write(USER_JAM % {'ver':ver,
            'system':'',
            'variant':'m',
-           'toolset':toolset,
-           'platform_root':OSX_PLATFORM_ROOT})
+           'toolset':toolset
+           })
     elif ver in ('2.5','2.6','2.7'):
         # build against system pythons so we can reliably link against FAT binaries
         open('user-config.jam','w').write(USER_JAM % {'ver':ver,
             'system':'/System',
             'variant':'',
             'toolset':toolset,
-            'platform_root':OSX_PLATFORM_ROOT})
+            })
     else:
         # for 2.7 and above hope that python.org provides 64 bit ready binaries...
         open('user-config.jam','w').write(USER_JAM % {'ver':ver,
