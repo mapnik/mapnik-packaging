@@ -254,7 +254,8 @@ cd ${PACKAGES}
 # cairo
 echo '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
-xz -d cairo-${CAIRO_VERSION}.tar.xz
+rm -rf cairo-${CAIRO_VERSION}.tar
+xz -d -k cairo-${CAIRO_VERSION}.tar.xz
 tar xf cairo-${CAIRO_VERSION}.tar
 cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
