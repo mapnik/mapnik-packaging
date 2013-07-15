@@ -43,8 +43,11 @@ echo '*building zlib*'
 rm -rf zlib-${ZLIB_VERSION}
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}
-patch -N < ${PATCHES}/zlib-configure.diff
-./configure --prefix=${BUILD} --static
+if [ $UNAME = 'Darwin' ]; then
+  patch -N < ${PATCHES}/zlib-configure.diff
+fi
+./configure --prefix=${BUILD}
+mv libz.so libz-shared.so
 make -j$JOBS
 make install
 cd ${PACKAGES}
