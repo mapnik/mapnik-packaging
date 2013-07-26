@@ -42,15 +42,21 @@ else # linux
 fi
 
 # settings
-export STDLIB="libc++" # libc++
-if [ $STDLIB = 'stdc++' ]; then
+export CXX11='true'
+if [ $CXX11 = 'true' ]; then
+  if [ $UNAME = 'Darwin' ]; then
+    export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++ -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+    export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
+    echo "building against libc++ in c++11 mode"
+  else
+    export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+    export STDLIB_LDFLAGS=""
+    echo "building against libstdc++ in c++11 mode"
+  fi
+else
   echo "building against libstdc++"
   export STDLIB_CXXFLAGS=""
   export STDLIB_LDFLAGS=""
-else
-  export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++ -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
-  export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-  echo "building against lib++"
 fi
 export BUILDDIR="build-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
