@@ -42,10 +42,21 @@ else # linux
 fi
 
 # settings
-export BUILD_UNIVERSAL="${ROOTDIR}/out/build-universal"
+export STDLIB="libc++" # libc++
+if [ $STDLIB = 'stdc++' ]; then
+  echo "building against libstdc++"
+  export STDLIB_CXXFLAGS=""
+  export STDLIB_LDFLAGS=""
+else
+  export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++ -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+  export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
+  echo "building against lib++"
+fi
+export BUILDDIR="build-${STDLIB}"
+export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export OPTIMIZATION="3"
 export S3_BASE="http://mapnik.s3.amazonaws.com/deps"
-export BUILD_ROOT="${ROOTDIR}/out/build"
+export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DIST="${ROOTDIR}/out/dist"
 export PACKAGES="${ROOTDIR}/out/packages"
@@ -70,7 +81,7 @@ export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
 export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSET_BITS=64"
-export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
+export CORE_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
 export CXX="${CORE_CXX}"

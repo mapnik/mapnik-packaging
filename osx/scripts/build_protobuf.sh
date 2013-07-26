@@ -11,10 +11,13 @@ if [ $BOOST_ARCH = "arm" ]; then
 else
     export CROSS_FLAGS=""
 fi
+export OLD_LDFLAGS=${LDFLAGS}
+export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} ${HOST_ARG} ${CROSS_FLAGS} \
 --enable-static --disable-shared \
 --disable-debug --with-zlib \
 --disable-dependency-tracking
 make -j${JOBS}
 make install
+export LDFLAGS=${OLD_LDFLAGS}
 cd ${PACKAGES}
