@@ -116,7 +116,7 @@ fi
 
 # clear out shared libs
 rm -f ${BUILD}/lib/{*.so,*.dylib}
-
+cd ${PACKAGES}
 echo '*done compiling boost*'
 
 
