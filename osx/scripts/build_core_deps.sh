@@ -101,8 +101,8 @@ echo '*compiling boost*'
   --with-filesystem \
   --disable-filesystem2 \
   --with-system \
-  "${EXTRA_LIBS_ARGS}" \
-  "${ICU_DETAILS}" \
+  ${EXTRA_LIBS_ARGS} \
+  ${ICU_DETAILS} \
   --with-regex \
   link=static,shared \
   variant=release \
@@ -133,14 +133,17 @@ echo '*building zlib*'
 rm -rf zlib-${ZLIB_VERSION}
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}
-if [ $UNAME = 'Darwin' ]; then
-  patch -N < ${PATCHES}/zlib-configure.diff
-fi
+# no longer needed on os x with zlib 1.2.8
+#if [ $UNAME = 'Darwin' ]; then
+#  patch -N < ${PATCHES}/zlib-configure.diff
+#fi
 ./configure --prefix=${BUILD}
-mv libz.so libz-shared.so
 make -j$JOBS
 make install
 cd ${PACKAGES}
+
+# clear out shared libs
+rm -f ${BUILD}/lib/{*.so,*.dylib}
 
 # freetype
 echo '*building freetype*'
