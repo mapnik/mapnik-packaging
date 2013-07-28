@@ -14,7 +14,11 @@ echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
 echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
-echo "CUSTOM_LDFLAGS = '${LDFLAGS}'" >> config.py
+if [ $UNAME = 'Linux' ]; then
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -pthread'" >> config.py
+else
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+fi
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 echo "RUNTIME_LINK = 'static'" >> config.py
 echo "PATH = '${BUILD}/bin/'" >> config.py
