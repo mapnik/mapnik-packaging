@@ -127,6 +127,8 @@ export PROJ_GRIDS_VERSION="1.5"
 export LIBPNG_VERSION="1.6.2"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
+#https://code.google.com/p/webp/downloads/
+export WEBP_VERSION="0.3.1"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"

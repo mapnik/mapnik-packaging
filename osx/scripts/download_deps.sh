@@ -38,6 +38,7 @@ download node-v${NODE_VERSION}.tar.gz
 
 # optional deps
 download tiff-${LIBTIFF_VERSION}.tar.gz
+download libwebp-${WEBP_VERSION}.tar.gz
 download sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 download libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
 download proj-datumgrid-${PROJ_GRIDS_VERSION}.zip

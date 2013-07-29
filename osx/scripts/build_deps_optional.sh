@@ -18,6 +18,18 @@ cd ${PACKAGES}
 
 
 # tiff
+echo '*building webp*'
+rm -rf libwebp-${WEBP_VERSION}
+tar xf libwebp-${WEBP_VERSION}.tar.gz
+cd libwebp-${WEBP_VERSION}
+./configure --prefix=${BUILD} \
+--enable-static --disable-shared --disable-dependency-tracking
+make -j${JOBS}
+make install
+cd ${PACKAGES}
+
+
+# tiff
 echo '*building tiff*'
 rm -rf tiff-${LIBTIFF_VERSION}
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
