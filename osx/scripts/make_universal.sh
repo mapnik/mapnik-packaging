@@ -7,6 +7,7 @@ do
     echo '*making universal '$i'*'
     lipo -create -output \
         "${BUILD_UNIVERSAL}/lib${i}.a" \
+        "${BUILD_ROOT}-x86_64/lib/lib${i}.a" \
         "${BUILD_ROOT}-armv7s/lib/lib${i}.a" \
         "${BUILD_ROOT}-armv7/lib/lib${i}.a" \
         "${BUILD_ROOT}-i386/lib/lib${i}.a"
@@ -16,6 +17,7 @@ done
 echo '*making universal mapnik*'
 lipo -create -output \
     "${BUILD_UNIVERSAL}/libmapnik.a" \
+    "${BUILD_ROOT}-x86_64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
     "${BUILD_ROOT}-armv7s-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
     "${BUILD_ROOT}-armv7-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
     "${BUILD_ROOT}-i386-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a"
