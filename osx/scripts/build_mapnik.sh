@@ -44,7 +44,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 
 ./configure \
   PATH_REMOVE="/usr/include" \
-  BINDINGS='' \
+  BINDINGS='python' \
   INPUT_PLUGINS='csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite' \
   CAIRO=True \
   JOBS=6 \
@@ -70,24 +70,26 @@ env = {
 }
 " > bindings/python/mapnik/mapnik_settings.py
 
-# python versions
-export i="3.3"
-echo "...Updating and building mapnik python bindings for python ${i}"
-rm -f bindings/python/*os
-rm -f bindings/python/mapnik/_mapnik.so
-./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-make
-make install
-
-for i in {"2.6","2.7"}
-do
-  echo "...Updating and building mapnik python bindings for python ${i}"
-  rm -f bindings/python/*os
-  rm -f bindings/python/mapnik/_mapnik.so
-  ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-  make
-  make install
-done
+if [ $OFFICIAL_RELEASE = 'true' ]; then
+    # python versions
+    export i="3.3"
+    echo "...Updating and building mapnik python bindings for python ${i}"
+    rm -f bindings/python/*os
+    rm -f bindings/python/mapnik/_mapnik.so
+    ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+    make
+    make install
+    
+    for i in {"2.6","2.7"}
+    do
+      echo "...Updating and building mapnik python bindings for python ${i}"
+      rm -f bindings/python/*os
+      rm -f bindings/python/mapnik/_mapnik.so
+      ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+      make
+      make install
+    done
+fi
 
 # remove headers for now
-rm -rf ${MAPNIK_BIN_SOURCE}/include
+#rm -rf ${MAPNIK_BIN_SOURCE}/include
