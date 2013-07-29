@@ -33,6 +33,9 @@ download freetype-${FREETYPE_VERSION}.tar.bz2
 # protobuf
 download protobuf-${PROTOBUF_VERSION}.tar.bz2
 
+# node.js
+download node-v${NODE_VERSION}.tar.bz2
+
 # optional deps
 download tiff-${LIBTIFF_VERSION}.tar.gz
 download sqlite-autoconf-${SQLITE_VERSION}.tar.gz
