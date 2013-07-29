@@ -81,9 +81,9 @@ export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PAT
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 
 # should not be needed now that we set 'LIBRARY_PATH'
-if [ $UNAME = 'Darwin' ]; then
+#if [ $UNAME = 'Darwin' ]; then
   #export DYLD_LIBRARY_PATH="${BUILD}/lib"
-fi
+#fi
 
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
