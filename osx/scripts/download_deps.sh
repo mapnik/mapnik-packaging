@@ -34,7 +34,7 @@ download freetype-${FREETYPE_VERSION}.tar.bz2
 download protobuf-${PROTOBUF_VERSION}.tar.bz2
 
 # node.js
-download node-v${NODE_VERSION}.tar.bz2
+download node-v${NODE_VERSION}.tar.gz
 
 # optional deps
 download tiff-${LIBTIFF_VERSION}.tar.gz
