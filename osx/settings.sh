@@ -1,3 +1,6 @@
+# settings
+export CXX11='true'
+export OFFICIAL_RELEASE='false'
 
 # start from here
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -29,7 +32,8 @@ if [ $UNAME = 'Darwin' ]; then
     export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
-    export CXX_VISIBILITY_FLAGS="-fvisibility=hidden -fvisibility-inlines-hidden"
+    # breaks node.js -fvisibility=hidden
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
 else # linux
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
@@ -41,8 +45,6 @@ else # linux
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
 fi
 
-# settings
-export CXX11='true'
 if [ $CXX11 = 'true' ]; then
   if [ $UNAME = 'Darwin' ]; then
     export STDLIB="libc++"
@@ -74,11 +76,15 @@ export STAGING="${ROOTDIR}/out/staging"
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_INSTALL="/usr/local"
-export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}/${MAPNIK_INSTALL}"
-export PATH="${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
+export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
+export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 
-export DYLD_LIBRARY_PATH="${BUILD}/lib"
+# should not be needed now that we set 'LIBRARY_PATH'
+if [ $UNAME = 'Darwin' ]; then
+  #export DYLD_LIBRARY_PATH="${BUILD}/lib"
+fi
+
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
 
@@ -148,4 +154,5 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
+export NODE_VERSION="0.10.15"
 
