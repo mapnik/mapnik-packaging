@@ -162,6 +162,8 @@ cd gdal-${GDAL_VERSION}
 # not bigtiff check will fail…
 # fix bigtiff check
 patch configure ${PATCHES}/bigtiff_check.diff
+export OLD_LDFLAGS=${LDFLAGS}
+export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
 --with-geotiff=${BUILD} \
@@ -185,12 +187,9 @@ patch configure ${PATCHES}/bigtiff_check.diff
 --with-grib=no \
 --with-freexl=no
 
-# gdal 1.10 command line tools will not link if -fvisibility=hidden is used
-# so force it since libgdal still works
-set +e
-make -j${JOBS} -i -k
-make install -i -k
-set -e
+make -j${JOBS}
+make install
+export LDFLAGS=${OLD_LDFLAGS}
 cd ${PACKAGES}
 
 
