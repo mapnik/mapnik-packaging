@@ -1,6 +1,8 @@
---- tools/build/v2/tools/darwin.jam	2013-01-09 14:44:19.000000000 -0800
-+++ tools/build/v2/tools/darwin.jam	2013-01-09 14:44:21.000000000 -0800
-@@ -70,7 +70,7 @@
+Index: tools/build/v2/tools/darwin.jam
+===================================================================
+--- tools/build/v2/tools/darwin.jam	(revision 85176)
++++ tools/build/v2/tools/darwin.jam	(working copy)
+@@ -72,7 +72,7 @@
  #
  #   <root>PATH
  #       Platform root path. The common autodetection will set this to
@@ -9,7 +11,7 @@
  #       the corresponding "*.platform/Developer" directory.
  #
  rule init ( version ? : command * : options * : requirement * )
-@@ -104,7 +104,7 @@
+@@ -106,7 +106,7 @@
          bin ?= [ common.get-absolute-tool-path $(command[1]) ] ;
          if $(bin) = "/usr/bin"
          {
@@ -18,7 +20,7 @@
          }
          else
          {
-@@ -327,9 +327,13 @@
+@@ -329,9 +329,13 @@
  # Determine the MacOSX SDK versions installed and their locations.
  local rule init-available-sdk-versions ( condition * : root ? )
  {
