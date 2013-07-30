@@ -17,6 +17,7 @@ fi
 for i in {"2.6","2.7","3.3"}
 do
     if [ -d "${BUILD}/lib/python${i}/site-packages/cairo" ];then
+        mkdir -p ${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/
         cp -R ${BUILD}/lib/python${i}/site-packages/cairo ${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/
     fi
 done
