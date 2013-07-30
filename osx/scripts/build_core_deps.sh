@@ -50,9 +50,9 @@ if [ $USE_BOOST_TRUNK = 'true' ]; then
         svn co https://svn.boost.org/svn/boost/trunk boost-trunk
     else
         # takes forever
-        #cd boost-trunk
+        cd boost-trunk
         #svn up
-        #cd ../
+        cd ../
     fi
     cp -r boost-trunk boost_trunk-${ARCH_NAME}
     cd boost_trunk-${ARCH_NAME}
