@@ -43,16 +43,33 @@ rm -f ${BUILD}/lib/{*.so,*.dylib}
 
 
 # boost
-echo '*building boost*'
+if [ $USE_BOOST_TRUNK = 'true' ]; then
+    echo '*building boost trunk*'
+    rm -rf boost_trunk-${ARCH_NAME}
+    if [ ! -d boost-trunk ]; then
+        svn co https://svn.boost.org/svn/boost/trunk boost-trunk
+    else
+        # takes forever
+        #cd boost-trunk
+        #svn up
+        #cd ../
+    fi
+    cp -r boost-trunk boost_trunk-${ARCH_NAME}
+    cd boost_trunk-${ARCH_NAME}
+else
+    echo '*building boost*'
+    rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
+    tar xjf boost_${BOOST_VERSION2}.tar.bz2
+    mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
+    cd boost_${BOOST_VERSION2}-${ARCH_NAME}
+fi
+
 B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
-rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
-tar xjf boost_${BOOST_VERSION2}.tar.bz2
-mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
-cd boost_${BOOST_VERSION2}-${ARCH_NAME}
 
 if [ $UNAME = 'Darwin' ]; then
   # patch python build to ensure we do not link boost_python to python
+  # https://svn.boost.org/trac/boost/ticket/3930
   patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
   # https://svn.boost.org/trac/boost/ticket/6686
   if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
@@ -60,7 +77,10 @@ if [ $UNAME = 'Darwin' ]; then
   fi
 fi
 
+# way to pass extra flags with cxx, but seems brittle
+#echo "using ${BOOST_TOOLSET} : : ${BOOST_TOOLSET} ${STDLIB_CXXFLAGS} ;" > user-config.jam
 echo "using ${BOOST_TOOLSET} ;" > user-config.jam
+
 
 echo '*bootstrapping boost*'
 ./bootstrap.sh
@@ -81,14 +101,20 @@ fi
 # only build with icudata library support on mac
 if [ $BOOST_ARCH = "x86" ]; then
     export BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
-    export BOOST_CXXFLAGS="${CXXFLAGS} -DU_STATIC_IMPLEMENTATION=1"
-    export ICU_DETAILS='-sHAVE_ICU=1 -sICU_PATH=${BUILD}'
+    export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} -DU_STATIC_IMPLEMENTATION=1"
+    export ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
 else
+    mv libs/regex/build/has_icu_test.cpp libs/regex/build/has_icu_test.cpp_
     echo '#error' > libs/regex/build/has_icu_test.cpp
     export BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-    export BOOST_CXXFLAGS="${CXXFLAGS}"
+    export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
     export ICU_DETAILS=""
 fi
+
+# workaround boost linking problem in trunk
+#if [ $STDLIB = "libc++" ]; then
+#    export BOOST_LDFLAGS="${BOOST_LDFLAGS} -lc++"
+#fi
 
 echo '*compiling boost*'
 # static libs

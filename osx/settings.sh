@@ -1,6 +1,7 @@
 # settings
 export CXX11='true'
 export OFFICIAL_RELEASE='false'
+export USE_BOOST_TRUNK='false'
 
 # start from here
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
