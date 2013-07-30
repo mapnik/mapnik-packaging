@@ -100,9 +100,7 @@ export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSE
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
-# note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
-# http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-export CXX="${CORE_CXX} ${STDLIB_CXXFLAGS}"
+export CXX="${CORE_CXX}"
 export CC="${CORE_CC}"
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
@@ -110,7 +108,7 @@ export LIBRARY_PATH="${BUILD}/lib"
 export CPPFLAGS="${CORE_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS"
-export CXXFLAGS="-I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
+export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
 # http://site.icu-project.org/download
 export ICU_VERSION="51.2"

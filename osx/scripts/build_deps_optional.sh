@@ -155,6 +155,11 @@ cd ${PACKAGES}
 
 # gdal
 echo '*building gdal*'
+
+export OLD_CXX=${CXX}
+# note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
+# http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
+export CXX="${CXX} ${STDLIB_CXXFLAGS}"
 rm -rf gdal-${GDAL_VERSION}
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
@@ -190,6 +195,7 @@ export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 make -j${JOBS}
 make install
 export LDFLAGS=${OLD_LDFLAGS}
+export CXX=${OLD_CXX}
 cd ${PACKAGES}
 
 
