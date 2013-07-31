@@ -17,8 +17,12 @@ function download {
 # build deps
 download xz-${XZ_VERSION}.tar.bz2
 download nose-${NOSE_VERSION}.tar.gz
-echo distribute_setup.py
-curl -s -S -f -O http://python-distribute.org/distribute_setup.py
+if [ ! -f distribute_setup.py ]; then
+  echo downloading distribute_setup.py
+  curl -s -S -f -O http://python-distribute.org/distribute_setup.py
+else
+  echo using cached distribute_setup.py
+fi
 
 # core deps
 download bzip2-${BZIP2_VERSION}.tar.gz
