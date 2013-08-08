@@ -100,9 +100,12 @@ echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
 echo "Produced on `date`" >> ${LOCAL_TARGET}/VERSION
 
 echo "...creating tarball of mapnik build"
-tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
-FINAL_BASENAME="${PACKAGE_NAME}-${DESCRIBE}"
-UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${FINAL_BASENAME}.tar.bz2"
+tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}.tar.bz2 ${PACKAGE_NAME}/
+if [ $OFFICIAL_RELEASE = 'true' ]; then
+  UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${PACKAGE_NAME}.tar.bz2"
+else
+  UPLOAD="s3://mapnik/dist/dev/${PACKAGE_NAME}.tar.bz2"
+fi
 echo "*uploading ${UPLOAD}"
-#/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${FINAL_BASENAME}.tar.bz2 ${UPLOAD}
+/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${PACKAGE_NAME}.tar.bz2 ${UPLOAD}
 # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
