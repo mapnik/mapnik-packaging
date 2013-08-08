@@ -54,12 +54,14 @@ rm -f bindings/python/mapnik/_mapnik.so
   SHAPE_MEMORY_MAPPED_FILE=False \
   CAIRO=False \
   TIFF=False \
+  WEBP=False \
   PROJ=False \
   SVG2PNG=False \
   SHAPEINDEX=False \
   CPP_TESTS=False \
   DEMO=False \
   SVG_RENDERER=False \
+  GRID_RENDERER=False \
   PGSQL2SQLITE=False \
   SYSTEM_FONTS=/System/Library/Fonts
 make
