@@ -4,7 +4,7 @@ cd ${MAPNIK_SOURCE}
 echo 'Building mapnik minimal ios'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
-rm -f src/libmapnik* # ensure both .a and .dylib are cleared
+rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 #make clean
 
@@ -12,10 +12,10 @@ echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
-#echo "CUSTOM_CXXFLAGS = '-gline-tables-only ${CXXFLAGS}'" >> config.py
+#echo "CUSTOM_CXXFLAGS = '-gline-tables-only -fno-omit-frame-pointer ${CXXFLAGS}'" >> config.py
 echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
-echo "CUSTOM_LDFLAGS = '${LDFLAGS}'" >> config.py
+echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 echo "RUNTIME_LINK = 'static'" >> config.py
 echo "PATH = '${BUILD}/bin/'" >> config.py

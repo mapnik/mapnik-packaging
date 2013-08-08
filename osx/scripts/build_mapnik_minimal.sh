@@ -4,7 +4,7 @@ cd ${MAPNIK_SOURCE}
 echo 'Building mapnik minimal'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
-rm -f src/libmapnik* # ensure both .a and .dylib are cleared
+rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 make clean
 
@@ -14,7 +14,11 @@ echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
 echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
-echo "CUSTOM_LDFLAGS = '${LDFLAGS}'" >> config.py
+if [ $UNAME = 'Linux' ]; then
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -pthread'" >> config.py
+else
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+fi
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 echo "RUNTIME_LINK = 'static'" >> config.py
 echo "PATH = '${BUILD}/bin/'" >> config.py

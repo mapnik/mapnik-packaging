@@ -1,4 +1,3 @@
-source iPhoneOS.sh
 export PLATFORM="iPhoneSimulator"
 export BOOST_ARCH="x86"
 export ARCH_NAME="i386"

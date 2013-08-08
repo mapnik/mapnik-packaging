@@ -18,12 +18,28 @@ cd ${PACKAGES}
 
 
 # tiff
+echo '*building webp*'
+rm -rf libwebp-${WEBP_VERSION}
+tar xf libwebp-${WEBP_VERSION}.tar.gz
+cd libwebp-${WEBP_VERSION}
+./configure --prefix=${BUILD} \
+--enable-static --disable-shared --disable-dependency-tracking
+make -j${JOBS}
+make install
+cd ${PACKAGES}
+
+
+# tiff
 echo '*building tiff*'
 rm -rf tiff-${LIBTIFF_VERSION}
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
 export OLD_CFLAGS=$CFLAGS
-export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
+
+if [ $UNAME = 'Darwin' ]; then
+    export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
+fi
+
 ./configure --prefix=${BUILD} \
 --enable-static --disable-shared \
 --disable-dependency-tracking \
@@ -91,7 +107,7 @@ tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 ./configure --prefix=${BUILD} --enable-shared \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --without-libxml
+--with-bonjour --without-libxml --without-readline
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
 set +e
@@ -111,7 +127,7 @@ otool -L ${BUILD}/lib/*dylib
 '
 
 # clear out shared libs
-rm ${BUILD}/lib/*dylib
+rm -f ${BUILD}/lib/{*.so,*.dylib}
 
 # geotiff
 echo '*building geotiff*'
@@ -139,6 +155,11 @@ cd ${PACKAGES}
 
 # gdal
 echo '*building gdal*'
+
+export OLD_CXX=${CXX}
+# note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
+# http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
+export CXX="${CXX} ${STDLIB_CXXFLAGS}"
 rm -rf gdal-${GDAL_VERSION}
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
@@ -146,6 +167,8 @@ cd gdal-${GDAL_VERSION}
 # not bigtiff check will fail…
 # fix bigtiff check
 patch configure ${PATCHES}/bigtiff_check.diff
+export OLD_LDFLAGS=${LDFLAGS}
+export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} --enable-static --enable-shared --disable-dependency-tracking \
 --with-libtiff=${BUILD} \
 --with-geotiff=${BUILD} \
@@ -170,11 +193,9 @@ patch configure ${PATCHES}/bigtiff_check.diff
 --with-freexl=no
 
 make -j${JOBS}
-# gdal 1.10 command line tools will not link, so force it since libgdal works
-set +e
-make -j${JOBS} -i -k
-make install -i -k
-set -e
+make install
+export LDFLAGS=${OLD_LDFLAGS}
+export CXX=${OLD_CXX}
 cd ${PACKAGES}
 
 
@@ -189,7 +210,7 @@ otool -L ${BUILD}/lib/*dylib
 '
 
 # clear out shared libs
-rm ${BUILD}/lib/*dylib
+rm -f ${BUILD}/lib/{*.so,*.dylib}
 
 echo '*building pkg-config*'
 rm -rf pkg-config-${PKG_CONFIG_VERSION}
@@ -250,7 +271,8 @@ cd ${PACKAGES}
 # cairo
 echo '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
-xz -d cairo-${CAIRO_VERSION}.tar.xz
+rm -rf cairo-${CAIRO_VERSION}.tar
+xz -d -k cairo-${CAIRO_VERSION}.tar.xz
 tar xf cairo-${CAIRO_VERSION}.tar
 cd cairo-${CAIRO_VERSION}
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point

@@ -3,10 +3,11 @@ set -e
 echo '...packaging ios sdk tarball'
 
 # where we are headed
+mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
-PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-ios"
-TARGET_BASENAME="${PACKAGE_NAME}-sdk"
-LOCAL_TARGET="${MAPNIK_DIST}/${TARGET_BASENAME}"
+DESCRIBE=`mapnik-config --git-describe`
+PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-ios-sdk-${STDLIB}-${DESCRIBE}"
+LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 mkdir -p "${LOCAL_TARGET}"
 STAGING_DIR="boost-staging-minimal"
 
@@ -95,16 +96,13 @@ cp ${BUILD_UNIVERSAL}/* ${LOCAL_TARGET}/lib/
 
 cd ${MAPNIK_DIST}
 rm -f ./${PACKAGE_NAME}*.tar.bz2
-FOUND_VERSION=`mapnik-config --version`
-DESCRIBE=`mapnik-config --git-describe`
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
+echo "Produced on `date`" >> ${LOCAL_TARGET}/VERSION
 
 echo "...creating tarball of mapnik build"
-TEMP_SYMLINK="${MAPNIK_DIST}/${PACKAGE_NAME}"
-ln -s ${LOCAL_TARGET} ${TEMP_SYMLINK}
 tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${PACKAGE_NAME}/
-UPLOAD="s3://mapnik/dist/v${FOUND_VERSION}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2"
+FINAL_BASENAME="${PACKAGE_NAME}-${DESCRIBE}"
+UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${FINAL_BASENAME}.tar.bz2"
 echo "*uploading ${UPLOAD}"
-/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${PACKAGE_NAME}-${DESCRIBE}.tar.bz2 ${UPLOAD}
-rm ${TEMP_SYMLINK}
+#/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${FINAL_BASENAME}.tar.bz2 ${UPLOAD}
 # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
