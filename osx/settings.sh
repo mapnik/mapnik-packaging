@@ -30,9 +30,10 @@ if [ $UNAME = 'Darwin' ]; then
     export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
     export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
+    export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first -Wl,-S"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
+    export LD="clang"
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
 else # linux
