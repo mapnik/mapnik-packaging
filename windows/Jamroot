@@ -250,7 +250,17 @@ if $(sdk)
         : <location>$(prefix)/include
        ;
 
-    install install-freetype2
+    install install-cairo5
+        : $(MAPNIK_DEPS_DIR)/cairo/src/cairo-svg.h
+        : <location>$(prefix)/include
+       ;
+
+    install install-cairo6
+        : $(MAPNIK_DEPS_DIR)/cairo/src/cairo-pdf.h
+        : <location>$(prefix)/include
+       ;
+
+	   install install-freetype2
         : $(MAPNIK_DEPS_DIR)/freetype/include/ft2build.h
         : <location>$(prefix)/include
        ;
