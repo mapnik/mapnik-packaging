@@ -16,31 +16,33 @@ else
   echo "new build detected, carrying on"
 fi
 
+BUILD_DEPS=false
+
+function build_all {
+  if [ $BUILD_DEPS = true ];  then
+    ./scripts/build_core_deps.sh
+    ./scripts/build_protobuf.sh
+  fi
+  ./scripts/build_mapnik_ios.sh
+}
+
 # x86_64
 source MacOSX.sh
 # required for bcp header copy
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
-./scripts/build_mapnik_ios.sh
+build_all
 
 # i386
 source iPhoneSimulator.sh
 # required first for cross compiling later on arm
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
-./scripts/build_mapnik_ios.sh
+build_all
 
 # armv7
 source iPhoneOS.sh
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
-./scripts/build_mapnik_ios.sh
+build_all
 
 # armv7s
 source iPhoneOSs.sh
-./scripts/build_core_deps.sh
-./scripts/build_protobuf.sh
-./scripts/build_mapnik_ios.sh
+build_all
 
 # done now package
 ./scripts/make_universal.sh
