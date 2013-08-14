@@ -19,7 +19,7 @@ cp -R ${MAPNIK_BIN_SOURCE}/* ${LOCAL_TARGET}/
 
 # package more boost headers
 # (only needed to compile mapnik itself)
-cd ${PACKAGES}/boost*/
+cd ${PACKAGES}/boost*-x86_64/
 mkdir -p boost-staging
 echo '...copying boost headers'
 ./dist/bin/bcp \
