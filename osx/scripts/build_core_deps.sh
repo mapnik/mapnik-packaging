@@ -14,7 +14,11 @@ echo '*building bzip2'
 rm -rf bzip2-${BZIP2_VERSION}
 tar xf bzip2-${BZIP2_VERSION}.tar.gz
 cd bzip2-${BZIP2_VERSION}
-make install PREFIX=${BUILD} CC="$CC" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" -i -k
+# note: -i -k only for android since ranlib breaks: error: bz2: no archive symbol table (run ranlib)
+make install PREFIX=${BUILD} CC="$CC" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" RANLIB="${RANLIB}" -i -k
+if [ ${PLATFORM} = 'Android' ]; then
+    ${RANLIB} ${BUILD}/lib/libbz2.a
+fi
 cd ${PACKAGES}
 
 # zlib
@@ -26,6 +30,9 @@ cd zlib-${ZLIB_VERSION}
 #if [ $UNAME = 'Darwin' ]; then
 #  patch -N < ${PATCHES}/zlib-configure.diff
 #fi
+if [ ${PLATFORM} = 'Android' ]; then
+   patch -N < ${PATCHES}/android-zlib.diff
+fi
 ./configure --prefix=${BUILD}
 make -j$JOBS
 make install
@@ -69,11 +76,24 @@ make install
 cd ${PACKAGES}
 
 # libxml2
-# TODO: https://docs.google.com/a/mapbox.com/document/d/1AcQlm_bl8TQ0n3of5udyMzIbk54712-f_8Ph9zfjIsc/pub
 echo '*building libxml2*'
 rm -rf libxml2-${LIBXML2_VERSION}
 tar xf libxml2-${LIBXML2_VERSION}.tar.gz
 cd libxml2-${LIBXML2_VERSION}
+export OLD_LIBS="${LIBS}"
+export OLD_CFLAGS="${CFLAGS}"
+if [ ${PLATFORM} = 'Android' ]; then
+    mkdir ./tmp
+    cd ./tmp
+    cp ${PATCHES}/glob.c .
+    cp ${PATCHES}/glob.h .
+    ${CC} -c -I. ${CFLAGS} glob.c -Wall -Wextra
+    chmod +x glob.o
+    RIGHT_HERE=$(pwd)
+    export LIBS="${RIGHT_HERE}/glob.o"
+    export CFLAGS="${CFLAGS} -I${RIGHT_HERE}"
+    cd ../
+fi
 ./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
 --enable-static --disable-shared ${HOST_ARG} \
 --with-icu=${PREFIX} \
@@ -103,8 +123,9 @@ cd libxml2-${LIBXML2_VERSION}
 --without-c14n
 make -j${JOBS}
 make install
+export LIBS="${OLD_LIBS}"
+export CFLAGS="${OLD_CFLAGS}"
 cd ${PACKAGES}
-
 
 if [ $UNAME = 'Darwin' ]; then
     lipo -info ${BUILD}/lib/*.a | grep arch
