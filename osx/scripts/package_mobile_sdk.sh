@@ -45,6 +45,7 @@ cp -R "${MAPNIK_BIN_SOURCE}/include/" ${LOCAL_TARGET}/include/
 #fi
 
 echo '...packaging boost headers'
+# TODO - make finding bcp more robust
 cd ${PACKAGES}/boost*-x86_64/
 mkdir -p ${STAGING_DIR}
 ./dist/bin/bcp \
