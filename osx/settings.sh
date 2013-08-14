@@ -20,6 +20,8 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_LDFLAGS=
     export CORE_CC="gcc"
     export CORE_CXX="g++"
+    export AR=
+    export RANLIB=
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
@@ -86,6 +88,8 @@ elif [ ${UNAME} = 'Darwin' ]; then
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export CORE_CC="${TOOLCHAIN_ROOT}/clang"
     export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+    export AR=
+    export RANLIB=
     export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
     export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"

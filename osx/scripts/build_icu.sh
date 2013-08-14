@@ -26,20 +26,19 @@ if [ $BOOST_ARCH = "arm" ]; then
 else
     export CROSS_FLAGS=""
 fi
+# note: enable-draft is needed for U_ICUDATA_ENTRY_POINT
 ./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
---disable-samples \
+--enable-draft \
 --enable-static \
---disable-shared \
 --with-data-packaging=archive \
+--disable-shared \
 --disable-tests \
---enable-tests=no \
 --disable-extras \
 --disable-layout \
---disable-draft \
 --disable-icuio \
 --disable-samples \
 --disable-dyload
-make -j${JOBS} -i -k
+make -j${JOBS}
 make install
 export LDFLAGS=${OLD_LDFLAGS}
 export CPPFLAGS=${OLD_CPPFLAGS}
