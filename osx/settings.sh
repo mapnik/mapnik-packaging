@@ -41,8 +41,6 @@ if [ ${PLATFORM} = 'Linux' ]; then
     fi
 elif [ ${PLATFORM} = 'Android' ]; then
     export UNAME='Android'
-    # http://dl.google.com/android/adt/adt-bundle-mac-x86_64-20130729.zip
-    export ADT_BUNDLE="${ROOTDIR}/adt-bundle-mac"
     # http://dl.google.com/android/ndk/android-ndk-r9-darwin-x86.tar.bz2
     export NDK_PATH="${ROOTDIR}/android-ndk-r9"
     #ln -s ../android/android-ndk-r9 ./android-ndk-r9
@@ -63,8 +61,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export EXTRA_LDFLAGS="-Wl,-S"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="gcc-arm"
-    export SDK_PATH="${ADT_BUNDLE}/sdk/"
-    export PATH="${SDK_PATH}/tools:${SDK_PATH}/platform-tools":${PATH}
+    export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     export CORE_CXX="arm-linux-androideabi-g++"
     export CORE_CC="arm-linux-androideabi-gcc"
