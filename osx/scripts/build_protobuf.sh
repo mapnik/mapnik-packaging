@@ -7,7 +7,14 @@ tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2
 mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 cd protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 if [ $BOOST_ARCH = "arm" ]; then
-    export CROSS_FLAGS="--with-protoc=$(pwd)/../protobuf-${PROTOBUF_VERSION}-i386/src/protoc"
+    if [ -f "$(pwd)/../protobuf-${PROTOBUF_VERSION}-i386/src/protoc" ]; then
+        NATIVE_PROTOC="$(pwd)/../protobuf-${PROTOBUF_VERSION}-i386/src/protoc"
+    elif [ -f "$(pwd)/../protobuf-${PROTOBUF_VERSION}-x86-64/src/protoc" ]; then
+        NATIVE_PROTOC="$(pwd)/../protobuf-${PROTOBUF_VERSION}-x86-64/src/protoc"
+    else
+        echo 'could not find pre-built protobuf/protoc from a native/host arch!'
+    fi
+    export CROSS_FLAGS="--with-protoc=${NATIVE_PROTOC}"
 else
     export CROSS_FLAGS=""
 fi
