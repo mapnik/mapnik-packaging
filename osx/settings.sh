@@ -14,14 +14,17 @@ export UNAME=$(uname -s);
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 export ICU_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1 -DU_USING_ICU_NAMESPACE=0 -DU_STATIC_IMPLEMENTATION=1 -DU_TIMEZONE=0 -DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=0 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
 
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt51l.dat"
+
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS=
+    export EXTRA_LDFLAGS="-Wl,-S"
     export CORE_CC="gcc"
     export CORE_CXX="g++"
     export AR=
     export RANLIB=
+    export ARCH_FLAGS=
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
@@ -57,6 +60,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     alias ldd="arm-linux-androideabi-readelf -d "
     export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export EXTRA_LDFLAGS="-Wl,-S"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH="${ADT_BUNDLE}/sdk/"
@@ -66,6 +70,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export CORE_CC="arm-linux-androideabi-gcc"
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
+    export ARCH_FLAGS=
     export RANLIB="arm-linux-androideabi-ranlib"
     # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
     #alias libtool="arm-linux-androideabi-ar cru"
