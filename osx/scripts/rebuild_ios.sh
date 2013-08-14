@@ -47,4 +47,4 @@ build_all
 # done now package
 ./scripts/make_universal.sh
 # TODO 
-./scripts/package_ios_sdk.sh
+./scripts/package_mobile_sdk.sh
