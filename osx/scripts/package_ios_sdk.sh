@@ -6,7 +6,7 @@ echo '...packaging mobile sdk tarball'
 mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 DESCRIBE=`mapnik-config --git-describe`
-PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${PLATFORM}-sdk-${STDLIB}-${DESCRIBE}"
+PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${PLATFORM}-sdk-${DESCRIBE}"
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 mkdir -p "${LOCAL_TARGET}"
 STAGING_DIR="boost-staging-minimal"
@@ -23,20 +23,17 @@ mkdir ${LOCAL_TARGET}/bin
 
 echo '...copying over mapnik'
 if [ -d "${BUILD_ROOT}-i386-mapnik" ]; then
-  cp "${BUILD_ROOT}-i386-mapnik${MAPNIK_INSTALL}/bin/mapnik-config" ${LOCAL_TARGET}/bin/
   cp "${BUILD_ROOT}-i386/bin/protoc" ${LOCAL_TARGET}/bin/
 elif [ -d "${BUILD_ROOT}-x86_64-mapnik" ]; then
-  cp "${BUILD_ROOT}-x86_64-mapnik${MAPNIK_INSTALL}/bin/mapnik-config" ${LOCAL_TARGET}/bin/
   cp "${BUILD_ROOT}-x86_64/bin/protoc" ${LOCAL_TARGET}/bin/
 elif [ -d "${ROOTDIR}/out/build-libc++-x86_64-mapnik" ]; then
-  cp "${ROOTDIR}/out/build-libc++-x86_64-mapnik${MAPNIK_INSTALL}/bin/mapnik-config" ${LOCAL_TARGET}/bin/
   cp "${ROOTDIR}/out/build-libc++-x86_64/bin/protoc" ${LOCAL_TARGET}/bin/
 elif [ -d "${ROOTDIR}/out/build-libc++-i386-mapnik" ]; then
-  cp "${ROOTDIR}/out/build-libc++-i386-mapnik${MAPNIK_INSTALL}/bin/mapnik-config" ${LOCAL_TARGET}/bin/
   cp "${ROOTDIR}/out/build-libc++-i386/bin/protoc" ${LOCAL_TARGET}/bin/
 fi
 
-cp -R ${MAPNIK_BIN_SOURCE}/include/ ${LOCAL_TARGET}/include/
+cp "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" ${LOCAL_TARGET}/bin/
+cp -R "${MAPNIK_BIN_SOURCE}/include/" ${LOCAL_TARGET}/include/
 #mkdir -p ${LOCAL_TARGET}/share/mapnik/icu
 #if [ $BOOST_ARCH = "x86" ]; then
 #  cp -R ${BUILD_ROOT}-i386/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/mapnik/icu/
