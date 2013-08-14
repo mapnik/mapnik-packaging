@@ -4,10 +4,10 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # icu
-./build_icu.sh
+${ROOTDIR}/scripts/build_icu.sh
 
 # boost
-./build_boost.sh
+${ROOTDIR}/scripts/build_boost.sh
 
 # bzip2
 echo '*building bzip2'

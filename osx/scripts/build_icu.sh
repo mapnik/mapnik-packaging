@@ -21,7 +21,14 @@ tar xf icu4c-${ICU_VERSION2}-src.tgz
 mv icu icu-${ARCH_NAME}
 cd icu-${ARCH_NAME}/source
 if [ $BOOST_ARCH = "arm" ]; then
-    export CROSS_FLAGS="--with-cross-build=$(pwd)/../../icu-i386/source"
+    if [ -d "$(pwd)/../../icu-i386/source" ]; then
+        NATIVE_BUILD_DIR="$(pwd)/../../icu-i386/source"
+    elif [ -d "$(pwd)/../../icu-x86_64/source" ]; then
+        NATIVE_BUILD_DIR="$(pwd)/../../icu-x86_64/source"
+    else
+        echo 'could not find pre-built icu from a native/host arch!'
+    fi
+    export CROSS_FLAGS="--with-cross-build=${NATIVE_BUILD_DIR}"
     export CPPFLAGS="${CPPFLAGS} -I$(pwd)/common -I$(pwd)/tools/tzcode/"
 else
     export CROSS_FLAGS=""
