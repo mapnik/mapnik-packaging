@@ -11,7 +11,69 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
 export UNAME=$(uname -s);
 
-if [ $UNAME = 'Darwin' ]; then
+# note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
+export ICU_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1 -DU_USING_ICU_NAMESPACE=0 -DU_STATIC_IMPLEMENTATION=1 -DU_TIMEZONE=0 -DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=0 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
+
+if [ ${PLATFORM} = 'Linux' ]; then
+    export EXTRA_CFLAGS="-fPIC"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export EXTRA_LDFLAGS=
+    export CORE_CC="gcc"
+    export CORE_CXX="g++"
+    export JOBS=`grep -c ^processor /proc/cpuinfo`
+    export BOOST_TOOLSET="gcc"
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    if [ $CXX11 = 'true' ]; then
+      export STDLIB="libstdc++"
+      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_LDFLAGS=""
+      echo "building against libstdc++ in c++11 mode"
+    else
+      echo "building against libstdc++"
+      export STDLIB="libstdc++"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
+elif [ ${PLATFORM} = 'Android' ]; then
+    export UNAME='Android'
+    # http://dl.google.com/android/adt/adt-bundle-mac-x86_64-20130729.zip
+    export ADT_BUNDLE="${ROOTDIR}/adt-bundle-mac"
+    # http://dl.google.com/android/ndk/android-ndk-r9-darwin-x86.tar.bz2
+    export NDK_PATH="${ROOTDIR}/android-ndk-r9"
+    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
+    export PLATFORM_PREFIX="${ROOTDIR}/platform/"
+    export API_LEVEL="android-18"
+    if [ ! -d "${PLATFORM_PREFIX}" ]; then
+        "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
+          --toolchain=arm-linux-androideabi-4.6 \
+          --install-dir="${PLATFORM_PREFIX}" \
+          --stl=gnustl \
+          --arch=arm \
+          --platform="${API_LEVEL}"
+    fi
+    export ICU_CPP_FLAGS="${ICU_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    alias ldd="arm-linux-androideabi-readelf -d "
+    export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export JOBS=`sysctl -n hw.ncpu`
+    export BOOST_TOOLSET="gcc-arm"
+    export SDK_PATH="${ADT_BUNDLE}/sdk/"
+    export PATH="${SDK_PATH}/tools:${SDK_PATH}/platform-tools":${PATH}
+    export PATH="${PLATFORM_PREFIX}/bin":${PATH}
+    export CORE_CXX="arm-linux-androideabi-g++"
+    export CORE_CC="arm-linux-androideabi-gcc"
+    export LD="arm-linux-androideabi-ld"
+    export AR="arm-linux-androideabi-ar"
+    export RANLIB="arm-linux-androideabi-ranlib"
+    # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
+    #alias libtool="arm-linux-androideabi-ar cru"
+    #export libtool="arm-linux-androideabi-ar cru"
+    export NM="arm-linux-androideabi-nm"
+    echo "building against libstdc++"
+    export STDLIB="libstdc++"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
+elif [ ${UNAME} = 'Darwin' ]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
     XCODE_PREFIX=$( xcode-select -print-path )
@@ -36,35 +98,21 @@ if [ $UNAME = 'Darwin' ]; then
     export LD="clang"
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-else # linux
-    export EXTRA_CFLAGS="-fPIC"
-    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS=
-    export CORE_CC="gcc"
-    export CORE_CXX="g++"
-    export JOBS=`grep -c ^processor /proc/cpuinfo`
-    export BOOST_TOOLSET="gcc"
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    if [ $CXX11 = 'true' ]; then
+        export STDLIB="libc++"
+        export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
+        export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
+        echo "building against libc++ in c++11 mode"
+    else
+      echo "building against libstdc++"
+      export STDLIB="libstdc++"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
+else
+    echo '**unhandled platform: ${PLATFORM}**'
 fi
 
-if [ $CXX11 = 'true' ]; then
-  if [ $UNAME = 'Darwin' ]; then
-    export STDLIB="libc++"
-    export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
-    export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-    echo "building against libc++ in c++11 mode"
-  else
-    export STDLIB="libstdc++"
-    export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
-    export STDLIB_LDFLAGS=""
-    echo "building against libstdc++ in c++11 mode"
-  fi
-else
-  echo "building against libstdc++"
-  export STDLIB="libstdc++"
-  export STDLIB_CXXFLAGS=""
-  export STDLIB_LDFLAGS=""
-fi
 export BUILDDIR="build-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export OPTIMIZATION="3"

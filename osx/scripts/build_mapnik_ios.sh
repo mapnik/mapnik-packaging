@@ -13,7 +13,7 @@ echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
 #echo "CUSTOM_CXXFLAGS = '-gline-tables-only -fno-omit-frame-pointer ${CXXFLAGS}'" >> config.py
-echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
+echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_CPP_FLAGS}'" >> config.py
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
@@ -40,7 +40,7 @@ rm -f bindings/python/mapnik/_mapnik.so
 
 ./configure \
   PATH_REMOVE="/usr/include" \
-  INPUT_PLUGINS=shape,csv,geojson,sqlite \
+  INPUT_PLUGINS=shape,csv,geojson \
   PNG=True \
   JPEG=True \
   BENCHMARK=False \
@@ -48,7 +48,6 @@ rm -f bindings/python/mapnik/_mapnik.so
   ${HOST_ARGS_FOR_IOS} \
   FULL_LIB_PATH=False \
   BINDINGS='' \
-  INPUT_PLUGINS=shape,csv,geojson,sqlite \
   PLUGIN_LINKING='static' \
   SAMPLE_INPUT_PLUGINS=False \
   SHAPE_MEMORY_MAPPED_FILE=False \
