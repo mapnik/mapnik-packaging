@@ -62,17 +62,17 @@ fi
 # only build with icudata library support on mac
 if [ $BOOST_ARCH = "x86" ]; then
     export BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
-    export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} ${ICU_CPP_FLAGS}"
+    export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} ${ICU_CORE_CPP_FLAGS}"
     export ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
 else
     mv libs/regex/build/has_icu_test.cpp libs/regex/build/has_icu_test.cpp_
     echo '#error' > libs/regex/build/has_icu_test.cpp
     export BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-    export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
+    export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}"
     export ICU_DETAILS=""
 fi
 
-if [ $PLATFORM = 'Android' ];  then
+if [ $PLATFORM = 'Android' ]; then
     # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
     mkdir -p tmp/sys/
     echo '#include <sys/statfs.h>' > tmp/sys/statvfs.h

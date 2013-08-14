@@ -13,7 +13,11 @@ echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
 #echo "CUSTOM_CXXFLAGS = '-gline-tables-only -fno-omit-frame-pointer ${CXXFLAGS}'" >> config.py
-echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_CPP_FLAGS}'" >> config.py
+if [ $BOOST_ARCH = "x86" ]; then
+    echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_CORE_CPP_FLAGS}'" >> config.py
+else
+    echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}'" >> config.py
+fi
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py

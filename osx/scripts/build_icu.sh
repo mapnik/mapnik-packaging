@@ -15,7 +15,11 @@ export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # http://userguide.icu-project.org/packaging
 # http://thebugfreeblog.blogspot.de/2013/05/cross-building-icu-for-applications-on.html
 # U_CHARSET_IS_UTF8 is added to try to reduce icu library size (18.3)
-export CPPFLAGS=${ICU_CPP_FLAGS}
+if [ $BOOST_ARCH = "x86" ]; then
+    export CPPFLAGS="${ICU_CORE_CPP_FLAGS}"
+else
+    export CPPFLAGS="${ICU_EXTRA_CPP_FLAGS}"
+fi
 
 tar xf icu4c-${ICU_VERSION2}-src.tgz
 mv icu icu-${ARCH_NAME}
@@ -46,7 +50,7 @@ cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 --disable-icuio \
 --disable-samples \
 --disable-dyload
-make -j${JOBS}
+make -j${JOBS} -i -k
 make install
 export LDFLAGS=${OLD_LDFLAGS}
 export CPPFLAGS=${OLD_CPPFLAGS}
