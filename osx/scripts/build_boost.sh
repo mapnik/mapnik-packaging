@@ -54,7 +54,7 @@ if [ $BOOST_ARCH = "arm" ]; then
     export EXTRA_LIBS_ARGS=""
 else
     export CROSS_FLAGS="tools/bcp"
-    export EXTRA_LIBS_ARGS="--with-program_options"
+    export EXTRA_LIBS_ARGS="--with-program_options --with-test"
 fi
 
 # TODO set address-model ?

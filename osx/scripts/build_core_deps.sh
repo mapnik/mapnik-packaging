@@ -94,16 +94,18 @@ if [ ${PLATFORM} = 'Android' ]; then
     export CFLAGS="${CFLAGS} -I${RIGHT_HERE}"
     cd ../
 fi
+# note --with-writer for osmium
 ./configure --prefix=${BUILD} --with-zlib=${PREFIX} \
 --enable-static --disable-shared ${HOST_ARG} \
 --with-icu=${PREFIX} \
---without-python \
+--with-writer \
 --with-xptr \
 --with-xpath \
 --with-xinclude \
 --with-threads \
 --with-tree \
 --with-catalog \
+--without-python \
 --without-legacy \
 --without-iconv \
 --without-debug \
@@ -115,14 +117,12 @@ fi
 --without-schemas \
 --without-schematron \
 --without-valid \
---without-writer \
 --without-modules \
 --without-lzma \
 --without-readline \
 --without-regexps \
 --without-c14n
-make -j${JOBS}
-make install
+make -j${JOBS} install
 export LIBS="${OLD_LIBS}"
 export CFLAGS="${OLD_CFLAGS}"
 cd ${PACKAGES}
