@@ -56,9 +56,9 @@ export LDFLAGS=${OLD_LDFLAGS}
 export CPPFLAGS=${OLD_CPPFLAGS}
 cd ${PACKAGES}
 
-if [ $UNAME = 'Darwin' ]; then
-    otool -L ${BUILD}/lib/*.dylib | grep c++
-fi
+#if [ $UNAME = 'Darwin' ]; then
+#    otool -L ${BUILD}/lib/*.dylib | grep c++
+#fi
 
 # clear out shared libs
 rm -f ${BUILD}/lib/{*.so,*.dylib}
