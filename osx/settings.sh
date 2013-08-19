@@ -102,10 +102,11 @@ elif [ ${UNAME} = 'Darwin' ]; then
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
+    # and needs to default to 'gyp-mac-tool'
     #export LD="clang"
-    export LD=ld
-    export AR=ar
-    export RANLIB=ranlib
+    unset LD
+    unset AR
+    unset RANLIB
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [ $CXX11 = 'true' ]; then
