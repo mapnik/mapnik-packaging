@@ -92,8 +92,6 @@ elif [ ${UNAME} = 'Darwin' ]; then
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export CORE_CC="${TOOLCHAIN_ROOT}/clang"
     export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
-    export AR=ar
-    export RANLIB=ranlib
     export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
     export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"
@@ -103,7 +101,11 @@ elif [ ${UNAME} = 'Darwin' ]; then
     export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first -Wl,-S"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
-    export LD="clang"
+    # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
+    #export LD="clang"
+    export LD=ld
+    export AR=ar
+    export RANLIB=ranlib
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [ $CXX11 = 'true' ]; then
