@@ -7,7 +7,7 @@ cd ${PACKAGES}
 
 function download {
     if [ ! -f $1 ]; then
-        echo downloading $1
+        echo downloading ${S3_BASE}/$1
         curl -s -S -f -O  ${S3_BASE}/$1
     else
         echo using cached $1
