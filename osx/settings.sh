@@ -84,23 +84,31 @@ elif [ ${PLATFORM} = 'Android' ]; then
 elif [ ${UNAME} = 'Darwin' ]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-    XCODE_PREFIX=$( xcode-select -print-path )
+    if [ -d /Applications/Xcode.app/ ]; then
+      # set this up with:
+      #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+      # for more info
+      #   man xcrun
+      XCODE_PREFIX=$( xcode-select -print-path )
+      export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+      export CORE_CC="${TOOLCHAIN_ROOT}/clang"
+      export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+      export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
+      # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
+      export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"
+      export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
+      export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first -Wl,-S"
+    else
+      export TOOLCHAIN_ROOT="/usr/bin"
+      export CORE_CC="${TOOLCHAIN_ROOT}/clang"
+      export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
+      export EXTRA_CFLAGS=
+      export EXTRA_LDFLAGS="-Wl,-search_paths_first -Wl,-S"
+    fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
-    # set this up with:
-    #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-    # for more info
-    #   man xcrun
-    export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
-    export CORE_CC="${TOOLCHAIN_ROOT}/clang"
-    export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
-    export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
-    # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
-    export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"
-    export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-    export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first -Wl,-S"
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
