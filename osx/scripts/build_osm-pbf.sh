@@ -2,11 +2,15 @@ set -e
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-rm -rf v1.3.0.tar.gz
-wget https://github.com/scrosby/OSM-binary/archive/v1.3.0.tar.gz
-tar xf v1.3.0.tar.gz
+rm -rf v1.3.0
+curl -s -S -f -O https://codeload.github.com/scrosby/OSM-binary/tar.gz/v1.3.0
+tar xf v1.3.0
 cd OSM-binary-1.3.0/src
 patch -N < $PATCHES/osm-pbf.diff
-make CXX=$CXX AR=$AR CXXFLAGS="${CXXFLAGS}"
+if [ $AR ]; then
+  make CXX=$CXX AR=$AR CXXFLAGS="${CXXFLAGS}"
+else
+  make CXX=$CXX CXXFLAGS="${CXXFLAGS}"
+fi 
 make install DESTDIR=${BUILD}
 cd ${PACKAGES}
