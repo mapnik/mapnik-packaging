@@ -184,8 +184,8 @@ export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXX
 export ICU_VERSION="51.2"
 export ICU_VERSION2="51_2"
 
-export BOOST_VERSION="1.53.0"
-export BOOST_VERSION2="1_53_0"
+export BOOST_VERSION="1.54.0"
+export BOOST_VERSION2="1_54_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3071700"
 # http://download.savannah.gnu.org/releases/freetype/
