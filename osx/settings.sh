@@ -23,6 +23,7 @@ export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt51l.dat"
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    # TODO -Wl,--gc-sections
     export EXTRA_LDFLAGS="-Wl,-S"
     export CORE_CC="gcc"
     export CORE_CXX="g++"
@@ -89,7 +90,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
       #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
       # for more info
       #   man xcrun
-      XCODE_PREFIX=$( xcode-select -print-path )
+      export XCODE_PREFIX=$( xcode-select -print-path )
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
@@ -104,6 +105,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
       export EXTRA_CFLAGS=
+      # todo -no_dead_strip_inits_and_terms
       export EXTRA_LDFLAGS="-Wl,-search_paths_first -Wl,-S"
     fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
