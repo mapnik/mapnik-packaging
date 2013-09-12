@@ -85,12 +85,12 @@ elif [ ${PLATFORM} = 'Android' ]; then
 elif [ ${UNAME} = 'Darwin' ]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-    if [ -d /Applications/Xcode.app/ ]; then
+    export XCODE_PREFIX=$( xcode-select -print-path )
+    if [ -d "${XCODE_PREFIX}" ]; then
       # set this up with:
       #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
       # for more info
       #   man xcrun
-      export XCODE_PREFIX=$( xcode-select -print-path )
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
