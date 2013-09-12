@@ -94,6 +94,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+      export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
@@ -229,7 +230,7 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.17"
+export NODE_VERSION="0.10.18"
 
 function download {
     if [ ! -f $1 ]; then
