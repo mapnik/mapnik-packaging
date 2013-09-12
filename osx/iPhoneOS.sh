@@ -3,8 +3,8 @@ export PLATFORM="iPhoneOS"
 export BOOST_ARCH="arm"
 export ARCH_NAME="armv7"
 export HOST_ARG="--host=arm-apple-darwin"
-export MIN_SDK_VERSION="6.1"
-export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=${MIN_SDK_VERSION}"
+export ACTIVE_SDK_VERSION="6.1"
+export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=${ACTIVE_SDK_VERSION}"
 source settings.sh
 
 # learn about arm: http://wanderingcoder.net/2010/07/19/ought-arm/
