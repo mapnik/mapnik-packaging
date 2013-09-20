@@ -1,5 +1,5 @@
 # settings
-export CXX11='true'
+export CXX11=false
 export OFFICIAL_RELEASE='false'
 export USE_BOOST_TRUNK='false'
 
@@ -24,7 +24,8 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections
-    export EXTRA_LDFLAGS="-Wl,-S"
+    # Note: stripping with -Wl,-S breaks dtrace
+    export EXTRA_LDFLAGS=""
     export CORE_CC="gcc"
     export CORE_CXX="g++"
     export AR=ar
@@ -33,7 +34,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    if [ $CXX11 = 'true' ]; then
+    if [ ${CXX11} = true ]; then
       export STDLIB="libstdc++"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
@@ -63,7 +64,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     alias ldd="arm-linux-androideabi-readelf -d "
     export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS="-Wl,-S"
+    export EXTRA_LDFLAGS=""
     export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
@@ -100,14 +101,15 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
-      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first -Wl,-S"
+      # Note: stripping with -Wl,-S breaks dtrace
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
     else
       export TOOLCHAIN_ROOT="/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
-      export EXTRA_CFLAGS=
+      export EXTRA_CFLAGS=""
       # todo -no_dead_strip_inits_and_terms
-      export EXTRA_LDFLAGS="-Wl,-search_paths_first -Wl,-S"
+      export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
@@ -122,7 +124,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
     unset RANLIB
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    if [ $CXX11 = 'true' ]; then
+    if [ ${CXX11} = true ]; then
         export STDLIB="libc++"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
