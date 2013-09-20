@@ -1,5 +1,5 @@
 # settings
-export CXX11=false
+export CXX11=true
 export OFFICIAL_RELEASE='false'
 export USE_BOOST_TRUNK='false'
 
