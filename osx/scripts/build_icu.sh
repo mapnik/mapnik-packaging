@@ -15,7 +15,7 @@ export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # http://userguide.icu-project.org/packaging
 # http://thebugfreeblog.blogspot.de/2013/05/cross-building-icu-for-applications-on.html
 # U_CHARSET_IS_UTF8 is added to try to reduce icu library size (18.3)
-if [ $BOOST_ARCH = "x86" ]; then
+if [ ${BOOST_ARCH} = "x86" ]; then
     export CPPFLAGS="${ICU_CORE_CPP_FLAGS}"
 else
     export CPPFLAGS="${ICU_EXTRA_CPP_FLAGS}"

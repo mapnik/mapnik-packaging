@@ -60,7 +60,7 @@ fi
 # TODO set address-model ?
 
 # only build with icudata library support on mac
-if [ $BOOST_ARCH = "x86" ]; then
+if [ ${BOOST_ARCH} = "x86" ]; then
     export BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
     export BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} ${ICU_CORE_CPP_FLAGS}"
     export ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
