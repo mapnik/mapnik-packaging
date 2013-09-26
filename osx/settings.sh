@@ -48,14 +48,17 @@ if [ ${PLATFORM} = 'Linux' ]; then
     fi
 elif [ ${PLATFORM} = 'Android' ]; then
     export UNAME='Android'
-    # http://dl.google.com/android/ndk/android-ndk-r9-darwin-x86.tar.bz2
-    export NDK_PATH="${ROOTDIR}/android-ndk-r9"
-    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
-    export PLATFORM_PREFIX="${ROOTDIR}/platform/"
     export API_LEVEL="android-18"
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
+    # run ./scripts/setup-android-ndk-adk-osx.sh to setup
+    export NDK_PATH="${PACKAGES}/android-ndk-r9"
+    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
+    export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
+    # NOTE: make-standalone-toolchain.sh --help for options
     if [ ! -d "${PLATFORM_PREFIX}" ]; then
+        echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
         "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
-          --toolchain=arm-linux-androideabi-4.6 \
+          --toolchain="${ANDROID_CROSS_COMPILER}" \
           --install-dir="${PLATFORM_PREFIX}" \
           --stl=gnustl \
           --arch=arm \
