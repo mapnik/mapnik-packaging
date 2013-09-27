@@ -1,5 +1,4 @@
 # settings
-export CXX11=true
 export OFFICIAL_RELEASE='false'
 export USE_BOOST_TRUNK='false'
 
@@ -35,6 +34,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    export CXX11=false
     if [ ${CXX11} = true ]; then
       export STDLIB="libstdc++"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
@@ -128,6 +128,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
     unset RANLIB
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    export CXX11=false
     if [ ${CXX11} = true ]; then
         export STDLIB="libc++"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
