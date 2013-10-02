@@ -1,0 +1,60 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH SHAPEINDEX 1 "January 11, 2007"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+shapeindex \- program to creates file system based index for ESRI shapefiles
+.SH SYNOPSIS
+.B shapeindex
+.RI [ options ]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B shapeindex
+command.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
+.\" respectively.
+\fBshapeindex\fP is a program that creates file system based index (*.index)
+for ESRI shapefiles. These files are used for fast 'in box' queries on large
+shapefiles.
+.SH OPTIONS
+This program follows the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-V, \-\-version
+Show version of program.
+.TP
+.B \-v, \-\-verbose
+Show verbose output.
+.TP
+.B \-d, \-\-depth [arg]
+Specify maximum tree depth (default 8)
+.TP
+.B \-r, \-\-ratio [arg]
+Specify split ratio (default 0.55)
+.TP
+.B \-\-shape_files [file1 file2..fileN]
+Specify shape files to index
+.SH AUTHOR
+shapeindex was written by Artem Pavlenko.
+.PP
+This manual page was written by Dominic Hargreaves <dom@earth.li>,
+for the Debian project (but may be used by others).
