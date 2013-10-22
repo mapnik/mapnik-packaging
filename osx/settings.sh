@@ -34,7 +34,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    if [ ${CXX11} = true ]; then
+    if [ "${CXX11}" = true ]; then
       export STDLIB="libstdc++"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
@@ -127,7 +127,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
     unset RANLIB
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    if [ ${CXX11} = true ]; then
+    if [ "${CXX11}" = true ]; then
         export STDLIB="libc++"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
@@ -235,7 +235,7 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.20"
+export NODE_VERSION="0.10.21"
 export SPARSEHASH_VERSION="2.0.2"
 
 function download {
