@@ -73,6 +73,7 @@ else
 fi
 
 if [ $PLATFORM = 'Android' ]; then
+    # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
     # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
     mkdir -p tmp/sys/
     echo '#include <sys/statfs.h>' > tmp/sys/statvfs.h
