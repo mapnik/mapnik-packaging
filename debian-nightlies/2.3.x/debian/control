@@ -40,7 +40,8 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- mapnik-utils (= ${binary:Version}),
+ mapnik-utils (= ${binary:Version})
+Suggests:
  ttf-dejavu,
  ttf-unifont
 Suggests: postgis
@@ -111,7 +112,8 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- libmapnik (= ${binary:Version}),
+ libmapnik (= ${binary:Version})
+Recommends:
  python-lxml
 Conflicts: mapnik-utils
 Replaces: mapnik-utils
@@ -139,7 +141,8 @@ Depends:
  ${shlibs:Depends},
  ${misc:Depends},
  ${python:Depends},
- libmapnik (= ${binary:Version}),
+ libmapnik (= ${binary:Version})
+Recommends:
  python-cairo
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
