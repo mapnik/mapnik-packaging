@@ -43,8 +43,8 @@ Depends:
  mapnik-utils (= ${binary:Version})
 Suggests:
  ttf-dejavu,
- ttf-unifont
-Suggests: postgis
+ ttf-unifont,
+ postgis
 Description: C++/Python toolkit for developing GIS applications (libraries)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
  (Geographic Information Systems) applications. At the core is a C++
