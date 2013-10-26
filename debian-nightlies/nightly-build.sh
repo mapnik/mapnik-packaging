@@ -122,6 +122,9 @@ for BRANCH in ${BRANCHES_TO_BUILD}; do
     git checkout "$BRANCH"
     git merge --ff-only "origin/${BRANCH}"
     REV="$(git log -1 --pretty=format:%h)"
+    if [ ! -f "../${BRANCH}/prev.rev" ]; then
+       echo "../${BRANCH}/prev.rev";
+    fi
     REV_PREV="$(cat ../${BRANCH}/prev.rev)"
     echo "Previous revision was ${REV_PREV}"
 
