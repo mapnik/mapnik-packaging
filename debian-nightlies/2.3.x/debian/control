@@ -39,8 +39,7 @@ Package: libmapnik
 Architecture: any
 Depends:
  ${shlibs:Depends},
- ${misc:Depends},
- mapnik-utils (= ${binary:Version})
+ ${misc:Depends}
 Suggests:
  ttf-dejavu,
  ttf-unifont,
@@ -73,7 +72,6 @@ Architecture: any
 Depends:
  ${misc:Depends},
  libmapnik (= ${binary:Version}),
- mapnik-utils (= ${binary:Version}),
  libc6-dev | libc-dev,
  libboost-thread-dev (>= 1.42),
  libboost-filesystem-dev (>= 1.42),
