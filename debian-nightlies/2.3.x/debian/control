@@ -58,7 +58,14 @@ Description: C++/Python toolkit for developing GIS applications (libraries)
  High-level Python bindings (boost.python) facilitate rapid application
  development, targeting zope3, django, etc.
  .
- This package contains the shared library and input plugins.
+ This package contains the shared library and input plugins that lack depedencies.
+
+Package: mapnik-input-plugin-gdal
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Mapnik GDAL input plugin for reading raster datasources.
 
 Package: libmapnik-dev
 Section: libdevel

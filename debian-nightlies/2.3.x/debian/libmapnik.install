@@ -1,2 +1,4 @@
 usr/lib/lib*.so.*
-usr/lib/mapnik/input/*
+usr/lib/mapnik/input/shape*
+usr/lib/mapnik/input/csv*
+usr/lib/mapnik/input/geojson*
