@@ -22,7 +22,6 @@ Build-Depends:
  libfreetype6-dev,
  libpq-dev,
  libproj-dev,
- libltdl7-dev,
  libgdal1-dev,
  libxml2-dev,
  libicu-dev (>= 4.2),
@@ -85,22 +84,15 @@ Depends:
  libboost-regex-dev (>= 1.42),
  libboost-python-dev (>= 1.42),
  libboost-system-dev (>= 1.42),
- libboost-program-options-dev (>= 1.42),
  libpng-dev,
  libjpeg-dev,
  libtiff-dev,
  zlib1g-dev,
  libfreetype6-dev,
- libpq-dev,
  libproj-dev,
- libltdl7-dev,
- libgdal1-dev,
  libxml2-dev,
  libicu-dev (>= 4.2),
- libcairo2-dev,
- python-cairo-dev,
- libsqlite3-dev,
- libcurl4-gnutls-dev
+ libcairo2-dev
 Suggests: mapnik-doc
 Description: C++/Python toolkit for developing GIS applications (devel)
  Mapnik is an OpenSource C++/Python toolkit for developing GIS
