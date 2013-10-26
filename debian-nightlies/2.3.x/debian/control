@@ -167,7 +167,7 @@ Depends:
  ${misc:Depends},
  ${python:Depends},
  libmapnik (= ${binary:Version})
-Recommends:
+Suggests:
  python-cairo
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
