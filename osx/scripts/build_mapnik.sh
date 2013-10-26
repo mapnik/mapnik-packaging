@@ -4,16 +4,19 @@ cd ${MAPNIK_SOURCE}
 echo 'Building mapnik'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
-rm -f src/libmapnik* # ensure both .a and .dylib are cleared
+rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 make clean
-
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
-echo "CUSTOM_CXXFLAGS = '${CXXFLAGS}'" >> config.py
+if [ ${BOOST_ARCH} = "x86" ]; then
+    echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_CORE_CPP_FLAGS}'" >> config.py
+else
+    echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}'" >> config.py
+fi
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 if [ $UNAME = 'Linux' ]; then
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -pthread'" >> config.py

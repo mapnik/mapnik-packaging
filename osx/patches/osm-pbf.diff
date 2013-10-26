@@ -1,0 +1,21 @@
+--- Makefile_	2012-12-04 20:14:05.000000000 -0800
++++ Makefile	2013-08-27 11:47:25.000000000 -0700
+@@ -16,12 +16,12 @@
+ 	cp *.pb.h ../include/osmpbf/
+ 
+ install:
+-	install -m 755 -g root -o root -d $(DESTDIR)/usr/lib
+-	install -m 644 -g root -o root libosmpbf.a $(DESTDIR)/usr/lib
+-	install -m 755 -g root -o root -d $(DESTDIR)/usr/include/osmpbf
+-	install -m 644 -g root -o root ../include/osmpbf/osmpbf.h $(DESTDIR)/usr/include/osmpbf
+-	install -m 644 -g root -o root ../include/osmpbf/fileformat.pb.h $(DESTDIR)/usr/include/osmpbf
+-	install -m 644 -g root -o root ../include/osmpbf/osmformat.pb.h $(DESTDIR)/usr/include/osmpbf
++	install -m 755 -d $(DESTDIR)/lib
++	install -m 644 libosmpbf.a $(DESTDIR)/lib
++	install -m 755 -d $(DESTDIR)/include/osmpbf
++	install -m 644 ../include/osmpbf/osmpbf.h $(DESTDIR)/include/osmpbf
++	install -m 644 ../include/osmpbf/fileformat.pb.h $(DESTDIR)/include/osmpbf
++	install -m 644 ../include/osmpbf/osmformat.pb.h $(DESTDIR)/include/osmpbf
+ 
+ clean:
+ 	rm -f *.pb.h *.pb.cc *.pb.o libosmpbf.a

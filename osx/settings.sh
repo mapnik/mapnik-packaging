@@ -1,5 +1,4 @@
 # settings
-export CXX11='true'
 export OFFICIAL_RELEASE='false'
 export USE_BOOST_TRUNK='false'
 
@@ -11,60 +10,138 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
 export UNAME=$(uname -s);
 
-if [ $UNAME = 'Darwin' ]; then
-    # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
-    # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-    XCODE_PREFIX=$( xcode-select -print-path )
-    export ARCH_FLAGS="-arch ${ARCH_NAME}"
-    # set this up with:
-    #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-    # for more info
-    #   man xcrun
-    export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
-    export PATH=${TOOLCHAIN_ROOT}:$PATH
-    export CORE_CC="${TOOLCHAIN_ROOT}/clang"
-    export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
-    export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
-    # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
-    export PLATFORM_SDK="${PLATFORM}${MIN_SDK_VERSION}.sdk"
-    export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-    export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
-    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first -Wl,-S"
-    export JOBS=`sysctl -n hw.ncpu`
-    export BOOST_TOOLSET="clang"
-    export LD="clang"
-    # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-else # linux
+# note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
+# http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
+export ICU_CORE_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1"
+# disabled due to breakage with node-mapnik on OS X: https://github.com/mapnik/mapnik-packaging/issues/98
+# -DU_USING_ICU_NAMESPACE=0 -DU_STATIC_IMPLEMENTATION=1 -DU_TIMEZONE=0 -DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
+export ICU_EXTRA_CPP_FLAGS="${ICU_CORE_CPP_FLAGS} -DUCONFIG_NO_COLLATION=1"
+
+#export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt51l_empty.dat"
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt51l_only_collators.dat"
+
+if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS=
+    # TODO -Wl,--gc-sections
+    # Note: stripping with -Wl,-S breaks dtrace
+    export EXTRA_LDFLAGS=""
     export CORE_CC="gcc"
     export CORE_CXX="g++"
+    export AR=ar
+    export RANLIB=ranlib
+    export ARCH_FLAGS=
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    if [ "${CXX11}" = true ]; then
+      export STDLIB="libstdc++"
+      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_LDFLAGS=""
+      echo "building against libstdc++ in c++11 mode"
+    else
+      echo "building against libstdc++"
+      export STDLIB="libstdc++"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
+elif [ ${PLATFORM} = 'Android' ]; then
+    export UNAME='Android'
+    export API_LEVEL="android-18"
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
+    # run ./scripts/setup-android-ndk-adk-osx.sh to setup
+    export NDK_PATH="${PACKAGES}/android-ndk-r9"
+    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
+    export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
+    # NOTE: make-standalone-toolchain.sh --help for options
+    if [ ! -d "${PLATFORM_PREFIX}" ]; then
+        echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
+        "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
+          --toolchain="${ANDROID_CROSS_COMPILER}" \
+          --install-dir="${PLATFORM_PREFIX}" \
+          --stl=gnustl \
+          --arch=arm \
+          --platform="${API_LEVEL}"
+    fi
+    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    alias ldd="arm-linux-androideabi-readelf -d "
+    export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export EXTRA_LDFLAGS=""
+    export JOBS=`sysctl -n hw.ncpu`
+    export BOOST_TOOLSET="gcc-arm"
+    export SDK_PATH=
+    export PATH="${PLATFORM_PREFIX}/bin":${PATH}
+    export CORE_CXX="arm-linux-androideabi-g++"
+    export CORE_CC="arm-linux-androideabi-gcc"
+    export LD="arm-linux-androideabi-ld"
+    export AR="arm-linux-androideabi-ar"
+    export ARCH_FLAGS=
+    export RANLIB="arm-linux-androideabi-ranlib"
+    # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
+    #alias libtool="arm-linux-androideabi-ar cru"
+    #export libtool="arm-linux-androideabi-ar cru"
+    export NM="arm-linux-androideabi-nm"
+    echo "building against libstdc++"
+    export STDLIB="libstdc++"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
+elif [ ${UNAME} = 'Darwin' ]; then
+    # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
+    # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
+    export XCODE_PREFIX=$( xcode-select -print-path )
+    if [ -d "${XCODE_PREFIX}" ]; then
+      # set this up with:
+      #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+      # for more info
+      #   man xcrun
+      export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+      export CORE_CC="${TOOLCHAIN_ROOT}/clang"
+      export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+      export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
+      export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
+      # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
+      export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
+      export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
+      export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+      # Note: stripping with -Wl,-S breaks dtrace
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
+    else
+      export TOOLCHAIN_ROOT="/usr/bin"
+      export CORE_CC="${TOOLCHAIN_ROOT}/clang"
+      export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
+      export EXTRA_CFLAGS=""
+      # todo -no_dead_strip_inits_and_terms
+      export EXTRA_LDFLAGS="-Wl,-search_paths_first"
+    fi
+    export ARCH_FLAGS="-arch ${ARCH_NAME}"
+    export PATH=${TOOLCHAIN_ROOT}:$PATH
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export JOBS=`sysctl -n hw.ncpu`
+    export BOOST_TOOLSET="clang"
+    # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
+    # and needs to default to 'gyp-mac-tool'
+    #export LD="clang"
+    unset LD
+    unset AR
+    unset RANLIB
+    # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    if [ "${CXX11}" = true ]; then
+        export STDLIB="libc++"
+        export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
+        export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
+        echo "building against libc++ in c++11 mode"
+    else
+      echo "building against libstdc++"
+      export STDLIB="libstdc++"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
+else
+    echo '**unhandled platform: ${PLATFORM}**'
 fi
 
-if [ $CXX11 = 'true' ]; then
-  if [ $UNAME = 'Darwin' ]; then
-    export STDLIB="libc++"
-    export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
-    export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-    echo "building against libc++ in c++11 mode"
-  else
-    export STDLIB="libstdc++"
-    export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
-    export STDLIB_LDFLAGS=""
-    echo "building against libstdc++ in c++11 mode"
-  fi
-else
-  echo "building against libstdc++"
-  export STDLIB="libstdc++"
-  export STDLIB_CXXFLAGS=""
-  export STDLIB_LDFLAGS=""
-fi
 export BUILDDIR="build-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export OPTIMIZATION="3"
@@ -115,8 +192,8 @@ export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXX
 export ICU_VERSION="51.2"
 export ICU_VERSION2="51_2"
 
-export BOOST_VERSION="1.53.0"
-export BOOST_VERSION2="1_53_0"
+export BOOST_VERSION="1.54.0"
+export BOOST_VERSION2="1_54_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3071700"
 # http://download.savannah.gnu.org/releases/freetype/
@@ -158,5 +235,19 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.15"
+export NODE_VERSION="0.10.21"
+export SPARSEHASH_VERSION="2.0.2"
+
+function download {
+    if [ ! -f $1 ]; then
+        echo downloading $1
+        curl -s -S -f -O  ${S3_BASE}/$1
+    else
+        echo using cached $1
+    fi
+}
+
+function upload {
+    s3cmd --acl-public put $1 s3://mapnik/deps/
+}
 

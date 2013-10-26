@@ -3,18 +3,8 @@ source MacOSX.sh
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-curl -O ${S3_BASE}/geos-${GEOS_VERSION}.tar.bz2
-curl -O ${S3_BASE}/protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
-
-echo '*building geos*'
-rm -rf geos-${GEOS_VERSION}
-tar xf geos-${GEOS_VERSION}.tar.bz2
-cd geos-${GEOS_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared \
---disable-dependency-tracking
-make -j${JOBS}
-make install
-cd ${PACKAGES}
+download geos-${GEOS_VERSION}.tar.bz2
+download protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
 
 echo '*building protobuf C*'
 rm -rf cd protobuf-c-${PROTOBUF_C_VERSION}
@@ -26,18 +16,35 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
+echo '*building geos*'
+export OLD_LDFLAGS=${LDFLAGS}
+export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+rm -rf geos-${GEOS_VERSION}
+tar xf geos-${GEOS_VERSION}.tar.bz2
+cd geos-${GEOS_VERSION}
+patch -N configure.in ${PATCHES}/geos-ansi.diff
+./configure --prefix=${BUILD} --enable-static --disable-shared \
+--disable-dependency-tracking
+make -j${JOBS}
+make install
+cp include/geos/platform.h ${BUILD}/include/geos/
+cd ${PACKAGES}
+export LDFLAGS=${OLD_LDFLAGS}
+
 echo '*building osm2pgsql*'
+export OLD_LDFLAGS=${LDFLAGS}
+export LDFLAGS="${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
+export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+export OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
+export DESTDIR=${OSM2PGSQL_TARGET}
 #svn co http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/
 cd ${ROOTDIR}/osm2pgsql
+# fix 'Could not find a c++ compiler' error on 'conftest.c:11:10: fatal error: 'ac_nonexistent.h' file not found'
 patch configure.ac ${PATCHES}/osm2pgsql-configure.diff -N
 patch Makefile.am ${PATCHES}/osm2pgsql-datadir.diff -N
 make clean
 make distclean
 ./autogen.sh
-OLD_LDFLAGS=$LDFLAGS
-export LDFLAGS="${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
-export OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
-export DESTDIR=${OSM2PGSQL_TARGET}
 ./configure --prefix=/usr/local \
 --with-zlib=${BUILD} \
 --with-bzip2=${BUILD} \
@@ -48,7 +55,7 @@ export DESTDIR=${OSM2PGSQL_TARGET}
 make
 make install
 export LDFLAGS="$OLD_LDFLAGS"
-export DESTDIR=
+unset DESTDIR
 
 /usr/local/bin/freeze ${ROOTDIR}/installer/osm2pgsql/osm2pgsql.packproj
 

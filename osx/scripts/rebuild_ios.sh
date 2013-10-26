@@ -23,7 +23,7 @@ function build_all {
     ./scripts/build_core_deps.sh
     ./scripts/build_protobuf.sh
   fi
-  ./scripts/build_mapnik_ios.sh
+  ./scripts/build_mapnik_mobile.sh
 }
 
 # x86_64
@@ -47,4 +47,4 @@ build_all
 # done now package
 ./scripts/make_universal.sh
 # TODO 
-./scripts/package_ios_sdk.sh
+./scripts/package_mobile_sdk.sh

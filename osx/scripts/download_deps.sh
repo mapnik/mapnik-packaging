@@ -7,7 +7,7 @@ cd ${PACKAGES}
 
 function download {
     if [ ! -f $1 ]; then
-        echo downloading $1
+        echo downloading ${S3_BASE}/$1
         curl -s -S -f -O  ${S3_BASE}/$1
     else
         echo using cached $1
@@ -36,6 +36,9 @@ download freetype-${FREETYPE_VERSION}.tar.bz2
 
 # protobuf
 download protobuf-${PROTOBUF_VERSION}.tar.bz2
+
+# sparsehash
+download sparsehash-${SPARSEHASH_VERSION}.tar.gz
 
 # node.js
 download node-v${NODE_VERSION}.tar.gz
