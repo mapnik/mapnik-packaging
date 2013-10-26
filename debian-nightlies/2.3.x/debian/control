@@ -72,6 +72,27 @@ Depends:
  ${misc:Depends},
 Description: Mapnik OGR input plugin for reading vector datasources.
 
+Package: mapnik-input-plugin-postgis
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Mapnik PostGIS input plugin for reading vector data from PostGIS tables in PostgreSQL.
+
+Package: mapnik-input-plugin-sqlite
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Mapnik SQLite input plugin for reading vector data in sqlite3 or spatialite databases.
+
+Package: mapnik-input-plugin-osm
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Mapnik OSM input plugin for reading OSM data out of XML.
+
 Package: libmapnik-dev
 Section: libdevel
 Architecture: any
