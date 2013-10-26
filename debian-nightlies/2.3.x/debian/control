@@ -66,6 +66,13 @@ Depends:
  ${misc:Depends},
 Description: Mapnik GDAL input plugin for reading raster datasources.
 
+Package: mapnik-input-plugin-ogr
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Mapnik OGR input plugin for reading vector datasources.
+
 Package: libmapnik-dev
 Section: libdevel
 Architecture: any
