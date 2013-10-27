@@ -57,6 +57,7 @@ make install
 export LDFLAGS="$OLD_LDFLAGS"
 unset DESTDIR
 
+# TODO - update version in packproj
 /usr/local/bin/freeze ${ROOTDIR}/installer/osm2pgsql/osm2pgsql.packproj
 
 # TODO dump git describe once it is working

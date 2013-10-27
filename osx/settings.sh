@@ -230,7 +230,7 @@ export CAIRO_VERSION="1.12.14"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
-export GEOS_VERSION="3.3.8"
+export GEOS_VERSION="3.4.2"
 export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
@@ -249,5 +249,12 @@ function download {
 
 function upload {
     s3cmd --acl-public put $1 s3://mapnik/deps/
+}
+
+function push {
+    echo "downloading $1"
+    wget $1
+    echo "uploading `basename $1`"
+    upload `basename $1`
 }
 
