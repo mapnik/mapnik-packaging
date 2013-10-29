@@ -2,4 +2,5 @@ usr/lib/lib*.so.*
 usr/lib/mapnik/input/shape*
 usr/lib/mapnik/input/csv*
 usr/lib/mapnik/input/geojson*
+usr/lib/mapnik/input/topojson*
 usr/bin/mapnik-config
