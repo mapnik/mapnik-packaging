@@ -1,15 +1,15 @@
 # Building Mapnik dependencies on Windows 
 
-*(Visual C++ express 2008 and 2010 32-bit)*
+*(Visual C++ express 2008, 2010 and 2012 32-bit)*
 
 Buiding dependencies on windows can be very tedious. The goal here is to provide
-concise instructions for building individual packages using either VC++ 2008 and 2010.
+concise instructions for building individual packages using either VC++ 2008, or 2010/2012.
 
 Hopefully, this will allow fully automated builds in the future.
 
 ## Prerequisites
 
-* Visual C++ 2008 or 2010 Express
+* Visual C++ 2008, 2010 or 2012, Express or Professional versions
   * http://www.microsoft.com/visualstudio/en-us/products/2008-editions/visual-basic-express
   * http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-basic-express
 * GNU Unix tools (GnuWin32) 
@@ -25,11 +25,11 @@ Hopefully, this will allow fully automated builds in the future.
 
 ## Environment
 
-We'll be using combination of "Visual Studio 2008 Command Prompt" (or "Visual Studio 2010 Command Prompt") and GNU
+We'll be using combination of "Visual Studio 2008 Command Prompt" (or "Visual Studio 2010 Command Prompt" or "Developer Command Prompt for VS2012") and GNU
 tools. Please, ensure PATH is setup correctly and GNU tools can be accessed from VC++ command prompt.
 The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 
-    set PATH=%PATH%;c:\msysgit\msysgit\bin;c:\cygwin\bin;c:\GnuWin32\bin
+    set PATH=%PATH%;c:\git\bin;c:\cygwin\bin;c:\GnuWin32\bin
     set ROOTDIR=c:\dev2
     cd %ROOTDIR%
     mkdir packages 
@@ -39,8 +39,8 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
 
     set ICU_VERSION=4.8
     set BOOST_VERSION=49
-    set ZLIB_VERSION=1.2.5
-    set LIBPNG_VERSION=1.5.10
+    set ZLIB_VERSION=1.2.8
+    set LIBPNG_VERSION=1.5.17
     set JPEG_VERSION=8d
     set FREETYPE_VERSION=2.4.9
     set POSTGRESQL_VERSION=9.1.3
@@ -65,7 +65,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
     curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
     curl http://ftp.de.postgresql.org/packages/databases/PostgreSQL/latest/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
-    curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-%LIBPNG_VERSION%.tar.gz -O
+    curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng15/libpng-%LIBPNG_VERSION%.tar.gz -O
     curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
     curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
     curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
@@ -78,6 +78,11 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://download.osgeo.org/proj/proj-%PROJ_VERSION%.tar.gz -O
     curl http://download.osgeo.org/proj/proj-datumgrid-%PROJ_GRIDS_VERSION%.zip -O
     curl http://download.osgeo.org/geos/geos-%GEOS_VERSION%.tar.bz2 -O
+    
+    If BOOST and EXPAT don't seem to download properly by CURL, check the file you get. It probably contains
+    an error/redirect, telling you to visit their project download URLs like these to select a mirror:
+    http://sourceforge.net/projects/boost/files/boost/1.49.0/boost_1_49_0.tar.gz/download
+    http://downloads.sourceforge.net/project/expat/expat_win32/2.1.0/expat-win32bin-2.1.0.exe
 
     cd %ROOTDIR%
     
@@ -97,7 +102,7 @@ for every build variant.*
     bash ./runConfigure Cygwin/MSVC --prefix=%ROOTDIR%\icu
     make install
 
-##### VC++ 2010
+##### VC++ 2010/2012
 
     cd icu/
     msbuild source\allinone\allinone.sln /t:Rebuild  /p:Configuration="Release" /p:Platform=Win32
@@ -114,6 +119,8 @@ for every build variant.*
 
     # if you need python
     bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-python python=2.7 release link=static --build-type=complete install
+    
+    cd %ROOTDIR%
 
 ### Jpeg
 
@@ -122,6 +129,10 @@ for every build variant.*
     cd jpeg 
     copy jconfig.txt jconfig.h
     nmake /f Makefile.vc nodebug=1
+    
+    If you receive an error about not finding Win32.mak, you may need to do something like:
+    set INCLUDE=%include%;C:\Program Files\Microsoft SDKs\Windows\v7.1\Include
+    
     cd %ROOTDIR%
 
 ### Freetype 
@@ -134,7 +145,7 @@ for every build variant.*
 
     vcbuild builds\win32\vc2008\freetype.vcproj "Release|Win32"
 
-##### VC++ 2010
+##### VC++ 2010/2012
 
     msbuild builds\win32\vc2010\freetype.sln /p:Configuration=Release /p:Platform=Win32
 
