@@ -64,7 +64,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl http://iweb.dl.sourceforge.net/project/boost/boost/1.%BOOST_VERSION%.0/boost_1_%BOOST_VERSION%_0.tar.gz -O
     curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
     curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
-    curl http://ftp.de.postgresql.org/packages/databases/PostgreSQL/latest/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
+    curl http://ftp.postgresql.org/pub/source/v%POSTGRESQL_VERSION%/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
     curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng15/libpng-%LIBPNG_VERSION%.tar.gz -O
     curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
     curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
@@ -155,56 +155,67 @@ for every build variant.*
 
 ### zlib
 
-zlib comes with old VC++ project files. Instead we use upgraded project file from libpng:
+##### VC++ 2008
+    bsdtar xvfz %PKGDIR%\zlib-%ZLIB_VERSION%.tar.gz
+    #libpng 2010/2012 project looks for a folder called zlib-1.2.5, this is here for consistency
+    rename zlib-%ZLIB_VERSION% zlib-1.2.5
+    cd %ROOTDIR%\zlib-1.2.5\contrib\masmx86
+    bld_ml32.bat
+    cd %ROOTDIR%\zlib-1.2.5\contrib\vstudio\
 
-    bsdtar xvfz %PKGDIR%\libpng-%LIBPNG_VERSION%.tar.gz
-    rename libpng-%LIBPNG_VERSION% libpng
+    cd vc9
+    vcbuild /rebuild zlibstat.vcproj "Release|Win32"
+
+    cd %ROOTDIR%\zlib-1.2.5
+    move contrib\vstudio\vc9\x86\ZlibStatRelease\zlibstat.lib zlib.lib
+    cd  %ROOTDIR%
+
+##### VC++ 2010/2012
 
     bsdtar xvfz %PKGDIR%\zlib-%ZLIB_VERSION%.tar.gz
-    rename zlib-%ZLIB_VERSION% zlib
-    mkdir %ROOTDIR%\zlib\projects\visualc71
-    cd %ROOTDIR%\zlib\projects\visualc71
-    copy %ROOTDIR%\libpng\projects\visualc71\zlib.vcproj .
-
-##### VC++ 2008
-
-    msbuild /upgrade zlib.vcproj
-    vcbuild zlib.vcproj "LIB Release"
-
-##### VC++ 2010
-
-    vcupgrade zlib.vcproj
-    msbuild zlib.vcxproj /t:Rebuild /p:Configuration="LIB Release" /p:Platform=Win32
-
-    cd %ROOTDIR%\zlib
-    move projects\visualc71\Win32_LIB_Release\ZLib\zlib.lib zlib.lib
+    #libpng build scripts look for a folder called zlib-1.2.5
+    rename zlib-%ZLIB_VERSION% zlib-1.2.5
+    #zlib will be built with/by libpng below
     cd  %ROOTDIR%
 
 ### libpng
 
-    cd %ROOTDIR%\libpng\projects\visualc71
+    bsdtar xvfz %PKGDIR%\libpng-%LIBPNG_VERSION%.tar.gz
+    rename libpng-%LIBPNG_VERSION% libpng
 
 ##### VC++ 2008
 
+    cd %ROOTDIR%\libpng\projects\visualc71
     vcbuild /upgrade libpng.vcproj
     vcbuild libpng.vcproj "LIB Release"
 
-##### VC++ 2010
-
-    vcupgrade libpng.vcproj
-    msbuild libpng.vcxproj /t:Rebuild  /p:Configuration="LIB Release" /p:Platform=Win32
-    
     cd %ROOTDIR%\libpng
     move projects\visualc71\Win32_LIB_Release\libpng.lib libpng.lib
     cd %ROOTDIR%
 
-   
+##### VC++ 2010/2012
+
+    cd %ROOTDIR%\libpng\projects\vstudio\
+    msbuild vstudio.sln /t:Rebuild  /p:Configuration="Release" /p:Platform=Win32
+    
+    cd %ROOTDIR%\libpng
+    move projects\vstudio\Release\libpng15.lib libpng.lib
+    move projects\vstudio\Release\zlib.lib ..\zlib-1.2.5\zlib.lib
+    cd %ROOTDIR%
+
+
 ### libpq (PostgreSQL C-interface)
 
     bsdtar xvfz "%PKGDIR%\postgresql-%POSTGRESQL_VERSION%.tar.gz"
     rename postgresql-%POSTGRESQL_VERSION% postgresql
     cd postgresql\src
     nmake /f win32.mak
+    
+    #Note: The following errors occurred uring this process:
+    #.\Release\libpq.dll.manifest : general error c1010070: Failed to load and parse the manifest. The system cannot find the file specified.
+NMAKE : fatal error U1077: '"C:\Program Files (x86)\Windows Kits\8.0\bin\x86\mt.EXE"' : return code '0x1f'
+    # However libpq.lib was successfully built.
+
     cd %ROOTDIR%
 
 
@@ -218,9 +229,19 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     set P3=s/\^#JPEG_INCLUDE/JPEG_INCLUDE/;
     set P4=s/\^#JPEG_LIB.*/JPEG_LIB = \$(JPEGDIR^)\\\libjpeg.lib/;
     set P5=s/\^#ZIP_SUPPORT.*/ZIP_SUPPORT = 1/;
-    set P6=s/\^#ZLIBDIR.*/ZLIBDIR = %ROOTDIR:\=\\\%\\\zlib/;
+    set P6=s/\^#ZLIBDIR.*/ZLIBDIR = %ROOTDIR:\=\\\%\\\zlib-1.2.5/;
     set P7=s/\^#ZLIB_INCLUDE/ZLIB_INCLUDE/;
+
+##### VC++ 2008
+
     set P8=s/\^#ZLIB_LIB.*/ZLIB_LIB = \$(ZLIBDIR^)\\\zlib.lib/;
+
+##### VC++ 2010/2012
+
+    set P8=s/\^#ZLIB_LIB.*/ZLIB_LIB = \$(ZLIBDIR^)\\\zlib.lib/;
+
+##### Common
+
     set PATTERN="%P1%%P2%%P3%%P4%%P5%%P6%%P7%%P8%"
     sed %PATTERN%  nmake.opt > nmake.opt.fixed
     move /Y nmake.opt.fixed nmake.opt
@@ -241,12 +262,12 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     %PKGDIR%\cairo-%CAIRO_VERSION%.tar.xz
     rename cairo-%CAIRO_VERSION% cairo
     cd cairo
-    @rem edit the buid\Makefile.win32.features
+    @rem edit the build\Makefile.win32.features
     @rem enable CAIRO_HAS_FT_FONT=1
     @rem edit the build\Makefile.win32.common
-    @rem change zdll.lib to zlib.lib
+    @rem change zdll.lib to zlib.lib and zlib path to zlib-1.2.5
     @rem add freetype lib path and freetype.lib to CAIRO_LIBS variable
-    set INCLUDE=%INCLUDE%;%ROOTDIR%\zlib
+    set INCLUDE=%INCLUDE%;%ROOTDIR%\zlib-1.2.5
     set INCLUDE=%INCLUDE%;%ROOTDIR%\libpng
     set INCLUDE=%INCLUDE%;%ROOTDIR%\pixman\pixman
     set INCLUDE=%INCLUDE%;%ROOTDIR%\cairo\boilerplate
@@ -265,7 +286,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     rename libxml2-%LIBXML2_VERSION% libxml2
     cd libxml2\win32
     cscript configure.js compiler=msvc prefix=%ROOTDIR%\libxml2 iconv=no icu=yes include=%ROOTDIR%\icu\include lib=%ROOTDIR%\icu\lib
-    patch  -p1 < ..\libxml.patch
+    patch  -p1 < %ROOTDIR%\libxml.patch
     nmake /f Makefile.msvc
     cd %ROOTDIR%
 
@@ -276,15 +297,15 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     bsdtar xfz %PKGDIR%\proj-%PROJ_VERSION%.tar.gz
     rename proj-%PROJ_VERSION% proj
     cd proj/nad
-    unzip -o ../../proj-datumgrid-%PROJ_GRIDS_VERSION%.zip
-    cd ..\
+    unzip -o ../../packages/proj-datumgrid-%PROJ_GRIDS_VERSION%.zip
+    cd ..
     nmake /f Makefile.vc
     cd %ROOTDIR%
 
 ### Expat (for GDAL's KML,GPX, GeoRSS read support)
 
     @rem - run the binary installer
-    start expat-win32bin-%EXPAT_VERSION%.exe
+    start packages\expat-win32bin-%EXPAT_VERSION%.exe
 
 ### GDAL
 
@@ -292,7 +313,7 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
     rename gdal-%GDAL_VERSION% gdal
     cd gdal
 
-    @rem Edit the 'name.opt' to point to the location the expat binary was installed to:
+    @rem Edit the 'nmake.opt' to point to the location the expat binary was installed to:
     @rem EXPAT_DIR="C:\Program Files (x86)\Expat 2.1.0"
 
 ##### VC++ 2008
@@ -302,6 +323,10 @@ zlib comes with old VC++ project files. Instead we use upgraded project file fro
 ##### VC++ 2010
 
     nmake /f makefile.vc MSVC_VER=1600
+ 
+##### VC++ 2012
+
+    nmake /f makefile.vc MSVC_VER=1700
  
     cd %ROOTDIR%
 
@@ -337,13 +362,18 @@ Download https://protobuf.googlecode.com/files/protobuf-2.5.0.zip and unzip
 
 *NOTE: this is optional as GEOS is not used by Mapnik*
 
-    bsdtar xvf geos-%GEOS_VERSION%.tar.bz2
+    bsdtar xvf %PKGDIR%\geos-%GEOS_VERSION%.tar.bz2
     rename geos-%GEOS_VERSION% geos
 
-##### VC++ 2010
+##### VC++ 2010/2012
+
+    #on VS2012, take note of these issues:
+    #http://trac.osgeo.org/geos/ticket/616
+    #add  #define NOMINMAX to the beginning of geos\src\operation\buffer\BufferOp.cpp
 
     cd geos
     mkdir build
     cd build
-    cmake -G ..\
+    cmake -G "NMake Makefiles" ..
     nmake /f Makefile geos
+
