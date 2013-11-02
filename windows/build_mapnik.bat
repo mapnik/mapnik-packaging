@@ -1,6 +1,8 @@
 @echo off
 
+@rem Need to explain what these are!
 set ROOTDIR=c:\\dev2
+@rem this appears to be the destination where the compiled mapnik SDK will be built
 set PREFIX=c:\\mapnik-v2.2.0
 set PREFIX2=c:\mapnik-v2.2.0
 
@@ -54,6 +56,7 @@ xcopy /d /s build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\
 
 @rem demo files
 xcopy /d /s %MAPNIK_SOURCE%\demo\data %PREFIX%\demo\data /Y /i
+@rem You may need to answer "File" here.
 xcopy /d /s %MAPNIK_SOURCE%\demo\python\rundemo.py %PREFIX%\demo\python\rundemo.py /Y
 
 echo running CPP tests
