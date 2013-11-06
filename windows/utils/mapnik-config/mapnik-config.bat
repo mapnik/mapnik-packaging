@@ -1,7 +1,8 @@
 @echo off
 
-set MAPNIK_VERSION=v2.2.0
-set MAPNIK_PREFIX=c:\\mapnik-%MAPNIK_VERSION%
+set MAPNIK_VERSION=2.3.0
+set MAPNIK_VERSION_NUMBER=200300
+set MAPNIK_PREFIX=c:\\mapnik-v%MAPNIK_VERSION%
 set MAPNIK_LIBS=%MAPNIK_PREFIX%\\lib
 set MAPNIK_INCLUDES=%MAPNIK_PREFIX%\\include
 set MAPNIK_INPUT_PLUGINS_DIRECTORY=%MAPNIK_PREFIX%\\lib\\mapnik\\input
@@ -13,17 +14,17 @@ if /i "%1"=="" (
 )
 
 if /i "%1"=="-v" (
-  echo 2.2.0
+  echo %MAPNIK_VERSION%
   goto exit_ok
 )
 
 if /i "%1"=="--version" (
-  echo 2.2.0
+  echo %MAPNIK_VERSION%
   goto exit_ok
 )
 
 if /i "%1"=="--version-number" (
-  echo 2002000
+  echo %MAPNIK_VERSION_NUMBER%
   goto exit_ok
 )
 
@@ -121,7 +122,7 @@ if /i "%1"=="--ldflags" (
 )
 
 if /i "%1"=="--defines" (
-  echo _WINDOWS HAVE_JPEG HAVE_PNG HAVE_TIFF MAPNIK_USE_PROJ4 BOOST_REGEX_HAS_ICU MAPNIK_THREADSAFE BIGINT HAVE_LIBXML2 HAVE_CAIRO
+  echo _WINDOWS HAVE_JPEG HAVE_PNG HAVE_TIFF MAPNIK_USE_PROJ4 BOOST_REGEX_HAS_ICU GRID_RENDERER MAPNIK_THREADSAFE BIGINT HAVE_LIBXML2 HAVE_CAIRO
   set hit="yes"
 )
 

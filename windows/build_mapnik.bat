@@ -1,8 +1,8 @@
 @echo off
 
 set ROOTDIR=c:\\dev2
-set PREFIX=c:\\mapnik-v2.2.0
-set PREFIX2=c:\mapnik-v2.2.0
+set PREFIX=c:\\mapnik-v2.3.0
+set PREFIX2=c:\mapnik-v2.3.0
 
 @rem critical global variables needed by bjam
 set MAPNIK_DEPS_DIR=%ROOTDIR%
