@@ -44,7 +44,7 @@ PACKAGES["2.0.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="saucy raring quantal precise lucid"
+DISTS="trusty saucy raring quantal precise lucid"
 
 ######### Shouldn't need to edit anything past here #########
 
@@ -123,7 +123,7 @@ for BRANCH in ${BRANCHES_TO_BUILD}; do
     git merge --ff-only "origin/${BRANCH}"
     REV="$(git log -1 --pretty=format:%h)"
     if [ ! -f "../${BRANCH}/prev.rev" ]; then
-       echo "../${BRANCH}/prev.rev";
+       echo > "../${BRANCH}/prev.rev";
     fi
     REV_PREV="$(cat ../${BRANCH}/prev.rev)"
     echo "Previous revision was ${REV_PREV}"
