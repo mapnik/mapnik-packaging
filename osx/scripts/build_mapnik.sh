@@ -9,7 +9,7 @@ rm -f tests/cpp_tests/*-bin
 make clean
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
-echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
+#echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
 echo "CC = '${CC}'" >> config.py
 if [ ${BOOST_ARCH} = "x86" ]; then
