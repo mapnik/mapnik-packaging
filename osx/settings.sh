@@ -17,15 +17,27 @@ export ICU_CORE_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1"
 # -DU_USING_ICU_NAMESPACE=0 -DU_STATIC_IMPLEMENTATION=1 -DU_TIMEZONE=0 -DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
 export ICU_EXTRA_CPP_FLAGS="${ICU_CORE_CPP_FLAGS} -DUCONFIG_NO_COLLATION=1"
 
-#export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt51l_empty.dat"
-export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt51l_only_collators.dat"
+export BUILDDIR="build-${STDLIB}"
+export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
+export OPTIMIZATION="3"
+export S3_BASE="http://mapnik.s3.amazonaws.com/deps"
+export MAPNIK_DIST="${ROOTDIR}/out/dist"
+export PACKAGES="${ROOTDIR}/out/packages"
+export PATCHES="${ROOTDIR}/patches"
+export STAGING="${ROOTDIR}/out/staging"
+export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
+export MAPNIK_INSTALL="/usr/local"
+export MAPNIK_PACKAGE_PREFIX="mapnik"
+
+# http://apps.icu-project.org/datacustom/
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt52l_only_collator_and_breakiterator.dat"
 
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections
     # Note: stripping with -Wl,-S breaks dtrace
-    export EXTRA_LDFLAGS=""
+    export EXTRA_LDFLAGS="--as-needed"
     export CORE_CC="gcc"
     export CORE_CXX="g++"
     export AR=ar
@@ -142,22 +154,11 @@ else
     echo '**unhandled platform: ${PLATFORM}**'
 fi
 
-export BUILDDIR="build-${STDLIB}"
-export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
-export OPTIMIZATION="3"
-export S3_BASE="http://mapnik.s3.amazonaws.com/deps"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
-export MAPNIK_DIST="${ROOTDIR}/out/dist"
-export PACKAGES="${ROOTDIR}/out/packages"
-export PATCHES="${ROOTDIR}/patches"
-export STAGING="${ROOTDIR}/out/staging"
-export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
-export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
-export MAPNIK_PACKAGE_PREFIX="mapnik"
 
 # should not be needed now that we set 'LIBRARY_PATH'
 #if [ $UNAME = 'Darwin' ]; then
@@ -189,34 +190,34 @@ export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS"
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
 # http://site.icu-project.org/download
-export ICU_VERSION="51.2"
-export ICU_VERSION2="51_2"
+export ICU_VERSION="52.1"
+export ICU_VERSION2="52_1"
 
-export BOOST_VERSION="1.54.0"
-export BOOST_VERSION2="1_54_0"
+export BOOST_VERSION="1.55.0"
+export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3071700"
+export SQLITE_VERSION="3080100"
 # http://download.savannah.gnu.org/releases/freetype/
-export FREETYPE_VERSION="2.4.12"
+export FREETYPE_VERSION="2.5.0.1"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.2"
+export LIBPNG_VERSION="1.6.6"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
-#https://code.google.com/p/webp/downloads/
+# https://code.google.com/p/webp/downloads/list
 export WEBP_VERSION="0.3.1"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="1.10.0"
+export GDAL_VERSION="1.10.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
-export POSTGRES_VERSION="9.2.4"
+export POSTGRES_VERSION="9.3.1"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
@@ -253,8 +254,10 @@ function upload {
 
 function push {
     echo "downloading $1"
+    cd ${PACKAGES}
     wget $1
     echo "uploading `basename $1`"
     upload `basename $1`
+    cd ${ROOTDIR}
 }
 
