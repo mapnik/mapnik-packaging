@@ -227,7 +227,7 @@ export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.10.0"
 # http://cairographics.org/releases/
 export PIXMAN_VERSION="0.30.0"
-export CAIRO_VERSION="1.12.14"
+export CAIRO_VERSION="1.12.16"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
