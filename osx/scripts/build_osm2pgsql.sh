@@ -19,17 +19,23 @@ cd ${PACKAGES}
 echo '*building geos*'
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+export OLD_CXX=${CXX}
+# note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
+# http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
+export CXX="${CXX} ${STDLIB_CXXFLAGS}"
 rm -rf geos-${GEOS_VERSION}
 tar xf geos-${GEOS_VERSION}.tar.bz2
 cd geos-${GEOS_VERSION}
 patch -N configure.in ${PATCHES}/geos-ansi.diff
-./configure --prefix=${BUILD} --enable-static --disable-shared \
+./configure --prefix=${BUILD} --enable-static --enable-shared \
 --disable-dependency-tracking
 make -j${JOBS}
 make install
 cp include/geos/platform.h ${BUILD}/include/geos/
 cd ${PACKAGES}
 export LDFLAGS=${OLD_LDFLAGS}
+export CXX=${OLD_CXX}
+
 
 echo '*building osm2pgsql*'
 export OLD_LDFLAGS=${LDFLAGS}
