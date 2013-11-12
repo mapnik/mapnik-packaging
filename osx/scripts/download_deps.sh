@@ -5,15 +5,6 @@ mkdir -p ${BUILD}/lib
 mkdir -p ${BUILD}/include
 cd ${PACKAGES}
 
-function download {
-    if [ ! -f $1 ]; then
-        echo downloading ${S3_BASE}/$1
-        curl -s -S -f -O  ${S3_BASE}/$1
-    else
-        echo using cached $1
-    fi
-}
-
 # build deps
 download xz-${XZ_VERSION}.tar.bz2
 download nose-${NOSE_VERSION}.tar.gz

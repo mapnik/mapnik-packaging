@@ -1,3 +1,5 @@
+set -e
+
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
@@ -20,6 +22,13 @@ else
 fi
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+export OLD_CXX=${CXX}
+# note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
+# http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
+export CXX="${CXX} ${STDLIB_CXXFLAGS}"
+# WARNING: building a shared lib will result in shared libs being listed in
+# the libprotobuf.la and then libproto-c will try to link against them even
+# if they do not exist (as deleted by below)
 ./configure --prefix=${BUILD} ${HOST_ARG} ${CROSS_FLAGS} \
 --enable-static --disable-shared \
 --disable-debug --with-zlib \
@@ -27,4 +36,7 @@ export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 make -j${JOBS}
 make install
 export LDFLAGS=${OLD_LDFLAGS}
+export CXX=${OLD_CXX}
 cd ${PACKAGES}
+
+check_and_clear_libs

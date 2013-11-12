@@ -1,4 +1,4 @@
-set -e 
+set -e
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}

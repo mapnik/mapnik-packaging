@@ -5,6 +5,9 @@ cd ${MAPNIK_SOURCE}
 SHARE_DIR="`pwd`/../../share"
 mkdir -p $SHARE_DIR
 TEMP_SYMLINK="$SHARE_DIR/mapnik"
+if [ ! -d "${MAPNIK_BIN_SOURCE}/share/mapnik" ]; then
+  ${ROOTDIR}/scripts/post_build_fix.sh
+fi
 ln -s ${MAPNIK_BIN_SOURCE}/share/mapnik ${TEMP_SYMLINK}
 
 export DYLD_LIBRARY_PATH=`pwd`/src

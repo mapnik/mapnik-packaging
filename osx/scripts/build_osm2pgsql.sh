@@ -1,4 +1,4 @@
-source MacOSX.sh
+set -e
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -27,15 +27,15 @@ rm -rf geos-${GEOS_VERSION}
 tar xf geos-${GEOS_VERSION}.tar.bz2
 cd geos-${GEOS_VERSION}
 patch -N configure.in ${PATCHES}/geos-ansi.diff
-./configure --prefix=${BUILD} --enable-static --enable-shared \
+./configure --prefix=${BUILD} --enable-static --disable-shared \
 --disable-dependency-tracking
 make -j${JOBS}
 make install
-cp include/geos/platform.h ${BUILD}/include/geos/
 cd ${PACKAGES}
 export LDFLAGS=${OLD_LDFLAGS}
 export CXX=${OLD_CXX}
 
+check_and_clear_libs
 
 echo '*building osm2pgsql*'
 export OLD_LDFLAGS=${LDFLAGS}
@@ -46,8 +46,8 @@ export DESTDIR=${OSM2PGSQL_TARGET}
 #svn co http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/
 cd ${ROOTDIR}/osm2pgsql
 # fix 'Could not find a c++ compiler' error on 'conftest.c:11:10: fatal error: 'ac_nonexistent.h' file not found'
-patch configure.ac ${PATCHES}/osm2pgsql-configure.diff -N
-patch Makefile.am ${PATCHES}/osm2pgsql-datadir.diff -N
+patch -N configure.ac ${PATCHES}/osm2pgsql-configure.diff | true
+patch -N Makefile.am ${PATCHES}/osm2pgsql-datadir.diff | true
 make clean
 make distclean
 ./autogen.sh

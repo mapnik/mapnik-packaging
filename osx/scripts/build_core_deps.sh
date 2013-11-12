@@ -38,8 +38,7 @@ make -j$JOBS
 make install
 cd ${PACKAGES}
 
-# clear out shared libs
-rm -f ${BUILD}/lib/{*.so,*.dylib}
+check_and_clear_libs
 
 # freetype
 echo '*building freetype*'
@@ -129,6 +128,4 @@ export LIBS="${OLD_LIBS}"
 export CFLAGS="${OLD_CFLAGS}"
 cd ${PACKAGES}
 
-if [ $UNAME = 'Darwin' ]; then
-    lipo -info ${BUILD}/lib/*.a | grep arch
-fi
+check_and_clear_libs

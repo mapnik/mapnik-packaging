@@ -122,18 +122,7 @@ make install -i -k
 set -e
 cd ${PACKAGES}
 
-: '
-otool -L ${BUILD}/lib/*dylib
-	/Users/dane/projects/mapnik-packaging/osx/build/lib/libpq.5.dylib (compatibility version 5.0.0, current version 5.4.0)
-	/usr/lib/libssl.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)
-	/usr/lib/libcrypto.0.9.8.dylib (compatibility version 0.9.8, current version 44.0.0)
-	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos (compatibility version 5.0.0, current version 6.0.0)
-	/System/Library/Frameworks/LDAP.framework/Versions/A/LDAP (compatibility version 1.0.0, current version 2.2.0)
-	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
-'
-
-# clear out shared libs
-rm -f ${BUILD}/lib/{*.so,*.dylib}
+check_and_clear_libs
 
 # geotiff
 echo '*building geotiff*'
@@ -204,19 +193,7 @@ export LDFLAGS=${OLD_LDFLAGS}
 export CXX=${OLD_CXX}
 cd ${PACKAGES}
 
-
-: '
-otool -L ${BUILD}/lib/*dylib
-	/Users/dane/projects/mapnik-packaging/osx/build/lib/libgdal.1.dylib (compatibility version 18.0.0, current version 18.0.0)
-	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 159.1.0)
-	/usr/lib/libexpat.1.dylib (compatibility version 7.0.0, current version 7.2.0)
-	/usr/lib/libz.1.dylib (compatibility version 1.0.0, current version 1.2.5)
-	/usr/lib/libiconv.2.dylib (compatibility version 7.0.0, current version 7.0.0)
-	/usr/lib/libstdc++.6.dylib (compatibility version 7.0.0, current version 52.0.0)
-'
-
-# clear out shared libs
-rm -f ${BUILD}/lib/{*.so,*.dylib}
+check_and_clear_libs
 
 echo '*building pkg-config*'
 rm -rf pkg-config-${PKG_CONFIG_VERSION}

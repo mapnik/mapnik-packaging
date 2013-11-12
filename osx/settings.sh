@@ -17,8 +17,6 @@ export ICU_CORE_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1"
 # -DU_USING_ICU_NAMESPACE=0 -DU_STATIC_IMPLEMENTATION=1 -DU_TIMEZONE=0 -DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
 export ICU_EXTRA_CPP_FLAGS="${ICU_CORE_CPP_FLAGS} -DUCONFIG_NO_COLLATION=1"
 
-export BUILDDIR="build-${STDLIB}"
-export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export OPTIMIZATION="3"
 export S3_BASE="http://mapnik.s3.amazonaws.com/deps"
 export MAPNIK_DIST="${ROOTDIR}/out/dist"
@@ -154,6 +152,8 @@ else
     echo '**unhandled platform: ${PLATFORM}**'
 fi
 
+export BUILDDIR="build-${STDLIB}"
+export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
@@ -247,10 +247,12 @@ function download {
         echo using cached $1
     fi
 }
+export -f download
 
 function upload {
     s3cmd --acl-public put $1 s3://mapnik/deps/
 }
+export -f upload
 
 function push {
     echo "downloading $1"
@@ -260,4 +262,17 @@ function push {
     upload `basename $1`
     cd ${ROOTDIR}
 }
+export -f push
 
+function check_and_clear_libs {
+  if [ $UNAME = 'Darwin' ]; then
+        if [ -n "$(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print -quit)" ];then
+           lipo -info ${BUILD}/lib/*.a | grep arch
+        fi
+        if [ -n "$(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print -quit)" ];then
+           otool -L ${BUILD}/lib/*.dylib | grep /usr/lib
+        fi
+    fi
+    rm -f ${BUILD}/lib/{*.so,*.dylib}
+}
+export -f check_and_clear_libs

@@ -1,5 +1,4 @@
 source MacOSX.sh
-source settings.sh
 #./scripts/setup.sh
 #./scripts/download_deps.sh
 ./scripts/build_core_deps.sh
