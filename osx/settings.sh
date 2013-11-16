@@ -23,7 +23,6 @@ export MAPNIK_DIST="${ROOTDIR}/out/dist"
 export PACKAGES="${ROOTDIR}/out/packages"
 export PATCHES="${ROOTDIR}/patches"
 export STAGING="${ROOTDIR}/out/staging"
-export MAPNIK_SOURCE="${ROOTDIR}/mapnik"
 export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 
@@ -152,6 +151,7 @@ else
     echo '**unhandled platform: ${PLATFORM}**'
 fi
 
+export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${STDLIB}"
 export BUILDDIR="build-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
