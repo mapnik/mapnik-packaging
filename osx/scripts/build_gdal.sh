@@ -24,14 +24,14 @@ if [ $UNAME = 'Darwin' ]; then
   fi
 fi
 if [ "${CXX11}" = true ]; then
-  GDB_ARGS="--with-fgdb=no"
+  FGDB_ARGS="--with-fgdb=no"
 else
-  GDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+  FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
 fi
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} --enable-static --disable-shared \
---with-fgdb="${PACKAGES}/FileGDB_API/" \
+${FGDB_ARGS} \
 --with-libtiff=${BUILD} \
 --with-geotiff=${BUILD} \
 --with-jpeg=${BUILD} \
