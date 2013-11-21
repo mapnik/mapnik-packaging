@@ -238,6 +238,7 @@ export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
 export NODE_VERSION="0.10.22"
 export SPARSEHASH_VERSION="2.0.2"
+export HARFBUZZ_VERSION="0.9.24"
 
 function download {
     if [ ! -f $1 ]; then
