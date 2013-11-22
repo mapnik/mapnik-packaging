@@ -9,6 +9,8 @@ rm -rf harfbuzz-${HARFBUZZ_VERSION}
 tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
 cd harfbuzz-${HARFBUZZ_VERSION}
 export OLD_LDFLAGS=${LDFLAGS}
+export CXXFLAGS="${CXXFLAGS} -DHB_NO_MT"
+export CFLAGS="${CFLAGS} -DHB_NO_MT"
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} ${HOST_ARG} \
  --enable-static --disable-shared --disable-dependency-tracking \
