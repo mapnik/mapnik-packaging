@@ -1,4 +1,5 @@
-set -e
+#!/bin/bash
+set -e -u
 
 echo '...packaging mobile sdk tarball'
 

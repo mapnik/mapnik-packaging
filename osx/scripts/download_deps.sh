@@ -1,4 +1,6 @@
-set -e
+#!/bin/bash
+set -e -u
+
 mkdir -p ${PACKAGES}
 mkdir -p ${BUILD}
 mkdir -p ${BUILD}/lib

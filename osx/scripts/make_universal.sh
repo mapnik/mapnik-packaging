@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e -u
+
 mkdir -p "${BUILD_UNIVERSAL}"
 
 echo '*making universal libs*'

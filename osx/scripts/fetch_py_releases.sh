@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e -u
+
 # http://www.python.org/download/releases/
 # http://www.python.org/ftp/python/
 

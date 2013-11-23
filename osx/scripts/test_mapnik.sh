@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e -u
 
 echo '*** testing install'
 cd ${MAPNIK_SOURCE}

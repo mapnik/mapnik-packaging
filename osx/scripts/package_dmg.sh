@@ -1,4 +1,6 @@
-set -e
+#!/bin/bash
+set -e -u
+
 echo '...packaging DMG'
 #install_name_tool -id ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib
 rm -f ${ROOTDIR}/installer/*dmg

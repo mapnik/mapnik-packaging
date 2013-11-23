@@ -1,4 +1,5 @@
-set -e 
+#!/bin/bash
+set -e -u 
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}

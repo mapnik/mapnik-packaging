@@ -1,4 +1,6 @@
-set -e 
+#!/bin/bash
+set -e -u
+
 cd ${MAPNIK_SOURCE}
 
 echo 'Building mapnik minimal ios'

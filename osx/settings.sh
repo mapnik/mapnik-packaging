@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e -u
+
 # settings
 export OFFICIAL_RELEASE='false'
 export USE_BOOST_TRUNK='false'
@@ -115,7 +118,6 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
       export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
-      export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC

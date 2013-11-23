@@ -1,4 +1,6 @@
-set -e
+#!/bin/bash
+set -e -u
+
 cd "$( dirname $( dirname "$0" ))"
 # update mapnik
 cd mapnik
