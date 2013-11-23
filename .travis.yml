@@ -12,25 +12,21 @@ before_install:
  - sudo apt-get update -y
  - apt-get install -y build-essential git unzip python-dev libbz2-dev
 
-before_install:
+install:
  # upgrade compilers
  - if [ "${CXX11}" = true ]; then sudo apt-get install -y gcc-4.7 g++-4.7; fi;
 
-install:
+before_script:
  - cd osx
  - source Linux64.sh
  - if [ "${CXX11}" = true ]; then export CC=gcc-4.7 && export CXX=g++-4.7; fi;
  - ./scripts/download_deps.sh
+
+script:
  - ./scripts/build_core_deps.sh
  - ./scripts/build_deps_optional.sh
  - ./scripts/build_python_versions.sh
  - ./scripts/build_protobuf.sh
-
-before_script:
- - true
-
-script:
- - true
 
 notifications:
   irc:
