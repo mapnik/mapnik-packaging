@@ -34,7 +34,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections
     # Note: stripping with -Wl,-S breaks dtrace
-    export EXTRA_LDFLAGS="--as-needed"
+    export EXTRA_LDFLAGS="-Wl,--as-needed"
     export CORE_CC="gcc"
     export CORE_CXX="g++"
     export AR=ar
