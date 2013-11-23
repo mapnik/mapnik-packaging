@@ -8,7 +8,6 @@ rm -rf node-v${NODE_VERSION}
 tar xf node-v${NODE_VERSION}.tar.gz
 cd node-v${NODE_VERSION}
 export OLD_LDFLAGS=${LDFLAGS}
-export CXXFLAGS="-mmacosx-version-min=10.7 ${CXXFLAGS}"
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} \
  --shared-zlib \
