@@ -3,6 +3,9 @@ set -e
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+# harfbuzz
+${ROOTDIR}/scripts/build_harfbuzz.sh
+
 # icu
 ${ROOTDIR}/scripts/build_icu.sh
 
