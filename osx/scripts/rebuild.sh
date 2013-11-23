@@ -1,5 +1,3 @@
-source MacOSX.sh
-#./scripts/setup.sh
 ./scripts/download_deps.sh
 ./scripts/build_core_deps.sh
 ./scripts/build_deps_optional.sh
@@ -12,8 +10,8 @@ source MacOSX.sh
 #git checkout v2.1.0
 #cd ../
 
-rm -rf ${MAPNIK_BIN_SOURCE}
-cd scripts/
+#rm -rf ${MAPNIK_BIN_SOURCE}
+#cd scripts/
 
 # build mapnik
 #./build_mapnik.sh
@@ -24,7 +22,7 @@ cd scripts/
 # test mapnik
 #./test_mapnik.sh
 
-# ./package_minimal_binary_sdk.sh
+#./package_minimal_binary_sdk.sh
 
 # manually edit mapnik-config if this is not a full SDK build
 
