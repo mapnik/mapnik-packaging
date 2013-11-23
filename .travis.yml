@@ -29,7 +29,9 @@ script:
  - ./scripts/build_deps_optional.sh
  - ./scripts/build_python_versions.sh
  - ./scripts/build_protobuf.sh
- - JOBS=1 ./scripts/build_node.sh
+ # https://github.com/travis-ci/travis-cookbooks/issues/155
+ - sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
+ - ./scripts/build_node.sh
 
 notifications:
   irc:
