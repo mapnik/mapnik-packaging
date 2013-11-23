@@ -24,6 +24,7 @@ download libxml2-${LIBXML2_VERSION}.tar.gz
 download icu4c-${ICU_VERSION2}-src.tgz
 download boost_${BOOST_VERSION2}.tar.bz2
 download freetype-${FREETYPE_VERSION}.tar.bz2
+download harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
 
 # protobuf
 download protobuf-${PROTOBUF_VERSION}.tar.bz2

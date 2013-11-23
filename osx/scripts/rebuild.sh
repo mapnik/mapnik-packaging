@@ -3,6 +3,7 @@
 ./scripts/build_deps_optional.sh
 ./scripts/build_python_versions.sh
 ./scripts/build_protobuf.sh
+./scripts/build_node.sh
 
 # update mapnik
 #cd mapnik
