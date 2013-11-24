@@ -3,9 +3,6 @@ set -e
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-# harfbuzz
-${ROOTDIR}/scripts/build_harfbuzz.sh
-
 # icu
 ${ROOTDIR}/scripts/build_icu.sh
 
@@ -54,6 +51,10 @@ cd freetype-${FREETYPE_VERSION}
 make -j${JOBS}
 make install
 cd ${PACKAGES}
+
+# harfbuzz
+${ROOTDIR}/scripts/build_harfbuzz.sh
+
 
 # jpeg
 echo '*building jpeg*'
