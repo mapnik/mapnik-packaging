@@ -9,6 +9,13 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
 export UNAME=$(uname -s);
+export DARWIN_VERSION=$(uname -r)
+export LIBCXX_DEFAULT=false
+SEMVER_PATTERN='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+DARWIN_MAJOR=`echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#"`
+if [ ${DARWIN_MAJOR} = "13" ];then
+  export LIBCXX_DEFAULT=true
+fi
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
@@ -140,12 +147,16 @@ elif [ ${UNAME} = 'Darwin' ]; then
         export STDLIB="libc++"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-        echo "building against libc++ in c++11 mode"
+        echo "building against ${STDLIB} in c++11 mode"
     else
-      echo "building against libstdc++"
-      export STDLIB="libstdc++"
-      export STDLIB_CXXFLAGS=""
-      export STDLIB_LDFLAGS=""
+        if [ "${LIBCXX_DEFAULT}" = true ]; then
+            export STDLIB="libc++"
+        else
+            export STDLIB="libstdc++"
+        fi
+        export STDLIB_CXXFLAGS=""
+        export STDLIB_LDFLAGS=""
+        echo "building against ${STDLIB} in ANSI mode"
     fi
 else
     echo '**unhandled platform: ${PLATFORM}**'
