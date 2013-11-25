@@ -20,8 +20,10 @@ cd gdal-${GDAL_VERSION}
 patch configure ${PATCHES}/bigtiff_check.diff
 if [ $UNAME = 'Darwin' ]; then
   # trick the gdal configure into working on os x
-  if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
+  if [ -d "${PACKAGES}/FileGDB_API/" ]; then
+      if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
        touch "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so"
+      fi
   fi
 fi
 if [ "${CXX11}" = true ]; then
