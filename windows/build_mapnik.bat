@@ -1,8 +1,9 @@
 @echo off
 
 set ROOTDIR=c:\\dev2
-set PREFIX=c:\\mapnik-v2.3.0
-set PREFIX2=c:\mapnik-v2.3.0
+set MAPNIK_VERSION=v2.3.0
+set PREFIX=c:\\mapnik-%MAPNIK_VERSION%
+set PREFIX2=c:\mapnik-%MAPNIK_VERSION%
 
 @rem critical global variables needed by bjam
 set MAPNIK_DEPS_DIR=%ROOTDIR%
@@ -61,15 +62,15 @@ for %%t in (build\tests\cpp_tests\msvc-10.0\release\threading-multi\*.exe) do ( 
 
 @rem - enable the below for packaging
 @rem no need for lib files for plugins
-@rem del c:\mapnik-v2.2.0\lib\mapnik\input\*lib
+@rem del c:\mapnik-%MAPNIK_VERSION%\lib\mapnik\input\*lib
 
-@rem del mapnik-win-sdk-v2.2.0.zip
-@rem 7z a mapnik-win-sdk-v2.2.0.zip %PREFIX%
+@rem del mapnik-win-sdk-%MAPNIK_VERSION%.zip
+@rem 7z a mapnik-win-sdk-%MAPNIK_VERSION%.zip %PREFIX%
 @rem rd %PREFIX2%\include /s /q
 @ rem - note: prefix has c:\\ which screws up del
-@rem del c:\mapnik-v2.2.0\lib\*lib
-@rem del mapnik-win-v2.2.0.zip
-@rem 7z a mapnik-win-v2.2.0.zip %PREFIX%
+@rem del c:\mapnik-%MAPNIK_VERSION%\lib\*lib
+@rem del mapnik-win-%MAPNIK_VERSION%.zip
+@rem 7z a mapnik-win-%MAPNIK_VERSION%.zip %PREFIX%
 
 echo Started at %STARTTIME%, finished at %TIME%
 
