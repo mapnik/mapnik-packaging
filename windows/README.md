@@ -14,7 +14,7 @@ These notes attempt to map out the steps to compile Mapnik and dependencies with
 
 ### Step 1: Build Mapnik dependencies
 
-See the [[building_mapnik_dependencies.md]] document for details building Mapnik dependencies.
+See the [building_mapnik_dependencies.md](https://github.com/mapnik/mapnik-packaging/blob/master/windows/building_mapnik_dependencies.md) document for details on building Mapnik dependencies.
 
 Step through it copying and pasting chunks of commands, ensuring they work before
 continuing.
