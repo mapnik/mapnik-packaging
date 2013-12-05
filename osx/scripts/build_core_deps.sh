@@ -26,7 +26,6 @@ ${ROOTDIR}/scripts/build_harfbuzz.sh
 ${ROOTDIR}/scripts/build_jpeg.sh
 
 # libpng
-echo '*building libpng*'
 ${ROOTDIR}/scripts/build_png.sh
 
 # libxml2
