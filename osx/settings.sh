@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e -u
 
 # settings
 export OFFICIAL_RELEASE='false'
