@@ -54,3 +54,4 @@ download fontconfig-${FONTCONFIG_VERSION}.tar.gz
 download cairo-${CAIRO_VERSION}.tar.xz
 download py2cairo-${PY2CAIRO_VERSION}.tar.bz2
 download pycairo-${PY3CAIRO_VERSION}.tar.bz2
+download stxxl-${STXXL_VERSION}.tar.gz
