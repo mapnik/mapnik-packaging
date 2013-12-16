@@ -1,0 +1,11 @@
+--- luabind-0.9.1/luabind/detail/object_rep.hpp  2013-10-10 15:00:19.000000000 +0200
++++ luabind-0.9.1/luabind/detail/object_rep.hpp  2013-10-10 15:00:48.000000000 +0200
+@@ -24,6 +24,8 @@
+ #ifndef LUABIND_OBJECT_REP_HPP_INCLUDED
+ #define LUABIND_OBJECT_REP_HPP_INCLUDED
+ 
++#include <cstdlib>
++
+ #include <boost/aligned_storage.hpp>
+ #include <luabind/config.hpp>
+ #include <luabind/detail/instance_holder.hpp>

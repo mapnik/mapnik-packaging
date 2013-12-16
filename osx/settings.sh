@@ -254,6 +254,7 @@ export NODE_VERSION="0.10.22"
 export SPARSEHASH_VERSION="2.0.2"
 export HARFBUZZ_VERSION="0.9.24"
 export STXXL_VERSION="1.4.0"
+export LUABIND_VERSION="0.9.1"
 
 function download {
     if [ ! -f $1 ]; then

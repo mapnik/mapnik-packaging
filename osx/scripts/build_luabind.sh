@@ -4,7 +4,32 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download luabind-${LUABIND_VERSION}.tar.gz
+
 echo '*building luabind*'
+rm -rf luabind-${LUABIND_VERSION}
+tar xf luabind-${LUABIND_VERSION}.tar.gz
+cd luabind-${LUABIND_VERSION}
+#wget https://gist.github.com/DennisOSRM/3728987/raw/052251fcdc23602770f6c543be9b3e12f0cac50a/Jamroot.diff
+patch -N Jamroot ${PATCHES}/Jamroot.diff
+#wget https://github.com/luabind/luabind/commit/3044a9053ac50977684a75c4af42b2bddb853fad.diff
+patch -N luabind/detail/format_signature.hpp ${PATCHES}/3044a9053ac50977684a75c4af42b2bddb853fad.diff
+#wget https://gist.github.com/DennisOSRM/a246514bf7d01631dda8/raw/0e83503dbf862ebfb6ac063338a6d7bca793f94d/object_rep.diff
+patch -N luabind/detail/object_rep.hpp ${PATCHES}/object_rep.diff
+BOOST_ROOT=../boost_${BOOST_VERSION2}-${ARCH_NAME}
+${BOOST_ROOT}/b2 \
+  -d2 \
+  --prefix=${BUILD} \
+  architecture="${BOOST_ARCH}" \
+  toolset="${BOOST_TOOLSET}" \
+  link=static \
+  variant=release \
+  linkflags="${LDFLAGS}" \
+  cxxflags="${CXXFLAGS}" \
+  -sBOOST_ROOT=${BOOST_ROOT} \
+  stage install
+
+: '
 rm -rf luabind
 git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
@@ -19,9 +44,10 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DBUILD_STATIC_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release
+
 make -j${JOBS} VERBOSE=1
 make install
 export LINK_FLAGS=${OLD_LINK_FLAGS}
-cd ${PACKAGES}
+'
 
-#check_and_clear_libs
+cd ${PACKAGES}
