@@ -8,8 +8,9 @@ echo '*building luabind*'
 rm -rf luabind
 git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
-export OLD_LDFLAGS=${LDFLAGS}
-export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+export OLD_LINK_FLAGS=${LINK_FLAGS}
+export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
+rm -rf build
 mkdir build
 cd build
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
@@ -20,7 +21,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_BUILD_TYPE=Release
 make -j${JOBS} VERBOSE=1
 make install
-export LDFLAGS=${OLD_LDFLAGS}
+export LINK_FLAGS=${OLD_LINK_FLAGS}
 cd ${PACKAGES}
 
 #check_and_clear_libs

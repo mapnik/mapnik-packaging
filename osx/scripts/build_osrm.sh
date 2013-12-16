@@ -8,12 +8,8 @@ echo '*building OSRM*'
 rm -rf Project-OSRM
 git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
 cd Project-OSRM
-# NOTE: cmake ignores LDFLAGS but respects LINK_FLAGS in env
-if [ "${LINKFLAGS:-false}" = false ]; then
-  LINK_FLAGS=""
-fi
 export OLD_LINK_FLAGS=${LINK_FLAGS}
-export LINK_FLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 mkdir build
 cd build
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
