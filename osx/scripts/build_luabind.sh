@@ -4,11 +4,10 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building libsxxl*'
-rm -rf stxxl-${STXXL_VERSION}-${ARCH_NAME}
-tar xf stxxl-${STXXL_VERSION}.tar.gz
-mv stxxl-${STXXL_VERSION} stxxl-${STXXL_VERSION}-${ARCH_NAME}
-cd stxxl-${STXXL_VERSION}-${ARCH_NAME}
+echo '*building luabind*'
+rm -rf luabind
+git clone https://github.com/DennisOSRM/luabind.git
+cd luabind
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 mkdir build
