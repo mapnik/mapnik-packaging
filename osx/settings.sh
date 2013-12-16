@@ -155,7 +155,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
         else
             export STDLIB="libstdc++"
         fi
-        export STDLIB_CXXFLAGS=""
+        export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
         export STDLIB_LDFLAGS=""
         echo "building against ${STDLIB} in ANSI mode"
     fi
