@@ -1,36 +1,23 @@
-language: cpp
+language: objective-c
 
 compiler:
- - gcc
-
-env:
-  - CXX11=false
-  - CXX11=true
+ - clang
 
 before_install:
- - if [ "${CXX11}" = true ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi;
- - sudo apt-get update -y
- - sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
- # postgres deps
- - sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+ - true
 
 install:
- # upgrade compilers
- - if [ "${CXX11}" = true ]; then sudo apt-get install -y gcc-4.7 g++-4.7; fi;
+ - true
 
 before_script:
  - cd osx
- - source Linux64.sh
- - if [ "${CXX11}" = true ]; then export CC=gcc-4.7 && export CXX=g++-4.7; fi;
- - ./scripts/download_deps.sh
+ - export CXX11=true
+ - source MacOSX.sh
 
 script:
+ - ./scripts/download_deps.sh
  - ./scripts/build_core_deps.sh
- - ./scripts/build_deps_optional.sh
- - ./scripts/build_python_versions.sh
  - ./scripts/build_protobuf.sh
- # https://github.com/travis-ci/travis-cookbooks/issues/155
- - sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
  - ./scripts/build_node.sh
 
 notifications:
