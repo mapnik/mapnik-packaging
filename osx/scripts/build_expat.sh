@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # expat for gdal to avoid linking against system expat in /usr/lib
-echo '*building expat*'
+echoerr 'building expat'
 rm -rf expat-${EXPAT_VERSION}
 tar xf expat-${EXPAT_VERSION}.tar.gz
 cd expat-${EXPAT_VERSION}

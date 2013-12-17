@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # xz
-echo '*building xz*'
+echoerr 'building xz'
 tar xf xz-5.0.3.tar.bz2
 cd xz-5.0.3
 ./configure --prefix=${BUILD}

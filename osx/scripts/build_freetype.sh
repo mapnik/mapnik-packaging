@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building freetype*'
+echoerr 'building freetype'
 rm -rf freetype-${FREETYPE_VERSION}
 tar xf freetype-${FREETYPE_VERSION}.tar.bz2
 cd freetype-${FREETYPE_VERSION}

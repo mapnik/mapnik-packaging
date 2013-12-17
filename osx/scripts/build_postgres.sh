@@ -19,7 +19,7 @@ cd ${PACKAGES}
 '
 
 # postgres
-echo '*building postgres for libpq client library*'
+echoerr 'building postgres for libpq client library'
 
 : '
 postgres/INSTALL has:
@@ -33,7 +33,7 @@ gmake -C doc install
 '
 
 # 64 bit build
-echo '*building postgres 64 bit*'
+echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
 tar xf postgresql-${POSTGRES_VERSION}.tar.bz2

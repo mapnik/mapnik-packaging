@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building zlib*'
+echo 'building zlib'
 rm -rf zlib-${ZLIB_VERSION}
 tar xf zlib-${ZLIB_VERSION}.tar.gz
 cd zlib-${ZLIB_VERSION}

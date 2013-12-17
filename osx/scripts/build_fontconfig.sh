@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # fontconfig
-echo '*building fontconfig*'
+echoerr 'building fontconfig'
 rm -rf fontconfig-${FONTCONFIG_VERSION}
 tar xf fontconfig-${FONTCONFIG_VERSION}.tar.gz
 cd fontconfig-${FONTCONFIG_VERSION}

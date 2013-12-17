@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building OSRM*'
+echoerr 'building OSRM'
 rm -rf Project-OSRM
 git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
 cd Project-OSRM

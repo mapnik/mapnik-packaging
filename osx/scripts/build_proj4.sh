@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # proj4
-echo '*building proj.4*'
+echoerr 'building proj.4'
 rm -rf proj-${PROJ_VERSION}
 tar xf proj-${PROJ_VERSION}.tar.gz
 cd proj-${PROJ_VERSION}/nad

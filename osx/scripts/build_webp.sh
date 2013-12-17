@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building webp*'
+echo 'building webp'
 rm -rf libwebp-${WEBP_VERSION}
 tar xf libwebp-${WEBP_VERSION}.tar.gz
 cd libwebp-${WEBP_VERSION}

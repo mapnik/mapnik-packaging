@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building geotiff*'
+echoerr 'building geotiff'
 rm -rf libgeotiff-${LIBGEOTIFF_VERSION}
 tar xf libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
 cd libgeotiff-${LIBGEOTIFF_VERSION}

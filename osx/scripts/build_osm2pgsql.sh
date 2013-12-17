@@ -1,4 +1,4 @@
-#!/bin/bash
+echoerr#!/bin/bash
 set -e -u
 
 mkdir -p ${PACKAGES}
@@ -7,7 +7,7 @@ cd ${PACKAGES}
 download geos-${GEOS_VERSION}.tar.bz2
 download protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
 
-echo '*building protobuf C*'
+echoerr 'building protobuf C'
 rm -rf cd protobuf-c-${PROTOBUF_C_VERSION}
 tar xf protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
 cd protobuf-c-${PROTOBUF_C_VERSION}
@@ -17,7 +17,7 @@ make -j${JOBS}
 make install
 cd ${PACKAGES}
 
-echo '*building geos*'
+echoerr 'building geos'
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 export OLD_CXX=${CXX}
@@ -38,7 +38,7 @@ export CXX=${OLD_CXX}
 
 check_and_clear_libs
 
-echo '*building osm2pgsql*'
+echoerr 'building osm2pgsql'
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"

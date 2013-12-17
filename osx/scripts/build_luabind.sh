@@ -6,7 +6,7 @@ cd ${PACKAGES}
 
 download luabind-${LUABIND_VERSION}.tar.gz
 
-echo '*building luabind*'
+echoerr 'building luabind'
 
 # disabled because I failed to get bjam working on linux:
 #  https://gist.github.com/springmeyer/17d0a1a12d7d4bce74d4

@@ -4,6 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+echoerr 'building OSM-binary'
 rm -rf OSM-binary
 git clone https://github.com/scrosby/OSM-binary.git
 cd OSM-binary/src
