@@ -4,7 +4,8 @@ compiler:
  - gcc
 
 env:
-  - TARGET=build_for_linux
+  - CXX11=true TARGET=build_for_linux
+  - CXX11=false TARGET=build_for_linux
 
 before_install:
  # fixes node/gyp install

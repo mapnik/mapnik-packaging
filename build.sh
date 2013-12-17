@@ -1,14 +1,18 @@
 #!/bin/bash
 
+function build_all {
+  ./scripts/download_deps.sh
+  ./scripts/build_core_deps.sh 1>> build.log
+  ./scripts/build_deps_optional.sh 1>> build.log
+  ./scripts/build_python_versions.sh 1>> build.log
+  ./scripts/build_protobuf.sh 1>> build.log
+  ./scripts/build_node.sh 1>> build.log
+}
+
 function build_for_osx {
   cd osx
   source MacOSX.sh
-  ./scripts/download_deps.sh
-  ./scripts/build_core_deps.sh 1>> build.log
-  #./scripts/build_deps_optional.sh
-  #./scripts/build_python_versions.sh
-  #./scripts/build_protobuf.sh
-  #./scripts/build_node.sh
+  build_all
 }
 
 export -f build_for_osx
@@ -26,12 +30,7 @@ function build_for_linux {
   sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
-  ./scripts/download_deps.sh
-  ./scripts/build_core_deps.sh
-  #./scripts/build_deps_optional.sh
-  #./scripts/build_python_versions.sh
-  #./scripts/build_protobuf.sh
-  #./scripts/build_node.sh
+  build_all
 }
 
 export -f build_for_linux
