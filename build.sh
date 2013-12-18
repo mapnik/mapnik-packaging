@@ -27,8 +27,9 @@ function build_for_linux {
     export CC="gcc-4.8";
     export CXX="g++-4.8";
     export BOOST_TOOLSET="gcc-4.8"
+  else
+    sudo apt-get update -y
   fi;
-  sudo apt-get update -y
   sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
