@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [ $USE_BOOST_TRUNK = 'true' ]; then
-    echo '*building boost trunk*'
+    echoerr 'building boost trunk'
     rm -rf boost_trunk-${ARCH_NAME}
     if [ ! -d boost-trunk ]; then
         svn co https://svn.boost.org/svn/boost/trunk boost-trunk
@@ -18,7 +18,7 @@ if [ $USE_BOOST_TRUNK = 'true' ]; then
     cp -r boost-trunk boost_trunk-${ARCH_NAME}
     cd boost_trunk-${ARCH_NAME}
 else
-    echo '*building boost*'
+    echoerr 'building boost'
     rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
     tar xjf boost_${BOOST_VERSION2}.tar.bz2
     mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
@@ -35,15 +35,14 @@ if [ $UNAME = 'Darwin' ]; then
   fi
 fi
 
+echoerr 'bootstrapping boost'
 if [ $PLATFORM = 'Android' ];  then
     echo "using gcc : arm : ${CXX} ;" > user-config.jam
-    echo '*bootstrapping boost*'
     ./bootstrap.sh --with-toolset=gcc
 else
     # way to pass extra flags with cxx, but seems brittle
     #echo "using ${BOOST_TOOLSET} : : ${BOOST_TOOLSET} ${STDLIB_CXXFLAGS} ;" > user-config.jam
     echo "using ${BOOST_TOOLSET} ;" > user-config.jam
-    echo '*bootstrapping boost*'
     ./bootstrap.sh
 fi
 
@@ -91,7 +90,7 @@ fi
 
 B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
-echo '*compiling boost*'
+echoerr 'compiling boost'
 # static libs
 ./b2 ${CROSS_FLAGS} \
   --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
@@ -118,4 +117,4 @@ fi
 # clear out shared libs
 rm -f ${BUILD}/lib/{*.so,*.dylib}
 cd ${PACKAGES}
-echo '*done compiling boost*'
+echoerr 'done compiling boost'

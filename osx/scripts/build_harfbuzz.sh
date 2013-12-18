@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # proj4
-echo '*building harfbuzz*'
+echoerr 'building harfbuzz'
 rm -rf harfbuzz-${HARFBUZZ_VERSION}
 tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
 cd harfbuzz-${HARFBUZZ_VERSION}

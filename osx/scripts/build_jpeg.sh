@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building jpeg*'
+echoerr 'building jpeg'
 rm -rf jpeg-${JPEG_VERSION}
 tar xf jpegsrc.v${JPEG_VERSION}.tar.gz
 cd jpeg-${JPEG_VERSION}

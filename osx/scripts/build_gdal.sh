@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 # gdal
-echo '*building gdal*'
+echoerr 'building gdal'
 
 export OLD_CXX=${CXX}
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:

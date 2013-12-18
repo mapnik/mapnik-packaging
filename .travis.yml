@@ -6,6 +6,13 @@ compiler:
 before_install:
  - true
 
+env:
+  - CXX11=true TARGET=build_for_osx
+  - CXX11=false TARGET=build_for_osx
+
+before_install:
+  - true
+
 install:
  - true
 
@@ -15,10 +22,8 @@ before_script:
  - source MacOSX.sh
 
 script:
- - ./scripts/download_deps.sh
- - ./scripts/build_core_deps.sh
- - ./scripts/build_protobuf.sh
- - ./scripts/build_node.sh
+ - source ./build.sh
+ - ${TARGET}
 
 notifications:
   irc:

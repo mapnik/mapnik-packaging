@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building icu*'
+echoerr 'building icu'
 rm -rf icu-${ARCH_NAME}
 rm -rf icu
 # *WARNING* do not set an $INSTALL variable
@@ -51,7 +51,7 @@ cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 --disable-icuio \
 --disable-samples \
 --disable-dyload
-make -j${JOBS} -i -k
+make -j${JOBS} -i -k 
 make install
 export LDFLAGS=${OLD_LDFLAGS}
 export CPPFLAGS=${OLD_CPPFLAGS}

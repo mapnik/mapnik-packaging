@@ -19,7 +19,7 @@ cd ${PACKAGES}
 '
 
 # postgres
-echo '*building postgres for libpq client library*'
+echoerr 'building postgres for libpq client library'
 
 : '
 postgres/INSTALL has:
@@ -33,12 +33,12 @@ gmake -C doc install
 '
 
 # 64 bit build
-echo '*building postgres 64 bit*'
+echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
 tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
-./configure --prefix=${BUILD} --enable-static --enable-shared \
+./configure --prefix=${BUILD} \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
 --with-bonjour --without-libxml --without-readline
 # LD=${CC}

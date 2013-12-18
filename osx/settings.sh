@@ -256,6 +256,9 @@ export HARFBUZZ_VERSION="0.9.24"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 
+function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
+export -f echoerr
+
 function download {
     if [ ! -f $1 ]; then
         echo downloading $1

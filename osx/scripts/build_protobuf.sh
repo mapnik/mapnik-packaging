@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echo '*building protobuf C++*'
+echoerr 'building protobuf C++'
 rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2
 mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
@@ -15,7 +15,7 @@ if [ $BOOST_ARCH = "arm" ]; then
     elif [ -f "$(pwd)/../protobuf-${PROTOBUF_VERSION}-x86-64/src/protoc" ]; then
         NATIVE_PROTOC="$(pwd)/../protobuf-${PROTOBUF_VERSION}-x86-64/src/protoc"
     else
-        echo 'could not find pre-built protobuf/protoc from a native/host arch!'
+        echoerr 'could not find pre-built protobuf/protoc from a native/host arch!'
     fi
     export CROSS_FLAGS="--with-protoc=${NATIVE_PROTOC}"
 else
