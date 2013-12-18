@@ -22,9 +22,11 @@ function build_for_linux {
   source Linux64.sh
   if [ "${CXX11}" = true ]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+    sudo apt-get update -y
     sudo apt-get install -y gcc-4.8 g++-4.8;
-    export CC=gcc-4.8;
-    export CXX=g++-4.8;
+    export CC="gcc-4.8";
+    export CXX="g++-4.8";
+    export BOOST_TOOLSET="gcc-4.8"
   fi;
   sudo apt-get update -y
   sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
