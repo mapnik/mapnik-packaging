@@ -3,23 +3,20 @@ language: objective-c
 compiler:
  - clang
 
-before_install:
- - true
-
 env:
   - CXX11=true TARGET=build_for_osx
   - CXX11=false TARGET=build_for_osx
 
 before_install:
-  - true
+ # fixes node/gyp install
+ # https://github.com/travis-ci/travis-cookbooks/issues/155
+ #- sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
 
 install:
  - true
 
 before_script:
- - cd osx
- - export CXX11=true
- - source MacOSX.sh
+ - true
 
 script:
  - source ./build.sh
