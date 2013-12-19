@@ -31,6 +31,7 @@ function build_mapnik {
   ./scripts/build_deps_optional.sh 1>> build.log
   ./scripts/build_python_versions.sh 1>> build.log
   ./scripts/build_protobuf.sh 1>> build.log
+  git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
   ./scripts/build_mapnik.sh
 }
 
