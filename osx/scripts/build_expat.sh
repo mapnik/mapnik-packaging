@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download expat-${EXPAT_VERSION}.tar.gz
+
 # expat for gdal to avoid linking against system expat in /usr/lib
 echoerr 'building expat'
 rm -rf expat-${EXPAT_VERSION}

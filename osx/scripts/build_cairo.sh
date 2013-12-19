@@ -16,6 +16,9 @@ make install
 cd ${PACKAGES}
 
 # cairo
+
+download cairo-${CAIRO_VERSION}.tar.xz
+
 echoerr '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
 rm -rf cairo-${CAIRO_VERSION}.tar

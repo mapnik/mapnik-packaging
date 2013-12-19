@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download pixman-${PIXMAN_VERSION}.tar.gz
+
 echoerr 'building pixman'
 rm -rf pixman-${PIXMAN_VERSION}
 tar xf pixman-${PIXMAN_VERSION}.tar.gz

@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download gdal-${GDAL_VERSION}.tar.gz
+
 # gdal
 echoerr 'building gdal'
 

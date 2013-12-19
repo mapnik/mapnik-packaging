@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download tiff-${LIBTIFF_VERSION}.tar.gz
+
 echoerr 'building tiff'
 rm -rf tiff-${LIBTIFF_VERSION}
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz

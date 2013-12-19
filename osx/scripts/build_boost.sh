@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download boost_${BOOST_VERSION2}.tar.bz2
+
 if [ $USE_BOOST_TRUNK = 'true' ]; then
     echoerr 'building boost trunk'
     rm -rf boost_trunk-${ARCH_NAME}

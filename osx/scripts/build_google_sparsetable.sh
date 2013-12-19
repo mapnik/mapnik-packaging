@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download sparsehash-${SPARSEHASH_VERSION}.tar.gz
+
 echoerr 'building sparsehash C++'
 rm -rf sparsehash-${SPARSEHASH_VERSION}-${ARCH_NAME}
 tar xf sparsehash-${SPARSEHASH_VERSION}.tar.gz

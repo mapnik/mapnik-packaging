@@ -10,8 +10,8 @@ function prep_osx {
 function prep_linux {
   cd osx
   source Linux64.sh
-  export JOBS=1
-  echo `grep -c ^processor /proc/cpuinfo`
+  export JOBS=$(($JOBS/2))
+  echo "Running build with ${JOBS} parallel jobs"
   if [ "${CXX11}" = true ]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
     sudo apt-get update -y
@@ -27,13 +27,16 @@ function build_mapnik {
   sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
-  ./scripts/download_deps.sh
   ./scripts/build_core_deps.sh 1>> build.log
   ./scripts/build_deps_optional.sh 1>> build.log
-  ./scripts/build_python_versions.sh 1>> build.log
-  ./scripts/build_zlib.sh 1>> build.log
+  ./scripts/build_python_versions.sh
   ./scripts/build_protobuf.sh 1>> build.log
   git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
+  cd mapnik-${STDLIB}
+  if [ "${CXX11}" = false ]; then
+      git checkout 2.3.x
+  fi
+  cd ../
   ./scripts/build_mapnik.sh
 }
 
@@ -45,15 +48,14 @@ export -f build_mapnik_for_linux
 
 function build_osrm {
   sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
-  ./scripts/download_deps.sh
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   # TODO: osrm boost usage does not need icu
-  ./scripts/build_boost.sh
+  ./scripts/build_boost.sh 1>> build.log
   ./scripts/build_zlib.sh 1>> build.log
   ./scripts/build_protobuf.sh 1>> build.log
   ./scripts/build_osm-pbf.sh 1>> build.log
-  ./scripts/build_luabind.sh
+  ./scripts/build_luabind.sh 1>> build.log
   ./scripts/build_libstxxl.sh 1>> build.log
   ./scripts/build_osrm.sh
 }

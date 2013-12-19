@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download jpegsrc.v${JPEG_VERSION}.tar.gz
+
 echoerr 'building jpeg'
 rm -rf jpeg-${JPEG_VERSION}
 tar xf jpegsrc.v${JPEG_VERSION}.tar.gz

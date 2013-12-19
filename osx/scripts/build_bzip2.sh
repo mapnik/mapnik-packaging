@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download bzip2-${BZIP2_VERSION}.tar.gz
+
 echoerr '*building bzip2'
 rm -rf bzip2-${BZIP2_VERSION}
 tar xf bzip2-${BZIP2_VERSION}.tar.gz

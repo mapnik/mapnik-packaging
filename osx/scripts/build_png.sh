@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download libpng-${LIBPNG_VERSION}.tar.gz
+
 echoerr 'building libpng'
 rm -rf libpng-${LIBPNG_VERSION}
 tar xf libpng-${LIBPNG_VERSION}.tar.gz
