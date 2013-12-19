@@ -46,7 +46,7 @@ function build_osrm {
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   # TODO: osrm boost usage does not need icu
-  ./scripts/build_boost.sh 1>> build.log
+  ./scripts/build_boost.sh
   ./scripts/build_protobuf.sh 1>> build.log
   ./scripts/build_osm-pbf.sh 1>> build.log
   ./scripts/build_luabind.sh

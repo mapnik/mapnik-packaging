@@ -18,18 +18,17 @@ cd gdal-${GDAL_VERSION}
 # not bigtiff check will fail…
 # fix bigtiff check
 patch configure ${PATCHES}/bigtiff_check.diff
+FGDB_ARGS="--with-fgdb=no"
 if [ $UNAME = 'Darwin' ]; then
-  # trick the gdal configure into working on os x
-  if [ -d "${PACKAGES}/FileGDB_API/" ]; then
-      if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
-       touch "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so"
-      fi
-  fi
-fi
-if [ "${CXX11}" = true ]; then
-  FGDB_ARGS="--with-fgdb=no"
-else
-  FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+    # trick the gdal configure into working on os x
+    if [ -d "${PACKAGES}/FileGDB_API/" ]; then
+        if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
+           touch "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so"
+        fi
+    fi
+    if [ "${CXX11}" = false ]; then
+      FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+    fi
 fi
 export OLD_LDFLAGS=${LDFLAGS}
 export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
