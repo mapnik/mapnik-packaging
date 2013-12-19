@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -x
 
 export PROJ_LIB=${MAPNIK_BIN_SOURCE}/share/mapnik/proj
 export GDAL_DATA=${MAPNIK_BIN_SOURCE}/share/mapnik/gdal
