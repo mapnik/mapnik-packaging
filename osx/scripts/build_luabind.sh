@@ -40,10 +40,7 @@ git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
 # avoid g++ being killed on travis
 if [ ${TRAVIS} = true ]; then
-    JOBS=$(($JOBS/6))
-    if [ $JOBS = 0 ]; then
-      JOBS=2
-    fi
+    JOBS=2
 fi
 export OLD_LINK_FLAGS=${LINK_FLAGS}
 export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"

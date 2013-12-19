@@ -10,10 +10,7 @@ git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
 cd Project-OSRM
 
 if [ ${TRAVIS} = true ]; then
-    JOBS=$(($JOBS/4))
-    if [ $JOBS = 0 ]; then
-      JOBS=2
-    fi
+    JOBS=2
 fi
 
 export OLD_LINK_FLAGS=${LINK_FLAGS}

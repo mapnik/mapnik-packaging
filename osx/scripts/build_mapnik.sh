@@ -11,10 +11,7 @@ rm -f tests/cpp_tests/*-bin
 make clean
 
 if [ ${TRAVIS} = true ]; then
-    JOBS=$(($JOBS/6))
-    if [ $JOBS = 0 ]; then
-      JOBS=2
-    fi
+    JOBS=2
 fi
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
