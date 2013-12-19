@@ -48,6 +48,7 @@ function build_mapnik_for_linux {
 export -f build_mapnik_for_linux
 
 function build_mapnik_for_osx {
+  env
   prep_osx
   build_mapnik
 }
