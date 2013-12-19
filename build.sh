@@ -1,23 +1,11 @@
 #!/bin/bash
 
-function build_all {
-  ./scripts/download_deps.sh
-  ./scripts/build_core_deps.sh 1>> build.log
-  ./scripts/build_deps_optional.sh 1>> build.log
-  ./scripts/build_python_versions.sh 1>> build.log
-  ./scripts/build_protobuf.sh 1>> build.log
-  ./scripts/build_node.sh 1>> build.log
-}
-
-function build_for_osx {
+function prep_osx {
   cd osx
   source MacOSX.sh
-  build_all
 }
 
-export -f build_for_osx
-
-function build_for_linux {
+function prep_linux {
   cd osx
   source Linux64.sh
   if [ "${CXX11}" = true ]; then
@@ -30,10 +18,46 @@ function build_for_linux {
   else
     sudo apt-get update -y
   fi;
+}
+
+function build_mapnik {
   sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
-  build_all
+  ./scripts/download_deps.sh
+  ./scripts/build_core_deps.sh 1>> build.log
+  ./scripts/build_deps_optional.sh 1>> build.log
+  ./scripts/build_python_versions.sh 1>> build.log
+  ./scripts/build_protobuf.sh 1>> build.log
+  ./scripts/build_mapnik.sh
 }
 
-export -f build_for_linux
+function build_mapnik_for_linux {
+  prep_linux
+  build_mapnik
+}
+export -f build_mapnik_for_linux
+
+function build_osrm {
+  sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
+  ./scripts/download_deps.sh
+  ./scripts/build_bzip2.sh 1>> build.log
+  ./scripts/build_boost.sh 1>> build.log
+  ./scripts/build_osm-pbf.sh 1>> build.log
+  ./scripts/build_luabind.sh 1>> build.log
+  ./scripts/build_libstxxl.sh 1>> build.log
+  ./scripts/build_protobuf.sh 1>> build.log
+  ./scripts/build_osrm.sh
+}
+
+function build_osrm_for_linux {
+  prep_linux
+  build_osrm
+}
+export -f build_osrm_for_linux
+
+function build_osmium_for_linux {
+  prep_linux
+  build_osmium
+}
+export -f build_osmium_for_linux
