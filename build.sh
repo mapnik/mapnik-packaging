@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -u
+
 function prep_osx {
   cd osx
   source MacOSX.sh
@@ -42,11 +44,11 @@ function build_osrm {
   sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
   ./scripts/download_deps.sh
   ./scripts/build_bzip2.sh 1>> build.log
-  ./scripts/build_boost.sh 1>> build.log
-  ./scripts/build_osm-pbf.sh 1>> build.log
-  ./scripts/build_luabind.sh 1>> build.log
-  ./scripts/build_libstxxl.sh 1>> build.log
+  ./scripts/build_boost.sh
   ./scripts/build_protobuf.sh 1>> build.log
+  ./scripts/build_osm-pbf.sh 1>> build.log
+  ./scripts/build_luabind.sh
+  ./scripts/build_libstxxl.sh 1>> build.log
   ./scripts/build_osrm.sh
 }
 
