@@ -18,7 +18,7 @@ export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
 if [ ${PLATFORM} = 'Linux' ]; then
     # workaround undefined reference to `clock_gettime' when linking osrm-extract
-    if [ ${CXX} = "clang++"]; then
+    if [ ${CXX} = "clang++" ]; then
         export LINK_FLAGS="-lrt ${LINK_FLAGS}"
     fi
 fi
