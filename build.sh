@@ -1,6 +1,4 @@
-#!/bin/bash
-
-set -e -u
+#!/bin/bash -u -x
 
 function prep_osx {
   cd osx
