@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -x
 
 cd "$( dirname $( dirname "$0" ))"
 source MacOSX.sh

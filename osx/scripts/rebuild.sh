@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -x
 
 ./scripts/download_deps.sh
 ./scripts/build_core_deps.sh

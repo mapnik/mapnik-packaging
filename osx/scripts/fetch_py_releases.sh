@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -x
 
 # http://www.python.org/download/releases/
 # http://www.python.org/ftp/python/

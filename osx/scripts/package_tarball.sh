@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -x
 
 echo '...packaging binary tarball'
 mkdir -p ${MAPNIK_DIST}

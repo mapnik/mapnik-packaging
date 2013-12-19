@@ -1,5 +1,5 @@
 echoerr#!/bin/bash
-set -e -u
+set -e -u -x
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}

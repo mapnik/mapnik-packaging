@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -x
 
 cd ${MAPNIK_SOURCE}
 
