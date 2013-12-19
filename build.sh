@@ -75,6 +75,7 @@ export -f build_osrm_for_linux
 
 function build_osrm_for_osx {
   prep_osx
+  brew install lua
   build_osrm
 }
 export -f build_osrm_for_osx
