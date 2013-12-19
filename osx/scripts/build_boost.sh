@@ -42,7 +42,7 @@ if [ $PLATFORM = 'Android' ];  then
 else
     # way to pass extra flags with cxx, but seems brittle
     #echo "using ${BOOST_TOOLSET} : : ${BOOST_TOOLSET} ${STDLIB_CXXFLAGS} ;" > user-config.jam
-    echo "using ${BOOST_TOOLSET} ;" > user-config.jam
+    echo "using ${BOOST_TOOLSET} : : `which ${CXX}` ;" > user-config.jam
     ./bootstrap.sh
 fi
 
