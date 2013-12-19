@@ -2,7 +2,6 @@ language: cpp
 
 compiler:
  - gcc
- - clang
 
 env:
   - CXX11=true TARGET=build_osrm_for_linux
