@@ -26,9 +26,9 @@ if [ $UNAME = 'Darwin' ]; then
         if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
            touch "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so"
         fi
-    fi
-    if [ "${CXX11}" = false ]; then
-      FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+        if [ "${CXX11}" = false ]; then
+          FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+        fi
     fi
 fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
