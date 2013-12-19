@@ -4,6 +4,9 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download proj-datumgrid-${PROJ_GRIDS_VERSION}.zip
+download proj-${PROJ_VERSION}.tar.gz
+
 # proj4
 echoerr 'building proj.4'
 rm -rf proj-${PROJ_VERSION}

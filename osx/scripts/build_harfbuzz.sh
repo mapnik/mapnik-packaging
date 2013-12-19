@@ -4,7 +4,9 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-# proj4
+download harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
+
+# harfbuzz
 echoerr 'building harfbuzz'
 rm -rf harfbuzz-${HARFBUZZ_VERSION}
 tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2

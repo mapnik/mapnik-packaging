@@ -4,6 +4,12 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+if [ ${TRAVIS} = true ]; then
+    JOBS=2
+fi
+
+download boost_${BOOST_VERSION2}.tar.bz2
+
 if [ $USE_BOOST_TRUNK = 'true' ]; then
     echoerr 'building boost trunk'
     rm -rf boost_trunk-${ARCH_NAME}
@@ -42,7 +48,7 @@ if [ $PLATFORM = 'Android' ];  then
 else
     # way to pass extra flags with cxx, but seems brittle
     #echo "using ${BOOST_TOOLSET} : : ${BOOST_TOOLSET} ${STDLIB_CXXFLAGS} ;" > user-config.jam
-    echo "using ${BOOST_TOOLSET} ;" > user-config.jam
+    echo "using ${BOOST_TOOLSET} : : `which ${CXX}` ;" > user-config.jam
     ./bootstrap.sh
 fi
 

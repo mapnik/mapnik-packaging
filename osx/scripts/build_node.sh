@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download node-v${NODE_VERSION}.tar.gz
+
 echoerr 'building node'
 rm -rf node-v${NODE_VERSION}
 tar xf node-v${NODE_VERSION}.tar.gz

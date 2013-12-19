@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download sqlite-autoconf-${SQLITE_VERSION}.tar.gz
+
 echoerr 'building sqlite'
 rm -rf sqlite-autoconf-${SQLITE_VERSION}
 tar xf sqlite-autoconf-${SQLITE_VERSION}.tar.gz

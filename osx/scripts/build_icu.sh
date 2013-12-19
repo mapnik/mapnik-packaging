@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download icu4c-${ICU_VERSION2}-src.tgz
+
 echoerr 'building icu'
 rm -rf icu-${ARCH_NAME}
 rm -rf icu

@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download stxxl-${STXXL_VERSION}.tar.gz
+
 echoerr 'building libsxxl'
 rm -rf stxxl-${STXXL_VERSION}
 rm -rf stxxl-${STXXL_VERSION}-${ARCH_NAME}

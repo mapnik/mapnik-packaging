@@ -6,6 +6,8 @@ cd ${PACKAGES}
 
 # build dep for untarring cairo
 # we build here to avoid the liblzma.dylib from being nuked earlier when we clear out gdal dylibs
+download xz-${XZ_VERSION}.tar.bz2
+
 echoerr '*building xz*'
 rm -rf xz-5.0.3
 tar xf xz-5.0.3.tar.bz2
@@ -16,12 +18,16 @@ make install
 cd ${PACKAGES}
 
 # cairo
+download cairo-${CAIRO_VERSION}.tar.xz
+
 echoerr '*building cairo*'
 rm -rf cairo-${CAIRO_VERSION}
 rm -rf cairo-${CAIRO_VERSION}.tar
 xz -d -k cairo-${CAIRO_VERSION}.tar.xz
 tar xf cairo-${CAIRO_VERSION}.tar
 cd cairo-${CAIRO_VERSION}
+export OLD_CFLAGS=${CFLAGS}
+export CFLAGS="${CFLAGS} -Wno-enum-conversion "
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
 export png_CFLAGS="-I${BUILD}/include"
 export png_LIBS="-I${BUILD}/lib -lpng"
@@ -68,4 +74,5 @@ export png_LIBS="-I${BUILD}/lib -lpng"
   --prefix=${BUILD}
 make -j${JOBS}
 make install
+export CFLAGS=${OLD_CFLAGS}
 cd ${PACKAGES}

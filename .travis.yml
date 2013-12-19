@@ -4,8 +4,10 @@ compiler:
  - clang
 
 env:
-  - CXX11=true TARGET=build_for_osx
-  - CXX11=false TARGET=build_for_osx
+  - CXX11=true TARGET=build_osrm_for_osx
+  - CXX11=false TARGET=build_osrm_for_osx
+  - CXX11=true TARGET=build_mapnik_for_osx
+  - CXX11=false TARGET=build_mapnik_for_osx
 
 before_install:
  # fixes node/gyp install

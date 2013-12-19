@@ -3,12 +3,16 @@ set -e -u
 
 cd ${MAPNIK_SOURCE}
 
-echo 'Building mapnik minimal ios'
+echo 'Building mapnik mobile'
 
 rm -rf ${MAPNIK_BIN_SOURCE}
 rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 #make clean
+
+if [ ${TRAVIS} = true ]; then
+    JOBS=2
+fi
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py

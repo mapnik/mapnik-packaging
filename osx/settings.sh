@@ -13,10 +13,12 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 export UNAME=$(uname -s);
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
-SEMVER_PATTERN='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
-DARWIN_MAJOR=`echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#"`
-if [ ${DARWIN_MAJOR} = "13" ];then
-  export LIBCXX_DEFAULT=true
+if [ ${UNAME} = 'Darwin' ]; then
+  SEMVER_PATTERN='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+  DARWIN_MAJOR=`echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#"`
+  if [ ${DARWIN_MAJOR} = "13" ];then
+    export LIBCXX_DEFAULT=true
+  fi
 fi
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
@@ -44,8 +46,13 @@ if [ ${PLATFORM} = 'Linux' ]; then
     # TODO -Wl,--gc-sections
     # Note: stripping with -Wl,-S breaks dtrace
     export EXTRA_LDFLAGS="-Wl,--as-needed"
-    export CORE_CC="gcc"
-    export CORE_CXX="g++"
+    if [ "${CXX:-false}" = "clang++" ]; then
+      export CORE_CC="clang"
+      export CORE_CXX="clang++"
+    else
+      export CORE_CC="gcc"
+      export CORE_CXX="g++"
+    fi
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=

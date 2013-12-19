@@ -32,6 +32,8 @@ cd ${PACKAGES}
 
 if [ $UNAME = 'Darwin' ]; then
 
+    download py2cairo-${PY2CAIRO_VERSION}.tar.bz2
+
     echoerr 'building py2cairo for py2.7'
     rm -rf py2cairo-${PY2CAIRO_VERSION}
     tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
@@ -55,6 +57,8 @@ if [ $UNAME = 'Darwin' ]; then
         cd ${PACKAGES}
     
         # py3cairo
+        download pycairo-${PY3CAIRO_VERSION}.tar.bz2
+        
         echoerr 'building py3cairo for py3.3'
         rm -rf pycairo-${PY3CAIRO_VERSION}
         tar xf pycairo-${PY3CAIRO_VERSION}.tar.bz2

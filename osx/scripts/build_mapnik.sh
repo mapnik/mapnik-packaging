@@ -10,6 +10,10 @@ rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 make clean
 
+if [ ${TRAVIS} = true ]; then
+    JOBS=2
+fi
+
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
@@ -52,7 +56,6 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   BINDINGS='python' \
   INPUT_PLUGINS='csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite' \
   CAIRO=True \
-  JOBS=6 \
   DEMO=True \
   PGSQL2SQLITE=True \
   SVG2PNG=False \

@@ -4,6 +4,8 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+download pkg-config-${PKG_CONFIG_VERSION}.tar.gz
+
 echoerr 'building pkg-config'
 rm -rf pkg-config-${PKG_CONFIG_VERSION}
 tar xf pkg-config-${PKG_CONFIG_VERSION}.tar.gz
