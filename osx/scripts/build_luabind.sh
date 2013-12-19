@@ -40,7 +40,9 @@ git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
 export OLD_JOBS=${JOBS}
 # avoid g++ being killed on linux
-export JOBS=$(($JOBS/2))
+if [ ${PLATFORM} = 'Linux' ]; then
+    export JOBS=1
+fi
 export OLD_LINK_FLAGS=${LINK_FLAGS}
 export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 rm -rf build
