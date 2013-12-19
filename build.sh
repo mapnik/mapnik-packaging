@@ -14,8 +14,10 @@ function prep_linux {
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
     sudo apt-get update -y
     sudo apt-get install -y gcc-4.8 g++-4.8;
-    export CC="gcc-4.8";
-    export CXX="g++-4.8";
+    if [ "${CXX}" = "g++" ]; then
+      export CC="gcc-4.8";
+      export CXX="g++-4.8";
+    fi
   else
     sudo apt-get update -y
   fi;
