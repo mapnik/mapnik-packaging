@@ -11,7 +11,11 @@ rm -f tests/cpp_tests/*-bin
 #make clean
 
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then
-    JOBS=2
+    if [ $UNAME = 'Darwin' ]; then
+      JOBS=1
+    else
+      JOBS=2
+    if
 fi
 
 
