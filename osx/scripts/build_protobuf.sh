@@ -19,16 +19,14 @@ if [ $BOOST_ARCH = "arm" ]; then
     else
         echoerr 'could not find pre-built protobuf/protoc from a native/host arch!'
     fi
-    export CROSS_FLAGS="--with-protoc=${NATIVE_PROTOC}"
+    CROSS_FLAGS="--with-protoc=${NATIVE_PROTOC}"
 else
-    export CROSS_FLAGS=""
+    CROSS_FLAGS=""
 fi
-export OLD_LDFLAGS=${LDFLAGS}
-export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-export OLD_CXX=${CXX}
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-export CXX="${CXX} ${STDLIB_CXXFLAGS}"
+CXX="${CXX} ${STDLIB_CXXFLAGS}"
 # WARNING: building a shared lib will result in shared libs being listed in
 # the libprotobuf.la and then libproto-c will try to link against them even
 # if they do not exist (as deleted by below)
@@ -38,8 +36,6 @@ export CXX="${CXX} ${STDLIB_CXXFLAGS}"
 --disable-dependency-tracking
 make -j${JOBS}
 make install
-export LDFLAGS=${OLD_LDFLAGS}
-export CXX=${OLD_CXX}
 cd ${PACKAGES}
 
 check_and_clear_libs

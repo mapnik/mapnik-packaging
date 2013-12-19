@@ -9,17 +9,16 @@ rm -rf Project-OSRM
 git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
 cd Project-OSRM
 
-if [ "${TRAVIS:-false}" != false ]; then
+if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2
 fi
 
-export OLD_LINK_FLAGS=${LINK_FLAGS}
-export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
+LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
 if [ ${PLATFORM} = 'Linux' ]; then
     # workaround undefined reference to `clock_gettime' when linking osrm-extract
     if [ ${CXX} = "clang++" ]; then
-        export LINK_FLAGS="-lrt ${LINK_FLAGS}"
+        LINK_FLAGS="-lrt ${LINK_FLAGS}"
     fi
 fi
 
@@ -34,5 +33,4 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_BUILD_TYPE=Release
 make -j${JOBS} VERBOSE=1
 make install
-export LINK_FLAGS=${OLD_LINK_FLAGS}
 cd ${PACKAGES}

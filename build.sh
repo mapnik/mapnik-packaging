@@ -40,7 +40,7 @@ function build_mapnik {
 
 function build_mapnik_for_linux {
   prep_linux
-  sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
+  sudo apt-get install -y build-essential git unzip python-dev
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
   build_mapnik

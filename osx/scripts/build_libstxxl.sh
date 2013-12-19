@@ -12,8 +12,7 @@ rm -rf stxxl-${STXXL_VERSION}-${ARCH_NAME}
 tar xf stxxl-${STXXL_VERSION}.tar.gz
 mv stxxl-${STXXL_VERSION} stxxl-${STXXL_VERSION}-${ARCH_NAME}
 cd stxxl-${STXXL_VERSION}-${ARCH_NAME}
-export OLD_LINK_FLAGS=${LINK_FLAGS}
-export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
+LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 mkdir build
 cd build
 if [ ${CXX11} = true ]; then
@@ -30,7 +29,6 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   ${CXX_ENABLED}
 make -j${JOBS} VERBOSE=1
 make install
-export LINK_FLAGS=${OLD_LINK_FLAGS}
 cd ${PACKAGES}
 
 #check_and_clear_libs

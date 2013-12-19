@@ -10,7 +10,6 @@ echoerr 'building libxml2'
 rm -rf libxml2-${LIBXML2_VERSION}
 tar xf libxml2-${LIBXML2_VERSION}.tar.gz
 cd libxml2-${LIBXML2_VERSION}
-export OLD_CFLAGS="${CFLAGS}"
 if [ ${PLATFORM} = 'Android' ]; then
     mkdir ./tmp
     cd ./tmp
@@ -19,8 +18,8 @@ if [ ${PLATFORM} = 'Android' ]; then
     ${CC} -c -I. ${CFLAGS} glob.c -Wall -Wextra
     chmod +x glob.o
     RIGHT_HERE=$(pwd)
-    export LIBS="${RIGHT_HERE}/glob.o"
-    export CFLAGS="${CFLAGS} -I${RIGHT_HERE}"
+    LIBS="${RIGHT_HERE}/glob.o"
+    CFLAGS="${CFLAGS} -I${RIGHT_HERE}"
     cd ../
 fi
 # note --with-writer for osmium
@@ -52,8 +51,6 @@ fi
 --without-regexps \
 --without-c14n
 make -j${JOBS} install
-unset LIBS
-export CFLAGS="${OLD_CFLAGS}"
 cd ${PACKAGES}
 
 check_and_clear_libs

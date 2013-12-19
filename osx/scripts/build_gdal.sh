@@ -9,10 +9,9 @@ download gdal-${GDAL_VERSION}.tar.gz
 # gdal
 echoerr 'building gdal'
 
-export OLD_CXX=${CXX}
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-export CXX="${CXX} ${STDLIB_CXXFLAGS}"
+CXX="${CXX} ${STDLIB_CXXFLAGS}"
 rm -rf gdal-${GDAL_VERSION}
 tar xf gdal-${GDAL_VERSION}.tar.gz
 cd gdal-${GDAL_VERSION}
@@ -27,13 +26,12 @@ if [ $UNAME = 'Darwin' ]; then
         if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
            touch "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so"
         fi
-    fi
-    if [ "${CXX11}" = false ]; then
-      FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+        if [ "${CXX11}" = false ]; then
+          FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+        fi
     fi
 fi
-export OLD_LDFLAGS=${LDFLAGS}
-export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} --enable-static --disable-shared \
 ${FGDB_ARGS} \
 --with-libtiff=${BUILD} \
@@ -59,8 +57,6 @@ ${FGDB_ARGS} \
 
 make -j${JOBS}
 make install
-export LDFLAGS=${OLD_LDFLAGS}
-export CXX=${OLD_CXX}
 cd ${PACKAGES}
 
 check_and_clear_libs
