@@ -39,8 +39,8 @@ rm -rf luabind
 git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
 export OLD_JOBS=${JOBS}
-# avoid g++ being killed on linux
-if [ ${PLATFORM} = 'Linux' ]; then
+# avoid g++ being killed on travis
+if [ ${TRAVIS} = true ]; then
     export JOBS=1
 fi
 export OLD_LINK_FLAGS=${LINK_FLAGS}
