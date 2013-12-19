@@ -6,6 +6,8 @@ cd ${PACKAGES}
 
 # build dep for untarring cairo
 # we build here to avoid the liblzma.dylib from being nuked earlier when we clear out gdal dylibs
+download xz-${XZ_VERSION}.tar.bz2
+
 echoerr '*building xz*'
 rm -rf xz-5.0.3
 tar xf xz-5.0.3.tar.bz2
@@ -16,8 +18,6 @@ make install
 cd ${PACKAGES}
 
 # cairo
-
-download xz-${XZ_VERSION}.tar.bz2
 download cairo-${CAIRO_VERSION}.tar.xz
 
 echoerr '*building cairo*'

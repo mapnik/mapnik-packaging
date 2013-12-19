@@ -24,27 +24,35 @@ function prep_linux {
 }
 
 function build_mapnik {
-  sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
-  # postgres deps
-  sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
   ./scripts/build_core_deps.sh 1>> build.log
   #./scripts/build_deps_optional.sh 1>> build.log
   ./scripts/build_python_versions.sh
   ./scripts/build_protobuf.sh 1>> build.log
-  git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
-  cd mapnik-${STDLIB}
-  if [ "${CXX11}" = false ]; then
-      git checkout 2.3.x
+  if [ ! -f mapnik-${STDLIB} ]; then
+      git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
   fi
-  cd ../
+  if [ "${CXX11}" = false ]; then
+      cd mapnik-${STDLIB}
+      git checkout 2.3.x
+      cd ../
+  fi
   ./scripts/build_mapnik_mobile.sh
 }
 
 function build_mapnik_for_linux {
   prep_linux
+  sudo apt-get install -y build-essential git unzip python-dev libbz2-dev
+  # postgres deps
+  sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
   build_mapnik
 }
 export -f build_mapnik_for_linux
+
+function build_mapnik_for_osx {
+  prep_osx
+  build_mapnik
+}
+export -f build_mapnik_for_osx
 
 function build_osrm {
   sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
