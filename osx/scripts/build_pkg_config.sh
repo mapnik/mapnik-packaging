@@ -13,8 +13,7 @@ cd pkg-config-${PKG_CONFIG_VERSION}
 # patch glib.h
 # change line 198 to:
 #      ifndef G_INLINE_FUNC inline
-export OLD_CFLAGS=$CFLAGS
-export CFLAGS="$CFLAGS -std=gnu89"
+CFLAGS="$CFLAGS -std=gnu89"
 
 ./configure --disable-debug \
   --disable-dependency-tracking \
@@ -23,5 +22,4 @@ export CFLAGS="$CFLAGS -std=gnu89"
   
 make -j${JOBS}
 make install
-export CFLAGS=$OLD_CFLAGS
 cd ${PACKAGES}

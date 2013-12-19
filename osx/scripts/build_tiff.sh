@@ -10,10 +10,8 @@ echoerr 'building tiff'
 rm -rf tiff-${LIBTIFF_VERSION}
 tar xf tiff-${LIBTIFF_VERSION}.tar.gz
 cd tiff-${LIBTIFF_VERSION}
-export OLD_CFLAGS=$CFLAGS
-
 if [ $UNAME = 'Darwin' ]; then
-    export CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
+    CFLAGS="-DHAVE_APPLE_OPENGL_FRAMEWORK $CFLAGS"
 fi
 
 ./configure --prefix=${BUILD} \
@@ -30,5 +28,4 @@ fi
 
 make -j${JOBS}
 make install
-export CFLAGS=$OLD_CFLAGS
 cd ${PACKAGES}

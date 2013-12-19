@@ -18,12 +18,10 @@ make install
 cd ${PACKAGES}
 
 echoerr 'building geos'
-export OLD_LDFLAGS=${LDFLAGS}
-export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-export OLD_CXX=${CXX}
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-export CXX="${CXX} ${STDLIB_CXXFLAGS}"
+CXX="${CXX} ${STDLIB_CXXFLAGS}"
 rm -rf geos-${GEOS_VERSION}
 tar xf geos-${GEOS_VERSION}.tar.bz2
 cd geos-${GEOS_VERSION}
@@ -33,16 +31,12 @@ patch -N configure.in ${PATCHES}/geos-ansi.diff
 make -j${JOBS}
 make install
 cd ${PACKAGES}
-export LDFLAGS=${OLD_LDFLAGS}
-export CXX=${OLD_CXX}
 
 check_and_clear_libs
 
 echoerr 'building osm2pgsql'
-export OLD_LDFLAGS=${LDFLAGS}
-export LDFLAGS="${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
-export LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-export OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
+OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
 export DESTDIR=${OSM2PGSQL_TARGET}
 #svn co http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/
 cd ${ROOTDIR}/osm2pgsql
@@ -61,7 +55,6 @@ make distclean
 --with-postgresql=${BUILD}/bin/pg_config
 make
 make install
-export LDFLAGS="$OLD_LDFLAGS"
 unset DESTDIR
 
 # TODO - update version in packproj

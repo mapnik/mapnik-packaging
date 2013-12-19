@@ -42,8 +42,7 @@ cd luabind
 if [ "${TRAVIS:-false}" != false ]; then
     JOBS=2
 fi
-export OLD_LINK_FLAGS=${LINK_FLAGS}
-export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
+LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 rm -rf build
 mkdir build
 cd build
@@ -56,6 +55,5 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
 
 make -j${JOBS} VERBOSE=1
 make install
-export LINK_FLAGS=${OLD_LINK_FLAGS}
 
 cd ${PACKAGES}
