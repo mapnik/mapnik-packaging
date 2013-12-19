@@ -15,7 +15,7 @@ if [ "${TRAVIS_COMMIT:-false}" != false ]; then
       JOBS=1
     else
       JOBS=2
-    if
+    fi
 fi
 
 
