@@ -38,10 +38,12 @@ ${BOOST_ROOT}/b2 \
 rm -rf luabind
 git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
-export OLD_JOBS=${JOBS}
 # avoid g++ being killed on travis
 if [ ${TRAVIS} = true ]; then
-    export JOBS=1
+    JOBS=$(($JOBS/6))
+    if [ $JOBS = 0 ]; then
+      JOBS=2
+    fi
 fi
 export OLD_LINK_FLAGS=${LINK_FLAGS}
 export LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
@@ -58,6 +60,5 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
 make -j${JOBS} VERBOSE=1
 make install
 export LINK_FLAGS=${OLD_LINK_FLAGS}
-export JOBS=${OLD_JOBS}
 
 cd ${PACKAGES}

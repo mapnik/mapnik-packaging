@@ -8,9 +8,6 @@ function prep_osx {
 function prep_linux {
   cd osx
   source Linux64.sh
-  if [ ${TRAVIS} = true ]; then
-      export JOBS=$(($JOBS/2))
-  fi
   echo "Running build with ${JOBS} parallel jobs"
   if [ "${CXX11}" = true ]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;

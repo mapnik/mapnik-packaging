@@ -4,6 +4,13 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+if [ ${TRAVIS} = true ]; then
+    JOBS=$(($JOBS/2))
+    if [ $JOBS = 0 ]; then
+      JOBS=2
+    fi
+fi
+
 download boost_${BOOST_VERSION2}.tar.bz2
 
 if [ $USE_BOOST_TRUNK = 'true' ]; then
