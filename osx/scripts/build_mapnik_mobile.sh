@@ -10,9 +10,10 @@ rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 #make clean
 
-if [ ${TRAVIS} = true ]; then
+if [ "${TRAVIS:-false}" != false ]; then
     JOBS=2
 fi
+
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py

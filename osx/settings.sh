@@ -7,10 +7,9 @@ export USE_BOOST_TRUNK='false'
 # start from here
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# set clean PATH
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
-
 export UNAME=$(uname -s);
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:${PATH}"
+
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
 if [ ${UNAME} = 'Darwin' ]; then
