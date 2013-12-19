@@ -16,7 +16,6 @@ function prep_linux {
     sudo apt-get install -y gcc-4.8 g++-4.8;
     export CC="gcc-4.8";
     export CXX="g++-4.8";
-    export BOOST_TOOLSET="gcc-4.8"
   else
     sudo apt-get update -y
   fi;
@@ -45,7 +44,9 @@ function build_osrm {
   sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
   ./scripts/download_deps.sh
   ./scripts/build_bzip2.sh 1>> build.log
-  ./scripts/build_boost.sh
+  ./scripts/build_icu.sh 1>> build.log
+  # TODO: osrm boost usage does not need icu
+  ./scripts/build_boost.sh 1>> build.log
   ./scripts/build_protobuf.sh 1>> build.log
   ./scripts/build_osm-pbf.sh 1>> build.log
   ./scripts/build_luabind.sh
