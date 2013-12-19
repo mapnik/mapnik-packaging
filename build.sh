@@ -48,13 +48,13 @@ function build_mapnik_for_linux {
 export -f build_mapnik_for_linux
 
 function build_mapnik_for_osx {
+  TRAVIS=true
   prep_osx
   build_mapnik
 }
 export -f build_mapnik_for_osx
 
 function build_osrm {
-  sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   # TODO: osrm boost usage does not need icu
@@ -69,12 +69,14 @@ function build_osrm {
 
 function build_osrm_for_linux {
   prep_linux
+  sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
   build_osrm
 }
 export -f build_osrm_for_linux
 
-function build_osmium_for_linux {
-  prep_linux
-  build_osmium
+function build_osrm_for_osx {
+  TRAVIS=true
+  prep_osx
+  build_osrm
 }
-export -f build_osmium_for_linux
+export -f build_osrm_for_osx
