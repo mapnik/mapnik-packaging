@@ -9,7 +9,7 @@ rm -rf Project-OSRM
 git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
 cd Project-OSRM
 
-if [ "${TRAVIS:-false}" != false ]; then
+if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2
 fi
 

@@ -4,7 +4,7 @@ set -e -u -x
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-if [ "${TRAVIS:-false}" != false ]; then
+if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2
 fi
 

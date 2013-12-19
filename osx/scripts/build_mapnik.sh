@@ -10,7 +10,7 @@ rm -f src/libmapnik{*.so,*.dylib,*.a}
 rm -f tests/cpp_tests/*-bin
 make clean
 
-if [ "${TRAVIS:-false}" != false ]; then
+if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2
 fi
 
