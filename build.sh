@@ -48,7 +48,6 @@ function build_mapnik_for_linux {
 export -f build_mapnik_for_linux
 
 function build_mapnik_for_osx {
-  TRAVIS=true
   prep_osx
   build_mapnik
 }
@@ -75,7 +74,6 @@ function build_osrm_for_linux {
 export -f build_osrm_for_linux
 
 function build_osrm_for_osx {
-  TRAVIS=true
   prep_osx
   build_osrm
 }

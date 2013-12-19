@@ -39,7 +39,7 @@ rm -rf luabind
 git clone https://github.com/DennisOSRM/luabind.git
 cd luabind
 # avoid g++ being killed on travis
-if [ ${TRAVIS} = true ]; then
+if [ "${TRAVIS:-false}" != false ]; then
     JOBS=2
 fi
 export OLD_LINK_FLAGS=${LINK_FLAGS}
