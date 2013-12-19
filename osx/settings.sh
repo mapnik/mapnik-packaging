@@ -41,6 +41,12 @@ export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt52l_only_collator_and_breakiter
 
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
+    if [ "${CXX11}" = true ]; then
+        if [ "${CXX:-false}" = "clang++" ]; then
+            # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
+            export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
+        fi
+    fi
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections
     # Note: stripping with -Wl,-S breaks dtrace
