@@ -10,6 +10,8 @@ function prep_osx {
 function prep_linux {
   cd osx
   source Linux64.sh
+  export JOBS=1
+  echo `grep -c ^processor /proc/cpuinfo`
   if [ "${CXX11}" = true ]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
     sudo apt-get update -y
@@ -29,6 +31,7 @@ function build_mapnik {
   ./scripts/build_core_deps.sh 1>> build.log
   ./scripts/build_deps_optional.sh 1>> build.log
   ./scripts/build_python_versions.sh 1>> build.log
+  ./scripts/build_zlib.sh 1>> build.log
   ./scripts/build_protobuf.sh 1>> build.log
   git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
   ./scripts/build_mapnik.sh
@@ -47,6 +50,7 @@ function build_osrm {
   ./scripts/build_icu.sh 1>> build.log
   # TODO: osrm boost usage does not need icu
   ./scripts/build_boost.sh
+  ./scripts/build_zlib.sh 1>> build.log
   ./scripts/build_protobuf.sh 1>> build.log
   ./scripts/build_osm-pbf.sh 1>> build.log
   ./scripts/build_luabind.sh
