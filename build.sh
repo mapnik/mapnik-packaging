@@ -28,7 +28,7 @@ function build_mapnik {
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
   ./scripts/build_core_deps.sh 1>> build.log
-  ./scripts/build_deps_optional.sh 1>> build.log
+  #./scripts/build_deps_optional.sh 1>> build.log
   ./scripts/build_python_versions.sh
   ./scripts/build_protobuf.sh 1>> build.log
   git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
@@ -37,7 +37,7 @@ function build_mapnik {
       git checkout 2.3.x
   fi
   cd ../
-  ./scripts/build_mapnik.sh
+  ./scripts/build_mapnik_mobile.sh
 }
 
 function build_mapnik_for_linux {

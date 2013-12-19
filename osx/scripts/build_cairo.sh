@@ -17,6 +17,7 @@ cd ${PACKAGES}
 
 # cairo
 
+download xz-${XZ_VERSION}.tar.bz2
 download cairo-${CAIRO_VERSION}.tar.xz
 
 echoerr '*building cairo*'
