@@ -224,7 +224,7 @@ export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3080200"
 # http://download.savannah.gnu.org/releases/freetype/
-export FREETYPE_VERSION="2.5.0.1"
+export FREETYPE_VERSION="2.5.2"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
