@@ -23,9 +23,3 @@ before_script:
 script:
  - source ./build.sh
  - ${TARGET}
-
-notifications:
-  irc:
-    channels:
-      - "irc.freenode.org#mapnik"
-    use_notice: true
