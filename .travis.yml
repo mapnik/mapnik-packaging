@@ -5,13 +5,14 @@ compiler:
  - clang
 
 env:
-  - CXX11=true TARGET=build_osrm_for_linux
-  - CXX11=false TARGET=build_osrm_for_linux
-  - CXX11=true TARGET=build_mapnik_for_linux
-  - CXX11=false TARGET=build_mapnik_for_linux
+  matrix:
+    - CXX11=true TARGET=build_osrm_for_linux
+    - CXX11=false TARGET=build_osrm_for_linux
+    - CXX11=true TARGET=build_mapnik_for_linux
+    - CXX11=false TARGET=build_mapnik_for_linux
   global:
-    secure: FDkDzj5cHyM5+5Hg73hmV2HM5e9fxS6Bo/Q3U4JXJAyD7cvOJ8C+MwWP76Njy5vJAyTfhSVV94CIAod92rgX//TGEw1rn+G5EN0aOc1zlfVP9E9pZhiGSYdwIlXgHfkakg+ISLEaBZVGc5Oa3HMR7/YRVao+7Qume5C+CnWba2M=
-    secure: O9EmUjozG8uRLMYbK9yVVUB2nWqIZP0n2iRPIT2Lg1MKE9nZHl1uQvh2lIlTUOc/8QQoe1X+quDMbliV5k5HM79AOvwESMjwoz1xEbUayR6esW20297RH3GDOZnDdMl3JEg/5ScjLHymlk/AIbDYj+rTLrnqARihmMeOdDWcMK0=
+    - secure: FDkDzj5cHyM5+5Hg73hmV2HM5e9fxS6Bo/Q3U4JXJAyD7cvOJ8C+MwWP76Njy5vJAyTfhSVV94CIAod92rgX//TGEw1rn+G5EN0aOc1zlfVP9E9pZhiGSYdwIlXgHfkakg+ISLEaBZVGc5Oa3HMR7/YRVao+7Qume5C+CnWba2M=
+    - secure: O9EmUjozG8uRLMYbK9yVVUB2nWqIZP0n2iRPIT2Lg1MKE9nZHl1uQvh2lIlTUOc/8QQoe1X+quDMbliV5k5HM79AOvwESMjwoz1xEbUayR6esW20297RH3GDOZnDdMl3JEg/5ScjLHymlk/AIbDYj+rTLrnqARihmMeOdDWcMK0=
 
 before_install:
  # fixes node/gyp install
