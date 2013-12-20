@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
+if [ -z "$@" ]; then
   echo 'please pass boost library names'
   exit 1
 fi
@@ -86,7 +86,7 @@ echoerr 'compiling boost'
   architecture="${BOOST_ARCH}" \
   toolset="${BOOST_TOOLSET}" \
   ${ICU_DETAILS} \
-  $1 \
+  "$@" \
   link=static,shared \
   variant=release \
   linkflags="${BOOST_LDFLAGS}" \
