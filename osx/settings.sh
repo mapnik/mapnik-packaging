@@ -318,5 +318,11 @@ function ensure_s3cmd {
       export PATH=`pwd`:$PATH
       cd $CUR_DIR
   fi
+  if [ ! -f ~/.s3cfg ]; then
+    echo "[default]" > ~/.s3cfg
+    echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
+    echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+  fi
+
 }
 export -f ensure_s3cmd

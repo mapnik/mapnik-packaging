@@ -20,8 +20,4 @@ else
     tar cjf ${TARBALL_NAME} ${BUILD}/
 fi
 
-if [ ${TRAVIS_SECURE_ENV_VARS:-false} = true ]; then
-    s3cmd --access_key=$AWS_S3_KEY --secret_key=$AWS_S3_SECRET ${TARBALL_NAME} s3://mapbox-springmeyer/
-else
-    s3cmd put ${TARBALL_NAME} s3://mapbox-springmeyer/
-fi
+s3cmd put ${TARBALL_NAME} s3://mapbox-springmeyer/
