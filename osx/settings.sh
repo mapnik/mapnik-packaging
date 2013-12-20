@@ -222,7 +222,7 @@ export ICU_VERSION2="52_1"
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080100"
+export SQLITE_VERSION="3080200"
 # http://download.savannah.gnu.org/releases/freetype/
 export FREETYPE_VERSION="2.5.0.1"
 # http://download.osgeo.org/proj/
@@ -230,7 +230,7 @@ export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.6"
+export LIBPNG_VERSION="1.6.7"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
@@ -262,9 +262,9 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.22"
+export NODE_VERSION="0.10.24"
 export SPARSEHASH_VERSION="2.0.2"
-export HARFBUZZ_VERSION="0.9.24"
+export HARFBUZZ_VERSION="0.9.25"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 

@@ -20,4 +20,4 @@ else
     tar cjf ${TARBALL_NAME} ${BUILD}/
 fi
 
-s3cmd put ${TARBALL_NAME} s3://mapbox-springmeyer/
+s3cmd put --acl-public ${TARBALL_NAME} s3://mapbox-springmeyer/
