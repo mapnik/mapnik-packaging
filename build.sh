@@ -3,6 +3,9 @@
 function prep_osx {
   cd osx
   source MacOSX.sh
+  mkdir -p ${BUILD}
+  mkdir -p ${BUILD}/lib
+  mkdir -p ${BUILD}/include
 }
 
 function prep_linux {
@@ -20,9 +23,14 @@ function prep_linux {
   else
     sudo apt-get update -y
   fi;
+  mkdir -p ${BUILD}
+  mkdir -p ${BUILD}/lib
+  mkdir -p ${BUILD}/include
 }
 
 function build_mapnik {
+  ./scripts/build_bzip2.sh 1>> build.log
+:'
   ./scripts/build_core_deps.sh 1>> build.log
   #./scripts/build_deps_optional.sh 1>> build.log
   ./scripts/build_python_versions.sh
@@ -36,6 +44,8 @@ function build_mapnik {
       cd ../
   fi
   ./scripts/build_mapnik_mobile.sh
+'
+  ./scripts/package_tarball.sh
 }
 
 function build_mapnik_for_linux {
@@ -55,6 +65,7 @@ export -f build_mapnik_for_osx
 
 function build_osrm {
   ./scripts/build_bzip2.sh 1>> build.log
+:'
   ./scripts/build_icu.sh 1>> build.log
   # TODO: osrm boost usage does not need icu
   ./scripts/build_boost.sh "--with-iostreams --with-program_options --with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex" 1>> build.log
@@ -64,6 +75,8 @@ function build_osrm {
   ./scripts/build_luabind.sh 1>> build.log
   ./scripts/build_libstxxl.sh 1>> build.log
   ./scripts/build_osrm.sh
+'
+  ./scripts/package_tarball.sh
 }
 
 function build_osrm_for_linux {

@@ -308,3 +308,16 @@ function check_and_clear_libs {
     rm -f ${BUILD}/lib/{*.so,*.dylib}
 }
 export -f check_and_clear_libs
+
+function ensure_s3cmd {
+if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
+    CUR_DIR=`pwd`
+    wget https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
+    tar xf v1.5.0-beta1.tar.gz
+    cd s3cmd-1.5.0-beta1
+    export PATH=`pwd`:$PATH
+    cd $CUR_DIR
+fi
+export -f ensure_s3cmd
+
+}

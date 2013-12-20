@@ -1,14 +1,27 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 echo '...packaging binary tarball'
-mkdir -p ${MAPNIK_DIST}
-cd ${MAPNIK_DIST}
-rm -rf ./${MAPNIK_PACKAGE_PREFIX}*.tar.bz2
-FOUND_VERSION=`mapnik-config --version`
 
-# symlink approach
-ln -s ${MAPNIK_BIN_SOURCE} ${MAPNIK_DIST}/${MAPNIK_PACKAGE_PREFIX}
-tar cjfH ${MAPNIK_DIST}/mapnik-${FOUND_VERSION}.tar.bz2 ${MAPNIK_PACKAGE_PREFIX}/
-# cleanup symlink
-rm ${MAPNIK_DIST}/${MAPNIK_PACKAGE_PREFIX}
+rm -rf ${BUILD}/var/
+rm -rf ${BUILD}/share/man/
+
+ensure_s3cmd
+
+if [ ${TRAVIS_SECURE_ENV_VARS:-false} = true ]; then
+    TARBALL_NAME="out-${TRAVIS_BUILD_ID}.tar.bz2"
+else
+    TARBALL_NAME="out.tar.bz2"
+fi
+
+if [ -d ${MAPNIK_DESTDIR} ]; then
+    tar cjfH ${TARBALL_NAME} ${BUILD}/ ${MAPNIK_DESTDIR}/
+else
+    tar cjfH ${TARBALL_NAME} ${BUILD}/
+fi
+TRAVIS_BUILD_ID
+if [ ${TRAVIS_SECURE_ENV_VARS:-false} = true ]; then
+    s3cmd --access_key=$AWS_S3_KEY --secret_key=$AWS_S3_SECRET ${TARBALL_NAME} s3://mapbox-springmeyer/
+else
+    s3cmd put ${TARBALL_NAME} s3://mapbox-springmeyer/
+fi
