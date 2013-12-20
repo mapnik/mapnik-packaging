@@ -31,7 +31,7 @@ function prep_linux {
 function build_mapnik {
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_core_deps.sh 1>> build.log
-  #./scripts/build_deps_optional.sh 1>> build.log
+  ./scripts/build_deps_optional.sh 1>> build.log
   ./scripts/build_python_versions.sh
   ./scripts/build_protobuf.sh 1>> build.log
   if [ ! -f mapnik-${STDLIB} ]; then
@@ -42,8 +42,9 @@ function build_mapnik {
       git checkout 2.3.x
       cd ../
   fi
-  ./scripts/build_mapnik_mobile.sh
-  ./scripts/package_tarball.sh
+  ./scripts/build_mapnik.sh
+  ./scripts/test_mapnik.sh
+  #./scripts/package_tarball.sh
 }
 
 function build_mapnik_for_linux {
