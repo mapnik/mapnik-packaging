@@ -15,9 +15,9 @@ else
 fi
 
 if [ -d ${MAPNIK_DESTDIR} ]; then
-    tar cjfH ${TARBALL_NAME} ${BUILD}/ ${MAPNIK_DESTDIR}/
+    tar cjf ${TARBALL_NAME} ${BUILD}/ ${MAPNIK_DESTDIR}/
 else
-    tar cjfH ${TARBALL_NAME} ${BUILD}/
+    tar cjf ${TARBALL_NAME} ${BUILD}/
 fi
 TRAVIS_BUILD_ID
 if [ ${TRAVIS_SECURE_ENV_VARS:-false} = true ]; then
