@@ -73,7 +73,7 @@ function build_osrm {
   ./scripts/build_luabind.sh 1>> build.log
   ./scripts/build_libstxxl.sh 1>> build.log
   ./scripts/build_osrm.sh
-  ./scripts/package_tarball.sh
+  #./scripts/package_tarball.sh
 }
 
 function build_osrm_for_linux {
