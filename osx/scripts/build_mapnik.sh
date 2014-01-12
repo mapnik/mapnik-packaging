@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e -u -x
+set -o pipefail
 
 cd ${MAPNIK_SOURCE}
 
@@ -69,7 +70,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   FRAMEWORK_PYTHON=False \
   BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
-make
+nice make
 make install
 
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366

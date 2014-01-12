@@ -4,9 +4,9 @@ set -e -u -x
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download luabind-${LUABIND_VERSION}.tar.gz
-
 echoerr 'building luabind'
+
+#download luabind-${LUABIND_VERSION}.tar.gz
 
 rm -rf luabind
 git clone https://github.com/DennisOSRM/luabind.git

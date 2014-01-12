@@ -39,7 +39,7 @@ if [ $PLATFORM = 'Android' ];  then
     ./bootstrap.sh --with-toolset=gcc
 else
     echo "using ${BOOST_TOOLSET} : : `which ${CXX}` ;" > user-config.jam
-    ./bootstrap.sh
+    ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
 fi
 
 # HINT: problems with icu configure check?
