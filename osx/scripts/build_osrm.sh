@@ -6,7 +6,7 @@ cd ${PACKAGES}
 
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
+git clone --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b develop
 cd Project-OSRM
 
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then

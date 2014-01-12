@@ -17,10 +17,10 @@ make -j${JOBS}
 make install
 
 cd ${ROOTDIR}
-git clone git@github.com:mapnik/node-mapnik.git
+git clone --depth=0 git@github.com:mapnik/node-mapnik.git
 cd ${ROOTDIR}/node-mapnik
 mkdir -p node_modules
-git clone git@github.com:mapbox/mapnik-vector-tile.git
+git clone --depth=0 git@github.com:mapbox/mapnik-vector-tile.git
 cd mapnik-vector-tile
 make && make test
 install_name_tool -change /usr/local/lib/libmapnik.dylib `mapnik-config --prefix`/lib/libmapnik.dylib test/run-test 

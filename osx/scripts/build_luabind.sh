@@ -9,7 +9,7 @@ echoerr 'building luabind'
 #download luabind-${LUABIND_VERSION}.tar.gz
 
 rm -rf luabind
-git clone https://github.com/DennisOSRM/luabind.git
+git clone --depth=0 https://github.com/DennisOSRM/luabind.git
 cd luabind
 # avoid g++ being killed on travis
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then

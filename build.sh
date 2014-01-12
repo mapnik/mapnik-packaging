@@ -35,7 +35,7 @@ function build_mapnik {
   ./scripts/build_python_versions.sh
   ./scripts/build_protobuf.sh 1>> build.log
   if [ ! -f mapnik-${STDLIB} ]; then
-      git clone https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
+      git clone --depth=0 https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
   fi
   if [ "${CXX11}" = false ]; then
       cd mapnik-${STDLIB}
