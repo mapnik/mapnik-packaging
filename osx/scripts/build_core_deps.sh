@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -14,7 +14,7 @@ if [ ${BOOST_ARCH} != "arm" ]; then
     # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
 fi
 
-${ROOTDIR}/scripts/build_boost.sh "$BOOST_LIBRARIES"
+${ROOTDIR}/scripts/build_boost.sh ${BOOST_LIBRARIES}
 
 # bzip2
 ${ROOTDIR}/scripts/build_bzip2.sh
