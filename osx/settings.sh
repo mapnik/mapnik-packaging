@@ -267,6 +267,7 @@ export SPARSEHASH_VERSION="2.0.2"
 export HARFBUZZ_VERSION="0.9.25"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
+export LUA_VERSION="5.1.5"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr
