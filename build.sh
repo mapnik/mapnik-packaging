@@ -65,6 +65,7 @@ export -f build_mapnik_for_osx
 function build_osrm {
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
+  ./scripts/build_lua.sh
   # TODO: osrm boost usage does not need icu
   ./scripts/build_boost.sh --with-iostreams --with-program_options --with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex 1>> build.log
   ./scripts/build_zlib.sh 1>> build.log
@@ -78,7 +79,7 @@ function build_osrm {
 
 function build_osrm_for_linux {
   prep_linux
-  sudo apt-get install -y build-essential git cmake lua5.1 liblua5.1-0-dev
+  sudo apt-get install -y build-essential git cmake
   build_osrm
 }
 export -f build_osrm_for_linux
