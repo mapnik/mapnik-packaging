@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 set -o pipefail
 
 cd ${MAPNIK_SOURCE}

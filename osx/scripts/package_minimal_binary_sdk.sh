@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 echo '...packaging minmal binary sdk tarball'
 

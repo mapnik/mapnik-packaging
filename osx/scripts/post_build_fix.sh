@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 echo "...fixing install names of mapnik and dependencies"
 
