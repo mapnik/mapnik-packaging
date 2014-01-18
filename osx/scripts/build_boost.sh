@@ -5,11 +5,10 @@ if [ -z "$@" ]; then
   exit 1
 fi
 
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
-
 
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2
@@ -18,18 +17,24 @@ fi
 download boost_${BOOST_VERSION2}.tar.bz2
 
 echoerr 'building boost'
-rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
-tar xjf boost_${BOOST_VERSION2}.tar.bz2
-mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
-cd boost_${BOOST_VERSION2}-${ARCH_NAME}
+if [[ -d boost_${BOOST_VERSION2}-${ARCH_NAME} ]]; then
+  cd boost_${BOOST_VERSION2}-${ARCH_NAME}
+  rm -rf bin.v2/ || true
+  rm -rf stage/
+else
+  rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
+  tar xjf boost_${BOOST_VERSION2}.tar.bz2
+  mv boost_${BOOST_VERSION2} boost_${BOOST_VERSION2}-${ARCH_NAME}
+  cd boost_${BOOST_VERSION2}-${ARCH_NAME}
+fi
 
 if [ $UNAME = 'Darwin' ]; then
   # patch python build to ensure we do not link boost_python to python
   # https://svn.boost.org/trac/boost/ticket/3930
-  patch -N tools/build/v2/tools/python.jam < ${PATCHES}/python_jam.diff
+  patch -N tools/build/v2/tools/python.jam ${PATCHES}/python_jam.diff || true
   # https://svn.boost.org/trac/boost/ticket/6686
   if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-      patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff
+      patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff || true
   fi
 fi
 
