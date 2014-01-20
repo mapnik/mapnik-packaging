@@ -109,6 +109,7 @@ if [[ `which protoc` ]]; then
 fi
 cp -r ${BUILD}/include/google ${LOCAL_TARGET}/include/
 cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
+cp ${BUILD}/lib/libprotobuf-lite* ${LOCAL_TARGET}/lib/
 #cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
 
 

@@ -332,6 +332,7 @@ function ensure_s3cmd {
     echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
   fi
 }
+export -f ensure_s3cmd
 
 function ensure_xz {
   CUR_DIR=`pwd`
@@ -352,7 +353,7 @@ function ensure_xz {
   source "${ROOTDIR}/${OLD_PLATFORM}.sh"
   cd $CUR_DIR
 }
-export -f ensure_s3cmd
+export -f ensure_xz
 
 echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 
