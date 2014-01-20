@@ -1,8 +1,17 @@
+#!/bin/bash
+
+set -u
+
 export PLATFORM="Android"
+export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="arm"
 export ARCH_NAME="gcc-arm"
 export HOST_ARG="--host=arm-linux-androideabi"
-source settings.sh
+source $(dirname "$BASH_SOURCE")/settings.sh
+
+if [[ "${CXX11:-false}" == false ]]; then
+  export CXX11=false
+fi
 
 # ADT to actually run and test the binaries
 # http://dl.google.com/android/adt/adt-bundle-mac-x86_64-20130729.zip

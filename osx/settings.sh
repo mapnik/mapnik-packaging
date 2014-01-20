@@ -20,6 +20,16 @@ if [ ${UNAME} = 'Darwin' ]; then
   fi
 fi
 
+if [ "${CXX11}" = true ]; then
+  export CXX_STANDARD="c++11"
+else
+  export CXX_STANDARD="c++03"
+fi
+
+
+# lowercase platform name
+export platform=$(echo $PLATFORM | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
 export ICU_CORE_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1"
@@ -68,9 +78,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export STDLIB="libstdc++"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
-      echo "building against libstdc++ in c++11 mode"
     else
-      echo "building against libstdc++"
       export STDLIB="libstdc++"
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
@@ -112,7 +120,6 @@ elif [ ${PLATFORM} = 'Android' ]; then
     #alias libtool="arm-linux-androideabi-ar cru"
     #export libtool="arm-linux-androideabi-ar cru"
     export NM="arm-linux-androideabi-nm"
-    echo "building against libstdc++"
     export STDLIB="libstdc++"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
@@ -160,7 +167,6 @@ elif [ ${UNAME} = 'Darwin' ]; then
         export STDLIB="libc++"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-        echo "building against ${STDLIB} in c++11 mode"
     else
         if [ "${LIBCXX_DEFAULT}" = true ]; then
             export STDLIB="libc++"
@@ -169,16 +175,16 @@ elif [ ${UNAME} = 'Darwin' ]; then
         fi
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
         export STDLIB_LDFLAGS=""
-        echo "building against ${STDLIB} in ANSI mode"
     fi
 else
     echo '**unhandled platform: ${PLATFORM}**'
 fi
 
-export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${STDLIB}"
-export BUILDDIR="build-${STDLIB}"
+export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${CXX_STANDARD}-${STDLIB}"
+export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
+export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
@@ -230,7 +236,7 @@ export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.7"
+export LIBPNG_VERSION="1.6.8"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
@@ -283,6 +289,7 @@ function download {
 export -f download
 
 function upload {
+    ensure_s3cmd
     s3cmd --acl-public put $1 s3://mapnik/deps/
 }
 export -f upload
@@ -290,7 +297,7 @@ export -f upload
 function push {
     echo "downloading $1"
     cd ${PACKAGES}
-    wget $1
+    curl -s -S -f -O $1
     echo "uploading `basename $1`"
     upload `basename $1`
     cd ${ROOTDIR}
@@ -311,19 +318,41 @@ function check_and_clear_libs {
 export -f check_and_clear_libs
 
 function ensure_s3cmd {
+  CUR_DIR=`pwd`
   if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
-      CUR_DIR=`pwd`
-      wget https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
+      curl -s -S -f -O https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
       tar xf v1.5.0-beta1.tar.gz
-      cd s3cmd-1.5.0-beta1
-      export PATH=`pwd`:$PATH
-      cd $CUR_DIR
   fi
+  cd ${PACKAGES}/s3cmd-1.5.0-beta1
+  export PATH=`pwd`:${PATH}
+  cd $CUR_DIR
   if [ ! -f ~/.s3cfg ]; then
     echo "[default]" > ~/.s3cfg
     echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
     echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
   fi
+}
 
+function ensure_xz {
+  CUR_DIR=`pwd`
+  mkdir -p ${PACKAGES}
+  cd ${PACKAGES}
+  # WARNING: this installs liblzma which we need to ensure that gdal does not link to
+  download xz-${XZ_VERSION}.tar.bz2
+  echoerr '*building xz*'
+  rm -rf xz-5.0.3
+  tar xf xz-5.0.3.tar.bz2
+  cd xz-5.0.3
+  OLD_PLATFORM=${PLATFORM}
+  source "${ROOTDIR}/${HOST_PLATFORM}.sh"
+  ./configure --prefix=${BUILD_TOOLS_ROOT}
+  make -j$JOBS
+  make install
+  export PATH=${BUILD_TOOLS_ROOT}/bin:$PATH
+  source "${ROOTDIR}/${OLD_PLATFORM}.sh"
+  cd $CUR_DIR
 }
 export -f ensure_s3cmd
+
+echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
+

@@ -1,11 +1,20 @@
+#!/bin/bash
+
+set -u
 
 export PLATFORM="iPhoneOS"
+export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="arm"
 export ARCH_NAME="armv7"
 export HOST_ARG="--host=arm-apple-darwin"
-export ACTIVE_SDK_VERSION="6.1"
+export ACTIVE_SDK_VERSION="7.0"
 export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=${ACTIVE_SDK_VERSION}"
-source settings.sh
+
+if [[ "${CXX11:-false}" == false ]]; then
+  export CXX11=false
+fi
+
+source $(dirname "$BASH_SOURCE")/settings.sh
 
 # learn about arm: http://wanderingcoder.net/2010/07/19/ought-arm/
 

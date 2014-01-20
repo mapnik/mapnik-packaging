@@ -30,9 +30,36 @@ function prep_linux {
 
 function build_mapnik {
   ./scripts/build_bzip2.sh 1>> build.log
-  ./scripts/build_core_deps.sh 1>> build.log
-  ./scripts/build_deps_optional.sh 1>> build.log
-  ./scripts/build_python_versions.sh
+  ./scripts/build_zlib.sh
+  ./scripts/build_icu.sh
+  BOOST_LIBRARIES="--with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex"
+  if [ ${BOOST_ARCH} != "arm" ]; then
+      BOOST_LIBRARIES="$BOOST_LIBRARIES --with-program_options"
+      # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
+  fi
+  ./scripts/build_boost.sh ${BOOST_LIBRARIES}
+  ./scripts/build_freetype.sh
+  ./scripts/build_harfbuzz.sh
+  ./scripts/build_libxml2.sh
+  BUILD_OPTIONAL_DEPS=true
+  if [ $BUILD_OPTIONAL_DEPS ]; then
+    ./scripts/build_jpeg.sh
+    ./scripts/build_png.sh
+    ./scripts/build_proj4.sh
+    ./scripts/build_webp.sh
+    ./scripts/build_tiff.sh
+    ./scripts/build_sqlite.sh
+    ./scripts/build_postgres.sh
+    #./scripts/build_geotiff.sh
+    ./scripts/build_expat.sh
+    ./scripts/build_gdal.sh
+    ./scripts/build_pkg_config.sh
+    ./scripts/build_pixman.sh
+    ./scripts/build_fontconfig.sh
+    ./scripts/build_cairo.sh
+    ./scripts/build_python_versions.sh
+  fi
+  # for mapnik-vector-tile
   ./scripts/build_protobuf.sh 1>> build.log
   if [ ! -f mapnik-${STDLIB} ]; then
       git clone --depth=0 https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
@@ -43,6 +70,7 @@ function build_mapnik {
       cd ../
   fi
   ./scripts/build_mapnik.sh
+  ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
   #./scripts/package_tarball.sh
 }
