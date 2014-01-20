@@ -3,6 +3,8 @@
 # settings
 export OFFICIAL_RELEASE='false'
 export USE_BOOST_TRUNK='false'
+export SHARED_ZLIB=true
+
 
 # start from here
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -58,7 +60,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
         fi
     fi
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    # TODO -Wl,--gc-sections
+    # TODO -Wl,--gc-sections / -Wl,--exclude-libs=ALL / Bsymbolic
     # Note: stripping with -Wl,-S breaks dtrace
     export EXTRA_LDFLAGS="-Wl,--as-needed"
     if [ "${CXX:-false}" = "clang++" ]; then
@@ -189,6 +191,12 @@ export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
+
+if [[ $SHARED_ZLIB == true ]];
+    export ZLIB_PATH='/usr'
+else
+    export ZLIB_PATH="${BUILD}"
+fi
 
 # should not be needed now that we set 'LIBRARY_PATH'
 #if [ $UNAME = 'Darwin' ]; then

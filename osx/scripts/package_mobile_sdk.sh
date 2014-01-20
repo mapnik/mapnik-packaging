@@ -95,7 +95,9 @@ cp -r ${BUILD}/include/j* ${LOCAL_TARGET}/include/
 cp -r ${BUILD}/include/p* ${LOCAL_TARGET}/include/
 
 # zlib
-cp -r ${BUILD}/include/z* ${LOCAL_TARGET}/include/
+if [[ $SHARED_ZLIB != true ]];
+    cp -r ${BUILD}/include/z* ${LOCAL_TARGET}/include/
+fi
 
 # cairo
 if [ -d ${BUILD}/include/cairo ];then

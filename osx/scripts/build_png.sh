@@ -14,7 +14,7 @@ cd libpng-${LIBPNG_VERSION}
 # seem to respect CFLAGS and will fail to find zlib.h
 ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
   --disable-dependency-tracking \
-  --with-zlib-prefix=${BUILD}
+  --with-zlib-prefix=${ZLIB_PATH}
 make -j${JOBS}
 make install
 cd ${PACKAGES}

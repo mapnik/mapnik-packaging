@@ -85,6 +85,7 @@ function build_mapnik {
   fi
   # git log --pretty='format:%h %an - %s' --graph
   ./scripts/build_mapnik.sh
+  sudo apt-get -y -qq install python-nose
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
   #./scripts/package_tarball.sh
@@ -93,7 +94,7 @@ function build_mapnik {
 
 function build_mapnik_for_linux {
   prep_linux
-  sudo apt-get install -qq -y build-essential git unzip python-dev
+  sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev
   # postgres deps
   sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
   export BUILD_OPTIONAL_DEPS=true

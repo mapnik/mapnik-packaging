@@ -32,7 +32,7 @@ CXX="${CXX} ${STDLIB_CXXFLAGS}"
 # if they do not exist (as deleted by below)
 ./configure --prefix=${BUILD} ${HOST_ARG} ${CROSS_FLAGS} \
 --enable-static --disable-shared \
---disable-debug --with-zlib \
+--disable-debug --without-zlib \
 --disable-dependency-tracking
 make -j${JOBS}
 make install

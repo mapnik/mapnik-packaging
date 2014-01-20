@@ -22,8 +22,8 @@ ${HOST_ARG} \
 --enable-defer-strile-load \
 --with-jpeg-include-dir=${BUILD}/include \
 --with-jpeg-lib-dir=${BUILD}/lib \
---with-zlib-include-dir=${BUILD}/include \
---with-zlib-lib-dir=${BUILD}/lib \
+--with-zlib-include-dir=${ZLIB_PATH}/include \
+--with-zlib-lib-dir=${ZLIB_PATH}/lib \
 --disable-lzma --disable-jbig --disable-mdi \
 --without-x
 
