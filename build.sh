@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -u
-
 function prep_osx {
   cd osx
   source MacOSX.sh
