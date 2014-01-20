@@ -218,7 +218,10 @@ export CPPFLAGS="${CORE_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
 export LINK_FLAGS=${LDFLAGS}
-export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS"
+# silence warnings in C depedencies like cairo, libxml2, pixman
+export WARNING_CFLAGS="-Wno-unused-variable -Wno-redundant-decls -Wno-uninitialized -Wno-unused-result -Wno-format"
+export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
+# we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
 # http://site.icu-project.org/download

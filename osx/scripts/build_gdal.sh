@@ -12,7 +12,7 @@ GDAL_LATEST=true
 if [[ $GDAL_LATEST == true ]]; then
     #rm -rf gdal
     if [ ! -d gdal ]; then
-        git clone --depth=0 https://github.com/OSGeo/gdal.git
+        git clone --quiet --depth=0 https://github.com/OSGeo/gdal.git
         cd gdal/gdal
     else
         cd gdal/gdal
@@ -34,7 +34,7 @@ fi
 
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-CXX="${CXX} ${STDLIB_CXXFLAGS}"
+CXX="${CXX} ${STDLIB_CXXFLAGS} -Wno-pragmas"
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 # not bigtiff check will fail…
 # fix bigtiff check

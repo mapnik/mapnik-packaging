@@ -16,14 +16,14 @@ function prep_linux {
   echo "Running build with ${JOBS} parallel jobs"
   if [ "${CXX11}" = true ]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
-    sudo apt-get update -y
-    sudo apt-get install -y gcc-4.8 g++-4.8;
+    sudo apt-get update -qq -y
+    sudo apt-get install -qq -y gcc-4.8 g++-4.8;
     if [ "${CXX}" = "g++" ]; then
       export CC="gcc-4.8";
       export CXX="g++-4.8";
     fi
   else
-    sudo apt-get update -y
+    sudo apt-get update -y -qq
   fi;
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
@@ -70,13 +70,14 @@ function build_mapnik {
       branch="2.3.x"
   fi
   if [ ! -f ${MAPNIK_SOURCE} ]; then
-      git clone --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
+      git clone --quiet --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
   fi
   if [ "${CXX11}" = false ]; then
       cd ${MAPNIK_SOURCE}
       git checkout 2.3.x
       cd ../
   fi
+  # git log --pretty='format:%h %an - %s' --graph
   ./scripts/build_mapnik.sh
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
@@ -86,9 +87,9 @@ function build_mapnik {
 
 function build_mapnik_for_linux {
   prep_linux
-  sudo apt-get install -y build-essential git unzip python-dev
+  sudo apt-get install -qq -y build-essential git unzip python-dev
   # postgres deps
-  sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+  sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
   export BUILD_OPTIONAL_DEPS=true
   build_mapnik
 }
@@ -129,7 +130,7 @@ function build_osrm {
 
 function build_osrm_for_linux {
   prep_linux
-  sudo apt-get install -y build-essential git cmake
+  sudo apt-get install -qq -y build-essential git cmake
   build_osrm
 }
 export -f build_osrm_for_linux
