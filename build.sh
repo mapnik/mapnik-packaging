@@ -15,16 +15,22 @@ function prep_linux {
   source Linux.sh
   echo "Running build with ${JOBS} parallel jobs"
   if [ "${CXX11}" = true ]; then
+    echo "adding gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+    echo "updating apt"
     sudo apt-get update -qq -y
+    echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8;
     if [ "${CXX}" = "g++" ]; then
       export CC="gcc-4.8";
       export CXX="g++-4.8";
     fi
   else
+    echo "updating apt"
     sudo apt-get update -y -qq
   fi;
+  echo "installing build tools"
+  sudo apt-get install -qq -y build-essential git cmake
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
@@ -130,7 +136,6 @@ function build_osrm {
 
 function build_osrm_for_linux {
   prep_linux
-  sudo apt-get install -qq -y build-essential git cmake
   build_osrm
 }
 export -f build_osrm_for_linux
