@@ -8,13 +8,13 @@ mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
 
 DATA_FILE=$(find ${BUILD_ROOT}-*/share/icu/*/icudt*.dat -maxdepth 1 -name '*.dat' -print -quit)
 if [ "${DATA_FILE}" ];then
-    cp "${DATA_FILE}" "${MAPNIK_BIN_SOURCE}/share/mapnik/"
+    cp "${DATA_FILE}" "${MAPNIK_BIN_SOURCE}/share/mapnik/icu/"
 fi
 if [ -d ${BUILD}/share/proj ];then
-  cp -r "${BUILD}/share/proj" "${MAPNIK_BIN_SOURCE}/share/mapnik/"
+  cp -r "${BUILD}/share/proj" "${MAPNIK_BIN_SOURCE}/share/mapnik/proj/"
 fi
 if [ -d ${BUILD}/share/gdal ];then
-cp -r "${BUILD}/share/gdal" "${MAPNIK_BIN_SOURCE}/share/mapnik/"
+cp -r "${BUILD}/share/gdal" "${MAPNIK_BIN_SOURCE}/share/mapnik/gdal/"
 fi
 
 # py2cairo
