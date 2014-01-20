@@ -23,9 +23,8 @@ if [ ${PLATFORM} = 'Android' ]; then
     cd ../
 fi
 # note --with-writer for osmium
-./configure --prefix=${BUILD} --with-zlib=${BUILD} \
+./configure --prefix=${BUILD} \
 --enable-static --disable-shared ${HOST_ARG} \
---with-icu=${BUILD} \
 --with-writer \
 --with-xptr \
 --with-xpath \
@@ -33,6 +32,8 @@ fi
 --with-threads \
 --with-tree \
 --with-catalog \
+--without-icu \
+--without-zlib \
 --without-python \
 --without-legacy \
 --without-iconv \
