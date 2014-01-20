@@ -192,8 +192,8 @@ export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
 
-if [[ $SHARED_ZLIB == true ]];
-    export ZLIB_PATH='/usr'
+if [[ $SHARED_ZLIB == true ]]; then
+    export ZLIB_PATH="/usr";
 else
     export ZLIB_PATH="${BUILD}"
 fi

@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-if [[ ${SHARED_ZLIB} == true ]];
+if [[ ${SHARED_ZLIB} == true ]]; then
     echoerr 'skipping zlib install, using shared lib'
 else
     download zlib-${ZLIB_VERSION}.tar.gz
