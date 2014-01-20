@@ -61,11 +61,11 @@ function build_mapnik {
   fi
   # for mapnik-vector-tile
   ./scripts/build_protobuf.sh 1>> build.log
-  if [ ! -f mapnik-${STDLIB} ]; then
-      git clone --depth=0 https://github.com/mapnik/mapnik.git mapnik-${STDLIB}
+  if [ ! -f ${MAPNIK_SOURCE} ]; then
+      git clone --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE}
   fi
   if [ "${CXX11}" = false ]; then
-      cd mapnik-${STDLIB}
+      cd ${MAPNIK_SOURCE}
       git checkout 2.3.x
       cd ../
   fi
