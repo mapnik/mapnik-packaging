@@ -11,11 +11,12 @@ GDAL_LATEST=true
 
 if [[ $GDAL_LATEST == true ]]; then
     #rm -rf gdal
-    if [ ! -f gdal ]; then
+    if [ ! -d gdal ]; then
         git clone --depth=0 https://github.com/OSGeo/gdal.git
         cd gdal/gdal
     else
         cd gdal/gdal
+        git pull
         if [[ -f GDALmake.opt ]]; then
             make clean
             make distclean
@@ -53,7 +54,10 @@ fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
-./configure --prefix=${BUILD} --enable-static --disable-shared \
+./configure ${HOST_ARG} \
+--prefix=${BUILD} \
+--enable-static \
+--disable-shared \
 ${FGDB_ARGS} \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \

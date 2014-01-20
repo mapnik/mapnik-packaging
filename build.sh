@@ -51,7 +51,6 @@ function build_mapnik {
     ./scripts/build_webp.sh 1>> build.log
     ./scripts/build_tiff.sh 1>> build.log
     ./scripts/build_sqlite.sh 1>> build.log
-    ./scripts/build_postgres.sh 1>> build.log
     #./scripts/build_geotiff.sh 1>> build.log
     ./scripts/build_expat.sh 1>> build.log
     ./scripts/build_gdal.sh 1>> build.log
@@ -60,13 +59,18 @@ function build_mapnik {
     ./scripts/build_fontconfig.sh 1>> build.log
     ./scripts/build_cairo.sh 1>> build.log
     if [ ${BOOST_ARCH} != "arm" ]; then
+      ./scripts/build_postgres.sh 1>> build.log
       ./scripts/build_python_versions.sh 1>> build.log
     fi
   fi
   # for mapnik-vector-tile
   ./scripts/build_protobuf.sh 1>> build.log
+  branch="master"
+  if [ "${CXX11}" = false ]; then
+      branch="2.3.x"
+  fi
   if [ ! -f ${MAPNIK_SOURCE} ]; then
-      git clone --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE}
+      git clone --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
   fi
   if [ "${CXX11}" = false ]; then
       cd ${MAPNIK_SOURCE}

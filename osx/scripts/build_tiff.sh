@@ -15,6 +15,7 @@ if [ $UNAME = 'Darwin' ]; then
 fi
 
 ./configure --prefix=${BUILD} \
+${HOST_ARG} \
 --enable-static --disable-shared \
 --disable-dependency-tracking \
 --disable-cxx \
