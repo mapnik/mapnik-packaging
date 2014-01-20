@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -u -x
+set -u
 
 function prep_osx {
   cd osx
@@ -12,7 +12,7 @@ function prep_osx {
 
 function prep_linux {
   cd osx
-  source Linux64.sh
+  source Linux.sh
   echo "Running build with ${JOBS} parallel jobs"
   if [ "${CXX11}" = true ]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
@@ -44,7 +44,6 @@ function build_mapnik {
   ./scripts/build_freetype.sh 1>> build.log
   ./scripts/build_harfbuzz.sh 1>> build.log
   ./scripts/build_libxml2.sh 1>> build.log
-  BUILD_OPTIONAL_DEPS=true
   if [ $BUILD_OPTIONAL_DEPS ]; then
     ./scripts/build_jpeg.sh 1>> build.log
     ./scripts/build_png.sh 1>> build.log
@@ -60,7 +59,9 @@ function build_mapnik {
     ./scripts/build_pixman.sh 1>> build.log
     ./scripts/build_fontconfig.sh 1>> build.log
     ./scripts/build_cairo.sh 1>> build.log
-    ./scripts/build_python_versions.sh 1>> build.log
+    if [ ${BOOST_ARCH} != "arm" ]; then
+      ./scripts/build_python_versions.sh 1>> build.log
+    fi
   fi
   # for mapnik-vector-tile
   ./scripts/build_protobuf.sh 1>> build.log
@@ -84,15 +85,28 @@ function build_mapnik_for_linux {
   sudo apt-get install -y build-essential git unzip python-dev
   # postgres deps
   sudo apt-get install -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+  export BUILD_OPTIONAL_DEPS=true
   build_mapnik
 }
 export -f build_mapnik_for_linux
 
 function build_mapnik_for_osx {
   prep_osx
+  export BUILD_OPTIONAL_DEPS=true
   build_mapnik
 }
 export -f build_mapnik_for_osx
+
+function build_mapnik_for_ios {
+  cd osx
+  source iPhoneOS.sh
+  mkdir -p ${BUILD}
+  mkdir -p ${BUILD}/lib
+  mkdir -p ${BUILD}/include
+  export BUILD_OPTIONAL_DEPS=true
+  build_mapnik
+}
+export -f build_mapnik_for_ios
 
 function build_osrm {
   ./scripts/build_bzip2.sh 1>> build.log
