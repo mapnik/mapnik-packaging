@@ -15,7 +15,8 @@ cd pkg-config-${PKG_CONFIG_VERSION}
 #      ifndef G_INLINE_FUNC inline
 CFLAGS="$CFLAGS -std=gnu89"
 
-./configure --disable-debug \
+./configure ${HOST_ARG}\
+    --disable-debug \
   --disable-dependency-tracking \
   --prefix=${BUILD} \
   --with-pc-path=${BUILD}/lib/pkgconfig
