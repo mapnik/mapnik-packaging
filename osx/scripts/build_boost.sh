@@ -103,6 +103,5 @@ if [ $UNAME = 'Darwin' ]; then
 fi
 
 # clear out shared libs
-rm -f ${BUILD}/lib/{*.so,*.dylib}
-cd ${PACKAGES}
+check_and_clear_libs
 echoerr 'done compiling boost'

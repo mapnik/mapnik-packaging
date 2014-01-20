@@ -2,14 +2,13 @@
 set -e -u
 set -o pipefail
 
-cd ${MAPNIK_SOURCE}
-
 echoerr 'Building mapnik'
 
+cd ${MAPNIK_SOURCE}
 if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -rf ${MAPNIK_BIN_SOURCE}
-  rm -f src/libmapnik{*.so,*.dylib,*.a}
-  rm -f tests/cpp_tests/*-bin
+  rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
+  rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
   make clean
 fi
@@ -69,7 +68,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   PGSQL2SQLITE=False \
   SVG2PNG=False \
   FRAMEWORK_PYTHON=False \
-  BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log
+  BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log && false
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
 nice make
 make install

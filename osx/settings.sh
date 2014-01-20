@@ -317,21 +317,26 @@ export -f push
 
 function check_and_clear_libs {
   if [ $UNAME = 'Darwin' ]; then
-        if [ -n "$(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print -quit)" ];then
-           lipo -info ${BUILD}/lib/*.a | grep arch
-        fi
-        if [ -n "$(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print -quit)" ];then
-           otool -L ${BUILD}/lib/*.dylib | grep /usr/lib
-        fi
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print -quit); do
+           lipo -info $i | grep arch;
+        done;
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print -quit); do
+           otool -L ${i} | grep /usr/lib;
+        done;
+    else
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print -quit); do
+           ldd ${i} | grep /usr/lib
+        done
     fi
-    rm -f ${BUILD}/lib/{*.so,*.dylib}
+    rm -f ${BUILD}/lib/{*.so*,*.dylib}
 }
 export -f check_and_clear_libs
 
 function ensure_s3cmd {
   CUR_DIR=`pwd`
   if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
-      curl -s -S -f -O https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
+      cd ${PACKAGES}
+      curl -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
       tar xf v1.5.0-beta1.tar.gz
   fi
   cd ${PACKAGES}/s3cmd-1.5.0-beta1

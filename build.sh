@@ -73,15 +73,17 @@ function build_mapnik {
   if [ "${CXX11}" = false ]; then
       branch="2.3.x"
   fi
-  if [ ! -f ${MAPNIK_SOURCE} ]; then
+  if [ ! -d ${MAPNIK_SOURCE} ]; then
       git clone --quiet --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
+      git branch -v
   fi
   if [ "${CXX11}" = false ]; then
       cd ${MAPNIK_SOURCE}
-      git checkout 2.3.x
+      git checkout $branch
+      git pull
+      git branch -v
       cd ../
   fi
-  # git log --pretty='format:%h %an - %s' --graph
   ./scripts/build_mapnik.sh
   sudo apt-get -y -qq install python-nose
   ./scripts/post_build_fix.sh

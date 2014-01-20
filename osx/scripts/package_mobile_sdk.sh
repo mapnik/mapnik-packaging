@@ -109,7 +109,7 @@ echoerr '...copying over protobuf'
 if [[ `which protoc` ]]; then
     cp `which protoc` ${LOCAL_TARGET}/bin/
 fi
-cp -r ${BUILD}/include/google ${LOCAL_TARGET}/include/
+cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
 cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
 cp ${BUILD}/lib/libprotobuf-lite* ${LOCAL_TARGET}/lib/
 #cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
@@ -130,8 +130,8 @@ echoerr "...creating tarball of mapnik build"
 # -j bz2
 # -c compress
 # -f write to file
-# -H symbolic links are followed/materialized
-time tar cjfH ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${PACKAGE_NAME}/
+# -H symbolic links are followed/materialized (but linux itis -h)
+time tar -c -j -f "${MAPNIK_DIST}/${TARBALL_NAME}.bz2" "${PACKAGE_NAME}/"
 ls -lh *tar*
 # -z compress
 # -k keep
