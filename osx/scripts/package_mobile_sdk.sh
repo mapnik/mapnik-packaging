@@ -30,15 +30,15 @@ mkdir ${LOCAL_TARGET}/bin
 mkdir -p ${LOCAL_TARGET}/lib/pkgconfig
 
 if [ -d "${MAPNIK_BIN_SOURCE}/share" ]; then
-    cp -r "${MAPNIK_BIN_SOURCE}/share/" "${LOCAL_TARGET}/share/"
+    cp -r "${MAPNIK_BIN_SOURCE}/share" "${LOCAL_TARGET}/share"
 fi
 
 sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" > "${LOCAL_TARGET}/bin/mapnik-config"
 chmod +x "${LOCAL_TARGET}/bin/mapnik-config"
-cp -R "${MAPNIK_BIN_SOURCE}/include/" "${LOCAL_TARGET}/include/"
+cp -r "${MAPNIK_BIN_SOURCE}/include/mapnik" "${LOCAL_TARGET}/include/mapnik"
 if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
-  mkdir -p "${LOCAL_TARGET}/lib/mapnik/input"
-  cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" "${LOCAL_TARGET}/lib/mapnik/input/"
+  mkdir -p "${LOCAL_TARGET}/lib/mapnik/input/"
+  cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/input"
 fi
 
 echoerr '...packaging boost headers'
@@ -109,7 +109,8 @@ echoerr '...copying over protobuf'
 if [[ `which protoc` ]]; then
     cp `which protoc` ${LOCAL_TARGET}/bin/
 fi
-cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
+mkdir -p ${LOCAL_TARGET}/include/google/protobuf
+cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/protobuf
 cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
 cp ${BUILD}/lib/libprotobuf-lite* ${LOCAL_TARGET}/lib/
 #cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
@@ -148,6 +149,6 @@ else
 fi
 echoerr "*uploading ${UPLOAD}"
 ensure_s3cmd
-s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
-s3cmd ls `dirname s3://mapnik/dist/dev/${UPLOAD}`/
+s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD} | sed -e "s/+/%2B/g"
+s3cmd ls `dirname s3://mapnik/dist/dev/*/*`
 # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9

@@ -88,7 +88,7 @@ function build_mapnik {
   sudo apt-get -y -qq install python-nose
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
-  #./scripts/package_tarball.sh
+  ./scripts/package_mobile_sdk.sh
   set +e
 }
 
