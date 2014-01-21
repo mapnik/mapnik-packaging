@@ -68,7 +68,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   PGSQL2SQLITE=False \
   SVG2PNG=False \
   FRAMEWORK_PYTHON=False \
-  BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log && false
+  BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
 nice make
 make install
