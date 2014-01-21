@@ -84,9 +84,10 @@ ${STAGING_DIR}/ 1>/dev/null
 cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 cd ${MAPNIK_DIST}
 
-echoerr "*copying other headers*"
+echoerr "*copying other deps*"
 # icu
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
+cp -r ${BUILD}/lib/libicu* ${LOCAL_TARGET}/lib/
 
 # jpeg
 cp -r ${BUILD}/include/j* ${LOCAL_TARGET}/include/
