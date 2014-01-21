@@ -62,7 +62,9 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections / -Wl,--exclude-libs=ALL / Bsymbolic
     # Note: stripping with -Wl,-S breaks dtrace
-    export EXTRA_LDFLAGS="-Wl,--as-needed"
+    #export EXTRA_LDFLAGS="-Wl,--as-needed"
+    # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
+    export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
     if [ "${CXX:-false}" = "clang++" ]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
