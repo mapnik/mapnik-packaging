@@ -98,10 +98,6 @@ echoerr 'compiling boost'
   cxxflags="${BOOST_CXXFLAGS}" \
   stage install
 
-if [ $UNAME = 'Darwin' ]; then
-    otool -L ${BUILD}/lib/*.dylib | grep c++
-fi
-
 # clear out shared libs
 check_and_clear_libs
 echoerr 'done compiling boost'

@@ -23,9 +23,9 @@ if [ ${UNAME} = 'Darwin' ]; then
 fi
 
 if [ "${CXX11}" = true ]; then
-  export CXX_STANDARD="c++11"
+  export CXX_STANDARD="cpp11"
 else
-  export CXX_STANDARD="c++03"
+  export CXX_STANDARD="cpp03"
 fi
 
 
@@ -77,11 +77,11 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export BOOST_TOOLSET="gcc"
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [ "${CXX11}" = true ]; then
-      export STDLIB="libstdc++"
+      export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
     else
-      export STDLIB="libstdc++"
+      export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
@@ -122,7 +122,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     #alias libtool="arm-linux-androideabi-ar cru"
     #export libtool="arm-linux-androideabi-ar cru"
     export NM="arm-linux-androideabi-nm"
-    export STDLIB="libstdc++"
+    export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
 elif [ ${UNAME} = 'Darwin' ]; then
@@ -166,14 +166,14 @@ elif [ ${UNAME} = 'Darwin' ]; then
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [ "${CXX11}" = true ]; then
-        export STDLIB="libc++"
+        export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
         if [ "${LIBCXX_DEFAULT}" = true ]; then
-            export STDLIB="libc++"
+            export STDLIB="libcpp"
         else
-            export STDLIB="libstdc++"
+            export STDLIB="libstdcpp"
         fi
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
         export STDLIB_LDFLAGS=""
