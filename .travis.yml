@@ -11,8 +11,8 @@ env:
     - CXX11=true TARGET=build_mapnik_for_linux
     - CXX11=false TARGET=build_mapnik_for_linux
   global:
-    - secure: FDkDzj5cHyM5+5Hg73hmV2HM5e9fxS6Bo/Q3U4JXJAyD7cvOJ8C+MwWP76Njy5vJAyTfhSVV94CIAod92rgX//TGEw1rn+G5EN0aOc1zlfVP9E9pZhiGSYdwIlXgHfkakg+ISLEaBZVGc5Oa3HMR7/YRVao+7Qume5C+CnWba2M=
-    - secure: O9EmUjozG8uRLMYbK9yVVUB2nWqIZP0n2iRPIT2Lg1MKE9nZHl1uQvh2lIlTUOc/8QQoe1X+quDMbliV5k5HM79AOvwESMjwoz1xEbUayR6esW20297RH3GDOZnDdMl3JEg/5ScjLHymlk/AIbDYj+rTLrnqARihmMeOdDWcMK0=
+    - secure: jLa/ai9FzqYRZkZrjQhn5KbsSrDDLBV2hPlKQh/nMn5bb5RooMnAo/9aSYsq8o4lMtnqsYX7wv/r35GKpJJk1OFBWmj1L94KTfm1TdC5Xlr5iumRbQ9VEPBbMgQw6WU+bp88QxvT0I9DZxgciMk6GV9eBM3dH4BSIwRCamOl018=
+    - secure: iQ5aDVTqRYX8YQdxi8gk0jLoNtWvtb7x3ZQORQT9w+y/X4qX+5mV/FV88BQBYF4MMlF5ePGx8IItpEagllIZboAf68CBvclretlPXUiw3JyHaALfHJI1n02y/j/NnY2P3QJUG9QuFBdIAeUWUyReGxOD9Bhcj4E8nHkAgDNsz5k=
 
 before_install:
  # fixes node/gyp install
