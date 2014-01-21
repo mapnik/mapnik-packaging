@@ -64,7 +64,9 @@ if [ ${PLATFORM} = 'Linux' ]; then
     # Note: stripping with -Wl,-S breaks dtrace
     #export EXTRA_LDFLAGS="-Wl,--as-needed"
     # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
-    export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
+    # breaks boost
+    #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
+    export EXTRA_LDFLAGS=""
     if [ "${CXX:-false}" = "clang++" ]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
@@ -77,7 +79,9 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export ARCH_FLAGS=
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    # breaking icu symbols?
+    #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    export CXX_VISIBILITY_FLAGS=""
     if [ "${CXX11}" = true ]; then
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
