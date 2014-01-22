@@ -15,14 +15,15 @@ fi
 
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
   PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}"
+  TARBALL_NAME="${PACKAGE_NAME}.tar"
   UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${TARBALL_NAME}.bz2"
 else
   PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}-${CXX_STANDARD}-${STDLIB}-${CXX_NAME}"
+  TARBALL_NAME="${PACKAGE_NAME}.tar"
   UPLOAD="s3://mapnik/dist/dev/${TARBALL_NAME}.bz2"
 fi
 
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
-TARBALL_NAME="${PACKAGE_NAME}.tar"
 mkdir -p "${LOCAL_TARGET}"
 STAGING_DIR="boost-staging-minimal"
 
