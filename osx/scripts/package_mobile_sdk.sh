@@ -85,6 +85,7 @@ boost/spirit/include/phoenix_operator.hpp \
 boost/spirit/include/phoenix_fusion.hpp \
 boost/spirit/include/phoenix_object.hpp \
 boost/spirit/include/phoenix_stl.hpp \
+boost/spirit/include/support_container.hpp \
 boost/regex.hpp \
 boost/regex/icu.hpp \
 boost/iostreams/device/file.hpp \
@@ -97,7 +98,7 @@ cd ${MAPNIK_DIST}
 
 echoerr "copying other deps"
 # icu
-if [ -d ${BUILD}/include/unicode ]l then
+if [ -d ${BUILD}/include/unicode ]; then
     echo "copying icu"
     cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
     cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
