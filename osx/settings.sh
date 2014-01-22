@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # settings
-export OFFICIAL_RELEASE='false'
+export OFFICIAL_RELEASE=false
 export USE_BOOST_TRUNK='false'
 export SHARED_ZLIB=true
 
@@ -54,7 +54,7 @@ export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt52l_only_collator_and_breakiter
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     if [ "${CXX11}" = true ]; then
-        if [ "${CXX:-false}" = "clang++" ]; then
+        if [[ "${CXX:-false}" == "clang++" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
@@ -67,12 +67,18 @@ if [ ${PLATFORM} = 'Linux' ]; then
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
     export EXTRA_LDFLAGS=""
-    if [ "${CXX:-false}" = "clang++" ]; then
+    if [[ "${CXX:-false}" == "clang++" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
+      if [[ "${CXX_NAME:-false}" == false ]]; then
+          export CXX_NAME="clang-3.3"
+      fi
     else
       export CORE_CC="gcc"
       export CORE_CXX="g++"
+      if [[ "${CXX_NAME:-false}" == false ]]; then
+          export CXX_NAME="gcc-4.8"
+      fi
     fi
     export AR=ar
     export RANLIB=ranlib
@@ -120,6 +126,10 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     export CORE_CXX="arm-linux-androideabi-g++"
     export CORE_CC="arm-linux-androideabi-gcc"
+    if [[ "${CXX_NAME:-false}" == false ]]; then
+        # TODO
+        export CXX_NAME="gcc-4.6"
+    fi
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
     export ARCH_FLAGS=
@@ -157,6 +167,10 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export EXTRA_CFLAGS=""
       # todo -no_dead_strip_inits_and_terms
       export EXTRA_LDFLAGS="-Wl,-search_paths_first"
+    fi
+    if [[ "${CXX_NAME:-false}" == false ]]; then
+        # TODO
+        export CXX_NAME="clang-3.3"
     fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH

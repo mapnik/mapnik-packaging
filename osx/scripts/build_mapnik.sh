@@ -88,7 +88,7 @@ env = {
 }
 " > bindings/python/mapnik/mapnik_settings.py
 
-if [ $OFFICIAL_RELEASE = 'true' ]; then
+if [[ ${OFFICIAL_RELEASE} == true ]]; then
     # python versions
     export i="3.3"
     echo "...Updating and building mapnik python bindings for python ${i}"

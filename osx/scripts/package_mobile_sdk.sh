@@ -12,7 +12,15 @@ DESCRIBE=`mapnik-config --git-describe`
 if test "${platform#*'iphone'}" != "$platform"; then
     platform="ios"
 fi
-PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}-${CXX_STANDARD}-${STDLIB}"
+
+if [[ ${OFFICIAL_RELEASE} == true ]]; then
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}"
+  UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${TARBALL_NAME}.bz2"
+else
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}-${CXX_STANDARD}-${STDLIB}-${CXX_NAME}"
+  UPLOAD="s3://mapnik/dist/dev/${TARBALL_NAME}.bz2"
+fi
+
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 TARBALL_NAME="${PACKAGE_NAME}.tar"
 mkdir -p "${LOCAL_TARGET}"
@@ -143,11 +151,6 @@ ls -lh *tar*
 
 # 13 MB
 #time xz -z -k -e -9 ${TARBALL_NAME}
-if [ $OFFICIAL_RELEASE = 'true' ]; then
-  UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${TARBALL_NAME}.bz2"
-else
-  UPLOAD="s3://mapnik/dist/dev/${TARBALL_NAME}.bz2"
-fi
 echoerr "*uploading ${UPLOAD}"
 ensure_s3cmd
 s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}

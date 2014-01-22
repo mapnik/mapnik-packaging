@@ -14,7 +14,7 @@ mv stage/lib/libboost_python.a stage/lib/libboost_python-2.7.a
 echoerr "placing boost python at ${BUILD}/lib/libboost_python-2.7.a"
 cp stage/lib/libboost_python-2.7.a ${BUILD}/lib/libboost_python-2.7.a
 
-if [ $OFFICIAL_RELEASE = 'true' ]; then
+if [[ ${OFFICIAL_RELEASE} == true ]]; then
     python ${ROOTDIR}/scripts/build_boost_pythons.py 2.6 ${BOOST_TOOLSET} 64 ${BOOST_ARCH} `which $CXX`
     mv stage/lib/libboost_python.a stage/lib/libboost_python-2.6.a
     echoerr "placing boost python at ${BUILD}/lib/libboost_python-2.6.a"
@@ -44,7 +44,7 @@ if [ $UNAME = 'Darwin' ]; then
     PYTHON=python2.7 ./waf install
     cd ${PACKAGES}
 
-    if [ $OFFICIAL_RELEASE = 'true' ]; then
+    if [[ ${OFFICIAL_RELEASE} == true ]]; then
         # py2cairo
         echoerr 'building py2cairo for py2.6'
         rm -rf py2cairo-${PY2CAIRO_VERSION}
