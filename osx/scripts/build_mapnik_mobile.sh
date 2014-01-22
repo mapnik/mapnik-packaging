@@ -13,8 +13,8 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   make clean
 fi
 
-if [ "${TRAVIS_COMMIT:-false}" != false ]; then
-    if [ $UNAME = 'Darwin' ]; then
+if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
+    if [[ $UNAME ]= 'Darwin' ]]; then
       JOBS=1
     else
       JOBS=2
@@ -81,5 +81,5 @@ rm -f bindings/python/mapnik/_mapnik.so
   GRID_RENDERER=False \
   PGSQL2SQLITE=False \
   SYSTEM_FONTS=/System/Library/Fonts
-make
+JOBS=${JOBS} make
 make install
