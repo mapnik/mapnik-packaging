@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e -u
+
+mkdir -p ${PACKAGES}
+cd ${PACKAGES}
+
+echoerr 'building lua'
+
+download lua-${LUA_VERSION}.tar.gz
+
+rm -rf lua-${LUA_VERSION}
+tar xf lua-${LUA_VERSION}.tar.gz
+cd lua-${LUA_VERSION}
+make generic CC=$CC CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INSTALL_TOP=${BUILD} install
+
+cd ${PACKAGES}

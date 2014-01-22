@@ -344,7 +344,8 @@ NMAKE : fatal error U1077: '"C:\Program Files (x86)\Windows Kits\8.0\bin\x86\mt.
 If you want to build sqlite standalone you might be interested in: https://skydrive.live.com/view.aspx?resid=A737583042956228!1940&cid=a737583042956228
 
 ### protobuf
-*NOTE: only needed if building node-mapnik with vector tiles support
+
+*NOTE: only needed if building node-mapnik >=1.x (which needs protobuf to work with vector tiles)
 
 Download https://protobuf.googlecode.com/files/protobuf-2.5.0.zip and unzip
 

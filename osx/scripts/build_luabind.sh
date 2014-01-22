@@ -1,16 +1,17 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download luabind-${LUABIND_VERSION}.tar.gz
-
 echoerr 'building luabind'
 
+#download luabind-${LUABIND_VERSION}.tar.gz
+
 rm -rf luabind
-git clone https://github.com/DennisOSRM/luabind.git
+git clone --quiet --depth=0 https://github.com/DennisOSRM/luabind.git
 cd luabind
+git checkout 98f9ea861f58842c54aa9ebe7754659cc787a89c
 # avoid g++ being killed on travis
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2

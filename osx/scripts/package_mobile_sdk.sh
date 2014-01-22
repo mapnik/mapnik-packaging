@@ -1,51 +1,59 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
-echo '...packaging mobile sdk tarball'
+echoerr '...packaging mobile sdk tarball'
 
 # where we are headed
 mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 DESCRIBE=`mapnik-config --git-describe`
-PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${PLATFORM}-sdk-${DESCRIBE}"
+# collapse all iOS platform names to one since
+# we provide these multiarch
+if test "${platform#*'iphone'}" != "$platform"; then
+    platform="ios"
+fi
+
+if [[ ${OFFICIAL_RELEASE} == true ]]; then
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}"
+  TARBALL_NAME="${PACKAGE_NAME}.tar"
+  UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${TARBALL_NAME}.bz2"
+else
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}-${CXX_STANDARD}-${STDLIB}-${CXX_NAME}"
+  TARBALL_NAME="${PACKAGE_NAME}.tar"
+  UPLOAD="s3://mapnik/dist/dev/${TARBALL_NAME}.bz2"
+fi
+
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 mkdir -p "${LOCAL_TARGET}"
 STAGING_DIR="boost-staging-minimal"
 
 # clear up where we're going
-rm -rf ${LOCAL_TARGET}/*
+rm -rf ${LOCAL_TARGET}/* || rm -rf ${LOCAL_TARGET}/*
 
-echo '...creating base directories'
+echoerr '...creating base directories'
 
 mkdir ${LOCAL_TARGET}/lib
 mkdir ${LOCAL_TARGET}/include
-#mkdir ${LOCAL_TARGET}/share/mapnik
 mkdir ${LOCAL_TARGET}/bin
+mkdir -p ${LOCAL_TARGET}/lib/pkgconfig
+mkdir ${LOCAL_TARGET}/share/
 
-echo '...copying over mapnik'
-if [ -d "${BUILD_ROOT}-i386-mapnik" ]; then
-  cp "${BUILD_ROOT}-i386/bin/protoc" ${LOCAL_TARGET}/bin/
-elif [ -d "${BUILD_ROOT}-x86_64-mapnik" ]; then
-  cp "${BUILD_ROOT}-x86_64/bin/protoc" ${LOCAL_TARGET}/bin/
-elif [ -d "${ROOTDIR}/out/build-libc++-x86_64-mapnik" ]; then
-  cp "${ROOTDIR}/out/build-libc++-x86_64/bin/protoc" ${LOCAL_TARGET}/bin/
-elif [ -d "${ROOTDIR}/out/build-libc++-i386-mapnik" ]; then
-  cp "${ROOTDIR}/out/build-libc++-i386/bin/protoc" ${LOCAL_TARGET}/bin/
+# NOTE: linux cp command needs the trailing dir names not to match otherwise it will nest the result
+# NOTE: OS X cp needs the from dir not to have a trailing slash otherwise it moves what is inside instead of the dir
+if [ -d "${MAPNIK_BIN_SOURCE}/share" ]; then
+    cp -r "${MAPNIK_BIN_SOURCE}/share/mapnik" "${LOCAL_TARGET}/share/"
+fi
+ls ${LOCAL_TARGET}/share/
+
+sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" > "${LOCAL_TARGET}/bin/mapnik-config"
+chmod +x "${LOCAL_TARGET}/bin/mapnik-config"
+cp -r "${MAPNIK_BIN_SOURCE}/include/mapnik" "${LOCAL_TARGET}/include/"
+if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
+    mkdir -p "${LOCAL_TARGET}/lib/mapnik/input/"
+    cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
-cp "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" ${LOCAL_TARGET}/bin/
-cp -R "${MAPNIK_BIN_SOURCE}/include/" ${LOCAL_TARGET}/include/
-#mkdir -p ${LOCAL_TARGET}/share/mapnik/icu
-#if [ $BOOST_ARCH = "x86" ]; then
-#  cp -R ${BUILD_ROOT}-i386/share/icu/*/icudt*.dat ${LOCAL_TARGET}/share/mapnik/icu/
-#fi
-# shape plugin
-#if [ -d ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ ];then
-#  mkdir -p ${LOCAL_TARGET}/lib/mapnik/input
-#  cp ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/* ${LOCAL_TARGET}/lib/mapnik/input/
-#fi
-
-echo '...packaging boost headers'
+echoerr '...packaging boost headers'
 # TODO - make finding bcp more robust
 cd ${PACKAGES}/boost*-x86_64/
 mkdir -p ${STAGING_DIR}
@@ -83,40 +91,75 @@ boost/regex/icu.hpp \
 boost/iostreams/device/file.hpp \
 boost/iostreams/stream.hpp \
 boost/iostreams/device/array.hpp \
+boost/gil/gil_all.hpp \
 ${STAGING_DIR}/ 1>/dev/null
 cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
+cd ${MAPNIK_DIST}
 
-echo "*copying other headers*"
+echoerr "*copying other deps*"
 # icu
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
+cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
 
 # jpeg
-cp -r ${BUILD}/include/j* ${LOCAL_TARGET}/include/
+cp ${BUILD}/include/j*.* ${LOCAL_TARGET}/include/
 
 # png
-cp -r ${BUILD}/include/p* ${LOCAL_TARGET}/include/
+cp ${BUILD}/include/png*.* ${LOCAL_TARGET}/include/
+
+# proj
+cp ${BUILD}/include/proj*.* ${LOCAL_TARGET}/include/
 
 # zlib
-cp -r ${BUILD}/include/z* ${LOCAL_TARGET}/include/
+if [[ $SHARED_ZLIB != true ]]; then
+    cp ${BUILD}/include/z*.* ${LOCAL_TARGET}/include/
+fi
+
+# cairo
+if [ -d ${BUILD}/include/cairo ];then
+  cp -r ${BUILD}/include/cairo ${LOCAL_TARGET}/include/
+fi
 
 # protobuf
-cp -r ${BUILD}/include/google ${LOCAL_TARGET}/include/
+echoerr '...copying over protobuf'
+if [[ `which protoc` ]]; then
+    cp `which protoc` ${LOCAL_TARGET}/bin/
+fi
+mkdir -p ${LOCAL_TARGET}/include/google/protobuf
+cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
+cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
+cp ${BUILD}/lib/libprotobuf-lite.a ${LOCAL_TARGET}/lib/
+#cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
 
-# libraries
-cp ${BUILD_UNIVERSAL}/* ${LOCAL_TARGET}/lib/
 
+# multiarch mapnik libs
+if [ -d "${BUILD_UNIVERSAL}/" ]; then
+    cp ${BUILD_UNIVERSAL}/* ${LOCAL_TARGET}/lib/
+else
+    cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
+fi
 cd ${MAPNIK_DIST}
-rm -f ./${PACKAGE_NAME}*.tar.bz2
+rm -f ./${TARBALL_NAME}*
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
 echo "Produced on `date`" >> ${LOCAL_TARGET}/VERSION
 
-echo "...creating tarball of mapnik build"
-tar cjfH ${MAPNIK_DIST}/${PACKAGE_NAME}.tar.bz2 ${PACKAGE_NAME}/
-if [ $OFFICIAL_RELEASE = 'true' ]; then
-  UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${PACKAGE_NAME}.tar.bz2"
-else
-  UPLOAD="s3://mapnik/dist/dev/${PACKAGE_NAME}.tar.bz2"
-fi
-echo "*uploading ${UPLOAD}"
-/usr/local/bin/s3cmd --acl-public put ${MAPNIK_DIST}/${PACKAGE_NAME}.tar.bz2 ${UPLOAD}
+echoerr "...creating tarball of mapnik build"
+# -j bz2
+# -c compress
+# -f write to file
+# -H symbolic links are followed/materialized (but linux itis -h)
+time tar -c -j -f "${MAPNIK_DIST}/${TARBALL_NAME}.bz2" "${PACKAGE_NAME}/"
+ls -lh *tar*
+# -z compress
+# -k keep
+# --best high compression
+# 20 MB
+#time bzip2 -z -k --best ${TARBALL_NAME}
+
+# 13 MB
+#time xz -z -k -e -9 ${TARBALL_NAME}
+echoerr "*uploading ${UPLOAD}"
+ensure_s3cmd
+s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
+s3cmd ls `dirname s3://mapnik/dist/dev/*/*`
 # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9

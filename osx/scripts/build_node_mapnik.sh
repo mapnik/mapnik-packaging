@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -11,16 +11,16 @@ cd node-v${NODE_VERSION}
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} \
  --shared-zlib \
- --shared-zlib-includes=${BUILD}/include \
- --shared-zlib-libpath=${BUILD}/lib
+ --shared-zlib-includes=${ZLIB_PATH}/include \
+ --shared-zlib-libpath=${ZLIB_PATH}/lib
 make -j${JOBS}
 make install
 
 cd ${ROOTDIR}
-git clone git@github.com:mapnik/node-mapnik.git
+git clone --depth=0 --quiet git@github.com:mapnik/node-mapnik.git
 cd ${ROOTDIR}/node-mapnik
 mkdir -p node_modules
-git clone git@github.com:mapbox/mapnik-vector-tile.git
+git clone --depth=0 --quiet git@github.com:mapbox/mapnik-vector-tile.git
 cd mapnik-vector-tile
 make && make test
 install_name_tool -change /usr/local/lib/libmapnik.dylib `mapnik-config --prefix`/lib/libmapnik.dylib test/run-test 

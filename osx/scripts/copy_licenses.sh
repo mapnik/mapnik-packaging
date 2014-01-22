@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 LICENSES=${ROOTDIR}/installer/pkg/licenses
 mkdir -p ${LICENSES}

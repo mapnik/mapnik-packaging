@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -11,13 +11,13 @@ rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2
 mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 cd protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
+export NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-x86_64/src/protoc"
 if [ $BOOST_ARCH = "arm" ]; then
-    if [ -f "$(pwd)/../protobuf-${PROTOBUF_VERSION}-i386/src/protoc" ]; then
-        NATIVE_PROTOC="$(pwd)/../protobuf-${PROTOBUF_VERSION}-i386/src/protoc"
-    elif [ -f "$(pwd)/../protobuf-${PROTOBUF_VERSION}-x86-64/src/protoc" ]; then
-        NATIVE_PROTOC="$(pwd)/../protobuf-${PROTOBUF_VERSION}-x86-64/src/protoc"
-    else
-        echoerr 'could not find pre-built protobuf/protoc from a native/host arch!'
+    if [ ! -f "${NATIVE_PROTOC}" ]; then
+        echoerr 'native/host arch protoc missing, building now in subshell'
+        OLD_PLATFORM=${PLATFORM}
+        source ${ROOTDIR}/${HOST_PLATFORM}.sh && ${ROOTDIR}/scripts/build_protobuf.sh
+        source ${ROOTDIR}/${OLD_PLATFORM}.sh
     fi
     CROSS_FLAGS="--with-protoc=${NATIVE_PROTOC}"
 else
@@ -32,10 +32,22 @@ CXX="${CXX} ${STDLIB_CXXFLAGS}"
 # if they do not exist (as deleted by below)
 ./configure --prefix=${BUILD} ${HOST_ARG} ${CROSS_FLAGS} \
 --enable-static --disable-shared \
---disable-debug --with-zlib \
+--disable-debug --without-zlib \
 --disable-dependency-tracking
 make -j${JOBS}
 make install
+if [ $BOOST_ARCH = "arm" ]; then
+    cp "${NATIVE_PROTOC}" ${BUILD}/bin/
+fi
 cd ${PACKAGES}
 
 check_and_clear_libs
+
+: '
+Note: iPhoneSimulator not working atm:
+
+dyld: Symbol not found: __ZNSt9exceptionD2Ev
+  Referenced from: /Users/dane/projects/mapnik-packaging/osx/out/packages/protobuf-2.5.0-i386/src/protoc
+  Expected in: /usr/lib/libc++abi.dylib
+
+'

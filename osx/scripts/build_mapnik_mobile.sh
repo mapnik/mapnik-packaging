@@ -1,14 +1,17 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 cd ${MAPNIK_SOURCE}
 
-echo 'Building mapnik mobile'
+echoerr 'Building mapnik mobile'
 
-rm -rf ${MAPNIK_BIN_SOURCE}
-rm -f src/libmapnik{*.so,*.dylib,*.a}
-rm -f tests/cpp_tests/*-bin
-#make clean
+if [ -d ${MAPNIK_BIN_SOURCE} ]; then
+  rm -rf ${MAPNIK_BIN_SOURCE}
+  rm -f src/libmapnik{*.so,*.dylib,*.a}
+  rm -f tests/cpp_tests/*-bin
+  # TODO: https://github.com/mapnik/mapnik/issues/2112
+  make clean
+fi
 
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     if [ $UNAME = 'Darwin' ]; then

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 echo '...copying headers needed for node bindings to compile against mapnik'
 

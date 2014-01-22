@@ -1,8 +1,11 @@
 #!/bin/bash
 
+set -u
+
 # settings
-export OFFICIAL_RELEASE='false'
+export OFFICIAL_RELEASE=false
 export USE_BOOST_TRUNK='false'
+export SHARED_ZLIB=true
 
 # start from here
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -19,6 +22,16 @@ if [ ${UNAME} = 'Darwin' ]; then
     export LIBCXX_DEFAULT=true
   fi
 fi
+
+if [ "${CXX11}" = true ]; then
+  export CXX_STANDARD="cpp11"
+else
+  export CXX_STANDARD="cpp03"
+fi
+
+
+# lowercase platform name
+export platform=$(echo $PLATFORM | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
@@ -42,36 +55,46 @@ export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt52l_only_collator_and_breakiter
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     if [ "${CXX11}" = true ]; then
-        if [ "${CXX:-false}" = "clang++" ]; then
+        if [[ "${CXX:-false}" == "clang++" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
     fi
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    # TODO -Wl,--gc-sections
+    # TODO -Wl,--gc-sections / -Wl,--exclude-libs=ALL / Bsymbolic
     # Note: stripping with -Wl,-S breaks dtrace
-    export EXTRA_LDFLAGS="-Wl,--as-needed"
-    if [ "${CXX:-false}" = "clang++" ]; then
+    #export EXTRA_LDFLAGS="-Wl,--as-needed"
+    # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
+    # breaks boost
+    #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
+    export EXTRA_LDFLAGS=""
+    if [[ "${CXX:-false}" == "clang++" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
+      if [[ "${CXX_NAME:-false}" == false ]]; then
+          export CXX_NAME="clang-3.3"
+      fi
     else
       export CORE_CC="gcc"
       export CORE_CXX="g++"
+      if [[ "${CXX_NAME:-false}" == false ]]; then
+          export CXX_NAME="gcc-4.8"
+      fi
     fi
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=
     export JOBS=`grep -c ^processor /proc/cpuinfo`
     export BOOST_TOOLSET="gcc"
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    # breaking icu symbols?
+    #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    export CXX_VISIBILITY_FLAGS=""
     if [ "${CXX11}" = true ]; then
-      export STDLIB="libstdc++"
+      export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
-      echo "building against libstdc++ in c++11 mode"
     else
-      echo "building against libstdc++"
-      export STDLIB="libstdc++"
+      export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
@@ -104,6 +127,10 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     export CORE_CXX="arm-linux-androideabi-g++"
     export CORE_CC="arm-linux-androideabi-gcc"
+    if [[ "${CXX_NAME:-false}" == false ]]; then
+        # TODO
+        export CXX_NAME="gcc-4.6"
+    fi
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
     export ARCH_FLAGS=
@@ -112,8 +139,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     #alias libtool="arm-linux-androideabi-ar cru"
     #export libtool="arm-linux-androideabi-ar cru"
     export NM="arm-linux-androideabi-nm"
-    echo "building against libstdc++"
-    export STDLIB="libstdc++"
+    export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
 elif [ ${UNAME} = 'Darwin' ]; then
@@ -143,6 +169,10 @@ elif [ ${UNAME} = 'Darwin' ]; then
       # todo -no_dead_strip_inits_and_terms
       export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     fi
+    if [[ "${CXX_NAME:-false}" == false ]]; then
+        # TODO
+        export CXX_NAME="clang-3.3"
+    fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
@@ -157,32 +187,37 @@ elif [ ${UNAME} = 'Darwin' ]; then
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [ "${CXX11}" = true ]; then
-        export STDLIB="libc++"
+        export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-        echo "building against ${STDLIB} in c++11 mode"
     else
         if [ "${LIBCXX_DEFAULT}" = true ]; then
-            export STDLIB="libc++"
+            export STDLIB="libcpp"
         else
-            export STDLIB="libstdc++"
+            export STDLIB="libstdcpp"
         fi
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
         export STDLIB_LDFLAGS=""
-        echo "building against ${STDLIB} in ANSI mode"
     fi
 else
     echo '**unhandled platform: ${PLATFORM}**'
 fi
 
-export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${STDLIB}"
-export BUILDDIR="build-${STDLIB}"
+export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${CXX_STANDARD}-${STDLIB}"
+export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
+export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
+
+if [[ $SHARED_ZLIB == true ]]; then
+    export ZLIB_PATH="/usr";
+else
+    export ZLIB_PATH="${BUILD}"
+fi
 
 # should not be needed now that we set 'LIBRARY_PATH'
 #if [ $UNAME = 'Darwin' ]; then
@@ -212,7 +247,10 @@ export CPPFLAGS="${CORE_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
 export LINK_FLAGS=${LDFLAGS}
-export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS"
+# silence warnings in C depedencies like cairo, libxml2, pixman
+export WARNING_CFLAGS="-Wno-unused-variable -Wno-redundant-decls -Wno-uninitialized -Wno-unused-result -Wno-format"
+export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
+# we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
 # http://site.icu-project.org/download
@@ -222,15 +260,15 @@ export ICU_VERSION2="52_1"
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080100"
+export SQLITE_VERSION="3080200"
 # http://download.savannah.gnu.org/releases/freetype/
-export FREETYPE_VERSION="2.5.0.1"
+export FREETYPE_VERSION="2.5.2"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.6"
+export LIBPNG_VERSION="1.6.8"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
@@ -262,11 +300,12 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.22"
+export NODE_VERSION="0.10.24"
 export SPARSEHASH_VERSION="2.0.2"
-export HARFBUZZ_VERSION="0.9.24"
+export HARFBUZZ_VERSION="0.9.25"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
+export LUA_VERSION="5.1.5"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr
@@ -282,6 +321,7 @@ function download {
 export -f download
 
 function upload {
+    ensure_s3cmd
     s3cmd --acl-public put $1 s3://mapnik/deps/
 }
 export -f upload
@@ -289,7 +329,7 @@ export -f upload
 function push {
     echo "downloading $1"
     cd ${PACKAGES}
-    wget $1
+    curl -s -S -f -O $1
     echo "uploading `basename $1`"
     upload `basename $1`
     cd ${ROOTDIR}
@@ -298,13 +338,61 @@ export -f push
 
 function check_and_clear_libs {
   if [ $UNAME = 'Darwin' ]; then
-        if [ -n "$(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print -quit)" ];then
-           lipo -info ${BUILD}/lib/*.a | grep arch
-        fi
-        if [ -n "$(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print -quit)" ];then
-           otool -L ${BUILD}/lib/*.dylib | grep /usr/lib
-        fi
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print -quit); do
+           lipo -info $i | grep arch;
+        done;
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print -quit); do
+           otool -L ${i} | grep /usr/lib;
+        done;
+    else
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print -quit); do
+           ldd ${i} | grep /usr/lib
+        done
     fi
-    rm -f ${BUILD}/lib/{*.so,*.dylib}
+    rm -f ${BUILD}/lib/{*.so*,*.dylib}
 }
 export -f check_and_clear_libs
+
+function ensure_s3cmd {
+  CUR_DIR=`pwd`
+  if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
+      cd ${PACKAGES}
+      curl -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
+      tar xf v1.5.0-beta1.tar.gz
+  fi
+  cd ${PACKAGES}/s3cmd-1.5.0-beta1
+  export PATH=`pwd`:${PATH}
+  cd $CUR_DIR
+  if [ ! -f ~/.s3cfg ]; then
+    echo "[default]" > ~/.s3cfg
+    echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
+    echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+  fi
+}
+export -f ensure_s3cmd
+
+function ensure_xz {
+  CUR_DIR=`pwd`
+  mkdir -p ${PACKAGES}
+  cd ${PACKAGES}
+  # WARNING: this installs liblzma which we need to ensure that gdal does not link to
+  download xz-${XZ_VERSION}.tar.bz2
+  echoerr '*building xz*'
+  rm -rf xz-5.0.3
+  tar xf xz-5.0.3.tar.bz2
+  cd xz-5.0.3
+  OLD_PLATFORM=${PLATFORM}
+  source "${ROOTDIR}/${HOST_PLATFORM}.sh"
+  ./configure --prefix=${BUILD_TOOLS_ROOT}
+  make -j$JOBS
+  make install
+  export PATH=${BUILD_TOOLS_ROOT}/bin:$PATH
+  source "${ROOTDIR}/${OLD_PLATFORM}.sh"
+  cd $CUR_DIR
+}
+export -f ensure_xz
+
+echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
+
+set +u
+

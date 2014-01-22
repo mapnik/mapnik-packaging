@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -20,7 +20,15 @@ cp ${PATCHES}/config.guess .
 cp ${PATCHES}/config.sub .
 ./configure --prefix=${BUILD} --without-mutex ${HOST_ARG} \
 --with-jni=no --enable-static --disable-shared --disable-dependency-tracking
-make -j${JOBS}
-# TODO - android: /bin/sh: ../src/nad2bin: cannot execute binary file
-make install
+# nad2bin cannot be run in cross compiler environment
+if [ ${BOOST_ARCH} != "arm" ]; then
+    # TODO - android: /bin/sh: ../src/nad2bin: cannot execute binary file
+    set +e
+    make -j${JOBS} -i -k
+    make install -i -k
+    set -e
+else
+    make -j${JOBS}
+    make install
+fi
 cd ${PACKAGES}

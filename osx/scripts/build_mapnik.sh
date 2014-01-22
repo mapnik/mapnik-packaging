@@ -1,14 +1,17 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
+set -o pipefail
+
+echoerr 'Building mapnik'
 
 cd ${MAPNIK_SOURCE}
-
-echo 'Building mapnik'
-
-rm -rf ${MAPNIK_BIN_SOURCE}
-rm -f src/libmapnik{*.so,*.dylib,*.a}
-rm -f tests/cpp_tests/*-bin
-make clean
+if [ -d ${MAPNIK_BIN_SOURCE} ]; then
+  rm -rf ${MAPNIK_BIN_SOURCE}
+  rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
+  rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
+  # TODO: https://github.com/mapnik/mapnik/issues/2112
+  make clean
+fi
 
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     if [ $UNAME = 'Darwin' ]; then
@@ -59,14 +62,17 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   PATH_REMOVE="/usr/include" \
   BINDINGS='python' \
   INPUT_PLUGINS='csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite' \
-  CAIRO=True \
   DEMO=True \
-  PGSQL2SQLITE=True \
+  SVG_RENDERER=true \
+  CAIRO=False \
+  PGSQL2SQLITE=False \
   SVG2PNG=False \
   FRAMEWORK_PYTHON=False \
-  BOOST_PYTHON_LIB=boost_python-2.7
+  FULL_LIB_PATH=False \
+  ENABLE_SONAME=False \
+  BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
-make
+nice make
 make install
 
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
@@ -82,7 +88,7 @@ env = {
 }
 " > bindings/python/mapnik/mapnik_settings.py
 
-if [ $OFFICIAL_RELEASE = 'true' ]; then
+if [[ ${OFFICIAL_RELEASE} == true ]]; then
     # python versions
     export i="3.3"
     echo "...Updating and building mapnik python bindings for python ${i}"

@@ -1,21 +1,10 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-# build dep for untarring cairo
-# we build here to avoid the liblzma.dylib from being nuked earlier when we clear out gdal dylibs
-download xz-${XZ_VERSION}.tar.bz2
-
-echoerr '*building xz*'
-rm -rf xz-5.0.3
-tar xf xz-5.0.3.tar.bz2
-cd xz-5.0.3
-./configure --prefix=${BUILD}
-make -j$JOBS
-make install
-cd ${PACKAGES}
+ensure_xz
 
 # cairo
 download cairo-${CAIRO_VERSION}.tar.xz

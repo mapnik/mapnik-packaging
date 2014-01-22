@@ -1,13 +1,14 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone https://github.com/DennisOSRM/Project-OSRM.git -b develop --depth 1
+git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b develop
 cd Project-OSRM
+git checkout 289e5ada2cbab0eb12fc24c985f2d094d8d5ed71
 
 if [ "${TRAVIS_COMMIT:-false}" != false ]; then
     JOBS=2

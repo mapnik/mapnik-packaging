@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -26,7 +26,8 @@ cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
 tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
-./configure --prefix=${BUILD} \
+./configure ${HOST_ARG} \
+--prefix=${BUILD} \
 --with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
 --with-bonjour --without-libxml --without-readline
 # LD=${CC}

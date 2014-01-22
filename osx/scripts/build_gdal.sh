@@ -1,24 +1,44 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download gdal-${GDAL_VERSION}.tar.gz
-
 # gdal
 echoerr 'building gdal'
 
+GDAL_LATEST=true
+
+if [[ $GDAL_LATEST == true ]]; then
+    #rm -rf gdal
+    if [ ! -d gdal ]; then
+        git clone --quiet --depth=0 https://github.com/OSGeo/gdal.git
+        cd gdal/gdal
+    else
+        cd gdal/gdal
+        git pull
+        if [[ -f GDALmake.opt ]]; then
+            make clean
+            make distclean
+        fi
+    fi
+else
+    download gdal-${GDAL_VERSION}.tar.gz
+    rm -rf gdal-${GDAL_VERSION}
+    tar xf gdal-${GDAL_VERSION}.tar.gz
+    cd gdal-${GDAL_VERSION}
+fi
+
+# purge previous install
+#rm ${BUILD}/include/cpl_*
+
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-CXX="${CXX} ${STDLIB_CXXFLAGS}"
-rm -rf gdal-${GDAL_VERSION}
-tar xf gdal-${GDAL_VERSION}.tar.gz
-cd gdal-${GDAL_VERSION}
+CXX="${CXX} ${STDLIB_CXXFLAGS} -Wno-pragmas"
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 # not bigtiff check will fail…
 # fix bigtiff check
-patch configure ${PATCHES}/bigtiff_check.diff
+patch -N configure ${PATCHES}/bigtiff_check.diff || true
 FGDB_ARGS="--with-fgdb=no"
 if [ $UNAME = 'Darwin' ]; then
     # trick the gdal configure into working on os x
@@ -32,10 +52,14 @@ if [ $UNAME = 'Darwin' ]; then
     fi
 fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-./configure --prefix=${BUILD} --enable-static --disable-shared \
+# --with-geotiff=${BUILD} \
+
+./configure ${HOST_ARG} \
+--prefix=${BUILD} \
+--enable-static \
+--disable-shared \
 ${FGDB_ARGS} \
 --with-libtiff=${BUILD} \
---with-geotiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \

@@ -1,5 +1,5 @@
 echoerr#!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -47,7 +47,7 @@ make clean
 make distclean
 ./autogen.sh
 ./configure --prefix=/usr/local \
---with-zlib=${BUILD} \
+--with-zlib=${ZLIB_PATH} \
 --with-bzip2=${BUILD} \
 --with-geos=${BUILD}/bin/geos-config \
 --with-proj=${BUILD} \

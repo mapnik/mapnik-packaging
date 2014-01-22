@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -12,9 +12,8 @@ tar xf sparsehash-${SPARSEHASH_VERSION}.tar.gz
 mv sparsehash-${SPARSEHASH_VERSION} sparsehash-${SPARSEHASH_VERSION}-${ARCH_NAME}
 cd sparsehash-${SPARSEHASH_VERSION}-${ARCH_NAME}
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-./configure --prefix=${BUILD} ${HOST_ARG} ${CROSS_FLAGS} \
+./configure --prefix=${BUILD} ${HOST_ARG} \
 --enable-static --enable-shared \
---disable-debug --with-zlib \
 --disable-dependency-tracking
 make -j${JOBS}
 make install

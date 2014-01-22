@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
@@ -15,14 +15,15 @@ if [ $UNAME = 'Darwin' ]; then
 fi
 
 ./configure --prefix=${BUILD} \
+${HOST_ARG} \
 --enable-static --disable-shared \
 --disable-dependency-tracking \
 --disable-cxx \
 --enable-defer-strile-load \
 --with-jpeg-include-dir=${BUILD}/include \
 --with-jpeg-lib-dir=${BUILD}/lib \
---with-zlib-include-dir=${BUILD}/include \
---with-zlib-lib-dir=${BUILD}/lib \
+--with-zlib-include-dir=${ZLIB_PATH}/include \
+--with-zlib-lib-dir=${ZLIB_PATH}/lib \
 --disable-lzma --disable-jbig --disable-mdi \
 --without-x
 

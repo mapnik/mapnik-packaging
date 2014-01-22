@@ -1,21 +1,22 @@
+
 #!/bin/bash
-set -e -u -x
+set -e -u
 
 echo '*** testing install'
-cd ${MAPNIK_SOURCE}
-# setup 'share' symlink
-SHARE_DIR="`pwd`/../../share"
-mkdir -p $SHARE_DIR
-TEMP_SYMLINK="$SHARE_DIR/mapnik"
 if [ ! -d "${MAPNIK_BIN_SOURCE}/share/mapnik" ]; then
   ${ROOTDIR}/scripts/post_build_fix.sh
 fi
-ln -s ${MAPNIK_BIN_SOURCE}/share/mapnik ${TEMP_SYMLINK}
 
-export DYLD_LIBRARY_PATH=`pwd`/src
-export MAPNIK_FONT_DIRECTORY=`pwd`/fonts/dejavu-fonts-ttf-2.33/ttf/
-export MAPNIK_INPUT_PLUGINS_DIRECTORY=`pwd`/plugins/input/
-
+echoerr 'testing build in place'
+export ICU_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
+export GDAL_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/gdal"
+export PROJ_LIB="${MAPNIK_BIN_SOURCE}/share/mapnik/proj"
+cd ${MAPNIK_SOURCE}
+make test-local || true
+echo here
+#TODO - place in dist and there there
+#echoerr 'testing build as packaged'
+: '
 for i in {"2.7","2.6",}
 do
   if [ -d "${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/mapnik" ]; then
@@ -30,5 +31,4 @@ do
       echo skipping test against python $i
   fi
 done
-
-rm ${TEMP_SYMLINK}
+'
