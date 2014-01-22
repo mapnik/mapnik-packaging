@@ -141,6 +141,8 @@ fi
 cd ${MAPNIK_DIST}
 rm -f ./${TARBALL_NAME}*
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
+echo `mapnik-config -v` >> ${LOCAL_TARGET}/VERSION
+echo `mapnik-config --all-flags` >> ${LOCAL_TARGET}/VERSION
 echo "Produced on `date`" >> ${LOCAL_TARGET}/VERSION
 
 echoerr "...creating tarball of mapnik build"

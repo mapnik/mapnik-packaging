@@ -13,7 +13,6 @@ function prep_osx {
 function prep_linux {
   cd osx
   source Linux.sh
-  echo "Running build with ${JOBS} parallel jobs"
   if [ "${CXX11}" = true ]; then
     echo "adding gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
@@ -50,8 +49,8 @@ function build_mapnik {
   else
       prep_osx
   fi
+  echo "Running build with ${JOBS} parallel jobs"
   export BUILD_OPTIONAL_DEPS=true
-
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_zlib.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
@@ -65,12 +64,13 @@ function build_mapnik {
   ./scripts/build_harfbuzz.sh 1>> build.log
   ./scripts/build_libxml2.sh 1>> build.log
   if [ $BUILD_OPTIONAL_DEPS ]; then
-    ./scripts/build_jpeg.sh 1>> build.log
-    ./scripts/build_png.sh 1>> build.log
-    ./scripts/build_proj4.sh 1>> build.log
-    ./scripts/build_webp.sh 1>> build.log
-    ./scripts/build_tiff.sh 1>> build.log
-    ./scripts/build_sqlite.sh 1>> build.log
+    echo 'skipping optional deps'
+    #./scripts/build_jpeg.sh 1>> build.log
+    #./scripts/build_png.sh 1>> build.log
+    #./scripts/build_proj4.sh 1>> build.log
+    #./scripts/build_webp.sh 1>> build.log
+    #./scripts/build_tiff.sh 1>> build.log
+    #./scripts/build_sqlite.sh 1>> build.log
     #./scripts/build_geotiff.sh 1>> build.log
     if [ ${BOOST_ARCH} != "arm" ]; then
       #./scripts/build_expat.sh 1>> build.log
@@ -126,6 +126,7 @@ function build_osrm {
   else
       prep_osx
   fi
+  echo "Running build with ${JOBS} parallel jobs"
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   ./scripts/build_lua.sh
