@@ -1,5 +1,7 @@
 #!/bin/bash
 
+UNAME=$(uname -s)
+
 function prep_osx {
   cd osx
   source MacOSX.sh
@@ -40,6 +42,16 @@ function prep_linux {
 
 function build_mapnik {
   set -e
+  if [[ $UNAME == 'Linux' ]]; then
+      prep_linux
+      sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev
+      # postgres deps
+      sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+  else
+      prep_osx
+  fi
+  export BUILD_OPTIONAL_DEPS=true
+
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_zlib.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
@@ -96,24 +108,6 @@ function build_mapnik {
   set +e
 }
 
-function build_mapnik_for_linux {
-  prep_linux
-  sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev
-  # postgres deps
-  sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
-  export BUILD_OPTIONAL_DEPS=true
-  build_mapnik
-}
-export -f build_mapnik_for_linux
-
-function build_mapnik_for_osx {
-  env
-  prep_osx
-  export BUILD_OPTIONAL_DEPS=true
-  build_mapnik
-}
-export -f build_mapnik_for_osx
-
 function build_mapnik_for_ios {
   cd osx
   source iPhoneOS.sh
@@ -126,6 +120,12 @@ function build_mapnik_for_ios {
 export -f build_mapnik_for_ios
 
 function build_osrm {
+  if [[ $UNAME == 'Linux' ]]; then
+      prep_linux
+      sudo apt-get install -qq -y build-essential git unzip zlib1g-dev
+  else
+      prep_osx
+  fi
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   ./scripts/build_lua.sh
@@ -140,15 +140,4 @@ function build_osrm {
   #./scripts/package_tarball.sh
 }
 
-function build_osrm_for_linux {
-  prep_linux
-  build_osrm
-}
-export -f build_osrm_for_linux
-
-function build_osrm_for_osx {
-  prep_osx
-  brew install lua
-  build_osrm
-}
-export -f build_osrm_for_osx
+export -f build_osrm
