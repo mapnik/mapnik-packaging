@@ -43,7 +43,6 @@ mkdir ${LOCAL_TARGET}/share/
 if [ -d "${MAPNIK_BIN_SOURCE}/share" ]; then
     cp -r "${MAPNIK_BIN_SOURCE}/share/mapnik" "${LOCAL_TARGET}/share/"
 fi
-ls ${LOCAL_TARGET}/share/
 
 sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" > "${LOCAL_TARGET}/bin/mapnik-config"
 chmod +x "${LOCAL_TARGET}/bin/mapnik-config"
@@ -53,7 +52,7 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
-echoerr '...packaging boost headers'
+echoerr 'packaging boost headers'
 # TODO - make finding bcp more robust
 cd ${PACKAGES}/boost*-x86_64/
 mkdir -p ${STAGING_DIR}
@@ -96,48 +95,69 @@ ${STAGING_DIR}/ 1>/dev/null
 cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 cd ${MAPNIK_DIST}
 
-echoerr "*copying other deps*"
+echoerr "copying other deps"
 # icu
-cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
-cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
+if [ -d ${BUILD}/include/unicode ]l then
+    echo "copying icu"
+    cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
+    cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
+fi
 
-# jpeg
-cp ${BUILD}/include/j*.* ${LOCAL_TARGET}/include/
+# jpeg - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'j*.*' -print); do
+    echo "copying jpeg: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
 
-# png
-cp ${BUILD}/include/png*.* ${LOCAL_TARGET}/include/
+# png - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'png*.*' -print); do
+    echo "copying png: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
 
-# proj
-cp ${BUILD}/include/proj*.* ${LOCAL_TARGET}/include/
+# proj - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'proj*.*' -print); do
+    echo "copying proj: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
 
-# zlib
+# zlib - optional
 if [[ $SHARED_ZLIB != true ]]; then
-    cp ${BUILD}/include/z*.* ${LOCAL_TARGET}/include/
+    for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'z*.*' -print); do
+        echo "copying zlib: $i"
+        cp $i ${LOCAL_TARGET}/include/
+    done;
 fi
 
 # cairo
 if [ -d ${BUILD}/include/cairo ];then
-  cp -r ${BUILD}/include/cairo ${LOCAL_TARGET}/include/
+    echo 'copying cairo'
+    cp -r ${BUILD}/include/cairo ${LOCAL_TARGET}/include/
 fi
 
-# protobuf
-echoerr '...copying over protobuf'
-if [[ `which protoc` ]]; then
-    cp `which protoc` ${LOCAL_TARGET}/bin/
+# protobuf - optional
+if [ -d ${BUILD}/include/google ]; then
+    echo 'copying protobuf'
+    # NOTE: using which here to get the non arm version
+    if [[ `which protoc` ]]; then
+        cp `which protoc` ${LOCAL_TARGET}/bin/
+    fi
+    mkdir -p ${LOCAL_TARGET}/include/google/protobuf
+    cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
+    cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
+    cp ${BUILD}/lib/libprotobuf-lite.a ${LOCAL_TARGET}/lib/
+    #cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
+
 fi
-mkdir -p ${LOCAL_TARGET}/include/google/protobuf
-cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
-cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
-cp ${BUILD}/lib/libprotobuf-lite.a ${LOCAL_TARGET}/lib/
-#cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
 
-
-# multiarch mapnik libs
-if [ -d "${BUILD_UNIVERSAL}/" ]; then
+if [ -d "${BUILD_UNIVERSAL}" ]; then
+    # multiarch mapnik libs
     cp ${BUILD_UNIVERSAL}/* ${LOCAL_TARGET}/lib/
 else
+    # just mapnik single arch
     cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
 fi
+
 cd ${MAPNIK_DIST}
 rm -f ./${TARBALL_NAME}*
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
