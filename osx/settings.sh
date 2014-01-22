@@ -247,8 +247,12 @@ export CPPFLAGS="${CORE_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
 export LINK_FLAGS=${LDFLAGS}
-# silence warnings in C depedencies like cairo, libxml2, pixman
-export WARNING_CFLAGS="-Wno-unused-variable -Wno-redundant-decls -Wno-uninitialized -Wno-unused-result -Wno-format"
+# silence warnings in C depedencies like cairo, freetype, libxml2, pixman
+export WARNING_CFLAGS="-Wno-long-long -Wno-unused-variable -Wno-redundant-decls -Wno-uninitialized -Wno-unused-result -Wno-format"
+# clang specific
+if test "${CC#*'clang'}" != "$CC"; then
+  export WARNING_CFLAGS="-Wno-invalid-source-encoding -Wno-unused-parameter -Wno-cast-align -Wno-extended-offsetof ${WARNING_CFLAGS}"
+fi
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 # we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
