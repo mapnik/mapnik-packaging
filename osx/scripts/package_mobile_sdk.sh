@@ -34,20 +34,23 @@ echoerr '...creating base directories'
 
 mkdir ${LOCAL_TARGET}/lib
 mkdir ${LOCAL_TARGET}/include
-mkdir ${LOCAL_TARGET}/share/
 mkdir ${LOCAL_TARGET}/bin
 mkdir -p ${LOCAL_TARGET}/lib/pkgconfig
+mkdir ${LOCAL_TARGET}/share/
 
+# NOTE: linux cp command needs the trailing dir names not to match otherwise it will nest the result
+# NOTE: OS X cp needs the from dir not to have a trailing slash otherwise it moves what is inside instead of the dir
 if [ -d "${MAPNIK_BIN_SOURCE}/share" ]; then
-    cp -r "${MAPNIK_BIN_SOURCE}/share" "${LOCAL_TARGET}/share"
+    cp -r "${MAPNIK_BIN_SOURCE}/share/mapnik" "${LOCAL_TARGET}/share/"
 fi
+ls ${LOCAL_TARGET}/share/
 
 sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" > "${LOCAL_TARGET}/bin/mapnik-config"
 chmod +x "${LOCAL_TARGET}/bin/mapnik-config"
-cp -r "${MAPNIK_BIN_SOURCE}/include/mapnik" "${LOCAL_TARGET}/include/mapnik"
+cp -r "${MAPNIK_BIN_SOURCE}/include/mapnik" "${LOCAL_TARGET}/include/"
 if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
-  mkdir -p "${LOCAL_TARGET}/lib/mapnik/input/"
-  cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/input"
+    mkdir -p "${LOCAL_TARGET}/lib/mapnik/input/"
+    cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
 echoerr '...packaging boost headers'
@@ -96,17 +99,20 @@ cd ${MAPNIK_DIST}
 echoerr "*copying other deps*"
 # icu
 cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
-cp -r ${BUILD}/lib/libicu* ${LOCAL_TARGET}/lib/
+cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
 
 # jpeg
-cp -r ${BUILD}/include/j* ${LOCAL_TARGET}/include/
+cp ${BUILD}/include/j*.* ${LOCAL_TARGET}/include/
 
 # png
-cp -r ${BUILD}/include/p* ${LOCAL_TARGET}/include/
+cp ${BUILD}/include/png*.* ${LOCAL_TARGET}/include/
+
+# proj
+cp ${BUILD}/include/proj*.* ${LOCAL_TARGET}/include/
 
 # zlib
 if [[ $SHARED_ZLIB != true ]]; then
-    cp -r ${BUILD}/include/z* ${LOCAL_TARGET}/include/
+    cp ${BUILD}/include/z*.* ${LOCAL_TARGET}/include/
 fi
 
 # cairo
@@ -120,9 +126,9 @@ if [[ `which protoc` ]]; then
     cp `which protoc` ${LOCAL_TARGET}/bin/
 fi
 mkdir -p ${LOCAL_TARGET}/include/google/protobuf
-cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/protobuf
+cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
 cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
-cp ${BUILD}/lib/libprotobuf-lite* ${LOCAL_TARGET}/lib/
+cp ${BUILD}/lib/libprotobuf-lite.a ${LOCAL_TARGET}/lib/
 #cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
 
 

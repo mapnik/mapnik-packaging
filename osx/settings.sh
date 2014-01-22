@@ -1,10 +1,11 @@
 #!/bin/bash
 
+set -u
+
 # settings
 export OFFICIAL_RELEASE=false
 export USE_BOOST_TRUNK='false'
 export SHARED_ZLIB=true
-
 
 # start from here
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -392,4 +393,6 @@ function ensure_xz {
 export -f ensure_xz
 
 echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
+
+set +u
 
