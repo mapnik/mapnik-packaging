@@ -13,8 +13,8 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   make clean
 fi
 
-if [ "${TRAVIS_COMMIT:-false}" != false ]; then
-    if [ $UNAME = 'Darwin' ]; then
+if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
+    if [[ $UNAME == 'Darwin' ]]; then
       JOBS=1
     else
       JOBS=2
@@ -72,7 +72,7 @@ echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
   ENABLE_SONAME=False \
   BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
-nice make
+JOBS=${JOBS} make
 make install
 
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
@@ -95,7 +95,7 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
     rm -f bindings/python/*os
     rm -f bindings/python/mapnik/_mapnik.so
     ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-    make
+    JOBS=${JOBS} make
     make install
     
     for i in {"2.6","2.7"}
@@ -104,7 +104,7 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
       rm -f bindings/python/*os
       rm -f bindings/python/mapnik/_mapnik.so
       ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-      make
+      JOBS=${JOBS} make
       make install
     done
 fi

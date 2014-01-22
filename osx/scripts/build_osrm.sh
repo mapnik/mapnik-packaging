@@ -10,15 +10,15 @@ git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b de
 cd Project-OSRM
 git checkout 289e5ada2cbab0eb12fc24c985f2d094d8d5ed71
 
-if [ "${TRAVIS_COMMIT:-false}" != false ]; then
+if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     JOBS=2
 fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
-if [ ${PLATFORM} = 'Linux' ]; then
+if [[ ${PLATFORM} == 'Linux' ]]; then
     # workaround undefined reference to `clock_gettime' when linking osrm-extract
-    if [ ${CXX} = "clang++" ]; then
+    if [[ ${CXX} == "clang++" ]]; then
         LINK_FLAGS="-lrt ${LINK_FLAGS}"
     fi
 fi
