@@ -22,6 +22,10 @@ function prep_linux {
     if [ "${CXX}" = "g++" ]; then
       export CC="gcc-4.8";
       export CXX="g++-4.8";
+      export CXX_NAME="gcc-4.8";
+    else
+      # default on precise
+      export CXX_NAME="gcc-4.6";
     fi
   else
     echo "updating apt"
