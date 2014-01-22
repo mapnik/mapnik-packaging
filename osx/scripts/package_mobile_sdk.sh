@@ -53,46 +53,13 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
 fi
 
 echoerr 'packaging boost headers'
-# TODO - make finding bcp more robust
-cd ${PACKAGES}/boost*-x86_64/
+# http://www.boost.org/doc/libs/1_55_0b1/tools/bcp/doc/html/index.html
+cd ${PACKAGES}/boost_${BOOST_VERSION2}-x86_64/
+rm -rf ${STAGING_DIR}/*
 mkdir -p ${STAGING_DIR}
-./dist/bin/bcp \
-boost/unordered_map.hpp \
-boost/foreach.hpp \
-boost/optional.hpp \
-boost/ptr_container/ptr_vector.hpp \
-boost/make_shared.hpp \
-boost/shared_ptr.hpp \
-boost/scoped_ptr.hpp \
-boost/version.hpp \
-boost/ptr_container/ptr_sequence_adapter.hpp \
-boost/cstdint.hpp \
-boost/variant.hpp \
-boost/operators.hpp \
-boost/iterator/filter_iterator.hpp \
-boost/concept_check.hpp \
-boost/thread.hpp \
-boost/thread/mutex.hpp \
-boost/functional/hash.hpp \
-boost/property_tree/ptree_fwd.hpp \
-boost/interprocess/mapped_region.hpp \
-boost/math/constants/constants.hpp \
-boost/algorithm/string/predicate.hpp \
-boost/spirit/include/qi.hpp \
-boost/spirit/include/phoenix_function.hpp \
-boost/spirit/include/phoenix_core.hpp \
-boost/spirit/include/phoenix_operator.hpp \
-boost/spirit/include/phoenix_fusion.hpp \
-boost/spirit/include/phoenix_object.hpp \
-boost/spirit/include/phoenix_stl.hpp \
-boost/spirit/include/support_container.hpp \
-boost/regex.hpp \
-boost/regex/icu.hpp \
-boost/iostreams/device/file.hpp \
-boost/iostreams/stream.hpp \
-boost/iostreams/device/array.hpp \
-boost/gil/gil_all.hpp \
-${STAGING_DIR}/ 1>/dev/null
+./dist/bin/bcp --scan \
+`find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
+${STAGING_DIR} 1>/dev/null
 cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 cd ${MAPNIK_DIST}
 
