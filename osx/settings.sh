@@ -75,10 +75,14 @@ if [ ${PLATFORM} = 'Linux' ]; then
           export CXX_NAME="clang-3.3"
       fi
     else
-      export CORE_CC="gcc"
-      export CORE_CXX="g++"
-      if [[ "${CXX_NAME:-false}" == false ]]; then
+      if [ "${CXX11}" = true ]; then
+          export CORE_CC="gcc-4.8"
+          export CORE_CXX="g++-4.8"
           export CXX_NAME="gcc-4.8"
+      else
+          export CORE_CC="gcc"
+          export CORE_CXX="g++"
+          export CXX_NAME="gcc-4.6"
       fi
     fi
     export AR=ar

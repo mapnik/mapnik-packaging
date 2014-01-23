@@ -20,14 +20,6 @@ function prep_linux {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8;
-    if [ "${CXX}" = "g++" ]; then
-      export CC="gcc-4.8";
-      export CXX="g++-4.8";
-      export CXX_NAME="gcc-4.8";
-    else
-      # default on precise
-      export CXX_NAME="gcc-4.6";
-    fi
   else
     echo "updating apt"
     sudo apt-get update -y -qq
