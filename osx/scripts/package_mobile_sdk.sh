@@ -158,6 +158,7 @@ if [ -d ${BUILD}/include/google ]; then
     mkdir -p ${LOCAL_TARGET}/include/google/protobuf
     cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
     cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
+    cp "${BUILD}/lib/libprotobuf-lite.a" ${LOCAL_TARGET}/lib/
 fi
 
 if [ -d "${BUILD_UNIVERSAL}" ]; then
