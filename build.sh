@@ -24,10 +24,6 @@ function prep_linux {
     echo "updating apt"
     sudo apt-get update -y -qq
   fi;
-  echo "removing potentially conflicting librarys"
-  # remove travis default installed libs which will conflict
-  sudo apt-get purge libtiff* libjpeg* libpng3 -y
-  sudo apt-get autoremove
   echo "installing build tools"
   sudo apt-get install -qq -y build-essential git cmake
   mkdir -p ${BUILD}
@@ -42,6 +38,10 @@ function build_mapnik {
       sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev
       # postgres deps
       sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+      echo "removing potentially conflicting libraries"
+      # remove travis default installed libs which will conflict
+      sudo apt-get purge libtiff* libjpeg* libpng3 -y
+      sudo apt-get autoremove
   else
       prep_osx
   fi
