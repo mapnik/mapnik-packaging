@@ -169,8 +169,7 @@ else
     echoerr "copying mapnik"
     cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
     echoerr "copying libs of other deps"
-    for i in {"icudata","icui18n","icuuc","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_thread","png","png16","tiff","webp","jpeg","xml2","freetype","bz2"}
-    do
+    for i in $(mapnik-config --dep-libs | sed 's/-l//g'); do
         if [ -f "${BUILD}/lib/lib${i}.a" ]; then
             cp "${BUILD}/lib/lib${i}.a" "${LOCAL_TARGET}/lib/lib${i}.a"
         fi
