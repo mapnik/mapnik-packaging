@@ -8,7 +8,7 @@ echoerr 'building OSRM'
 rm -rf Project-OSRM
 git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b develop
 cd Project-OSRM
-git checkout 289e5ada2cbab0eb12fc24c985f2d094d8d5ed71
+git checkout 40517e3010757bdbb
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     JOBS=2
