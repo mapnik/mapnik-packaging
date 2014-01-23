@@ -32,7 +32,10 @@ else
 fi
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 if [ $UNAME = 'Linux' ]; then
-  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -pthread'" >> config.py
+  # NOTE: --no-undefined works with linux linker to ensure that
+  # an error is throw if any symbols cannot be resolve for static libs
+  # which can happen if their order is incorrect when linked: see lorder | tsort
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -Wl,--no-undefined'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 fi
