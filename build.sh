@@ -60,10 +60,10 @@ function build_mapnik {
   ./scripts/build_libxml2.sh 1>> build.log
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
-    #./scripts/build_jpeg.sh 1>> build.log
-    #./scripts/build_png.sh 1>> build.log
-    #./scripts/build_proj4.sh 1>> build.log
-    #./scripts/build_webp.sh 1>> build.log
+    ./scripts/build_jpeg.sh 1>> build.log
+    ./scripts/build_png.sh 1>> build.log
+    ./scripts/build_proj4.sh 1>> build.log
+    ./scripts/build_webp.sh 1>> build.log
     #./scripts/build_tiff.sh 1>> build.log
     #./scripts/build_sqlite.sh 1>> build.log
     #./scripts/build_geotiff.sh 1>> build.log
