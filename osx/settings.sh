@@ -396,6 +396,53 @@ function ensure_xz {
 }
 export -f ensure_xz
 
+
+function ensure_clang {
+  CVER="3.3"
+  if [ ! -z $1 ]; then
+    CVER=$1
+  fi
+  CUR_DIR=`pwd`
+  mkdir -p ${PACKAGES}
+  cd ${PACKAGES}
+  if [[ ${PLATFORM} == 'Linux' ]]; then
+      # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
+      if [ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]; then
+          echoerr 'downloading clang'
+          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+      fi
+      if [ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ] && [ ! -d clang-$CVER ]; then
+          echoerr 'uncompressing clang'
+          tar xf clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+          mv clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu clang-$CVER
+      fi
+  else
+      if [[ $CVER == "3.4" ]]; then
+          DARWIN_V="10.9"
+      fi
+      if [[ $CVER == "3.3" ]]; then
+          DARWIN_V="12"
+      fi
+      if [[ $CVER == "3.2" ]]; then
+          DARWIN_V="11"
+      fi
+      if [ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]; then
+          echoerr 'downloading clang'
+          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+      fi
+      if [ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ] && [ ! -d clang-$CVER ]; then
+          echoerr 'uncompressing clang'
+          tar xf clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+          mv clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V clang-$CVER
+      fi
+  fi
+  echoerr "enabled clang at `pwd`/clang-$CVER/bin"
+  export PATH=`pwd`/clang-$CVER/bin:$PATH
+  export CXX_NAME="clang-$CVER"
+  cd $CUR_DIR
+}
+export -f ensure_clang
+
 echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 
 set +u
