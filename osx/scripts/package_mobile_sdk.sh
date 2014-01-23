@@ -81,12 +81,24 @@ fi
 
 cd ${MAPNIK_DIST}
 
-echoerr "copying other deps"
+echoerr "copying headers of other deps"
+
 # icu
 if [ -d ${BUILD}/include/unicode ]; then
     echo "copying icu"
     cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
-    cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
+fi
+
+# webp
+if [ -d ${BUILD}/include/webp ]; then
+    echo "copying webp"
+    cp -r ${BUILD}/include/webp ${LOCAL_TARGET}/include/
+fi
+
+# harfbuzz
+if [ -d ${BUILD}/include/harfbuzz ]; then
+    echo "copying harfbuzz"
+    cp -r ${BUILD}/include/harfbuzz ${LOCAL_TARGET}/include/
 fi
 
 # jpeg - optional
@@ -101,9 +113,21 @@ for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'png*.*' -print); do
     cp $i ${LOCAL_TARGET}/include/
 done;
 
+# tiff - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'tiff*.*' -print); do
+    echo "copying tiff: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
+
 # proj - optional
 for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'proj*.*' -print); do
     echo "copying proj: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
+
+# bzlib
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'bzlib.*' -print); do
+    echo "copying bz2: $i"
     cp $i ${LOCAL_TARGET}/include/
 done;
 
@@ -113,6 +137,9 @@ if [[ $SHARED_ZLIB != true ]]; then
         echo "copying zlib: $i"
         cp $i ${LOCAL_TARGET}/include/
     done;
+    if [ -f "${BUILD}/lib/libz.a" ]; then
+        cp "${BUILD}/lib/libz.a" ${LOCAL_TARGET}/lib/
+    fi
 fi
 
 # cairo
@@ -131,17 +158,23 @@ if [ -d ${BUILD}/include/google ]; then
     mkdir -p ${LOCAL_TARGET}/include/google/protobuf
     cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
     cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
-    cp ${BUILD}/lib/libprotobuf-lite.a ${LOCAL_TARGET}/lib/
-    #cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
-
 fi
 
 if [ -d "${BUILD_UNIVERSAL}" ]; then
+    echoerr "copying universal libs"
     # multiarch mapnik libs
     cp ${BUILD_UNIVERSAL}/* ${LOCAL_TARGET}/lib/
 else
     # just mapnik single arch
+    echoerr "copying mapnik"
     cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
+    echoerr "copying libs of other deps"
+    for i in {"icudata","icui18n","icuuc","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_thread","png","png16","tiff","webp","jpeg","xml2","freetype","bz2"}
+    do
+        if [ -f "${BUILD}/lib/lib${i}.a" ]; then
+            cp "${BUILD}/lib/lib${i}.a" "${LOCAL_TARGET}/lib/lib${i}.a"
+        fi
+    done
 fi
 
 cd ${MAPNIK_DIST}

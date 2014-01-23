@@ -10,7 +10,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
   rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  make clean
+  #make clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
