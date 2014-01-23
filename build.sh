@@ -20,6 +20,9 @@ function prep_linux {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8;
+    # remove travis default installed libs which will conflict
+    sudo apt-get purge libtiff* libjpeg* libpng3
+    sudo apt-get autoremove
   else
     echo "updating apt"
     sudo apt-get update -y -qq
