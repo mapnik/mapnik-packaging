@@ -52,15 +52,22 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
-echoerr 'packaging boost headers'
-# http://www.boost.org/doc/libs/1_55_0b1/tools/bcp/doc/html/index.html
-cd ${PACKAGES}/boost_${BOOST_VERSION2}-x86_64/
-rm -rf ${STAGING_DIR}/*
-mkdir -p ${STAGING_DIR}
-./dist/bin/bcp --scan \
-`find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
-${STAGING_DIR} 1>/dev/null
-cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
+BCP_TOOL=$(find ${PACKAGES}/boost*/dist/* -name 'bcp' -print -quit)
+if [ $BCP_TOOL ]; then
+    echoerr 'packaging boost headers'
+    # http://www.boost.org/doc/libs/1_55_0b1/tools/bcp/doc/html/index.html
+    cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}/
+    rm -rf ${STAGING_DIR}/*
+    mkdir -p ${STAGING_DIR}
+    ./dist/bin/bcp --scan \
+    `find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
+    ${STAGING_DIR} 1>/dev/null
+    cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
+else
+    echoerr 'could not find boost bcp'
+    exit 1
+fi
+
 cd ${MAPNIK_DIST}
 
 echoerr "copying other deps"
