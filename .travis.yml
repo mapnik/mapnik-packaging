@@ -8,7 +8,7 @@ env:
   matrix:
 #    - CXX11=true TARGET=build_osrm
 #    - CXX11=false TARGET=build_osrm
-    - CXX11=true TARGET=build_mapnik
+    #- CXX11=true TARGET=build_mapnik
     - CXX11=false TARGET=build_mapnik
   global:
     - secure: jLa/ai9FzqYRZkZrjQhn5KbsSrDDLBV2hPlKQh/nMn5bb5RooMnAo/9aSYsq8o4lMtnqsYX7wv/r35GKpJJk1OFBWmj1L94KTfm1TdC5Xlr5iumRbQ9VEPBbMgQw6WU+bp88QxvT0I9DZxgciMk6GV9eBM3dH4BSIwRCamOl018=

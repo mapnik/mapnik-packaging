@@ -64,8 +64,8 @@ function build_mapnik {
     ./scripts/build_png.sh 1>> build.log
     ./scripts/build_proj4.sh 1>> build.log
     ./scripts/build_webp.sh 1>> build.log
-    #./scripts/build_tiff.sh 1>> build.log
-    #./scripts/build_sqlite.sh 1>> build.log
+    ./scripts/build_tiff.sh 1>> build.log
+    ./scripts/build_sqlite.sh 1>> build.log
     #./scripts/build_geotiff.sh 1>> build.log
     if [ ${BOOST_ARCH} != "arm" ]; then
       #./scripts/build_expat.sh 1>> build.log
