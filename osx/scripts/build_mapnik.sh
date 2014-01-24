@@ -35,7 +35,8 @@ if [ $UNAME = 'Linux' ]; then
   # NOTE: --no-undefined works with linux linker to ensure that
   # an error is throw if any symbols cannot be resolve for static libs
   # which can happen if their order is incorrect when linked: see lorder | tsort
-  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -Wl,--no-undefined'" >> config.py
+  # TODO: only apply this to libmapnik (not python bindings) -Wl,--no-undefined
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 fi
