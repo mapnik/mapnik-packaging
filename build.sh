@@ -35,7 +35,7 @@ function build_mapnik {
   set -e
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
-      sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev
+      sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev python-nose
       # postgres deps
       sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
       echo "removing potentially conflicting libraries"
@@ -57,6 +57,8 @@ function build_mapnik {
   fi
   ./scripts/build_boost.sh ${BOOST_LIBRARIES}
   ./scripts/build_freetype.sh 1>> build.log
+  # NOTE: harfbuzz needs pkg-config to find icu
+  ./scripts/build_pkg_config.sh 1>> build.log
   ./scripts/build_harfbuzz.sh 1>> build.log
   ./scripts/build_libxml2.sh 1>> build.log
   if [ $BUILD_OPTIONAL_DEPS ]; then
@@ -97,7 +99,6 @@ function build_mapnik {
       cd ../
   fi
   ./scripts/build_mapnik.sh
-  sudo apt-get -y -qq install python-nose
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
   ./scripts/package_mobile_sdk.sh
