@@ -347,14 +347,14 @@ export -f push
 function check_and_clear_libs {
   if [ $UNAME = 'Darwin' ]; then
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
-           lipo -info $i | grep arch;
+           lipo -info $i | grep arch 1>&2;
         done;
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
-           otool -L ${i} | grep /usr/lib;
+           otool -L ${i} | grep /usr/lib 1>&2;
         done;
     else
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
-           ldd ${i} | grep /usr/lib
+           ldd ${i} | grep /usr/lib 1>&2
         done
     fi
     rm -f ${BUILD}/lib/{*.so*,*.dylib}
