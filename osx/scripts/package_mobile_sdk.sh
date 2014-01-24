@@ -59,19 +59,17 @@ if [ $BCP_TOOL ]; then
     cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}/
     rm -rf ${STAGING_DIR}/*
     mkdir -p ${STAGING_DIR}
-    if [[ $UNAME == 'Linux' ]]; then
-         # workaround
-         # **** exception(205): std::exception: basic_filebuf::underflow error reading the file
-         # ******** errors detected; see standard output for details ********
-        # 53 MB
-        ./dist/bin/bcp ${MAPNIK_BIN_SOURCE}/include ${STAGING_DIR} 1>/dev/null
-        # 43 MB
-        #./dist/bin/bcp --scane ${MAPNIK_BIN_SOURCE}/include/mapnik/*hpp ${STAGING_DIR} 1>/dev/null
-    else
-        ./dist/bin/bcp --scan \
-        `find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
-        ${STAGING_DIR} 1>/dev/null
-    fi
+    # workaround
+    # **** exception(205): std::exception: basic_filebuf::underflow error reading the file
+    # ******** errors detected; see standard output for details ********
+    # 53 MB
+    ./dist/bin/bcp ${MAPNIK_BIN_SOURCE}/include ${STAGING_DIR} 1>/dev/null
+    # below suffers from underflow error
+    # 43 MB
+    #./dist/bin/bcp --scan ${MAPNIK_BIN_SOURCE}/include/mapnik/*hpp ${STAGING_DIR} 1>/dev/null
+    #./dist/bin/bcp --scan \
+    #`find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
+    #${STAGING_DIR} 1>/dev/null
     du -h -d 0 boost-staging-minimal/boost/
     cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 else
