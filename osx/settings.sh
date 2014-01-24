@@ -350,11 +350,11 @@ function check_and_clear_libs {
            lipo -info $i | grep arch 1>&2;
         done;
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
-           otool -L ${i} | grep /usr/lib 1>&2;
+           otool -L ${i} 1>&2;
         done;
     else
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
-           ldd ${i} | grep /usr/lib 1>&2
+           ldd ${i} 1>&2
         done
     fi
     rm -f ${BUILD}/lib/{*.so*,*.dylib}
