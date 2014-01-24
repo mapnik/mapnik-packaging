@@ -125,6 +125,7 @@ function build_osrm {
   fi
   echo "Running build with ${JOBS} parallel jobs"
   ./scripts/build_bzip2.sh 1>> build.log
+  ./scripts/build_libxml2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   ./scripts/build_lua.sh
   # TODO: osrm boost usage does not need icu
