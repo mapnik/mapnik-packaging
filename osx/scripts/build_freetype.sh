@@ -9,8 +9,9 @@ download freetype-${FREETYPE_VERSION}.tar.bz2
 echoerr 'building freetype'
 rm -rf freetype-${FREETYPE_VERSION}
 tar xf freetype-${FREETYPE_VERSION}.tar.bz2
+# http://sourceforge.net/projects/freetype/files/freetype2/2.5.0/
 if [[ "${DISABLE_CFF:-false}" == true ]]; then
-    CFLAGS="${CFLAGS} -DCFF_CONFIG_OPTION_OLD_ENGINE"
+    CFLAGS="${CFLAGS} -DCFF_CONFIG_OPTION_OLD_ENGINE=1"
     echoerr "disabling freetype CFF"
 else
     echoerr "keepin freetype CFF"
