@@ -162,9 +162,16 @@ elif [ ${UNAME} = 'Darwin' ]; then
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-      export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
-      # Note: stripping with -Wl,-S breaks dtrace
-      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
+      if [[ $PLATFORM == "MacOSX" ]]; then
+          # workaround https://github.com/mapnik/mapnik-packaging/issues/116
+          export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG}"
+          # Note: stripping with -Wl,-S breaks dtrace
+          export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -Wl,-search_paths_first"
+      else
+          export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+          # Note: stripping with -Wl,-S breaks dtrace
+          export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
+      fi
     else
       export TOOLCHAIN_ROOT="/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
