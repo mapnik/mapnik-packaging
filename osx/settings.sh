@@ -226,7 +226,7 @@ if [[ $SHARED_ZLIB == true ]]; then
             export ZLIB_PATH=$PLATFORM_PREFIX;
         else
             if [[ ${SDK_PATH} ]]; then
-                export ZLIB_PATH=${SDK_PATH};
+                export ZLIB_PATH=${SDK_PATH}/usr;
             fi
         fi
     fi
