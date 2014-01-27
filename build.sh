@@ -88,7 +88,7 @@ function build_mapnik {
       branch="2.3.x"
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
-      git clone --quiet --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
+      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
       git branch -v
   fi
   if [ "${CXX11}" = false ]; then
