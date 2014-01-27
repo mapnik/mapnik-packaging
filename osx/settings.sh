@@ -224,10 +224,19 @@ export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
 
+export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
-    export ZLIB_PATH="/usr";
-else
-    export ZLIB_PATH="${BUILD}"
+    if [[ ${PLATFORM} = 'Linux' ]] || [[ ${PLATFORM} == 'MacOSX' ]]; then
+        export ZLIB_PATH="/usr";
+    else
+        if [[ ${PLATFORM} = 'Android' ]]; then
+            export ZLIB_PATH=$PLATFORM_PREFIX;
+        else
+            if [[ ${SDK_PATH} ]]; then
+                export ZLIB_PATH=${SDK_PATH};
+            fi
+        fi
+    fi
 fi
 
 # should not be needed now that we set 'LIBRARY_PATH'
