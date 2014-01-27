@@ -162,16 +162,9 @@ elif [ ${UNAME} = 'Darwin' ]; then
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-      if [[ $PLATFORM == "MacOSX" ]]; then
-          # workaround https://github.com/mapnik/mapnik-packaging/issues/116
-          export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG}"
-          # Note: stripping with -Wl,-S breaks dtrace
-          export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -Wl,-search_paths_first"
-      else
-          export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
-          # Note: stripping with -Wl,-S breaks dtrace
-          export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
-      fi
+      export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+      # Note: stripping with -Wl,-S breaks dtrace
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
     else
       export TOOLCHAIN_ROOT="/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
@@ -226,7 +219,7 @@ export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PAT
 
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
-    if [[ ${PLATFORM} = 'Linux' ]] || [[ ${PLATFORM} == 'MacOSX' ]]; then
+    if [[ ${PLATFORM} = 'Linux' ]]; then
         export ZLIB_PATH="/usr";
     else
         if [[ ${PLATFORM} = 'Android' ]]; then
