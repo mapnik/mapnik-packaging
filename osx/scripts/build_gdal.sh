@@ -51,6 +51,12 @@ if [ $UNAME = 'Darwin' ]; then
         fi
     fi
 fi
+
+# warning: unknown warning option '-Wno-pragmas' [-Wunknown-warning-option]
+if [[ $UNAME == 'Darwin' ]]; then
+    CXXFLAGS=" -Wno-unknown-warning-option $CXXFLAGS"
+fi
+
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
