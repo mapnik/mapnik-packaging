@@ -20,14 +20,6 @@ function prep_linux {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8;
-    if [ "${CXX}" = "g++" ]; then
-      export CC="gcc-4.8";
-      export CXX="g++-4.8";
-      export CXX_NAME="gcc-4.8";
-    else
-      # default on precise
-      export CXX_NAME="gcc-4.6";
-    fi
   else
     echo "updating apt"
     sudo apt-get update -y -qq
@@ -43,9 +35,13 @@ function build_mapnik {
   set -e
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
-      sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev
+      sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev python-nose
       # postgres deps
       sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+      echo "removing potentially conflicting libraries"
+      # remove travis default installed libs which will conflict
+      sudo apt-get purge libtiff* libjpeg* libpng3 -y
+      sudo apt-get autoremove
   else
       prep_osx
   fi
@@ -61,25 +57,26 @@ function build_mapnik {
   fi
   ./scripts/build_boost.sh ${BOOST_LIBRARIES}
   ./scripts/build_freetype.sh 1>> build.log
+  # NOTE: harfbuzz needs pkg-config to find icu
+  ./scripts/build_pkg_config.sh 1>> build.log
   ./scripts/build_harfbuzz.sh 1>> build.log
   ./scripts/build_libxml2.sh 1>> build.log
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
-    #./scripts/build_jpeg.sh 1>> build.log
-    #./scripts/build_png.sh 1>> build.log
-    #./scripts/build_proj4.sh 1>> build.log
-    #./scripts/build_webp.sh 1>> build.log
-    #./scripts/build_tiff.sh 1>> build.log
-    #./scripts/build_sqlite.sh 1>> build.log
+    ./scripts/build_jpeg.sh 1>> build.log
+    ./scripts/build_png.sh 1>> build.log
+    ./scripts/build_proj4.sh 1>> build.log
+    ./scripts/build_webp.sh 1>> build.log
+    ./scripts/build_tiff.sh 1>> build.log
+    ./scripts/build_sqlite.sh 1>> build.log
     #./scripts/build_geotiff.sh 1>> build.log
-    if [ ${BOOST_ARCH} != "arm" ]; then
-      #./scripts/build_expat.sh 1>> build.log
-      #./scripts/build_pkg_config.sh 1>> build.log
+    if [[ ${BOOST_ARCH} != "arm" ]]; then
+      ./scripts/build_expat.sh 1>> build.log
+      ./scripts/build_gdal.sh 1>> build.log
+      ./scripts/build_postgres.sh 1>> build.log
       #./scripts/build_pixman.sh 1>> build.log
       #./scripts/build_fontconfig.sh 1>> build.log
       #./scripts/build_cairo.sh 1>> build.log
-      #./scripts/build_gdal.sh 1>> build.log
-      #./scripts/build_postgres.sh 1>> build.log
       ./scripts/build_python_versions.sh 1>> build.log
     fi
   fi
@@ -90,7 +87,7 @@ function build_mapnik {
       branch="2.3.x"
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
-      git clone --quiet --depth=0 https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
+      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
       git branch -v
   fi
   if [ "${CXX11}" = false ]; then
@@ -101,7 +98,6 @@ function build_mapnik {
       cd ../
   fi
   ./scripts/build_mapnik.sh
-  sudo apt-get -y -qq install python-nose
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
   ./scripts/package_mobile_sdk.sh
@@ -128,6 +124,7 @@ function build_osrm {
   fi
   echo "Running build with ${JOBS} parallel jobs"
   ./scripts/build_bzip2.sh 1>> build.log
+  ./scripts/build_libxml2.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
   ./scripts/build_lua.sh
   # TODO: osrm boost usage does not need icu

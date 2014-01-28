@@ -43,7 +43,6 @@ mkdir ${LOCAL_TARGET}/share/
 if [ -d "${MAPNIK_BIN_SOURCE}/share" ]; then
     cp -r "${MAPNIK_BIN_SOURCE}/share/mapnik" "${LOCAL_TARGET}/share/"
 fi
-ls ${LOCAL_TARGET}/share/
 
 sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" > "${LOCAL_TARGET}/bin/mapnik-config"
 chmod +x "${LOCAL_TARGET}/bin/mapnik-config"
@@ -53,91 +52,129 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
-echoerr '...packaging boost headers'
-# TODO - make finding bcp more robust
-cd ${PACKAGES}/boost*-x86_64/
-mkdir -p ${STAGING_DIR}
-./dist/bin/bcp \
-boost/unordered_map.hpp \
-boost/foreach.hpp \
-boost/optional.hpp \
-boost/ptr_container/ptr_vector.hpp \
-boost/make_shared.hpp \
-boost/shared_ptr.hpp \
-boost/scoped_ptr.hpp \
-boost/version.hpp \
-boost/ptr_container/ptr_sequence_adapter.hpp \
-boost/cstdint.hpp \
-boost/variant.hpp \
-boost/operators.hpp \
-boost/iterator/filter_iterator.hpp \
-boost/concept_check.hpp \
-boost/thread.hpp \
-boost/thread/mutex.hpp \
-boost/functional/hash.hpp \
-boost/property_tree/ptree_fwd.hpp \
-boost/interprocess/mapped_region.hpp \
-boost/math/constants/constants.hpp \
-boost/algorithm/string/predicate.hpp \
-boost/spirit/include/qi.hpp \
-boost/spirit/include/phoenix_function.hpp \
-boost/spirit/include/phoenix_core.hpp \
-boost/spirit/include/phoenix_operator.hpp \
-boost/spirit/include/phoenix_fusion.hpp \
-boost/spirit/include/phoenix_object.hpp \
-boost/spirit/include/phoenix_stl.hpp \
-boost/regex.hpp \
-boost/regex/icu.hpp \
-boost/iostreams/device/file.hpp \
-boost/iostreams/stream.hpp \
-boost/iostreams/device/array.hpp \
-boost/gil/gil_all.hpp \
-${STAGING_DIR}/ 1>/dev/null
-cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
+BCP_TOOL=$(find ${PACKAGES}/boost*/dist/* -name 'bcp' -print -quit)
+if [ $BCP_TOOL ]; then
+    echoerr 'packaging boost headers'
+    # http://www.boost.org/doc/libs/1_55_0b1/tools/bcp/doc/html/index.html
+    cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}/
+    rm -rf ${STAGING_DIR}/*
+    mkdir -p ${STAGING_DIR}
+    # workaround
+    # **** exception(205): std::exception: basic_filebuf::underflow error reading the file
+    # ******** errors detected; see standard output for details ********
+    # 53 MB
+    ./dist/bin/bcp ${MAPNIK_BIN_SOURCE}/include ${STAGING_DIR} 1>/dev/null
+    # below suffers from underflow error
+    # 43 MB
+    #./dist/bin/bcp --scan ${MAPNIK_BIN_SOURCE}/include/mapnik/*hpp ${STAGING_DIR} 1>/dev/null
+    #./dist/bin/bcp --scan \
+    #`find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
+    #${STAGING_DIR} 1>/dev/null
+    du -h -d 0 boost-staging-minimal/boost/
+    cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
+else
+    echoerr 'could not find boost bcp'
+    exit 1
+fi
+
 cd ${MAPNIK_DIST}
 
-echoerr "*copying other deps*"
+echoerr "copying headers of other deps"
+
 # icu
-cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
-cp ${BUILD}/lib/lib{icuuc.a,icudata.a,icui18n.a} ${LOCAL_TARGET}/lib/
+if [ -d ${BUILD}/include/unicode ]; then
+    echo "copying icu"
+    cp -r ${BUILD}/include/unicode ${LOCAL_TARGET}/include/
+fi
 
-# jpeg
-cp ${BUILD}/include/j*.* ${LOCAL_TARGET}/include/
+# webp
+if [ -d ${BUILD}/include/webp ]; then
+    echo "copying webp"
+    cp -r ${BUILD}/include/webp ${LOCAL_TARGET}/include/
+fi
 
-# png
-cp ${BUILD}/include/png*.* ${LOCAL_TARGET}/include/
+# harfbuzz
+if [ -d ${BUILD}/include/harfbuzz ]; then
+    echo "copying harfbuzz"
+    cp -r ${BUILD}/include/harfbuzz ${LOCAL_TARGET}/include/
+fi
 
-# proj
-cp ${BUILD}/include/proj*.* ${LOCAL_TARGET}/include/
+# jpeg - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'j*.*' -print); do
+    echo "copying jpeg: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
 
-# zlib
+# png - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'png*.*' -print); do
+    echo "copying png: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
+
+# tiff - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'tiff*.*' -print); do
+    echo "copying tiff: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
+
+# proj - optional
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'proj*.*' -print); do
+    echo "copying proj: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
+
+# bzlib
+for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'bzlib.*' -print); do
+    echo "copying bz2: $i"
+    cp $i ${LOCAL_TARGET}/include/
+done;
+
+# zlib - optional
 if [[ $SHARED_ZLIB != true ]]; then
-    cp ${BUILD}/include/z*.* ${LOCAL_TARGET}/include/
+    for i in $(find ${BUILD}/include/ -maxdepth 1 -name 'z*.*' -print); do
+        echo "copying zlib: $i"
+        cp $i ${LOCAL_TARGET}/include/
+    done;
+    if [ -f "${BUILD}/lib/libz.a" ]; then
+        cp "${BUILD}/lib/libz.a" ${LOCAL_TARGET}/lib/
+    fi
 fi
 
 # cairo
 if [ -d ${BUILD}/include/cairo ];then
-  cp -r ${BUILD}/include/cairo ${LOCAL_TARGET}/include/
+    echo 'copying cairo'
+    cp -r ${BUILD}/include/cairo ${LOCAL_TARGET}/include/
 fi
 
-# protobuf
-echoerr '...copying over protobuf'
-if [[ `which protoc` ]]; then
-    cp `which protoc` ${LOCAL_TARGET}/bin/
+# protobuf - optional
+if [ -d ${BUILD}/include/google ]; then
+    echo 'copying protobuf'
+    # NOTE: using which here to get the non arm version
+    if [[ `which protoc` ]]; then
+        cp `which protoc` ${LOCAL_TARGET}/bin/
+    fi
+    mkdir -p ${LOCAL_TARGET}/include/google/protobuf
+    cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
+    cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
+    cp "${BUILD}/lib/libprotobuf-lite.a" ${LOCAL_TARGET}/lib/
 fi
-mkdir -p ${LOCAL_TARGET}/include/google/protobuf
-cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
-cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
-cp ${BUILD}/lib/libprotobuf-lite.a ${LOCAL_TARGET}/lib/
-#cp -r ${BUILD}/lib/pkgconfig/protobuf-lite.pc ${LOCAL_TARGET}/lib/pkgconfig
 
-
-# multiarch mapnik libs
-if [ -d "${BUILD_UNIVERSAL}/" ]; then
+if [ -d "${BUILD_UNIVERSAL}" ]; then
+    echoerr "copying universal libs"
+    # multiarch mapnik libs
     cp ${BUILD_UNIVERSAL}/* ${LOCAL_TARGET}/lib/
 else
+    # just mapnik single arch
+    echoerr "copying mapnik"
     cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
+    echoerr "copying libs of other deps"
+    for i in $(mapnik-config --dep-libs | sed 's/-l//g'); do
+        if [ -f "${BUILD}/lib/lib${i}.a" ]; then
+            cp "${BUILD}/lib/lib${i}.a" "${LOCAL_TARGET}/lib/lib${i}.a"
+        fi
+    done
 fi
+
 cd ${MAPNIK_DIST}
 rm -f ./${TARBALL_NAME}*
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
@@ -159,9 +196,11 @@ ls -lh *tar*
 #time bzip2 -z -k --best ${TARBALL_NAME}
 
 # 13 MB
-#time xz -z -k -e -9 ${TARBALL_NAME}
-echoerr "*uploading ${UPLOAD}"
-ensure_s3cmd
-s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
-s3cmd ls `dirname s3://mapnik/dist/dev/*/*`
-# update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
+if [[ "${PUBLISH:-false}" != false ]]; then
+    #time xz -z -k -e -9 ${TARBALL_NAME}
+    echoerr "*uploading ${UPLOAD}"
+    ensure_s3cmd
+    s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
+    s3cmd ls `dirname s3://mapnik/dist/dev/*/*`
+    # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
+fi

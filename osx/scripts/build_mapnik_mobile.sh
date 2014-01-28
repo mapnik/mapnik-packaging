@@ -14,7 +14,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    if [[ $UNAME ]= 'Darwin' ]]; then
+    if [[ $UNAME  == 'Darwin' ]]; then
       JOBS=1
     else
       JOBS=2
@@ -71,7 +71,7 @@ rm -f bindings/python/mapnik/_mapnik.so
   SHAPE_MEMORY_MAPPED_FILE=False \
   CAIRO=False \
   TIFF=False \
-  WEBP=False \
+  WEBP=True \
   PROJ=False \
   SVG2PNG=False \
   SHAPEINDEX=False \

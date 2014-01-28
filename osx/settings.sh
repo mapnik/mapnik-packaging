@@ -75,10 +75,14 @@ if [ ${PLATFORM} = 'Linux' ]; then
           export CXX_NAME="clang-3.3"
       fi
     else
-      export CORE_CC="gcc"
-      export CORE_CXX="g++"
-      if [[ "${CXX_NAME:-false}" == false ]]; then
+      if [ "${CXX11}" = true ]; then
+          export CORE_CC="gcc-4.8"
+          export CORE_CXX="g++-4.8"
           export CXX_NAME="gcc-4.8"
+      else
+          export CORE_CC="gcc"
+          export CORE_CXX="g++"
+          export CXX_NAME="gcc-4.6"
       fi
     fi
     export AR=ar
@@ -213,10 +217,19 @@ export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
 
+export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
-    export ZLIB_PATH="/usr";
-else
-    export ZLIB_PATH="${BUILD}"
+    if [[ ${PLATFORM} = 'Linux' ]]; then
+        export ZLIB_PATH="/usr";
+    else
+        if [[ ${PLATFORM} = 'Android' ]]; then
+            export ZLIB_PATH=$PLATFORM_PREFIX;
+        else
+            if [[ ${SDK_PATH} ]]; then
+                export ZLIB_PATH=${SDK_PATH}/usr;
+            fi
+        fi
+    fi
 fi
 
 # should not be needed now that we set 'LIBRARY_PATH'
@@ -304,7 +317,7 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.24"
+export NODE_VERSION="0.10.25"
 export SPARSEHASH_VERSION="2.0.2"
 export HARFBUZZ_VERSION="0.9.25"
 export STXXL_VERSION="1.4.0"
@@ -342,15 +355,15 @@ export -f push
 
 function check_and_clear_libs {
   if [ $UNAME = 'Darwin' ]; then
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print -quit); do
-           lipo -info $i | grep arch;
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
+           lipo -info $i | grep arch 1>&2;
         done;
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print -quit); do
-           otool -L ${i} | grep /usr/lib;
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
+           otool -L ${i} 1>&2;
         done;
     else
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print -quit); do
-           ldd ${i} | grep /usr/lib
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
+           ldd ${i} 1>&2
         done
     fi
     rm -f ${BUILD}/lib/{*.so*,*.dylib}
@@ -395,6 +408,73 @@ function ensure_xz {
   cd $CUR_DIR
 }
 export -f ensure_xz
+
+
+function ensure_clang {
+  CVER="3.3"
+  if [ ! -z $1 ]; then
+    CVER=$1
+  fi
+  CUR_DIR=`pwd`
+  mkdir -p ${PACKAGES}
+  cd ${PACKAGES}
+  if [[ ${PLATFORM} == 'Linux' ]]; then
+      # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
+      if [ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]; then
+          echoerr 'downloading clang'
+          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+      fi
+      if [ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ] && [ ! -d clang-$CVER ]; then
+          echoerr 'uncompressing clang'
+          tar xf clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+          mv clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu clang-$CVER
+      fi
+  else
+      if [[ $CVER == "3.4" ]]; then
+          DARWIN_V="10.9"
+      fi
+      if [[ $CVER == "3.3" ]]; then
+          DARWIN_V="12"
+      fi
+      if [[ $CVER == "3.2" ]]; then
+          DARWIN_V="11"
+      fi
+      if [ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]; then
+          echoerr 'downloading clang'
+          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+      fi
+      if [ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ] && [ ! -d clang-$CVER ]; then
+          echoerr 'uncompressing clang'
+          tar xf clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+          mv clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V clang-$CVER
+      fi
+  fi
+  echoerr "enabled clang at `pwd`/clang-$CVER/bin"
+  export PATH=`pwd`/clang-$CVER/bin:$PATH
+  export CXX_NAME="clang-$CVER"
+  cd $CUR_DIR
+}
+export -f ensure_clang
+
+function memsize() {
+    # total physical memory in MB
+    case "$(uname -s)" in
+        'Linux')    echo $(($(free | awk '/^Mem:/{print $2}')/1024));;
+        'Darwin')   echo $(($(sysctl -n hw.memsize)/1024/1024));;
+        *)          echo 1;;
+    esac
+}
+export -f memsize
+
+function nprocs() {
+    # number of processors on the current system
+    case "$(uname -s)" in
+        'Linux')    nproc;;
+        'Darwin')   sysctl -n hw.ncpu;;
+        *)          echo 1;;
+    esac
+}
+export -f nprocs
 
 echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 

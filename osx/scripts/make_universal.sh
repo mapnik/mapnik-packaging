@@ -5,7 +5,7 @@ mkdir -p "${BUILD_UNIVERSAL}"
 
 echo '*making universal libs*'
 # TODO - make this list more generic
-for i in {"icudata","icui18n","icuuc","protobuf","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_thread","png","jpeg","xml2","z","freetype","bz2"}
+for i in {"icudata","icui18n","icuuc","protobuf","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_thread","png","jpeg","xml2","freetype","bz2"}
 do
     echo '*making universal '$i'*'
     if [ $PLATFORM = 'Android' ]; then
@@ -19,6 +19,15 @@ do
             "${BUILD_ROOT}-i386/lib/lib${i}.a"
     fi
 done
+
+if [[ $SHARED_ZLIB != true ]]; then
+    lipo -create -output \
+        "${BUILD_UNIVERSAL}/libz.a" \
+        "${BUILD_ROOT}-x86_64/lib/libz.a" \
+        "${BUILD_ROOT}-armv7s/lib/libz.a" \
+        "${BUILD_ROOT}-armv7/lib/libz.a" \
+        "${BUILD_ROOT}-i386/lib/libz.a"
+fi
 
 # mapnik
 echo '*making universal mapnik*'

@@ -4,11 +4,19 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
+if [[ "${OSRM_COMMIT:-false}" == false ]]; then
+    OSRM_COMMIT=40517e3010757bdbb
+fi
+
+if [[ "${OSRM_BRANCH:-false}" == false ]]; then
+    OSRM_BRANCH=develop
+fi
+
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b develop
+git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
 cd Project-OSRM
-git checkout 289e5ada2cbab0eb12fc24c985f2d094d8d5ed71
+git checkout $OSRM_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     JOBS=2

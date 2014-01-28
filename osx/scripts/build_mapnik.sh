@@ -10,7 +10,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
   rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  make clean
+  #make clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
@@ -32,7 +32,11 @@ else
 fi
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
 if [ $UNAME = 'Linux' ]; then
-  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -pthread'" >> config.py
+  # NOTE: --no-undefined works with linux linker to ensure that
+  # an error is throw if any symbols cannot be resolve for static libs
+  # which can happen if their order is incorrect when linked: see lorder | tsort
+  # TODO: only apply this to libmapnik (not python bindings) -Wl,--no-undefined
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 fi
