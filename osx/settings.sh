@@ -456,6 +456,26 @@ function ensure_clang {
 }
 export -f ensure_clang
 
+function memsize() {
+    # total physical memory in MB
+    case "$(uname -s)" in
+        'Linux')    echo $(($(free | awk '/^Mem:/{print $2}')/1024));;
+        'Darwin')   echo $(($(sysctl -n hw.memsize)/1024/1024));;
+        *)          echo 1;;
+    esac
+}
+export -f memsize
+
+function nprocs() {
+    # number of processors on the current system
+    case "$(uname -s)" in
+        'Linux')    nproc;;
+        'Darwin')   sysctl -n hw.ncpu;;
+        *)          echo 1;;
+    esac
+}
+export -f nprocs
+
 echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 
 set +u
