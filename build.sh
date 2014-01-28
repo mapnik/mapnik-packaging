@@ -45,6 +45,9 @@ function build_mapnik {
   else
       prep_osx
   fi
+  echo "checking cpu and mem resources"
+  nprocs
+  memsize
   echo "Running build with ${JOBS} parallel jobs"
   export BUILD_OPTIONAL_DEPS=true
   ./scripts/build_bzip2.sh 1>> build.log
