@@ -150,7 +150,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
     export XCODE_PREFIX=$( xcode-select -print-path )
-    if [ -d "${XCODE_PREFIX}" ]; then
+    if [ -d "${XCODE_PREFIX}/Toolchains/" ]; then
       # set this up with:
       #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
       # for more info
@@ -166,7 +166,8 @@ elif [ ${UNAME} = 'Darwin' ]; then
       # Note: stripping with -Wl,-S breaks dtrace
       export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
     else
-      export TOOLCHAIN_ROOT="/usr/bin"
+      export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
+      export SDK_PATH="${XCODE_PREFIX}/usr/"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
       export EXTRA_CFLAGS=""
