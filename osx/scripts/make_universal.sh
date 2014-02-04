@@ -3,52 +3,39 @@ set -e -u
 
 mkdir -p "${BUILD_UNIVERSAL}"
 
-echo '*making universal libs*'
-# TODO - make this list more generic
-for i in {"icudata","icui18n","icuuc","protobuf","protobuf-lite","boost_regex","boost_system","boost_filesystem","boost_thread","png","jpeg","xml2","freetype","bz2"}
-do
-    echo '*making universal '$i'*'
-    if [ $PLATFORM = 'Android' ]; then
-        cp "${BUILD}/lib/lib${i}.a" "${BUILD_UNIVERSAL}/lib${i}.a"
-    else
+if [[ $UNAME == 'Darwin' ]]; then
+    echo '*making universal libs*'
+    for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
+        echo '*making universal '$i'*'
+        FROM_LIBS=""
+        libname=$(basename $i)
+        if [ -f "${BUILD_ROOT}-x86_64/lib/${libname}" ]; then
+            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-x86_64/lib/${libname}"
+        fi
+        if [ -f "${BUILD_ROOT}-armv7s/lib/${libname}" ]; then
+            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-armv7s/lib/${libname}"
+        fi
+        if [ -f "${BUILD_ROOT}-armv7/lib/${libname}" ]; then
+            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-armv7/lib/${libname}"
+        fi
+        if [ -f "${BUILD_ROOT}-i386/lib/${libname}" ]; then
+            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-i386/lib/${libname}"
+        fi
         lipo -create -output \
-            "${BUILD_UNIVERSAL}/lib${i}.a" \
-            "${BUILD_ROOT}-x86_64/lib/lib${i}.a" \
-            "${BUILD_ROOT}-armv7s/lib/lib${i}.a" \
-            "${BUILD_ROOT}-armv7/lib/lib${i}.a" \
-            "${BUILD_ROOT}-i386/lib/lib${i}.a"
+            "${BUILD_UNIVERSAL}/${libname}" \
+            $FROM_LIBS
+        lipo -info "${BUILD_UNIVERSAL}/${libname}"
+    done;
+
+    if [ -f ${MAPNIK_BIN_SOURCE}/lib/libmapnik.a ]; then
+        echo '*making universal mapnik*'
+        lipo -create -output \
+            "${BUILD_UNIVERSAL}/libmapnik.a" \
+            "${BUILD_ROOT}-x86_64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-armv7s-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-armv7-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-i386-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a"
     fi
-done
 
-if [[ $SHARED_ZLIB != true ]]; then
-    lipo -create -output \
-        "${BUILD_UNIVERSAL}/libz.a" \
-        "${BUILD_ROOT}-x86_64/lib/libz.a" \
-        "${BUILD_ROOT}-armv7s/lib/libz.a" \
-        "${BUILD_ROOT}-armv7/lib/libz.a" \
-        "${BUILD_ROOT}-i386/lib/libz.a"
 fi
 
-# mapnik
-echo '*making universal mapnik*'
-if [ $PLATFORM = 'Android' ]; then
-    cp "${MAPNIK_BIN_SOURCE}/lib/libmapnik.a" "${BUILD_UNIVERSAL}/libmapnik.a"
-else
-    lipo -create -output \
-        "${BUILD_UNIVERSAL}/libmapnik.a" \
-        "${BUILD_ROOT}-x86_64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-        "${BUILD_ROOT}-armv7s-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-        "${BUILD_ROOT}-armv7-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-        "${BUILD_ROOT}-i386-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a"
-fi
-# strip -o libmapnik.a -S out/build-universal/libmapnik.a
-# http://stackoverflow.com/questions/6732979/hiding-the-symbols-of-a-static-library-in-a-dynamic-library-in-mac-os-x
-# http://stackoverflow.com/questions/2222162/how-to-apply-gcc-fvisibility-option-to-symbols-in-static-libraries/14863432#14863432
-
-#for i in {"shape","csv","geojson","sqlite"}
-#do
-#    echo '*making universal '$i'*'
-#    lipo -create -output \
-#        "${BUILD_UNIVERSAL}/lib/mapnik/input/${i}.input" \
-#        "${BUILD_ROOT}-x86_64-mapnik/${MAPNIK_INSTALL}/lib/mapnik/input/${i}.input"
-#done
