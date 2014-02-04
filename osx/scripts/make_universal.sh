@@ -12,6 +12,9 @@ if [[ $UNAME == 'Darwin' ]]; then
         if [ -f "${BUILD_ROOT}-x86_64/lib/${libname}" ]; then
             FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-x86_64/lib/${libname}"
         fi
+        if [ -f "${BUILD_ROOT}-arm64/lib/${libname}" ]; then
+            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-arm64/lib/${libname}"
+        fi
         if [ -f "${BUILD_ROOT}-armv7s/lib/${libname}" ]; then
             FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-armv7s/lib/${libname}"
         fi
@@ -32,6 +35,7 @@ if [[ $UNAME == 'Darwin' ]]; then
         lipo -create -output \
             "${BUILD_UNIVERSAL}/libmapnik.a" \
             "${BUILD_ROOT}-x86_64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-arm64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
             "${BUILD_ROOT}-armv7s-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
             "${BUILD_ROOT}-armv7-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
             "${BUILD_ROOT}-i386-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a"
