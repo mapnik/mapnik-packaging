@@ -72,6 +72,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
       if [[ "${CXX_NAME:-false}" == false ]]; then
+          # TODO - use -dumpversion
           export CXX_NAME="clang-3.3"
       fi
     else
@@ -224,6 +225,7 @@ if [[ $SHARED_ZLIB == true ]]; then
         export ZLIB_PATH="/usr";
     else
         if [[ ${PLATFORM} = 'Android' ]]; then
+            # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
             export ZLIB_PATH=$PLATFORM_PREFIX;
         else
             if [[ ${SDK_PATH} ]]; then
