@@ -12,12 +12,13 @@ mapnik-plugin ogr
     ../../..//user    
     ../../..//gdal
     ../../..//expat
+	../../..//ws2
     :
     <include>.
-    <include>$(MAPNIK_DEPS_DIR)/gdal/port
-    <include>$(MAPNIK_DEPS_DIR)/gdal/gcore
-    <include>$(MAPNIK_DEPS_DIR)/gdal/ogr
-    <include>$(MAPNIK_DEPS_DIR)/gdal/ogr/ogrsf_frmts
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gdal/port
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gdal/gcore
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gdal/ogr
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gdal/ogr/ogrsf_frmts
     <link>shared
     <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
     ;

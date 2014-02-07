@@ -28,7 +28,7 @@ lib pq : : <name>libpq <search>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libp
 lib cairo : : <name>cairo <search>$(MAPNIK_DEPS_DIR)/cairo/src/release ;
 
 lib expat : : <name>libexpat <search>"C:/Program Files (x86)/Expat 2.1.0/bin" ;
-lib gdal : : <name>gdal <search>$(MAPNIK_DEPS_DIR)/gdal ;
+lib gdal : : <name>gdal_i <search>$(MAPNIK_DEPS_DIR)/gdal/gdal ;
 
 # win32 libs
 lib wsock : : <name>wsock32 <search>"c:/Program Files/MicrosoftSDKs/Windows/v7.0A/Lib" ;
