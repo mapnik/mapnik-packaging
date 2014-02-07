@@ -196,13 +196,14 @@ elif [ ${UNAME} = 'Darwin' ]; then
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
-        if [ "${LIBCXX_DEFAULT}" = true ]; then
-            export STDLIB="libcpp"
-        else
-            export STDLIB="libstdcpp"
-        fi
-        export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
-        export STDLIB_LDFLAGS=""
+#        if [ "${LIBCXX_DEFAULT}" = true ]; then
+#            export STDLIB="libcpp"
+#        else
+#            export STDLIB="libstdcpp"
+#        fi
+        export STDLIB="libstdcpp"
+        export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
+        export STDLIB_LDFLAGS="-stdlib=libstdc++"
     fi
 else
     echo '**unhandled platform: ${PLATFORM}**'
