@@ -313,8 +313,11 @@ NMAKE : fatal error U1077: '"C:\Program Files (x86)\Windows Kits\8.0\bin\x86\mt.
 ### GDAL
 
     bsdtar xvfz %PKGDIR%\gdal-%GDAL_VERSION%.tar.gz
-    rename gdal-%GDAL_VERSION% gdal
-    cd gdal
+    mkdir gdal
+    @rem create gdal/gdal directory to mirror if we
+    @rem checked out from github
+    rename gdal-%GDAL_VERSION% gdal/gdal
+    cd gdal/gdal
 
     @rem Edit the 'nmake.opt' to point to the location the expat binary was installed to:
     EXPAT_DIR="C:\Program Files (x86)\Expat 2.1.0"
