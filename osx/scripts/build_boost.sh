@@ -21,6 +21,7 @@ if [[ -d boost_${BOOST_VERSION2}-${ARCH_NAME} ]]; then
   cd boost_${BOOST_VERSION2}-${ARCH_NAME}
   rm -rf bin.v2/ || true
   rm -rf stage/
+  rm -f project-config.jam*
 else
   rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
   tar xjf boost_${BOOST_VERSION2}.tar.bz2
@@ -46,6 +47,9 @@ else
     echo "using ${BOOST_TOOLSET} : : `which ${CXX}` ;" > user-config.jam
     ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
 fi
+
+# HINT: boostrap failed? look in bootstrap.log and then debug by building from hand:
+# cd .//tools/build/v2/engine/
 
 # HINT: problems with icu configure check?
 # cat bin.v2/config.log to see problems

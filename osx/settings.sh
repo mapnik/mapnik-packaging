@@ -72,6 +72,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
       if [[ "${CXX_NAME:-false}" == false ]]; then
+          # TODO - use -dumpversion
           export CXX_NAME="clang-3.3"
       fi
     else
@@ -225,6 +226,7 @@ if [[ $SHARED_ZLIB == true ]]; then
         export ZLIB_PATH="/usr";
     else
         if [[ ${PLATFORM} = 'Android' ]]; then
+            # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
             export ZLIB_PATH=$PLATFORM_PREFIX;
         else
             if [[ ${SDK_PATH} ]]; then
@@ -331,10 +333,10 @@ export -f echoerr
 
 function download {
     if [ ! -f $1 ]; then
-        echo downloading $1
+        echoerr downloading $1
         curl -s -S -f -O  ${S3_BASE}/$1
     else
-        echo using cached $1
+        echoerr using cached $1
     fi
 }
 export -f download
@@ -478,7 +480,7 @@ function nprocs() {
 }
 export -f nprocs
 
-echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
+echoerr "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 
 set +u
 

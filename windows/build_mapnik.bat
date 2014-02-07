@@ -31,7 +31,7 @@ xcopy /i /d /s %ROOTDIR%\icu\include\unicode %PREFIX%\include\unicode /Y
 xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include\freetype /Y
 
 xcopy /i /d /s %ROOTDIR%\proj\nad %PREFIX%\share\proj
-xcopy /i /d /s %ROOTDIR%\gdal\data %PREFIX%\share\gdal
+xcopy /i /d /s %ROOTDIR%\gdal\gdal\data %PREFIX%\share\gdal
 
 echo from os import path > mapnik_settings.py
 echo mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/')) >> mapnik_settings.py
