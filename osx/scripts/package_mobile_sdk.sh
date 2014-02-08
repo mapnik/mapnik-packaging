@@ -6,7 +6,7 @@ echoerr '...packaging mobile sdk tarball'
 # where we are headed
 mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
-DESCRIBE=`mapnik-config --git-describe`
+DESCRIBE=`${MAPNIK_CONFIG} --git-describe`
 # collapse all iOS platform names to one since
 # we provide these multiarch
 if test "${platform#*'iphone'}" != "$platform"; then
@@ -44,7 +44,8 @@ if [ -d "${MAPNIK_BIN_SOURCE}/share" ]; then
     cp -r "${MAPNIK_BIN_SOURCE}/share/mapnik" "${LOCAL_TARGET}/share/"
 fi
 
-sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_BIN_SOURCE}/bin/mapnik-config" > "${LOCAL_TARGET}/bin/mapnik-config"
+NEW_MAPNIK_CONFIG="${LOCAL_TARGET}/bin/mapnik-config"
+sed -e "s=$BUILD=\$CONFIG_PREFIX=g" "${MAPNIK_CONFIG}" > ${NEW_MAPNIK_CONFIG}
 chmod +x "${LOCAL_TARGET}/bin/mapnik-config"
 cp -r "${MAPNIK_BIN_SOURCE}/include/mapnik" "${LOCAL_TARGET}/include/"
 if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
@@ -168,7 +169,7 @@ else
     echoerr "copying mapnik"
     cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
     echoerr "copying libs of other deps"
-    for i in $(mapnik-config --dep-libs | sed 's/-l//g'); do
+    for i in $(${NEW_MAPNIK_CONFIG} --dep-libs | sed 's/-l//g'); do
         if [ -f "${BUILD}/lib/lib${i}.a" ]; then
             cp "${BUILD}/lib/lib${i}.a" "${LOCAL_TARGET}/lib/lib${i}.a"
         fi
@@ -178,8 +179,8 @@ fi
 cd ${MAPNIK_DIST}
 rm -f ./${TARBALL_NAME}*
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
-echo `mapnik-config -v` >> ${LOCAL_TARGET}/VERSION
-echo `mapnik-config --all-flags` >> ${LOCAL_TARGET}/VERSION
+echo `${NEW_MAPNIK_CONFIG} -v` >> ${LOCAL_TARGET}/VERSION
+echo `${NEW_MAPNIK_CONFIG} --all-flags` >> ${LOCAL_TARGET}/VERSION
 echo "Produced on `date`" >> ${LOCAL_TARGET}/VERSION
 
 echoerr "...creating tarball of mapnik build"
