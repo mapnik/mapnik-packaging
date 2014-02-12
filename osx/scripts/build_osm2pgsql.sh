@@ -1,4 +1,4 @@
-echoerr#!/bin/bash
+#!/bin/bash
 set -e -u
 
 mkdir -p ${PACKAGES}
@@ -43,8 +43,8 @@ cd ${ROOTDIR}/osm2pgsql
 # fix 'Could not find a c++ compiler' error on 'conftest.c:11:10: fatal error: 'ac_nonexistent.h' file not found'
 patch -N configure.ac ${PATCHES}/osm2pgsql-configure.diff | true
 patch -N Makefile.am ${PATCHES}/osm2pgsql-datadir.diff | true
-make clean
-make distclean
+make clean || true
+make distclean || true
 ./autogen.sh
 ./configure --prefix=/usr/local \
 --with-zlib=${ZLIB_PATH} \
