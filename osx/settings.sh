@@ -385,9 +385,13 @@ function ensure_s3cmd {
   export PATH=`pwd`:${PATH}
   cd $CUR_DIR
   if [ ! -f ~/.s3cfg ]; then
-    echo "[default]" > ~/.s3cfg
-    echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
-    echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+    if [[ "${AWS_S3_KEY:-false}" == false ]] || [[ "${AWS_S3_SECRET:-false}" == false ]]; then
+        echoerr 'missing AWS keys: see ensure_s3cmd in settings.sh for details'
+    else
+        echo "[default]" > ~/.s3cfg
+        echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
+        echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+    fi
   fi
 }
 export -f ensure_s3cmd
