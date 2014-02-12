@@ -11,7 +11,7 @@ export SHARED_ZLIB=true
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export UNAME=$(uname -s);
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:${PATH}"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
@@ -197,13 +197,14 @@ elif [ ${UNAME} = 'Darwin' ]; then
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
-        if [ "${LIBCXX_DEFAULT}" = true ]; then
-            export STDLIB="libcpp"
-        else
-            export STDLIB="libstdcpp"
-        fi
-        export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
-        export STDLIB_LDFLAGS=""
+#        if [ "${LIBCXX_DEFAULT}" = true ]; then
+#            export STDLIB="libcpp"
+#        else
+#            export STDLIB="libstdcpp"
+#        fi
+        export STDLIB="libstdcpp"
+        export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
+        export STDLIB_LDFLAGS="-stdlib=libstdc++"
     fi
 else
     echo '**unhandled platform: ${PLATFORM}**'
@@ -217,7 +218,7 @@ export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
-export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
+export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
 
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
