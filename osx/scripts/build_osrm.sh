@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    OSRM_COMMIT=40517e3010757bdbb
+    OSRM_COMMIT=d73f3ebd1bde36c2e5b41edb44a703cfb09cd7a0
 fi
 
 if [[ "${OSRM_BRANCH:-false}" == false ]]; then
@@ -14,7 +14,7 @@ fi
 
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
+git clone --quiet --depth=1 https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
 cd Project-OSRM
 patch -N CMakeLists.txt ${PATCHES}/osrm-osx.diff || true
 git checkout $OSRM_COMMIT

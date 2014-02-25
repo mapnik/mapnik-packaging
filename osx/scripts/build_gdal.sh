@@ -12,7 +12,7 @@ GDAL_LATEST=true
 if [[ $GDAL_LATEST == true ]]; then
     #rm -rf gdal
     if [ ! -d gdal ]; then
-        git clone --quiet --depth=0 https://github.com/OSGeo/gdal.git
+        git clone --quiet --depth=1 https://github.com/OSGeo/gdal.git
         cd gdal/gdal
     else
         cd gdal/gdal
