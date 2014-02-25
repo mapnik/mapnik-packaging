@@ -11,6 +11,8 @@ echoerr 'building luabind'
 rm -rf luabind
 git clone --quiet --depth=0 https://github.com/DennisOSRM/luabind.git
 cd luabind
+# enable building in non-c++11/libc++ mode
+patch -N CMakeLists.txt ${PATCHES}/luabind-osx.diff || true
 git checkout 98f9ea861f58842c54aa9ebe7754659cc787a89c
 # avoid g++ being killed on travis
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then

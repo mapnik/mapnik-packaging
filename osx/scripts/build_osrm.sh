@@ -16,6 +16,7 @@ echoerr 'building OSRM'
 rm -rf Project-OSRM
 git clone --quiet --depth=0 https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
 cd Project-OSRM
+patch -N CMakeLists.txt ${PATCHES}/osrm-osx.diff || true
 git checkout $OSRM_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
