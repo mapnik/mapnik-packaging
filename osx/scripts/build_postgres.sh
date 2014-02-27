@@ -28,8 +28,8 @@ tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --without-libxml --without-readline
+--with-bonjour --with-openssl --with-pam --with-krb5 --with-gssapi --enable-thread-safety \
+--without-libxml --without-readline --without-ldap
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
 set +e
