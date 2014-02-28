@@ -77,9 +77,9 @@ function build_mapnik {
       ./scripts/build_expat.sh 1>> build.log
       ./scripts/build_gdal.sh 1>> build.log
       ./scripts/build_postgres.sh 1>> build.log
-      #./scripts/build_pixman.sh 1>> build.log
-      #./scripts/build_fontconfig.sh 1>> build.log
-      #./scripts/build_cairo.sh 1>> build.log
+      ./scripts/build_pixman.sh 1>> build.log
+      ./scripts/build_fontconfig.sh 1>> build.log
+      ./scripts/build_cairo.sh 1>> build.log
       ./scripts/build_python_versions.sh 1>> build.log
     fi
   fi
