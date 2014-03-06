@@ -9,7 +9,7 @@ echoerr 'building luabind'
 #download luabind-${LUABIND_VERSION}.tar.gz
 
 rm -rf luabind
-git clone --quiet --depth=1 https://github.com/DennisOSRM/luabind.git
+git clone --quiet https://github.com/DennisOSRM/luabind.git
 cd luabind
 # enable building in non-c++11/libc++ mode
 patch -N CMakeLists.txt ${PATCHES}/luabind-osx.diff || true
