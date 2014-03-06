@@ -14,7 +14,7 @@ fi
 
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone --quiet --depth=1 https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
+git clone --quiet https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
 cd Project-OSRM
 patch -N CMakeLists.txt ${PATCHES}/osrm-osx.diff || true
 git checkout $OSRM_COMMIT
