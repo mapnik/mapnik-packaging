@@ -50,6 +50,8 @@ function build_mapnik {
   memsize
   echo "Running build with ${JOBS} parallel jobs"
   export BUILD_OPTIONAL_DEPS=true
+  # NOTE: harfbuzz needs pkg-config to find icu
+  ./scripts/build_pkg_config.sh 1>> build.log
   ./scripts/build_bzip2.sh 1>> build.log
   ./scripts/build_zlib.sh 1>> build.log
   ./scripts/build_icu.sh 1>> build.log
@@ -59,10 +61,8 @@ function build_mapnik {
       # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
   fi
   ./scripts/build_boost.sh ${BOOST_LIBRARIES}
-  ./scripts/build_freetype.sh 1>> build.log
-  # NOTE: harfbuzz needs pkg-config to find icu
-  ./scripts/build_pkg_config.sh 1>> build.log
-  ./scripts/build_harfbuzz.sh 1>> build.log
+  ./scripts/build_freetype.sh
+  ./scripts/build_harfbuzz.sh
   ./scripts/build_libxml2.sh 1>> build.log
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
