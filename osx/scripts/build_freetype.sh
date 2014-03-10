@@ -18,9 +18,18 @@ else
 fi
 
 cd freetype-${FREETYPE_VERSION}
+# NOTE: --with-zlib=yes means external, non-bundled zip will be used
 ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
- --without-bzip2 \
- --without-png
+ --with-zlib=yes \
+ --with-bzip2=no \
+ --with-harfbuzz=no \
+ --with-png=no \
+ --with-quickdraw-toolbox=no \
+ --with-quickdraw-carbon=no \
+ --with-ats=no \
+ --with-fsref=no \
+ --with-fsspec=no \
+
 make -j${JOBS}
 make install
 cd ${PACKAGES}

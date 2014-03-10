@@ -282,8 +282,9 @@ export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3080200"
-# http://download.savannah.gnu.org/releases/freetype/
-export FREETYPE_VERSION="2.5.2"
+# http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
+# http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
+export FREETYPE_VERSION="2.5.3"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
@@ -323,6 +324,7 @@ export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
 export NODE_VERSION="0.10.26"
 export SPARSEHASH_VERSION="2.0.2"
+# export HARFBUZZ_VERSION="0.9.19"
 export HARFBUZZ_VERSION="0.9.25"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
@@ -334,7 +336,7 @@ export -f echoerr
 function download {
     if [ ! -f $1 ]; then
         echoerr downloading $1
-        curl -s -S -f -O  ${S3_BASE}/$1
+        curl -s -S -f -O -L ${S3_BASE}/$1
     else
         echoerr using cached $1
     fi
@@ -350,7 +352,7 @@ export -f upload
 function push {
     echo "downloading $1"
     cd ${PACKAGES}
-    curl -s -S -f -O $1
+    curl -s -S -f -O -L $1
     echo "uploading `basename $1`"
     upload `basename $1`
     cd ${ROOTDIR}
@@ -430,7 +432,7 @@ function ensure_clang {
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
       if [ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
       fi
       if [ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ] && [ ! -d clang-$CVER ]; then
           echoerr 'uncompressing clang'
@@ -449,7 +451,7 @@ function ensure_clang {
       fi
       if [ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
       fi
       if [ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ] && [ ! -d clang-$CVER ]; then
           echoerr 'uncompressing clang'
