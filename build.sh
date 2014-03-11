@@ -61,8 +61,8 @@ function build_mapnik {
       # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
   fi
   ./scripts/build_boost.sh ${BOOST_LIBRARIES}
-  ./scripts/build_freetype.sh
-  ./scripts/build_harfbuzz.sh
+  ./scripts/build_freetype.sh 1>> build.log
+  ./scripts/build_harfbuzz.sh 1>> build.log
   ./scripts/build_libxml2.sh 1>> build.log
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
