@@ -72,7 +72,7 @@ function build_mapnik {
       BOOST_LIBRARIES="$BOOST_LIBRARIES --with-program_options"
       # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
   fi
-  b ./scripts/build_boost.sh ${BOOST_LIBRARIES}
+  ./scripts/build_boost.sh ${BOOST_LIBRARIES}
   b ./scripts/build_freetype.sh
   b ./scripts/build_harfbuzz.sh
   b ./scripts/build_libxml2.sh
@@ -132,7 +132,7 @@ function build_osrm {
   b ./scripts/build_icu.sh
   b ./scripts/build_lua.sh
   # TODO: osrm boost usage does not need icu
-  b ./scripts/build_boost.sh --with-iostreams --with-program_options --with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex
+  ./scripts/build_boost.sh --with-iostreams --with-program_options --with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex
   b ./scripts/build_zlib.sh
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
