@@ -112,7 +112,7 @@ function build_mapnik {
       git branch -v
       cd ../
   fi
-  b ./scripts/build_mapnik.sh
+  ./scripts/build_mapnik.sh
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
   ./scripts/package_mobile_sdk.sh
