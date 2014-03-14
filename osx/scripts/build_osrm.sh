@@ -5,7 +5,8 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    OSRM_COMMIT=d73f3ebd1bde36c2e5b41edb44a703cfb09cd7a0
+    OSRM_COMMIT=720abbc
+    # https://github.com/DennisOSRM/Project-OSRM/commit/720abbc81e0a9af30fb8e849a3498465fe2dcd0c
 fi
 
 if [[ "${OSRM_BRANCH:-false}" == false ]]; then
@@ -40,7 +41,8 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}"
+  -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}" \
+  -DOSXLIBSTD="libstdc++"
 
 make -j${JOBS} VERBOSE=1
 make install

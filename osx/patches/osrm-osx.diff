@@ -1,20 +1,13 @@
---- c	2014-02-25 13:17:31.000000000 -0800
-+++ CMakeLists.txt	2014-02-25 13:17:39.000000000 -0800
-@@ -103,17 +103,6 @@
-   # using Visual Studio C++
- endif()
- 
--# Configuring other platform dependencies
--if(APPLE)
--  set(CMAKE_OSX_ARCHITECTURES "x86_64")
--  message(STATUS "Set Architecture to x64 on OS X")
--    exec_program(uname ARGS -v  OUTPUT_VARIABLE DARWIN_VERSION)
--    string(REGEX MATCH "[0-9]+" DARWIN_VERSION ${DARWIN_VERSION})
--    if(DARWIN_VERSION GREATER 12)
--        message(STATUS "Activating -std=c++11 flag for >= OS X 10.9")
--        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
--    endif()
--endif()
- 
- if(UNIX AND NOT APPLE)
-     target_link_libraries(osrm-datastore rt)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a1e733d..b38a38b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -109,7 +109,7 @@ if(APPLE)
+   message(STATUS "Set Architecture to x64 on OS X")
+   exec_program(uname ARGS -v  OUTPUT_VARIABLE DARWIN_VERSION)
+   string(REGEX MATCH "[0-9]+" DARWIN_VERSION ${DARWIN_VERSION})
+-  if(DARWIN_VERSION GREATER 12)
++  if(DARWIN_VERSION GREATER 12 AND NOT OSXLIBSTD)
+     message(STATUS "Activating -std=c++11 flag for >= OS X 10.9")
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+   endif()
