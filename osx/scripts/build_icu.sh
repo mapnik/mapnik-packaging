@@ -31,7 +31,11 @@ if [ $BOOST_ARCH = "arm" ]; then
     elif [ -d "$(pwd)/../../icu-x86_64/source" ]; then
         NATIVE_BUILD_DIR="$(pwd)/../../icu-x86_64/source"
     else
-        echo 'could not find pre-built icu from a native/host arch!'
+        NATIVE_BUILD_DIR="$(pwd)/../../icu-x86_64/source"
+        echoerr 'native/host arch icu missing, building now in subshell'
+        OLD_PLATFORM=${PLATFORM}
+        source ${ROOTDIR}/${HOST_PLATFORM}.sh && ${ROOTDIR}/scripts/build_icu.sh
+        source ${ROOTDIR}/${OLD_PLATFORM}.sh
     fi
     CROSS_FLAGS="--with-cross-build=${NATIVE_BUILD_DIR}"
     CPPFLAGS="${CPPFLAGS} -I$(pwd)/common -I$(pwd)/tools/tzcode/"

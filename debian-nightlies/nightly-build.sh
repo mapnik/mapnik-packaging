@@ -44,7 +44,7 @@ PACKAGES["2.0.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="trusty saucy raring quantal precise lucid"
+DISTS="trusty saucy quantal precise lucid"
 
 ######### Shouldn't need to edit anything past here #########
 

@@ -90,3 +90,13 @@ make install
 cd ${PACKAGES}
 
 check_and_clear_libs
+
+# build mdb plugin
+# http://gis.stackexchange.com/a/76792
+# http://www.gdal.org/ogr/drv_mdb.html
+# https://trac.osgeo.org/gdal/wiki/ConfigOptions#GDAL_DRIVER_PATH
+# http://www.gdal.org/ogr/ogr_drivertut.html
+#clang++ -Wall -g ogr/ogrsf_frmts/mdb/ogr*.c* -shared -o ogr_plugins/ogr_MDB.dylib   -Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/mdb   -I/System/Library/Frameworks/JavaVM.framework/Headers  -framework JavaVM .libs/libgdal.a -stdlib=libstdc++
+#export GDAL_DRIVER_PATH=`pwd`/ogr_plugins/
+#install_name_tool -id ogr_MDB.dylib ogr_plugins/ogr_MDB.dylib
+#cp mdb-sqlite-1.0.2/lib/* /Library/Java/Extensions/
