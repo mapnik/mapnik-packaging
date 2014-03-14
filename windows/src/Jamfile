@@ -159,6 +159,7 @@ lib mapnik
     ..//icui18n
     ..//xml2
     ..//cairo
+	..//ws2
       :
         <define>MAPNIK_EXPORTS
         <link>shared

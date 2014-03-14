@@ -19,8 +19,10 @@ lib tiff : : <name>libtiff <search>$(MAPNIK_DEPS_DIR)/tiff/libtiff ;
 lib icu : : <name>icuuc <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
 lib icui18n : : <name>icuin <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
 lib icudata : : <name>icudt <search>$(MAPNIK_DEPS_DIR)/icu/lib ;
-lib xml2 : : <name>libxml2 <search>$(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc ;
+# static libxml due to https://github.com/mapnik/mapnik-packaging/issues/129
+lib xml2 : : <name>libxml2_a <search>$(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc ;
 lib freetype2 : : <name>freetype <search>$(MAPNIK_DEPS_DIR)/freetype ;
+# static linking currently, link proj_i for dynamic
 lib proj : : <name>proj <search>$(MAPNIK_DEPS_DIR)/proj/src ;
 lib pq : : <name>libpq <search>$(MAPNIK_DEPS_DIR)/postgresql/src/interfaces/libpq/Release  ;
 
