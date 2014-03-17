@@ -5,8 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    OSRM_COMMIT=720abbc
-    # https://github.com/DennisOSRM/Project-OSRM/commit/720abbc81e0a9af30fb8e849a3498465fe2dcd0c
+    OSRM_COMMIT=9483b781e2
 fi
 
 if [[ "${OSRM_BRANCH:-false}" == false ]]; then
@@ -33,6 +32,12 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     fi
 fi
 
+if [[ ${CXX11} == true ]]; then
+    STDLIB_OVERRIDE=""
+else
+    STDLIB_OVERRIDE="-DOSXLIBSTD=\"libstdc++\""
+fi
+
 rm -rf build
 mkdir -p build
 cd build
@@ -42,7 +47,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}" \
-  -DOSXLIBSTD="libstdc++"
+  ${STDLIB_OVERRIDE}
 
 make -j${JOBS} VERBOSE=1
 make install
