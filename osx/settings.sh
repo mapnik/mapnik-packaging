@@ -303,6 +303,7 @@ export EXPAT_VERSION="2.1.0"
 export GDAL_VERSION="1.10.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
+# gz
 export POSTGRES_VERSION="9.3.3"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"

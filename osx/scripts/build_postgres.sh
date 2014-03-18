@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download postgresql-${POSTGRES_VERSION}.tar.bz2
+download postgresql-${POSTGRES_VERSION}.tar.gz
 
 # postgres
 echoerr 'building postgres for libpq client library'
@@ -24,7 +24,7 @@ gmake -C doc install
 echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
-tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
+tar xf postgresql-${POSTGRES_VERSION}.tar.gz
 cd postgresql-${POSTGRES_VERSION}
 if [[ ${PLATFORM} == 'Linux' ]]; then
     # https://github.com/mapnik/mapnik-packaging/issues/130
