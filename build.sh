@@ -52,8 +52,8 @@ function build_mapnik {
       sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
       echo "removing potentially conflicting libraries"
       # remove travis default installed libs which will conflict
-      sudo apt-get purge libtiff* libjpeg* libpng3 -y
-      sudo apt-get autoremove
+      sudo apt-get purge -y libtiff* libjpeg* libpng3
+      sudo apt-get autoremove -y
   else
       prep_osx
   fi
