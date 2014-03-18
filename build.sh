@@ -26,12 +26,12 @@ function prep_linux {
   cd osx
   source Linux.sh
   if [ "${CXX11}" = true ]; then
-    echo "adding gcc-4.9 ppa"
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+    echo "adding gcc-4.8 ppa"
+    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     echo "updating apt"
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
-    sudo apt-get install -qq -y gcc-4.9 g++-4.9;
+    sudo apt-get install -qq -y gcc-4.8 g++-4.8
   else
     echo "updating apt"
     sudo apt-get update -y -qq
