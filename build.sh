@@ -93,6 +93,7 @@ function build_mapnik {
       b ./scripts/build_fontconfig.sh
       b ./scripts/build_cairo.sh
       b ./scripts/build_python_versions.sh
+      b ./scripts/build_pycairo.sh
     fi
   fi
   # for mapnik-vector-tile
