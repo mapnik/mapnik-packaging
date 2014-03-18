@@ -277,11 +277,11 @@ export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXX
 # http://site.icu-project.org/download
 export ICU_VERSION="52.1"
 export ICU_VERSION2="52_1"
-
+# http://www.boost.org/users/download/
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080200"
+export SQLITE_VERSION="3080401"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
@@ -290,11 +290,11 @@ export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.9"
+export LIBPNG_VERSION="1.6.10"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
-export WEBP_VERSION="0.3.1"
+export WEBP_VERSION="0.4.0"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
@@ -303,14 +303,16 @@ export EXPAT_VERSION="2.1.0"
 export GDAL_VERSION="1.10.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
-export POSTGRES_VERSION="9.3.1"
+export POSTGRES_VERSION="9.3.3"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
 export LIBXML2_VERSION="2.9.1"
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
-export FONTCONFIG_VERSION="2.10.0"
+# http://www.freedesktop.org/software/fontconfig/release/
+# bz2
+export FONTCONFIG_VERSION="2.11.0"
 # http://cairographics.org/releases/
 export PIXMAN_VERSION="0.32.4"
 export CAIRO_VERSION="1.12.16"
