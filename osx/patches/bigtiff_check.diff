@@ -1,6 +1,8 @@
---- configure	2012-05-19 18:08:17.000000000 -0700
-+++ configure2	2012-05-19 18:08:14.000000000 -0700
-@@ -19654,6 +19654,7 @@
+diff --git a/gdal/configure b/gdal/configure
+index 1bcff74..7abaa24 100755
+--- a/gdal/configure
++++ b/gdal/configure
+@@ -20007,6 +20007,7 @@ fi
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libtiff" >&5
  $as_echo_n "checking for libtiff... " >&6; }
  
@@ -8,7 +10,7 @@
  if test "x${with_libtiff}" = "xyes" -o "x${with_libtiff}" = "x" ; then
  
      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for TIFFScanlineSize64 in -ltiff" >&5
-@@ -19662,7 +19663,6 @@
+@@ -20015,7 +20016,6 @@ if ${ac_cv_lib_tiff_TIFFScanlineSize64+:} false; then :
    $as_echo_n "(cached) " >&6
  else
    ac_check_lib_save_LIBS=$LIBS
