@@ -120,6 +120,7 @@ function build_mapnik {
 }
 
 function build_osrm {
+  set -e
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
       sudo apt-get install -qq -y build-essential git unzip zlib1g-dev
@@ -140,6 +141,7 @@ function build_osrm {
   b ./scripts/build_libstxxl.sh
   ./scripts/build_osrm.sh
   #./scripts/package_tarball.sh
+  set +e
 }
 
 export -f build_osrm
