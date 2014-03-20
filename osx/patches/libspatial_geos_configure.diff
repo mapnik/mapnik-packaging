@@ -1,0 +1,146 @@
+--- configure_	2014-03-20 13:52:55.000000000 -0700
++++ configure	2014-03-20 13:53:16.000000000 -0700
+@@ -17784,143 +17784,6 @@
+ 
+ done
+ 
+-  CPPFLAGS="$CPPFLAGS_SAVE"
+-  # Ensure we can link against libgeos_c
+-  LIBS_SAVE="$LIBS"
+-  LIBS="$GEOS_LDFLAGS"
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing GEOSTopologyPreserveSimplify" >&5
+-$as_echo_n "checking for library containing GEOSTopologyPreserveSimplify... " >&6; }
+-if ${ac_cv_search_GEOSTopologyPreserveSimplify+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_func_search_save_LIBS=$LIBS
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char GEOSTopologyPreserveSimplify ();
+-int
+-main ()
+-{
+-return GEOSTopologyPreserveSimplify ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-for ac_lib in '' geos_c; do
+-  if test -z "$ac_lib"; then
+-    ac_res="none required"
+-  else
+-    ac_res=-l$ac_lib
+-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+-  fi
+-  if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_search_GEOSTopologyPreserveSimplify=$ac_res
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext
+-  if ${ac_cv_search_GEOSTopologyPreserveSimplify+:} false; then :
+-  break
+-fi
+-done
+-if ${ac_cv_search_GEOSTopologyPreserveSimplify+:} false; then :
+-
+-else
+-  ac_cv_search_GEOSTopologyPreserveSimplify=no
+-fi
+-rm conftest.$ac_ext
+-LIBS=$ac_func_search_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_GEOSTopologyPreserveSimplify" >&5
+-$as_echo "$ac_cv_search_GEOSTopologyPreserveSimplify" >&6; }
+-ac_res=$ac_cv_search_GEOSTopologyPreserveSimplify
+-if test "$ac_res" != no; then :
+-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+-
+-else
+-  as_fn_error $? "could not find libgeos_c - you may need to specify the directory of a geos-config file using --with-geosconfig" "$LINENO" 5
+-fi
+-
+-  LIBS="$LIBS_SAVE"
+-  LIBS=$LIBS$GEOS_LDFLAGS' -lgeos_c'
+-
+-  #-----------------------------------------------------------------------
+-  #   --enable-geosadvanced
+-  #
+-  # Check whether --enable-geosadvanced was given.
+-if test "${enable_geosadvanced+set}" = set; then :
+-  enableval=$enable_geosadvanced;
+-else
+-  enable_geosadvanced=yes
+-fi
+-
+-  if test x"$enable_geosadvanced" != "xno"; then
+-	  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing GEOSCoveredBy" >&5
+-$as_echo_n "checking for library containing GEOSCoveredBy... " >&6; }
+-if ${ac_cv_search_GEOSCoveredBy+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_func_search_save_LIBS=$LIBS
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char GEOSCoveredBy ();
+-int
+-main ()
+-{
+-return GEOSCoveredBy ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-for ac_lib in '' geos_c; do
+-  if test -z "$ac_lib"; then
+-    ac_res="none required"
+-  else
+-    ac_res=-l$ac_lib
+-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+-  fi
+-  if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_search_GEOSCoveredBy=$ac_res
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext
+-  if ${ac_cv_search_GEOSCoveredBy+:} false; then :
+-  break
+-fi
+-done
+-if ${ac_cv_search_GEOSCoveredBy+:} false; then :
+-
+-else
+-  ac_cv_search_GEOSCoveredBy=no
+-fi
+-rm conftest.$ac_ext
+-LIBS=$ac_func_search_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_GEOSCoveredBy" >&5
+-$as_echo "$ac_cv_search_GEOSCoveredBy" >&6; }
+-ac_res=$ac_cv_search_GEOSCoveredBy
+-if test "$ac_res" != no; then :
+-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+-
+-else
+-  as_fn_error $? "obsolete 'libgeos_c' (< v.3.3.0). please retry specifying: --disable-geosadvanced." "$LINENO" 5
+-fi
+-
+-	  $as_echo "#define GEOS_ADVANCED 1" >>confdefs.h
+-
+-  fi
+ 
+   #-----------------------------------------------------------------------
+   #   --enable-geostrunk

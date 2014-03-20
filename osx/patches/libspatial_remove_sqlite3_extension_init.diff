@@ -1,0 +1,23 @@
+--- src/spatialite/spatialite_init.c	2014-03-20 14:21:54.000000000 -0700
++++ src/spatialite/spatialite_init.c	2014-03-20 14:21:57.000000000 -0700
+@@ -128,20 +128,3 @@
+ 
+     sqlite3_reset_auto_extension ();
+ }
+-
+-#if !(defined _WIN32) || defined(__MINGW32__)
+-/* MSVC is unable to understand this declaration */
+-__attribute__ ((visibility ("default")))
+-#endif
+-     SPATIALITE_DECLARE int
+-	 sqlite3_extension_init (sqlite3 * db, char **pzErrMsg,
+-				 const sqlite3_api_routines * pApi)
+-{
+-/* SQLite invokes this routine once when it dynamically loads the extension. */
+-
+-#ifndef OMIT_GEOS		/* initializing GEOS */
+-    initGEOS (geos_warning, geos_error);
+-#endif /* end GEOS  */
+-
+-    return init_spatialite_extension (db, pzErrMsg, pApi);
+-}

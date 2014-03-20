@@ -60,7 +60,14 @@ fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
-./configure ${HOST_ARG} \
+CUSTOM_LIBS="-lgeos_c -lgeos -lproj -lsqlite3"
+if [[ $CXX11 == true ]]; then
+    CUSTOM_LIBS="$CUSTOM_LIBS -lc++"
+else
+    CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+fi
+
+LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
 --enable-static \
 --disable-shared \
@@ -70,8 +77,8 @@ ${FGDB_ARGS} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \
 --with-sqlite3=${BUILD} \
+--with-spatialite=${BUILD} \
 --with-hide-internal-symbols=no \
---with-spatialite=no \
 --with-curl=no \
 --with-geos=no \
 --with-pcraster=no \
