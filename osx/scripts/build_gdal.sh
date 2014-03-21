@@ -38,7 +38,7 @@ CXX="${CXX} ${STDLIB_CXXFLAGS} -Wno-pragmas"
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 # not bigtiff check will fail…
 # fix bigtiff check
-patch -N configure ${PATCHES}/bigtiff_check.diff || true
+#patch -N configure ${PATCHES}/bigtiff_check.diff || true
 FGDB_ARGS="--with-fgdb=no"
 if [ $UNAME = 'Darwin' ]; then
     # trick the gdal configure into working on os x
@@ -60,12 +60,33 @@ fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
-CUSTOM_LIBS="-lgeos_c -lgeos -lproj -lsqlite3"
-if [[ $CXX11 == true ]]; then
-    CUSTOM_LIBS="$CUSTOM_LIBS -lc++"
-else
-    CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+BUILD_WITH_SPATIALITE="no"
+CUSTOM_LIBS=""
+
+if [ -f $BUILD/lib/libspatialite.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -lgeos_c -lgeos -lsqlite3"
+    BUILD_WITH_SPATIALITE="${BUILD}"
 fi
+if [ -f $BUILD/lib/libtiff.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -ltiff -ljpeg"
+fi
+
+if [ -f $BUILD/lib/libproj.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -lproj"
+fi
+
+if [[ $BUILD_WITH_SPATIALITE != "no" ]]; then
+    if [[ $CXX11 == true ]]; then
+        if [[ $STDLIB == "libcpp" ]]; then
+            CUSTOM_LIBS="$CUSTOM_LIBS -lc++"
+        else
+            CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+        fi
+    else
+        CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+    fi
+fi
+
 
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
@@ -77,7 +98,7 @@ ${FGDB_ARGS} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \
 --with-sqlite3=${BUILD} \
---with-spatialite=${BUILD} \
+--with-spatialite=${BUILD_WITH_SPATIALITE} \
 --with-hide-internal-symbols=no \
 --with-curl=no \
 --with-geos=no \
