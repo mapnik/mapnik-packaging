@@ -12,9 +12,13 @@ if [[ "${OSRM_BRANCH:-false}" == false ]]; then
     OSRM_BRANCH=develop
 fi
 
+if [[ "${OSRM_REPO:-false}" == false ]]; then
+    OSRM_REPO="https://github.com/DennisOSRM/Project-OSRM.git"
+fi
+
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone --quiet https://github.com/DennisOSRM/Project-OSRM.git -b $OSRM_BRANCH
+git clone --quiet ${OSRM_REPO} -b $OSRM_BRANCH
 cd Project-OSRM
 patch -N CMakeLists.txt ${PATCHES}/osrm-osx.diff || true
 git checkout $OSRM_COMMIT
