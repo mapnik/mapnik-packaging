@@ -298,6 +298,8 @@ export WEBP_VERSION="0.4.0"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
+export NASM_VERSION="2.11"
+export JPEG_TURBO_VERSION="1.3.1"
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
 export GDAL_VERSION="1.10.1"
@@ -402,25 +404,50 @@ function ensure_s3cmd {
 export -f ensure_s3cmd
 
 function ensure_xz {
-  CUR_DIR=`pwd`
-  mkdir -p ${PACKAGES}
-  cd ${PACKAGES}
-  # WARNING: this installs liblzma which we need to ensure that gdal does not link to
-  download xz-${XZ_VERSION}.tar.bz2
-  echoerr '*building xz*'
-  rm -rf xz-5.0.3
-  tar xf xz-5.0.3.tar.bz2
-  cd xz-5.0.3
-  OLD_PLATFORM=${PLATFORM}
-  source "${ROOTDIR}/${HOST_PLATFORM}.sh"
-  ./configure --prefix=${BUILD_TOOLS_ROOT}
-  make -j$JOBS
-  make install
+  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]; then
+      CUR_DIR=`pwd`
+      mkdir -p ${PACKAGES}
+      cd ${PACKAGES}
+      # WARNING: this installs liblzma which we need to ensure that gdal does not link to
+      download xz-${XZ_VERSION}.tar.bz2
+      echoerr '*building xz*'
+      rm -rf xz-5.0.3
+      tar xf xz-5.0.3.tar.bz2
+      cd xz-5.0.3
+      OLD_PLATFORM=${PLATFORM}
+      source "${ROOTDIR}/${HOST_PLATFORM}.sh"
+      ./configure --prefix=${BUILD_TOOLS_ROOT}
+      make -j$JOBS
+      make install
+      source "${ROOTDIR}/${OLD_PLATFORM}.sh"
+      cd $CUR_DIR
+  fi
   export PATH=${BUILD_TOOLS_ROOT}/bin:$PATH
-  source "${ROOTDIR}/${OLD_PLATFORM}.sh"
-  cd $CUR_DIR
 }
 export -f ensure_xz
+
+function ensure_nasm {
+  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]; then
+      CUR_DIR=`pwd`
+      mkdir -p ${PACKAGES}
+      cd ${PACKAGES}
+      # WARNING: this installs liblzma which we need to ensure that gdal does not link to
+      download nasm-${NASM_VERSION}.tar.bz2
+      echoerr '*building nasm*'
+      rm -rf nasm-${NASM_VERSION}
+      tar xf nasm-${NASM_VERSION}.tar.bz2
+      cd nasm-${NASM_VERSION}
+      OLD_PLATFORM=${PLATFORM}
+      source "${ROOTDIR}/${HOST_PLATFORM}.sh"
+      ./configure --prefix=${BUILD_TOOLS_ROOT}
+      make -j$JOBS
+      make install install_rdf
+      source "${ROOTDIR}/${OLD_PLATFORM}.sh"
+      cd $CUR_DIR
+  fi
+  export PATH=${BUILD_TOOLS_ROOT}/bin:$PATH
+}
+export -f ensure_nasm
 
 
 function ensure_clang {
