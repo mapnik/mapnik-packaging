@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 cd "$( dirname $( dirname "$0" ))"
 # update mapnik
 cd mapnik

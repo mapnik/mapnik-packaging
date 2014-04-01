@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 mkdir -p ${PACKAGES}
 mkdir -p ${BUILD}
 mkdir -p ${BUILD}/lib

@@ -1,7 +1,7 @@
 
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo '*** testing install'
 if [ ! -d "${MAPNIK_BIN_SOURCE}/share/mapnik" ]; then
   ${ROOTDIR}/scripts/post_build_fix.sh

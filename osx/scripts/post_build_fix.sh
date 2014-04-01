@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo "...fixing install names of mapnik and dependencies"
 
 mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/"

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo '...packaging DMG'
 #install_name_tool -id ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib
 rm -f ${ROOTDIR}/installer/*dmg

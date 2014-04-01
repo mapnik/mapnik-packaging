@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo '...packaging sdk tarball'
 
 # where we are headed

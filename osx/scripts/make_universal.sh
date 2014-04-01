@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 mkdir -p "${BUILD_UNIVERSAL}"
 
 if [[ $UNAME == 'Darwin' ]]; then

@@ -6,7 +6,7 @@ if [ -z "$@" ]; then
 fi
 
 set -e -u
-
+set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 LICENSES=${ROOTDIR}/installer/pkg/licenses
 mkdir -p ${LICENSES}
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echoerr '...packaging mobile sdk tarball'
 
 # where we are headed
