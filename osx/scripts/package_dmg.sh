@@ -6,7 +6,7 @@ echo '...packaging DMG'
 rm -f ${ROOTDIR}/installer/*dmg
 rm -rf ${ROOTDIR}/installer/build/*pkg
 freeze ${ROOTDIR}/installer/Mapnik.packproj
-FOUND_VERSION=`${MAPNIK_BIN_SOURCE}/bin/mapnik-config --version`
+FOUND_VERSION=`${MAPNIK_CONFIG} --version`
 echo "Mapnik v${FOUND_VERSION}" > ${ROOTDIR}/installer/build/build.log
 echo "Build on `date`" >> ${ROOTDIR}/installer/build/build.log
 echo "clang --version:" >> ${ROOTDIR}/installer/build/build.log

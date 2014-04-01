@@ -11,7 +11,7 @@ export SHARED_ZLIB=true
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export UNAME=$(uname -s);
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:${PATH}"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
@@ -72,6 +72,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
       if [[ "${CXX_NAME:-false}" == false ]]; then
+          # TODO - use -dumpversion
           export CXX_NAME="clang-3.3"
       fi
     else
@@ -150,7 +151,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
     export XCODE_PREFIX=$( xcode-select -print-path )
-    if [ -d "${XCODE_PREFIX}" ]; then
+    if [ -d "${XCODE_PREFIX}/Toolchains/" ]; then
       # set this up with:
       #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
       # for more info
@@ -166,7 +167,8 @@ elif [ ${UNAME} = 'Darwin' ]; then
       # Note: stripping with -Wl,-S breaks dtrace
       export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
     else
-      export TOOLCHAIN_ROOT="/usr/bin"
+      export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
+      export SDK_PATH="${XCODE_PREFIX}/usr/"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
       export EXTRA_CFLAGS=""
@@ -195,13 +197,14 @@ elif [ ${UNAME} = 'Darwin' ]; then
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
-        if [ "${LIBCXX_DEFAULT}" = true ]; then
-            export STDLIB="libcpp"
-        else
-            export STDLIB="libstdcpp"
-        fi
-        export STDLIB_CXXFLAGS="-Wno-c++11-long-long"
-        export STDLIB_LDFLAGS=""
+#        if [ "${LIBCXX_DEFAULT}" = true ]; then
+#            export STDLIB="libcpp"
+#        else
+#            export STDLIB="libstdcpp"
+#        fi
+        export STDLIB="libstdcpp"
+        export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
+        export STDLIB_LDFLAGS="-stdlib=libstdc++"
     fi
 else
     echo '**unhandled platform: ${PLATFORM}**'
@@ -215,7 +218,7 @@ export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
-export PATH="${MAPNIK_BIN_SOURCE}/bin:${MAPNIK_SOURCE}/utils/mapnik-config:${PATH}"
+export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
 
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
@@ -223,6 +226,7 @@ if [[ $SHARED_ZLIB == true ]]; then
         export ZLIB_PATH="/usr";
     else
         if [[ ${PLATFORM} = 'Android' ]]; then
+            # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
             export ZLIB_PATH=$PLATFORM_PREFIX;
         else
             if [[ ${SDK_PATH} ]]; then
@@ -273,41 +277,47 @@ export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXX
 # http://site.icu-project.org/download
 export ICU_VERSION="52.1"
 export ICU_VERSION2="52_1"
-
+# http://www.boost.org/users/download/
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080200"
-# http://download.savannah.gnu.org/releases/freetype/
-export FREETYPE_VERSION="2.5.2"
+export SQLITE_VERSION="3080401"
+# http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
+# http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
+export FREETYPE_VERSION="2.5.3"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.8"
+export LIBPNG_VERSION="1.6.10"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
-export WEBP_VERSION="0.3.1"
+export WEBP_VERSION="0.4.0"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
+export NASM_VERSION="2.11"
+export JPEG_TURBO_VERSION="1.3.1"
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
 export GDAL_VERSION="1.10.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
-export POSTGRES_VERSION="9.3.1"
+# gz
+export POSTGRES_VERSION="9.3.3"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
 export LIBXML2_VERSION="2.9.1"
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
-export FONTCONFIG_VERSION="2.10.0"
+# http://www.freedesktop.org/software/fontconfig/release/
+# bz2
+export FONTCONFIG_VERSION="2.11.0"
 # http://cairographics.org/releases/
-export PIXMAN_VERSION="0.30.0"
+export PIXMAN_VERSION="0.32.4"
 export CAIRO_VERSION="1.12.16"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
@@ -317,9 +327,10 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.25"
+export NODE_VERSION="0.10.26"
 export SPARSEHASH_VERSION="2.0.2"
-export HARFBUZZ_VERSION="0.9.25"
+# export HARFBUZZ_VERSION="0.9.19"
+export HARFBUZZ_VERSION="0.9.26"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
@@ -329,10 +340,10 @@ export -f echoerr
 
 function download {
     if [ ! -f $1 ]; then
-        echo downloading $1
-        curl -s -S -f -O  ${S3_BASE}/$1
+        echoerr downloading $1
+        curl -s -S -f -O -L ${S3_BASE}/$1
     else
-        echo using cached $1
+        echoerr using cached $1
     fi
 }
 export -f download
@@ -346,7 +357,7 @@ export -f upload
 function push {
     echo "downloading $1"
     cd ${PACKAGES}
-    curl -s -S -f -O $1
+    curl -s -S -f -O -L $1
     echo "uploading `basename $1`"
     upload `basename $1`
     cd ${ROOTDIR}
@@ -381,33 +392,62 @@ function ensure_s3cmd {
   export PATH=`pwd`:${PATH}
   cd $CUR_DIR
   if [ ! -f ~/.s3cfg ]; then
-    echo "[default]" > ~/.s3cfg
-    echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
-    echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+    if [[ "${AWS_S3_KEY:-false}" == false ]] || [[ "${AWS_S3_SECRET:-false}" == false ]]; then
+        echoerr 'missing AWS keys: see ensure_s3cmd in settings.sh for details'
+    else
+        echo "[default]" > ~/.s3cfg
+        echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
+        echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+    fi
   fi
 }
 export -f ensure_s3cmd
 
 function ensure_xz {
-  CUR_DIR=`pwd`
-  mkdir -p ${PACKAGES}
-  cd ${PACKAGES}
-  # WARNING: this installs liblzma which we need to ensure that gdal does not link to
-  download xz-${XZ_VERSION}.tar.bz2
-  echoerr '*building xz*'
-  rm -rf xz-5.0.3
-  tar xf xz-5.0.3.tar.bz2
-  cd xz-5.0.3
-  OLD_PLATFORM=${PLATFORM}
-  source "${ROOTDIR}/${HOST_PLATFORM}.sh"
-  ./configure --prefix=${BUILD_TOOLS_ROOT}
-  make -j$JOBS
-  make install
+  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]; then
+      CUR_DIR=`pwd`
+      mkdir -p ${PACKAGES}
+      cd ${PACKAGES}
+      # WARNING: this installs liblzma which we need to ensure that gdal does not link to
+      download xz-${XZ_VERSION}.tar.bz2
+      echoerr '*building xz*'
+      rm -rf xz-5.0.3
+      tar xf xz-5.0.3.tar.bz2
+      cd xz-5.0.3
+      OLD_PLATFORM=${PLATFORM}
+      source "${ROOTDIR}/${HOST_PLATFORM}.sh"
+      ./configure --prefix=${BUILD_TOOLS_ROOT}
+      make -j$JOBS
+      make install
+      source "${ROOTDIR}/${OLD_PLATFORM}.sh"
+      cd $CUR_DIR
+  fi
   export PATH=${BUILD_TOOLS_ROOT}/bin:$PATH
-  source "${ROOTDIR}/${OLD_PLATFORM}.sh"
-  cd $CUR_DIR
 }
 export -f ensure_xz
+
+function ensure_nasm {
+  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]; then
+      CUR_DIR=`pwd`
+      mkdir -p ${PACKAGES}
+      cd ${PACKAGES}
+      # WARNING: this installs liblzma which we need to ensure that gdal does not link to
+      download nasm-${NASM_VERSION}.tar.bz2
+      echoerr '*building nasm*'
+      rm -rf nasm-${NASM_VERSION}
+      tar xf nasm-${NASM_VERSION}.tar.bz2
+      cd nasm-${NASM_VERSION}
+      OLD_PLATFORM=${PLATFORM}
+      source "${ROOTDIR}/${HOST_PLATFORM}.sh"
+      ./configure --prefix=${BUILD_TOOLS_ROOT}
+      make -j$JOBS
+      make install install_rdf
+      source "${ROOTDIR}/${OLD_PLATFORM}.sh"
+      cd $CUR_DIR
+  fi
+  export PATH=${BUILD_TOOLS_ROOT}/bin:$PATH
+}
+export -f ensure_nasm
 
 
 function ensure_clang {
@@ -422,7 +462,7 @@ function ensure_clang {
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
       if [ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
       fi
       if [ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ] && [ ! -d clang-$CVER ]; then
           echoerr 'uncompressing clang'
@@ -441,7 +481,7 @@ function ensure_clang {
       fi
       if [ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
       fi
       if [ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ] && [ ! -d clang-$CVER ]; then
           echoerr 'uncompressing clang'
@@ -476,7 +516,7 @@ function nprocs() {
 }
 export -f nprocs
 
-echo "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
+echoerr "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 
 set +u
 

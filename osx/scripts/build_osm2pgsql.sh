@@ -1,38 +1,8 @@
-echoerr#!/bin/bash
+#!/bin/bash
 set -e -u
 
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
-
-download geos-${GEOS_VERSION}.tar.bz2
-download protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
-
-echoerr 'building protobuf C'
-rm -rf cd protobuf-c-${PROTOBUF_C_VERSION}
-tar xf protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
-cd protobuf-c-${PROTOBUF_C_VERSION}
-./configure --prefix=${BUILD} --enable-static --disable-shared \
---disable-dependency-tracking
-make -j${JOBS}
-make install
-cd ${PACKAGES}
-
-echoerr 'building geos'
-LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-# note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
-# http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
-CXX="${CXX} ${STDLIB_CXXFLAGS}"
-rm -rf geos-${GEOS_VERSION}
-tar xf geos-${GEOS_VERSION}.tar.bz2
-cd geos-${GEOS_VERSION}
-patch -N configure.in ${PATCHES}/geos-ansi.diff
-./configure --prefix=${BUILD} --enable-static --disable-shared \
---disable-dependency-tracking
-make -j${JOBS}
-make install
-cd ${PACKAGES}
-
-check_and_clear_libs
 
 echoerr 'building osm2pgsql'
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
@@ -43,8 +13,8 @@ cd ${ROOTDIR}/osm2pgsql
 # fix 'Could not find a c++ compiler' error on 'conftest.c:11:10: fatal error: 'ac_nonexistent.h' file not found'
 patch -N configure.ac ${PATCHES}/osm2pgsql-configure.diff | true
 patch -N Makefile.am ${PATCHES}/osm2pgsql-datadir.diff | true
-make clean
-make distclean
+make clean || true
+make distclean || true
 ./autogen.sh
 ./configure --prefix=/usr/local \
 --with-zlib=${ZLIB_PATH} \

@@ -63,12 +63,12 @@ echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 
 ./configure \
-  PATH_REMOVE="/usr/include" \
+  PATH_REMOVE="/usr/:/usr/local/" \
   BINDINGS='python' \
   INPUT_PLUGINS='csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite' \
   DEMO=True \
   SVG_RENDERER=true \
-  CAIRO=False \
+  CAIRO=True \
   PGSQL2SQLITE=False \
   SVG2PNG=False \
   FRAMEWORK_PYTHON=False \

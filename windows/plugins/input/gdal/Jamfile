@@ -5,13 +5,19 @@ local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
 mapnik-plugin gdal
     : [ glob *.cpp ]
     ../../..//src
-    ../../..//thread
     ../../..//icu
+    ../../..//odbc
+    ../../..//odbccp
+    ../../..//user
     ../../..//gdal
+    ../../..//expat
+	../../..//ws2
+	../../..//thread
+
     :
     <include>.
-    <include>$(MAPNIK_DEPS_DIR)/gdal/port
-    <include>$(MAPNIK_DEPS_DIR)/gdal/gcore
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gdal/port
+    <include>$(MAPNIK_DEPS_DIR)/gdal/gdal/gcore
     <link>shared
     <variant>debug:<linkflags>/NODEFAULTLIB:msvcrt.lib
     ;

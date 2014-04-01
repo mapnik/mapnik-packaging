@@ -11,10 +11,10 @@ cd ${PACKAGES}
 download xz-${XZ_VERSION}.tar.bz2
 download nose-${NOSE_VERSION}.tar.gz
 if [ ! -f distribute_setup.py ]; then
-  echo downloading distribute_setup.py
+  echoerr downloading distribute_setup.py
   curl -s -S -f -O http://python-distribute.org/distribute_setup.py
 else
-  echo using cached distribute_setup.py
+  echoerr using cached distribute_setup.py
 fi
 
 # core deps

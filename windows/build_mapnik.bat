@@ -11,6 +11,7 @@ set MAPNIK_SOURCE=%ROOTDIR%\mapnik
 set PYTHON_VERSION=2.7
 set PYTHON_VERSION2=27
 set PYTHON_ROOT=C:\Python%PYTHON_VERSION2%
+set PATH=%PYTHON_ROOT%\Scripts;%PATH%
 
 @rem other variables
 set BOOST_VERSION=49
@@ -31,7 +32,7 @@ xcopy /i /d /s %ROOTDIR%\icu\include\unicode %PREFIX%\include\unicode /Y
 xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include\freetype /Y
 
 xcopy /i /d /s %ROOTDIR%\proj\nad %PREFIX%\share\proj
-xcopy /i /d /s %ROOTDIR%\gdal\data %PREFIX%\share\gdal
+xcopy /i /d /s %ROOTDIR%\gdal\gdal\data %PREFIX%\share\gdal
 
 echo from os import path > mapnik_settings.py
 echo mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/')) >> mapnik_settings.py
@@ -51,26 +52,17 @@ echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> paths.py
 
 bjam toolset=msvc -j2 --python=true --prefix=%PREFIX% -sBOOST_INCLUDES=%BOOST_INCLUDES% -sBOOST_LIBS=%BOOST_LIBS% -sMAPNIK_DEPS_DIR=%MAPNIK_DEPS_DIR% -sMAPNIK_SOURCE=%MAPNIK_SOURCE%
 
-xcopy /d /s build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\mapnik.lib /Y
+echo f | xcopy /f /y build\src\msvc-10.0\release\threading-multi\mapnik.lib %PREFIX%\lib\mapnik.lib
 
 @rem demo files
 xcopy /d /s %MAPNIK_SOURCE%\demo\data %PREFIX%\demo\data /Y /i
-xcopy /d /s %MAPNIK_SOURCE%\demo\python\rundemo.py %PREFIX%\demo\python\rundemo.py /Y
+echo f | xcopy /f /y %MAPNIK_SOURCE%\demo\python\rundemo.py %PREFIX%\demo\python\rundemo.py
 
 echo running CPP tests
 for %%t in (build\tests\cpp_tests\msvc-10.0\release\threading-multi\*.exe) do ( %%t -d %MAPNIK_SOURCE% )
 
 @rem - enable the below for packaging
-@rem no need for lib files for plugins
-@rem del c:\mapnik-%MAPNIK_VERSION%\lib\mapnik\input\*lib
-
-@rem del mapnik-win-sdk-%MAPNIK_VERSION%.zip
-@rem 7z a mapnik-win-sdk-%MAPNIK_VERSION%.zip %PREFIX%
-@rem rd %PREFIX2%\include /s /q
-@ rem - note: prefix has c:\\ which screws up del
-@rem del c:\mapnik-%MAPNIK_VERSION%\lib\*lib
-@rem del mapnik-win-%MAPNIK_VERSION%.zip
-@rem 7z a mapnik-win-%MAPNIK_VERSION%.zip %PREFIX%
+@rem call package.bat
 
 echo Started at %STARTTIME%, finished at %TIME%
 

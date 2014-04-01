@@ -4,7 +4,7 @@ set -e -u
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download postgresql-${POSTGRES_VERSION}.tar.bz2
+download postgresql-${POSTGRES_VERSION}.tar.gz
 
 # postgres
 echoerr 'building postgres for libpq client library'
@@ -24,12 +24,17 @@ gmake -C doc install
 echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
-tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
+tar xf postgresql-${POSTGRES_VERSION}.tar.gz
 cd postgresql-${POSTGRES_VERSION}
+if [[ ${PLATFORM} == 'Linux' ]]; then
+    # https://github.com/mapnik/mapnik-packaging/issues/130
+    patch -N src/include/pg_config_manual.h ${PATCHES}/pg_config_manual.diff || true
+fi
+
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---with-openssl --with-pam --with-krb5 --with-gssapi --with-ldap --enable-thread-safety \
---with-bonjour --without-libxml --without-readline
+--with-bonjour --with-openssl --with-pam --with-krb5 --with-gssapi --enable-thread-safety \
+--without-libxml --without-readline --without-ldap
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
 set +e

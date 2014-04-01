@@ -9,14 +9,21 @@ echoerr 'building luabind'
 #download luabind-${LUABIND_VERSION}.tar.gz
 
 rm -rf luabind
-git clone --quiet --depth=0 https://github.com/DennisOSRM/luabind.git
+git clone --quiet https://github.com/DennisOSRM/luabind.git
 cd luabind
-git checkout 98f9ea861f58842c54aa9ebe7754659cc787a89c
+git checkout 789c9e0f98
 # avoid g++ being killed on travis
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     JOBS=2
 fi
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
+
+if [[ ${CXX11} == true ]]; then
+    STDLIB_OVERRIDE=""
+else
+    STDLIB_OVERRIDE="-DOSXLIBSTD=\"libstdc++\""
+fi
+
 rm -rf build
 mkdir build
 cd build
@@ -25,7 +32,8 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DBUILD_STATIC_LIBS=ON \
-  -DCMAKE_BUILD_TYPE=Release
+  -DCMAKE_BUILD_TYPE=Release \
+  ${STDLIB_OVERRIDE}
 
 make -j${JOBS} VERBOSE=1
 make install

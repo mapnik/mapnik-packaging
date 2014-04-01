@@ -12,7 +12,7 @@ GDAL_LATEST=true
 if [[ $GDAL_LATEST == true ]]; then
     #rm -rf gdal
     if [ ! -d gdal ]; then
-        git clone --quiet --depth=0 https://github.com/OSGeo/gdal.git
+        git clone --quiet --depth=1 https://github.com/OSGeo/gdal.git
         cd gdal/gdal
     else
         cd gdal/gdal
@@ -38,7 +38,7 @@ CXX="${CXX} ${STDLIB_CXXFLAGS} -Wno-pragmas"
 # http://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
 # not bigtiff check will fail…
 # fix bigtiff check
-patch -N configure ${PATCHES}/bigtiff_check.diff || true
+#patch -N configure ${PATCHES}/bigtiff_check.diff || true
 FGDB_ARGS="--with-fgdb=no"
 if [ $UNAME = 'Darwin' ]; then
     # trick the gdal configure into working on os x
@@ -60,7 +60,35 @@ fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
-./configure ${HOST_ARG} \
+BUILD_WITH_SPATIALITE="no"
+CUSTOM_LIBS=""
+
+if [ -f $BUILD/lib/libspatialite.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -lgeos_c -lgeos -lsqlite3"
+    BUILD_WITH_SPATIALITE="${BUILD}"
+fi
+if [ -f $BUILD/lib/libtiff.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -ltiff -ljpeg"
+fi
+
+if [ -f $BUILD/lib/libproj.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -lproj"
+fi
+
+if [[ $BUILD_WITH_SPATIALITE != "no" ]]; then
+    if [[ $CXX11 == true ]]; then
+        if [[ $STDLIB == "libcpp" ]]; then
+            CUSTOM_LIBS="$CUSTOM_LIBS -lc++"
+        else
+            CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+        fi
+    else
+        CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+    fi
+fi
+
+
+LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
 --enable-static \
 --disable-shared \
@@ -70,8 +98,8 @@ ${FGDB_ARGS} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \
 --with-sqlite3=${BUILD} \
+--with-spatialite=${BUILD_WITH_SPATIALITE} \
 --with-hide-internal-symbols=no \
---with-spatialite=no \
 --with-curl=no \
 --with-geos=no \
 --with-pcraster=no \
@@ -90,3 +118,13 @@ make install
 cd ${PACKAGES}
 
 check_and_clear_libs
+
+# build mdb plugin
+# http://gis.stackexchange.com/a/76792
+# http://www.gdal.org/ogr/drv_mdb.html
+# https://trac.osgeo.org/gdal/wiki/ConfigOptions#GDAL_DRIVER_PATH
+# http://www.gdal.org/ogr/ogr_drivertut.html
+#clang++ -Wall -g ogr/ogrsf_frmts/mdb/ogr*.c* -shared -o ogr_plugins/ogr_MDB.dylib   -Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/mdb   -I/System/Library/Frameworks/JavaVM.framework/Headers  -framework JavaVM .libs/libgdal.a -stdlib=libstdc++
+#export GDAL_DRIVER_PATH=`pwd`/ogr_plugins/
+#install_name_tool -id ogr_MDB.dylib ogr_plugins/ogr_MDB.dylib
+#cp mdb-sqlite-1.0.2/lib/* /Library/Java/Extensions/
