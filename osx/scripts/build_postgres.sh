@@ -33,7 +33,7 @@ fi
 
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---with-bonjour --with-openssl --with-pam --with-krb5 --with-gssapi --enable-thread-safety \
+--without-bonjour --without-openssl --without-pam --without-krb5 --without-gssapi --enable-thread-safety \
 --without-libxml --without-readline --without-ldap
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
