@@ -33,8 +33,31 @@ fi
 
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---without-bonjour --without-openssl --without-pam --without-krb5 --without-gssapi --enable-thread-safety \
---without-libxml --without-readline --without-ldap
+--enable-thread-safety \
+--enable-largefile \
+--without-bonjour \
+--without-openssl \
+--without-pam \
+--without-krb5 \
+--without-gssapi \
+--without-ossp-uuid \
+--without-readline \
+--without-ldap \
+--without-zlib \
+--without-libxml \
+--without-libxslt \
+--without-selinux \
+--without-python \
+--without-perl \
+--without-tcl \
+--disable-rpath \
+--disable-debug \
+--disable-profiling \
+--disable-coverage \
+--disable-dtrace \
+--disable-depend \
+--disable-cassert
+
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
 set +e
