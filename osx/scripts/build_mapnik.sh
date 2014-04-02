@@ -113,5 +113,7 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
     done
 fi
 
+$ROOTDIR/scripts/post_build_fix.sh
+
 # remove headers for now
 #rm -rf ${MAPNIK_BIN_SOURCE}/include
