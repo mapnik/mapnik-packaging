@@ -82,6 +82,12 @@ cd ${MAPNIK_DIST}
 
 echoerr "copying headers of other deps"
 
+# libxml2, needed after https://github.com/mapnik/node-mapnik/issues/239
+if [ -d ${BUILD}/include/libxml2 ]; then
+    echo "copying libxml2"
+    cp -r ${BUILD}/include/libxml2 ${LOCAL_TARGET}/include/
+fi
+
 # icu
 if [ -d ${BUILD}/include/unicode ]; then
     echo "copying icu"
