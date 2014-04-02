@@ -79,7 +79,7 @@ function build_mapnik {
   b ./scripts/build_libxml2.sh
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
-    b ./scripts/build_jpeg.sh
+    b ./scripts/build_jpeg_turbo.sh
     b ./scripts/build_png.sh
     b ./scripts/build_proj4.sh
     b ./scripts/build_webp.sh
