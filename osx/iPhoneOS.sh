@@ -7,7 +7,7 @@ export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="arm"
 export ARCH_NAME="armv7"
 export HOST_ARG="--host=arm-apple-darwin"
-export ACTIVE_SDK_VERSION="7.0"
+export ACTIVE_SDK_VERSION="7.1"
 export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=${ACTIVE_SDK_VERSION}"
 
 if [[ "${CXX11:-false}" == false ]]; then
