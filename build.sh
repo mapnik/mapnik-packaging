@@ -49,7 +49,8 @@ function build_mapnik {
       prep_linux
       sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev python-nose
       # postgres deps
-      sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+      # https://github.com/mapnik/mapnik-packaging/commit/598db68f4e5314883023eb6048e94ba7c021b6b7
+      #sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
       echo "removing potentially conflicting libraries"
       # remove travis default installed libs which will conflict
       sudo apt-get purge -y libtiff* libjpeg* libpng3
