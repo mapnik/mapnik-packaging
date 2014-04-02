@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-set -o pipefailset -o pipefail
+set -o pipefail
 
 echoerr 'Building mapnik'
 
