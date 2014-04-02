@@ -39,6 +39,10 @@ if [ $UNAME = 'Darwin' ]; then
   fi
 fi
 
+# patch to workaround crashes in python.input
+# https://github.com/mapnik/mapnik/issues/1968
+patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
+
 echoerr 'bootstrapping boost'
 if [ $PLATFORM = 'Android' ];  then
     echo "using gcc : arm : ${CXX} ;" > user-config.jam
