@@ -49,9 +49,6 @@ export STAGING="${ROOTDIR}/out/staging"
 export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 
-# http://apps.icu-project.org/datacustom/
-export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt52l_only_collator_and_breakiterator.dat"
-
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     if [ "${CXX11}" = true ]; then
@@ -275,8 +272,14 @@ export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
 # http://site.icu-project.org/download
-export ICU_VERSION="52.1"
-export ICU_VERSION2="52_1"
+# tgz
+# NOTE: regenerate the .dat with new major versions via
+# http://apps.icu-project.org/datacustom/
+# include the 'collators' and 'break iterator'
+# download it, unzip, rename, check it in, then edit the below paths and versions
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiterator.dat"
+export ICU_VERSION="53.1"
+export ICU_VERSION2="53_1"
 # http://www.boost.org/users/download/
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
