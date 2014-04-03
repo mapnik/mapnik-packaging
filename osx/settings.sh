@@ -332,8 +332,10 @@ export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
 export NODE_VERSION="0.10.26"
 export SPARSEHASH_VERSION="2.0.2"
+# http://www.freedesktop.org/software/harfbuzz/release/
+# bz2
 # export HARFBUZZ_VERSION="0.9.19"
-export HARFBUZZ_VERSION="0.9.26"
+export HARFBUZZ_VERSION="0.9.27"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
