@@ -7,6 +7,12 @@ cd ${PACKAGES}
 download icu4c-${ICU_VERSION2}-src.tgz
 
 echoerr 'building icu'
+# cleanup installed version
+rm -rf ${BUILD}/share/icu/
+rm -rf ${BUILD}/include/unicode/
+rm -rf ${BUILD}/lib/libicu*
+
+# cleanup local package
 rm -rf icu-${ARCH_NAME}
 rm -rf icu
 # *WARNING* do not set an $INSTALL variable
