@@ -1,0 +1,12 @@
+--- cmake/modules/FindGDAL.cmake_	2014-04-06 14:51:52.000000000 -0700
++++ cmake/modules/FindGDAL.cmake	2014-04-06 14:51:59.000000000 -0700
+@@ -164,7 +164,8 @@
+         ENDIF()
+ 
+         IF(APPLE)
+-            SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.dylib CACHE STRING INTERNAL)
++            SET(GDAL_LIBRARY "/Users/dane/projects/mapnik-packaging/osx/out/build-cpp03-libstdcpp-x86_64/lib/libgdal.a" CACHE STRING INTERNAL)
++            #SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.dylib CACHE STRING INTERNAL)
+         ELSE()
+             SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.so CACHE STRING INTERNAL)
+         ENDIF()

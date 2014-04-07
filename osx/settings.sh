@@ -339,6 +339,7 @@ export HARFBUZZ_VERSION="0.9.27"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
+export LIBLAS_VERSION="1.7.0"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr

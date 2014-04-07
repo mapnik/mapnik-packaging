@@ -1,0 +1,11 @@
+--- configure	2014-04-06 16:50:57.000000000 -0700
++++ configure_	2014-04-06 16:50:48.000000000 -0700
+@@ -26778,7 +26778,7 @@
+ 
+       HAVE_GEOS="no"
+ 
+-      GEOS_LIBS="`${GEOS_CONFIG} --ldflags` -lgeos_c"
++      GEOS_LIBS="`${GEOS_CONFIG} --ldflags` -lgeos_c ${LIBS}"
+       GEOS_CFLAGS="`${GEOS_CONFIG} --cflags`"
+       GEOS_VERSION="`${GEOS_CONFIG} --version`"
+ 
