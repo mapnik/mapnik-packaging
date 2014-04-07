@@ -5,7 +5,7 @@
  
          IF(APPLE)
 -            SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.dylib CACHE STRING INTERNAL)
-+            SET(GDAL_LIBRARY "/Users/dane/projects/mapnik-packaging/osx/out/build-cpp03-libstdcpp-x86_64/lib/libgdal.a" CACHE STRING INTERNAL)
++            SET(GDAL_LIBRARY "$ENV{BUILD}/lib/libgdal.a" CACHE STRING INTERNAL)
 +            #SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.dylib CACHE STRING INTERNAL)
          ELSE()
              SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.so CACHE STRING INTERNAL)
