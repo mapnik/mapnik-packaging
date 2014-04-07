@@ -16,7 +16,7 @@ if [[ $GDAL_LATEST == true ]]; then
         cd gdal/gdal
     else
         cd gdal/gdal
-        git pull
+        git pull || true
         if [[ -f GDALmake.opt ]]; then
             make clean
             make distclean
@@ -30,7 +30,9 @@ else
 fi
 
 # purge previous install
-#rm ${BUILD}/include/cpl_*
+rm -f ${BUILD}/include/cpl_*
+rm -f ${BUILD}/include/gdal*
+rm -f ${BUILD}/lib/libgdal*
 
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
@@ -39,6 +41,8 @@ CXX="${CXX} ${STDLIB_CXXFLAGS} -Wno-pragmas"
 # not bigtiff check will fail…
 # fix bigtiff check
 #patch -N configure ${PATCHES}/bigtiff_check.diff || true
+# add ability to link to static geos
+patch -N configure ${PATCHES}/gdal-geos-check.diff || true
 FGDB_ARGS="--with-fgdb=no"
 if [ $UNAME = 'Darwin' ]; then
     # trick the gdal configure into working on os x
@@ -61,12 +65,19 @@ LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
 BUILD_WITH_SPATIALITE="no"
+BUILD_WITH_GEOS="no"
 CUSTOM_LIBS=""
 
 if [ -f $BUILD/lib/libspatialite.a ]; then
     CUSTOM_LIBS="${CUSTOM_LIBS} -lgeos_c -lgeos -lsqlite3"
     BUILD_WITH_SPATIALITE="${BUILD}"
 fi
+
+if [ -f $BUILD/lib/libgeos.a ]; then
+    CUSTOM_LIBS="${CUSTOM_LIBS} -lgeos_c -lgeos"
+    BUILD_WITH_GEOS="${BUILD}/bin/geos-config"
+fi
+
 if [ -f $BUILD/lib/libtiff.a ]; then
     CUSTOM_LIBS="${CUSTOM_LIBS} -ltiff -ljpeg"
 fi
@@ -75,7 +86,7 @@ if [ -f $BUILD/lib/libproj.a ]; then
     CUSTOM_LIBS="${CUSTOM_LIBS} -lproj"
 fi
 
-if [[ $BUILD_WITH_SPATIALITE != "no" ]]; then
+if [[ $BUILD_WITH_SPATIALITE != "no" ]] || [[ $BUILD_WITH_GEOS != "no" ]]; then
     if [[ $CXX11 == true ]]; then
         if [[ $STDLIB == "libcpp" ]]; then
             CUSTOM_LIBS="$CUSTOM_LIBS -lc++"
@@ -99,9 +110,9 @@ ${FGDB_ARGS} \
 --with-static-proj4=${BUILD} \
 --with-sqlite3=${BUILD} \
 --with-spatialite=${BUILD_WITH_SPATIALITE} \
+--with-geos=${BUILD_WITH_GEOS} \
 --with-hide-internal-symbols=no \
 --with-curl=no \
---with-geos=no \
 --with-pcraster=no \
 --with-cfitsio=no \
 --with-odbc=no \
