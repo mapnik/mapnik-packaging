@@ -1,9 +1,11 @@
 #!/bin/bash
 
 if [ -z "$@" ]; then
-  echo 'please pass boost library names'
+  echo "please pass boost library names like '--with-thread' or just 'none' to only setup boost and not build any libs"
   exit 1
 fi
+
+LIBRARY_NAMES="$@"
 
 set -e -u
 set -o pipefail
@@ -92,20 +94,24 @@ fi
 B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
 echoerr 'compiling boost'
-# static libs
-./b2 ${CROSS_FLAGS} \
-  --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
-  --ignore-site-config --user-config=user-config.jam \
-  architecture="${BOOST_ARCH}" \
-  toolset="${BOOST_TOOLSET}" \
-  ${ICU_DETAILS} \
-  "$@" \
-  link=static,shared \
-  variant=release \
-  linkflags="${BOOST_LDFLAGS}" \
-  cxxflags="${BOOST_CXXFLAGS}" \
-  stage install
 
-# clear out shared libs
-check_and_clear_libs
-echoerr 'done compiling boost'
+if [[ ${LIBRARY_NAMES} != 'none' ]]; then
+    ./b2 ${CROSS_FLAGS} \
+      --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
+      --ignore-site-config --user-config=user-config.jam \
+      architecture="${BOOST_ARCH}" \
+      toolset="${BOOST_TOOLSET}" \
+      ${ICU_DETAILS} \
+      "$LIBRARY_NAMES" \
+      link=static,shared \
+      variant=release \
+      linkflags="${BOOST_LDFLAGS}" \
+      cxxflags="${BOOST_CXXFLAGS}" \
+      stage install
+
+    # clear out shared libs
+    check_and_clear_libs
+    echoerr 'done compiling boost'
+else
+    echoerr 'boost setup, but skipped compiling any boost libraries'
+fi
