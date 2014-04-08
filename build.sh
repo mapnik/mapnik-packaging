@@ -158,6 +158,7 @@ function build_http {
   b ./scripts/build_libuv.sh
   b ./scripts/build_openssl.sh
   b ./scripts/build_curl.sh
+  b ./scripts/build_glfw.sh
   set +e
 }
 export -f build_http
