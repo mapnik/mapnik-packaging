@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 echoerr 'building osm2pgsql'
-LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -lldap -lpam -lssl -lcrypto -lkrb5"
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} `pkg-config libpq --libs --static`"
 OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
 export DESTDIR=${OSM2PGSQL_TARGET}
 #svn co http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/
@@ -27,10 +27,12 @@ make
 make install
 unset DESTDIR
 
-# TODO - update version in packproj
-/usr/local/bin/freeze ${ROOTDIR}/installer/osm2pgsql/osm2pgsql.packproj
+if [[ ${UNAME} == 'Darwin' ]]; then
 
-# TODO dump git describe once it is working
+  # TODO - update version in packproj
+  /usr/local/bin/freeze ${ROOTDIR}/installer/osm2pgsql/osm2pgsql.packproj
+
+  # TODO dump git describe once it is working
 
 
 # add docs
@@ -82,11 +84,12 @@ Import an .osm file named 'test.osm' into a postgres database named 'osm':
 
 ' > "${ROOTDIR}/installer/osm2pgsql/build/README.txt"
 
-DMG_VOL_NAME="osm2pgsql"
-DMG_NAME="osm2pgsql.dmg"
-rm -rf "${ROOTDIR}/installer/osm2pgsql/build/${DMG_NAME}"
-hdiutil create \
-  "${ROOTDIR}/installer/osm2pgsql/build/${DMG_NAME}" \
-  -volname "${DMG_VOL_NAME}" \
-  -fs HFS+ \
-  -srcfolder "${ROOTDIR}/installer/osm2pgsql/build/"
+    DMG_VOL_NAME="osm2pgsql"
+    DMG_NAME="osm2pgsql.dmg"
+    rm -rf "${ROOTDIR}/installer/osm2pgsql/build/${DMG_NAME}"
+    hdiutil create \
+      "${ROOTDIR}/installer/osm2pgsql/build/${DMG_NAME}" \
+      -volname "${DMG_VOL_NAME}" \
+      -fs HFS+ \
+      -srcfolder "${ROOTDIR}/installer/osm2pgsql/build/"
+fi
