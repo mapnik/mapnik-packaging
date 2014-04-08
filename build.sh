@@ -121,8 +121,7 @@ function build_mapnik {
   set +e
 }
 
-function build_osrm {
-  set -e
+function basic_prep {
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
       sudo apt-get install -qq -y build-essential git unzip zlib1g-dev
@@ -130,6 +129,11 @@ function build_osrm {
       prep_osx
   fi
   echo "Running build with ${JOBS} parallel jobs"
+}
+
+function build_osrm {
+  set -e
+  basic_prep
   b ./scripts/build_bzip2.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_icu.sh
@@ -147,3 +151,47 @@ function build_osrm {
 }
 
 export -f build_osrm
+
+function build_http {
+  basic_prep
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_libuv.sh
+  b ./scripts/build_openssl.sh
+  b ./scripts/build_curl.sh
+  set +e
+}
+export -f build_http
+
+function build_osm2pgsql {
+  basic_prep
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_bzip2.sh
+  b ./scripts/build_geos.sh
+  b ./scripts/build_proj4.sh
+  b ./scripts/build_postgres.sh
+  b ./scripts/build_protobuf.sh
+  b ./scripts/build_protobuf_c.sh
+  set +e
+}
+export -f build_osm2pgsql
+
+function build_liblas {
+  basic_prep
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_jpeg_turbo.sh
+  b ./scripts/build_png.sh
+  b ./scripts/build_tiff.sh
+  b ./scripts/build_geotiff.sh
+  b ./scripts/build_geos.sh
+  b ./scripts/build_sqlite.sh
+  b ./scripts/build_proj4.sh
+  b ./scripts/build_spatialite.sh
+  b ./scripts/build_expat.sh
+  b ./scripts/build_postgres.sh
+  b ./scripts/build_gdal.sh
+  b ./scripts/build_laszip.sh
+  ./scripts/build_boost.sh --with-thread --with-program_options
+  b ./scripts/build_liblas.sh
+  set +e
+}
+export -f build_liblas
