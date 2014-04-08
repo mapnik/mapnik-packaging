@@ -14,7 +14,7 @@ if [[ $TIFF_LATEST == true ]]; then
     if [ ! -d libtiff ]; then
         # NOTE: make sure this repo is up to date with syncing from
         # https://github.com/OSGeo/gdal/commits/trunk/gdal/frmts/gtiff/libtiff
-        git clone --quiet --depth=1 git@github.com:vadz/libtiff.git
+        git clone --quiet --depth=1 https://github.com/vadz/libtiff.git
         cd libtiff
     else
         cd libtiff
