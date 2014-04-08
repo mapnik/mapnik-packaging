@@ -33,7 +33,10 @@ ${OS_COMPILER} \
 enable-ec_nistp_64_gcc_128
 
 make depend
-# now re-configure to put $CFLAGS
+
+# now re-configure to apply custom $CFLAGS
+CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAGS"
+
 # we do this now to avoid breaking 'make depend'
 ./Configure --prefix=${BUILD} \
 --openssldir=${BUILD}/etc/openssl \

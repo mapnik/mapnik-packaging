@@ -25,6 +25,7 @@ if [ ! -f ${CA_BUNDLE} ]; then
     rm -f ./certdata.txt
 fi
 
+# deps: http://curl.haxx.se/docs/libs.html
 ./configure --prefix=${BUILD} \
 --enable-static \
 --enable-shared \
