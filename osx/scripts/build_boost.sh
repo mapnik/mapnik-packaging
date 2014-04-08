@@ -102,7 +102,7 @@ if [[ ${LIBRARY_NAMES} != 'none' ]]; then
       architecture="${BOOST_ARCH}" \
       toolset="${BOOST_TOOLSET}" \
       ${ICU_DETAILS} \
-      "$LIBRARY_NAMES" \
+      "$@" \
       link=static,shared \
       variant=release \
       linkflags="${BOOST_LDFLAGS}" \
