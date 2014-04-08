@@ -17,6 +17,7 @@ function prep_osx {
   else
       source MacOSX.sh
   fi
+  brew install autoconf automake libtool makedepend | true
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
