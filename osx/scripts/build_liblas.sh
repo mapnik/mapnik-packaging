@@ -39,8 +39,6 @@ GDAL_LIBS=`gdal-config --libs`
 GDAL_LIBS="$GDAL_LIBS `gdal-config --dep-libs`"
 LDFLAGS="$GDAL_LIBS $LDFLAGS ${STDLIB_LDFLAGS}"
 
-# needed for static linking
-
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DWITH_GEOTIFF=ON \
   -DWITH_GDAL=ON \
@@ -48,13 +46,15 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DLASZIP_INCLUDE_DIR=${BUILD}/include \
   -DWITH_STATIC_LASZIP=ON \
   -DBoost_NO_SYSTEM_PATHS=ON \
+  -DBoost_USE_STATIC_LIBS=ON \
+  -DBoost_USE_MULTITHREADED=ON \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release
 make -j${JOBS} VERBOSE=1
 make install
 
-#check_and_clear_libs
+check_and_clear_libs
 
 #  -DCMAKE_SHARED_LINKER_FLAGS="$GDAL_LIBS"
 
