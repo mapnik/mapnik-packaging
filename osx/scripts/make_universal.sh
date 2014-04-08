@@ -3,31 +3,31 @@ set -e -u
 set -o pipefail
 mkdir -p "${BUILD_UNIVERSAL}"
 
+function add_library() {
+    cp -r "${BUILD_ROOT}-$1/" "${BUILD_ROOT}-universal"
+    BUILD_ROOT_ESCAPED=$(echo "${BUILD_ROOT}" | sed -e 's/[]\/()$*.^|[]/\\&/g')
+    find ${BUILD_ROOT}-universal/ \( -name "*.pc" -or -name "*.la" -or -name "*-config" \) \
+        -exec sed -i '' "s/${BUILD_ROOT_ESCAPED}-$1/${BUILD_ROOT_ESCAPED}-universal/g" {} \;
+    FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-$1/lib/${libname}"
+}
+
 if [[ $UNAME == 'Darwin' ]]; then
     echo '*making universal libs*'
-    for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
-        echo '*making universal '$i'*'
+    ARCHS="x86_64 arm64 armv7s armv7 i386"
+    LIBS=$(find ${ROOTDIR}/out/*/lib -maxdepth 1 -name '*.a' -exec basename '{}' \; | sort | uniq)
+    for libname in ${LIBS}; do
+        echo '*making universal '$libname'*'
         FROM_LIBS=""
-        libname=$(basename $i)
-        if [ -f "${BUILD_ROOT}-x86_64/lib/${libname}" ]; then
-            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-x86_64/lib/${libname}"
-        fi
-        if [ -f "${BUILD_ROOT}-arm64/lib/${libname}" ]; then
-            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-arm64/lib/${libname}"
-        fi
-        if [ -f "${BUILD_ROOT}-armv7s/lib/${libname}" ]; then
-            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-armv7s/lib/${libname}"
-        fi
-        if [ -f "${BUILD_ROOT}-armv7/lib/${libname}" ]; then
-            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-armv7/lib/${libname}"
-        fi
-        if [ -f "${BUILD_ROOT}-i386/lib/${libname}" ]; then
-            FROM_LIBS="$FROM_LIBS ${BUILD_ROOT}-i386/lib/${libname}"
-        fi
+        for arch in ${ARCHS}; do
+            if [ -f "${BUILD_ROOT}-${arch}/lib/${libname}" ]; then
+                add_library $arch
+            fi
+        done;
+
         lipo -create -output \
-            "${BUILD_UNIVERSAL}/${libname}" \
+            "${BUILD_UNIVERSAL}/lib/${libname}" \
             $FROM_LIBS
-        lipo -info "${BUILD_UNIVERSAL}/${libname}"
+        lipo -info "${BUILD_UNIVERSAL}/lib/${libname}"
     done;
 
     if [ -f ${MAPNIK_BIN_SOURCE}/lib/libmapnik.a ]; then
