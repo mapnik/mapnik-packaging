@@ -100,6 +100,35 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
+elif [ ${PLATFORM} = 'Linaro' ]; then
+    export UNAME='Linaro'
+    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
+    cd ${PACKAGES}
+    # https://launchpad.net/linaro-toolchain-binaries/support/01/+download/linaro-prebuilt-sysroot-2013.07-2.tar.bz2
+    download linaro-prebuilt-sysroot-2013.07-2.tar.bz2
+    if [ ! -d ${SDK_PATH} ]; then
+        echo "untarring ${SDK_PATH}"
+        tar -xf linaro-prebuilt-sysroot-2013.07-2.tar.bz2
+    fi
+    cd ${ROOTDIR}
+    # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
+    export EXTRA_CFLAGS="-fPIC --sysroot ${SDK_PATH}"
+    export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export JOBS=`sysctl -n hw.ncpu`
+    export BOOST_TOOLSET="gcc-arm"
+    export PATH="${SDK_PATH}/bin":${PATH}
+    export CORE_CXX="arm-linux-gnueabihf-g++"
+    export CORE_CC="arm-linux-gnueabihf-gcc"
+    export LD="arm-linux-gnueabihf-ld"
+    export AR="arm-linux-gnueabihf-ar"
+    export ARCH_FLAGS=
+    export RANLIB="arm-linux-gnueabihf-ranlib"
+    export NM="arm-linux-gnueabihf-nm"
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
 elif [ ${PLATFORM} = 'Android' ]; then
     export UNAME='Android'
     export API_LEVEL="android-18"
