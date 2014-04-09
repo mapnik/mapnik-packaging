@@ -13,6 +13,7 @@ cd curl-${CURL_VERSION}
 
 # generate root certs
 # https://github.com/joyent/node/pull/6489
+mkdir -p "${BUILD}/etc/openssl/certs"
 CA_BUNDLE="${BUILD}/etc/openssl/certs/ca-bundle.crt"
 if [ ! -f ${CA_BUNDLE} ]; then
     rm -f ./ca-bundle.crt
