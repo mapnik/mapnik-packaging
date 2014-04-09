@@ -17,7 +17,7 @@ env:
     - secure: iQ5aDVTqRYX8YQdxi8gk0jLoNtWvtb7x3ZQORQT9w+y/X4qX+5mV/FV88BQBYF4MMlF5ePGx8IItpEagllIZboAf68CBvclretlPXUiw3JyHaALfHJI1n02y/j/NnY2P3QJUG9QuFBdIAeUWUyReGxOD9Bhcj4E8nHkAgDNsz5k=
 
 before_install:
- - if [[ `uname -s` == 'Darwin' ]]; then vm_stat; else free; fi
+ - if [[ `uname -s` == 'Darwin' ]]; then vm_stat && sysctl -n hw.memsize; else free; fi
 
 install:
  - true
