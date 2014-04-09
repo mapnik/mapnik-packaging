@@ -1,0 +1,10 @@
+--- src/CMakeLists.txt	2014-04-06 15:12:13.000000000 -0700
++++ src/CMakeLists.txt_	2014-04-06 15:12:11.000000000 -0700
+@@ -10,7 +10,6 @@
+ if(GDAL_FOUND)
+   set(LIBLAS_GDAL_CPP
+     gt_citation.cpp
+-    gt_wkt_srs.cpp
+     tifvsi.cpp)
+ endif()
+ 

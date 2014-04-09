@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo '...packaging binary tarball'
 
 rm -rf ${BUILD}/var/

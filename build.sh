@@ -17,6 +17,7 @@ function prep_osx {
   else
       source MacOSX.sh
   fi
+  brew install autoconf automake libtool makedepend | true
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
@@ -49,11 +50,12 @@ function build_mapnik {
       prep_linux
       sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev python-nose
       # postgres deps
-      sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
+      # https://github.com/mapnik/mapnik-packaging/commit/598db68f4e5314883023eb6048e94ba7c021b6b7
+      #sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
       echo "removing potentially conflicting libraries"
       # remove travis default installed libs which will conflict
-      sudo apt-get purge -y libtiff* libjpeg* libpng3
-      sudo apt-get autoremove -y
+      sudo apt-get purge -qq -y libtiff* libjpeg* libpng3
+      sudo apt-get autoremove -y -qq
   else
       prep_osx
   fi
@@ -78,7 +80,7 @@ function build_mapnik {
   b ./scripts/build_libxml2.sh
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
-    b ./scripts/build_jpeg.sh
+    b ./scripts/build_jpeg_turbo.sh
     b ./scripts/build_png.sh
     b ./scripts/build_proj4.sh
     b ./scripts/build_webp.sh
@@ -120,8 +122,7 @@ function build_mapnik {
   set +e
 }
 
-function build_osrm {
-  set -e
+function basic_prep {
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
       sudo apt-get install -qq -y build-essential git unzip zlib1g-dev
@@ -129,6 +130,11 @@ function build_osrm {
       prep_osx
   fi
   echo "Running build with ${JOBS} parallel jobs"
+}
+
+function build_osrm {
+  set -e
+  basic_prep
   b ./scripts/build_bzip2.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_icu.sh
@@ -146,3 +152,48 @@ function build_osrm {
 }
 
 export -f build_osrm
+
+function build_http {
+  basic_prep
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_libuv.sh
+  b ./scripts/build_openssl.sh
+  b ./scripts/build_curl.sh
+  b ./scripts/build_glfw.sh
+  set +e
+}
+export -f build_http
+
+function build_osm2pgsql {
+  basic_prep
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_bzip2.sh
+  b ./scripts/build_geos.sh
+  b ./scripts/build_proj4.sh
+  b ./scripts/build_postgres.sh
+  b ./scripts/build_protobuf.sh
+  b ./scripts/build_protobuf_c.sh
+  set +e
+}
+export -f build_osm2pgsql
+
+function build_liblas {
+  basic_prep
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_jpeg_turbo.sh
+  b ./scripts/build_png.sh
+  b ./scripts/build_tiff.sh
+  b ./scripts/build_geotiff.sh
+  b ./scripts/build_geos.sh
+  b ./scripts/build_sqlite.sh
+  b ./scripts/build_proj4.sh
+  b ./scripts/build_spatialite.sh
+  b ./scripts/build_expat.sh
+  b ./scripts/build_postgres.sh
+  b ./scripts/build_gdal.sh
+  b ./scripts/build_laszip.sh
+  ./scripts/build_boost.sh --with-thread --with-program_options
+  b ./scripts/build_liblas.sh
+  set +e
+}
+export -f build_liblas

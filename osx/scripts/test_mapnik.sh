@@ -1,7 +1,7 @@
 
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo '*** testing install'
 if [ ! -d "${MAPNIK_BIN_SOURCE}/share/mapnik" ]; then
   ${ROOTDIR}/scripts/post_build_fix.sh
@@ -13,7 +13,6 @@ export GDAL_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/gdal"
 export PROJ_LIB="${MAPNIK_BIN_SOURCE}/share/mapnik/proj"
 cd ${MAPNIK_SOURCE}
 make test-local || true
-echo here
 #TODO - place in dist and there there
 #echoerr 'testing build as packaged'
 : '

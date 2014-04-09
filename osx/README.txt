@@ -8,4 +8,4 @@ Contact Dane (dane@dbsgeo.com) with any questions.
 
 ## osx
 
-    brew install autoconf automake libtool
+    brew install autoconf automake libtool makedepend

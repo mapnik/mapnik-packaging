@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 ./scripts/download_deps.sh
 ./scripts/build_core_deps.sh
 ./scripts/build_deps_optional.sh

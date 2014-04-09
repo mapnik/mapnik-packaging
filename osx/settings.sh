@@ -49,9 +49,6 @@ export STAGING="${ROOTDIR}/out/staging"
 export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 
-# http://apps.icu-project.org/datacustom/
-export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt52l_only_collator_and_breakiterator.dat"
-
 if [ ${PLATFORM} = 'Linux' ]; then
     export EXTRA_CFLAGS="-fPIC"
     if [ "${CXX11}" = true ]; then
@@ -103,6 +100,35 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
+elif [ ${PLATFORM} = 'Linaro' ]; then
+    export UNAME='Linaro'
+    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
+    cd ${PACKAGES}
+    # https://launchpad.net/linaro-toolchain-binaries/support/01/+download/linaro-prebuilt-sysroot-2013.07-2.tar.bz2
+    download linaro-prebuilt-sysroot-2013.07-2.tar.bz2
+    if [ ! -d ${SDK_PATH} ]; then
+        echo "untarring ${SDK_PATH}"
+        tar -xf linaro-prebuilt-sysroot-2013.07-2.tar.bz2
+    fi
+    cd ${ROOTDIR}
+    # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
+    export EXTRA_CFLAGS="-fPIC --sysroot ${SDK_PATH}"
+    export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export JOBS=`sysctl -n hw.ncpu`
+    export BOOST_TOOLSET="gcc-arm"
+    export PATH="${SDK_PATH}/bin":${PATH}
+    export CORE_CXX="arm-linux-gnueabihf-g++"
+    export CORE_CC="arm-linux-gnueabihf-gcc"
+    export LD="arm-linux-gnueabihf-ld"
+    export AR="arm-linux-gnueabihf-ar"
+    export ARCH_FLAGS=
+    export RANLIB="arm-linux-gnueabihf-ranlib"
+    export NM="arm-linux-gnueabihf-nm"
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
 elif [ ${PLATFORM} = 'Android' ]; then
     export UNAME='Android'
     export API_LEVEL="android-18"
@@ -275,13 +301,19 @@ export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
 # http://site.icu-project.org/download
-export ICU_VERSION="52.1"
-export ICU_VERSION2="52_1"
+# tgz
+# NOTE: regenerate the .dat with new major versions via
+# http://apps.icu-project.org/datacustom/
+# include the 'collators' and 'break iterator'
+# download it, unzip, rename, check it in, then edit the below paths and versions
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiterator.dat"
+export ICU_VERSION="53.1"
+export ICU_VERSION2="53_1"
 # http://www.boost.org/users/download/
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080401"
+export SQLITE_VERSION="3080402"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
@@ -329,11 +361,17 @@ export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
 export NODE_VERSION="0.10.26"
 export SPARSEHASH_VERSION="2.0.2"
+# http://www.freedesktop.org/software/harfbuzz/release/
+# bz2
 # export HARFBUZZ_VERSION="0.9.19"
-export HARFBUZZ_VERSION="0.9.26"
+export HARFBUZZ_VERSION="0.9.27"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
+export LIBLAS_VERSION="1.7.0"
+export CURL_VERSION="7.36.0"
+export OPENSSL_VERSION="1.0.1g"
+export LIBUV_VERSION="0.11.23"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr

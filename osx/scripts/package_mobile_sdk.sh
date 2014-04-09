@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echoerr '...packaging mobile sdk tarball'
 
 # where we are headed
@@ -81,6 +81,12 @@ fi
 cd ${MAPNIK_DIST}
 
 echoerr "copying headers of other deps"
+
+# libxml2, needed after https://github.com/mapnik/node-mapnik/issues/239
+if [ -d ${BUILD}/include/libxml2 ]; then
+    echo "copying libxml2"
+    cp -r ${BUILD}/include/libxml2 ${LOCAL_TARGET}/include/
+fi
 
 # icu
 if [ -d ${BUILD}/include/unicode ]; then
@@ -204,4 +210,6 @@ if [[ "${PUBLISH:-false}" != false ]]; then
     s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
     s3cmd ls `dirname s3://mapnik/dist/dev/*/*`
     # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
+else
+    echoerr 'skipping publishing'
 fi

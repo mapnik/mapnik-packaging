@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo '...copying headers needed for node bindings to compile against mapnik'
 
 # feed the boost beast - 45 MB instead of 113

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 # http://www.python.org/download/releases/
 # http://www.python.org/ftp/python/
 

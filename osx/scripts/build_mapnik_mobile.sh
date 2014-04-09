@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 cd ${MAPNIK_SOURCE}
 
 echoerr 'Building mapnik mobile'

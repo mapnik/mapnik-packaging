@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e -u
-
+set -o pipefail
 echo "...fixing install names of mapnik and dependencies"
 
 mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/"
 mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
 
-DATA_FILE=$(find ${BUILD_ROOT}-*/share/icu/*/icudt*.dat -maxdepth 1 -name '*.dat' -print -quit)
+DATA_FILE=$(find ${BUILD}/share/icu/*/icudt*.dat -maxdepth 1 -name '*.dat' -print -quit)
 if [ "${DATA_FILE}" ];then
     cp "${DATA_FILE}" "${MAPNIK_BIN_SOURCE}/share/mapnik/icu/"
 fi
