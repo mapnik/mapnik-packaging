@@ -61,21 +61,21 @@ echo "PROJ_LIBS = '${BUILD}/lib'" >> config.py
 echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
 echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
-
-./configure \
-  PATH_REMOVE="/usr/:/usr/local/" \
-  BINDINGS='python' \
-  INPUT_PLUGINS='csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite' \
-  DEMO=True \
-  SVG_RENDERER=true \
-  CAIRO=True \
-  PGSQL2SQLITE=False \
-  SVG2PNG=False \
-  FRAMEWORK_PYTHON=False \
-  FULL_LIB_PATH=False \
-  ENABLE_SONAME=False \
-  BOOST_PYTHON_LIB=boost_python-2.7 || cat config.log
+echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
+echo "BINDINGS = 'python'" >> config.py
+echo "INPUT_PLUGINS = 'csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+echo "DEMO = True" >> config.py
+echo "SVG_RENDERER = True" >> config.py
+echo "CAIRO = True" >> config.py
+echo "PGSQL2SQLITE = False" >> config.py
+echo "SVG2PNG = False" >> config.py
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
+echo "FRAMEWORK_PYTHON = False" >> config.py
+echo "FULL_LIB_PATH = False" >> config.py
+echo "ENABLE_SONAME = False" >> config.py
+echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
+
+./configure || cat config.log
 JOBS=${JOBS} make
 make install
 
