@@ -9,8 +9,9 @@ if [[ $UNAME == 'Darwin' ]]; then
     LIBS=$(find ${ROOTDIR}/out/*/lib -maxdepth 1 -name '*.a' -exec basename '{}' \; | sort | uniq)
 
     for arch in ${ARCHS}; do
-        if [ -f "${BUILD_ROOT}-${arch}" ]; then
-            cp -r "${BUILD_ROOT}-${arch}/" "${BUILD_ROOT}-universal"
+        if [ -d "${BUILD_ROOT}-${arch}" ]; then
+            echo '*merging '${BUILD_ROOT}'-'${arch}'*'
+            ditto "${BUILD_ROOT}-${arch}/" "${BUILD_ROOT}-universal"
             build_root_escaped=$(echo "${BUILD_ROOT}" | sed -e 's/[]\/()$*.^|[]/\\&/g')
             find ${BUILD_ROOT}-universal/ \( -name "*.pc" -or -name "*.la" -or -name "*-config" \) \
                 -exec sed -i '' "s/${build_root_escaped}-${arch}/${build_root_escaped}-universal/g" {} \;
