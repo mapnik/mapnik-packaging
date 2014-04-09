@@ -2,7 +2,6 @@ language: cpp
 
 compiler:
  - gcc
- - clang
 
 env:
   matrix:
@@ -18,9 +17,6 @@ env:
     - secure: iQ5aDVTqRYX8YQdxi8gk0jLoNtWvtb7x3ZQORQT9w+y/X4qX+5mV/FV88BQBYF4MMlF5ePGx8IItpEagllIZboAf68CBvclretlPXUiw3JyHaALfHJI1n02y/j/NnY2P3QJUG9QuFBdIAeUWUyReGxOD9Bhcj4E8nHkAgDNsz5k=
 
 before_install:
- # fixes node/gyp install
- # https://github.com/travis-ci/travis-cookbooks/issues/155
- - sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
  - if [[ `uname -s` == 'Darwin' ]]; then vm_stat; else free; fi
 
 install:
