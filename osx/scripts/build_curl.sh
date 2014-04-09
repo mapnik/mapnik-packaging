@@ -72,5 +72,8 @@ make install
 # test https with cert
 echo ${BUILD}/bin/curl -I --cacert ${CA_BUNDLE} "https://www.mapbox.com/"
 ${BUILD}/bin/curl -I --cacert ${CA_BUNDLE} "https://www.mapbox.com/"
-
+# remove curl command line now since the lack of default-known certs
+# will break other curl commands that the build system depends on
+# so we fall back to system curl command
+rm -f ${BUILD}/bin/curl
 cd ${PACKAGES}

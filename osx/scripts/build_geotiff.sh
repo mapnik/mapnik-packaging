@@ -7,7 +7,7 @@ cd ${PACKAGES}
 #download libgeotiff-${LIBGEOTIFF_VERSION}.tar.gz
 
 if [ ! -d libgeotiff ]; then
-    svn co https://svn.osgeo.org/metacrs/geotiff/trunk/libgeotiff
+    svn co https://svn.osgeo.org/metacrs/geotiff/trunk/libgeotiff --trust-server-cert --non-interactive
     cd libgeotiff
     ./autogen.sh
 else

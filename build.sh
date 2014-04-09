@@ -125,7 +125,7 @@ function build_mapnik {
 function basic_prep {
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
-      sudo apt-get install -qq -y build-essential git unzip zlib1g-dev
+      sudo apt-get install -qq -y build-essential git unzip zlib1g-dev subversion
   else
       prep_osx
   fi
