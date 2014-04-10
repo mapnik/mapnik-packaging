@@ -4,7 +4,8 @@ Contact Dane (dane@dbsgeo.com) with any questions.
 
 ## linux setup
 
-    apt-get install build-essential git unzip python-dev libbz2-dev
+    apt-get install -y build-essential unzip python-dev \
+      git libtool g++ autotools-dev automake cmake make
 
 ## osx
 
