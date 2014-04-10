@@ -89,12 +89,12 @@ fi
 if [[ $BUILD_WITH_SPATIALITE != "no" ]] || [[ $BUILD_WITH_GEOS != "no" ]]; then
     if [[ $CXX11 == true ]]; then
         if [[ $STDLIB == "libcpp" ]]; then
-            CUSTOM_LIBS="$CUSTOM_LIBS -lc++"
+            CUSTOM_LIBS="$CUSTOM_LIBS -lc++ -lm"
         else
-            CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+            CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++ -lm"
         fi
     else
-        CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++"
+        CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++ -lm"
     fi
 fi
 
