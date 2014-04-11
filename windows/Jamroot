@@ -236,7 +236,7 @@ if $(dll)
     #   ;
 
 	install install-gdal-dll
-        : $(MAPNIK_DEPS_DIR)/gdal/gdal/gdal110.dll
+        : $(MAPNIK_DEPS_DIR)/gdal/gdal/gdal111.dll
         : <location>$(prefix)/lib
        ;
 }
