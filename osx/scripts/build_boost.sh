@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$@" ]; then
-  echo "please pass boost library names like '--with-thread' or just 'none' to only setup boost and not build any libs"
+  echo "please pass boost library names like '--with-thread' or just 'header_only' to only setup boost and not build any libs"
   exit 1
 fi
 
@@ -95,7 +95,7 @@ B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
 echoerr 'compiling boost'
 
-if [[ ${LIBRARY_NAMES} != 'none' ]]; then
+if [[ ${LIBRARY_NAMES} != 'header_only' ]] && [[ ${LIBRARY_NAMES} != 'none' ]]; then
     ./b2 ${CROSS_FLAGS} \
       --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
       --ignore-site-config --user-config=user-config.jam \
