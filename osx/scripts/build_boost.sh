@@ -123,7 +123,10 @@ else
       STAGING_DIR=bcp_staging
       mkdir -p ${STAGING_DIR}
       rm -rf ${STAGING_DIR}/*
-      ./dist/bin/bcp "${TARGET_NAMES}" ${STAGING_DIR} 1>/dev/null
+      for var in "$@"
+      do
+          ./dist/bin/bcp "${var}" ${STAGING_DIR} 1>/dev/null
+      done
       du -h -d 0 ${STAGING_DIR}/boost/
       mkdir -p ${BUILD}/include
       cp -r ${STAGING_DIR}/boost ${BUILD}/include/
