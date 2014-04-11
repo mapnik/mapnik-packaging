@@ -13,6 +13,7 @@ local BOOST_LIBS = [ modules.peek : BOOST_LIBS ] ;
 local MAPNIK_DEPS_DIR = [ modules.peek : MAPNIK_DEPS_DIR ] ;
 
 lib z : : <name>zlib <search>$(MAPNIK_DEPS_DIR)/zlib ;
+lib webp : : <name>libwebp <search>$(MAPNIK_DEPS_DIR)/webp/lib ;
 lib png : z : <name>libpng <search>$(MAPNIK_DEPS_DIR)/libpng ;
 lib jpeg : : <name>libjpeg <search>$(MAPNIK_DEPS_DIR)/jpeg ;
 lib tiff : : <name>libtiff <search>$(MAPNIK_DEPS_DIR)/tiff/libtiff ;

@@ -107,6 +107,7 @@ lib mapnik
     # others
     feature_style_processor.cpp
     mapped_memory_cache.cpp
+    webp_reader.cpp
     jpeg_reader.cpp
     libxml2_loader.cpp
     #rapidxml_loader.cpp
@@ -150,6 +151,7 @@ lib mapnik
     ..//filesystem
     ..//regex
     ..//z
+    ..//webp
     ..//png
     ..//jpeg
     ..//tiff

@@ -42,6 +42,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     set ZLIB_VERSION=1.2.8
     set LIBPNG_VERSION=1.5.17
     set JPEG_VERSION=8d
+    set WEBP_VERSION=1.4.0
     set FREETYPE_VERSION=2.4.9
     set POSTGRESQL_VERSION=9.1.3
     set TIFF_VERSION=4.0.0beta7
@@ -63,6 +64,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     cd %PKGDIR%
     curl http://iweb.dl.sourceforge.net/project/boost/boost/1.%BOOST_VERSION%.0/boost_1_%BOOST_VERSION%_0.tar.gz -O
     curl http://www.ijg.org/files/jpegsr%JPEG_VERSION%.zip -O
+    curl https://webp.googlecode.com/files/libwebp-%WEBP_VERSION%-windows-x86.zip -O
     curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
     curl http://ftp.postgresql.org/pub/source/v%POSTGRESQL_VERSION%/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
     curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng15/libpng-%LIBPNG_VERSION%.tar.gz -O
@@ -123,6 +125,13 @@ for every build variant.*
     # note for VS2012, use toolset=msvc-11.0 and VS2010 use toolset=msvc-10.0 
     bjam toolset=msvc --prefix=..\\%BOOST_PREFIX% --with-python python=2.7 release link=static --build-type=complete install
     
+    cd %ROOTDIR%
+
+### webp
+
+    unzip %PKGDIR%\libwebp-%WEBP_VERSION%-windows-x86.zip
+    rename libwebp-%WEBP_VERSION%-windows-x86 webp
+    @rem nothing more needed as we use the binaries
     cd %ROOTDIR%
 
 ### Jpeg
