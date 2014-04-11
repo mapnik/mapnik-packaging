@@ -220,9 +220,13 @@ if $(dll)
         : <location>$(prefix)/lib
        ;
 
-    # statically linking so we don't need to provide
-	#install install-xml2-dll
-    #    : $(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc/libxml2.dll
+	install install-xml2-lib
+        : $(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc/libxml2_a.lib
+        : <location>$(prefix)/lib
+       ;
+
+  #install install-xml2-dll
+    #    : $(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc/libxml2_a_dll.lib
     #    : <location>$(prefix)/lib
     #   ;
     #
