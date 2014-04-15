@@ -33,6 +33,8 @@ fi
 rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
 rm -f ${BUILD}/lib/libgdal*
+rm -rf ./.libs
+rm -rf ./libgdal.la
 
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass

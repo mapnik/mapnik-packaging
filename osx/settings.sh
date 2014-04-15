@@ -191,7 +191,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
       # Note: stripping with -Wl,-S breaks dtrace
-      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -L${SDK_PATH}/usr/lib -Wl,-search_paths_first"
     else
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
       export SDK_PATH="${XCODE_PREFIX}/usr/"
