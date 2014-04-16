@@ -7,7 +7,7 @@ cd ${PACKAGES}
 echoerr 'building glfw'
 
 rm -rf glfw-master
-git clone --quiet https://github.com/glfw/glfw.git glfw-master
+git clone --quiet --depth=1 https://github.com/glfw/glfw.git glfw-master
 cd glfw-master
 
 rm -rf build
