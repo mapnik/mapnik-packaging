@@ -16,14 +16,7 @@ cd curl-${CURL_VERSION}
 mkdir -p "${BUILD}/etc/openssl/certs"
 CA_BUNDLE="${BUILD}/etc/openssl/certs/ca-bundle.crt"
 if [ ! -f ${CA_BUNDLE} ]; then
-    rm -f ./ca-bundle.crt
-    rm -f ./certdata.txt
-    perl ${PACKAGES}/curl-${CURL_VERSION}/lib/mk-ca-bundle.pl
-    if [[ ./ca-bundle.crt != "${CA_BUNDLE}" ]]; then
-        cp ./ca-bundle.crt ${CA_BUNDLE}
-    fi
-    rm -f ./ca-bundle.crt
-    rm -f ./certdata.txt
+    curl --silent http://curl.haxx.se/ca/cacert.pem -o ${BUILD}/etc/openssl/certs/ca-bundle.crt
 fi
 
 # deps: http://curl.haxx.se/docs/libs.html
