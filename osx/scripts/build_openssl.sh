@@ -44,7 +44,7 @@ CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAG
 --openssldir=${BUILD}/etc/openssl \
 zlib-dynamic \
 no-shared \
-darwin64-x86_64-cc \
+${OS_COMPILER} \
 enable-ec_nistp_64_gcc_128 \
 "$CFLAGS"
 
