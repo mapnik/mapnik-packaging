@@ -16,6 +16,9 @@ if [[ $GDAL_LATEST == true ]]; then
         cd gdal/gdal
     else
         cd gdal/gdal
+        CUR_NOW=`date +"%s"`
+        git diff > latest-${CUR_NOW}
+        git checkout .
         git pull || true
         if [[ -f GDALmake.opt ]]; then
             make clean
