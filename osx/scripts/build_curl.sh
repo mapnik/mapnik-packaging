@@ -11,8 +11,13 @@ rm -rf curl-${CURL_VERSION}
 tar xf curl-${CURL_VERSION}.tar.bz2
 cd curl-${CURL_VERSION}
 
+
+if [ ${PLATFORM} = 'Linux' ]; then
+    LIBS="-ldl ${LIBS=}"
+fi
+
 # deps: http://curl.haxx.se/docs/libs.html
-./configure --prefix=${BUILD} \
+LIBS="${LIBS=}" ./configure --prefix=${BUILD} \
 --enable-static \
 --enable-shared \
 --enable-manual \
