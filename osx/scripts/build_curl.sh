@@ -11,14 +11,6 @@ rm -rf curl-${CURL_VERSION}
 tar xf curl-${CURL_VERSION}.tar.bz2
 cd curl-${CURL_VERSION}
 
-# generate root certs
-# https://github.com/joyent/node/pull/6489
-mkdir -p "${BUILD}/etc/openssl/certs"
-CA_BUNDLE="${BUILD}/etc/openssl/certs/ca-bundle.crt"
-if [ ! -f ${CA_BUNDLE} ]; then
-    curl --silent http://curl.haxx.se/ca/cacert.pem -o ${BUILD}/etc/openssl/certs/ca-bundle.crt
-fi
-
 # deps: http://curl.haxx.se/docs/libs.html
 ./configure --prefix=${BUILD} \
 --enable-static \
@@ -62,6 +54,13 @@ fi
 --disable-cookies
 make -j$JOBS
 make install
+
+# download root certs. this is totally unsafe, we're playing with fire here.
+mkdir -p "${BUILD}/etc/openssl/certs"
+CA_BUNDLE="${BUILD}/etc/openssl/certs/ca-bundle.crt"
+if [ ! -f ${CA_BUNDLE} ]; then
+    ${BUILD}/bin/curl --silent http://curl.haxx.se/ca/cacert.pem -o ${BUILD}/etc/openssl/certs/ca-bundle.crt
+fi
 
 # test https with cert
 echo ${BUILD}/bin/curl -I --cacert ${CA_BUNDLE} "https://www.mapbox.com/"
