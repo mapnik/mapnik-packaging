@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$@" ]; then
+if [[ -z "$@" ]]; then
   echo "please pass boost library names like '--with-thread' or just a path to headers that use boost (bcp will search them)"
   exit 1
 fi
