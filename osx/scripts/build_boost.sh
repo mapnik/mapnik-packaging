@@ -45,6 +45,12 @@ fi
 # https://github.com/mapnik/mapnik/issues/1968
 patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
 
+# Patches boost::atomic for LLVM 3.4 as it is used on OS X 10.9 with Xcode 5.1
+# https://github.com/Homebrew/homebrew/issues/27396
+# https://github.com/Homebrew/homebrew/pull/27436
+patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff || true
+patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
+
 echoerr 'bootstrapping boost'
 if [ $PLATFORM = 'Android' ];  then
     echo "using gcc : arm : ${CXX} ;" > user-config.jam
