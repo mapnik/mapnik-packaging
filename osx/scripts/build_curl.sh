@@ -19,7 +19,7 @@ fi
 # deps: http://curl.haxx.se/docs/libs.html
 LIBS="${LIBS=}" ./configure --prefix=${BUILD} \
 --enable-static \
---enable-shared \
+--disable-shared \
 --enable-manual \
 --with-ssl=${BUILD} \
 --with-zlib=${ZLIB_PATH} \
