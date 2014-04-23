@@ -35,8 +35,8 @@ rm -f ${BUILD}/lib/liblas.*
 
 # oddly LDFLAGS rather than LINK_FLAGS are respected
 # by liblas cmake environment
-GDAL_LIBS=`gdal-config --libs`
-GDAL_LIBS="$GDAL_LIBS `gdal-config --dep-libs`"
+GDAL_LIBS=$(gdal-config --libs)
+GDAL_LIBS="$GDAL_LIBS $(gdal-config --dep-libs)"
 LDFLAGS="$GDAL_LIBS $LDFLAGS ${STDLIB_LDFLAGS}"
 
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \

@@ -17,7 +17,7 @@ export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
 if [ ${UNAME} = 'Darwin' ]; then
   SEMVER_PATTERN='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
-  DARWIN_MAJOR=`echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#"`
+  DARWIN_MAJOR=$(echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#")
   if [ ${DARWIN_MAJOR} = "13" ];then
     export LIBCXX_DEFAULT=true
   fi
@@ -86,7 +86,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=
-    export JOBS=`grep -c ^processor /proc/cpuinfo`
+    export JOBS=$(grep -c ^processor /proc/cpuinfo)
     export BOOST_TOOLSET="gcc"
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
@@ -116,7 +116,7 @@ elif [ ${PLATFORM} = 'Linaro' ]; then
     export EXTRA_CFLAGS="-fPIC --sysroot ${SDK_PATH}"
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export JOBS=`sysctl -n hw.ncpu`
+    export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabihf-g++"
@@ -152,7 +152,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_LDFLAGS=""
-    export JOBS=`sysctl -n hw.ncpu`
+    export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
@@ -208,7 +208,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export JOBS=`sysctl -n hw.ncpu`
+    export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
     # and needs to default to 'gyp-mac-tool'
@@ -396,8 +396,8 @@ function push {
     echo "downloading $1"
     cd ${PACKAGES}
     curl -s -S -f -O -L $1
-    echo "uploading `basename $1`"
-    upload `basename $1`
+    echo "uploading $(basename $1)"
+    upload $(basename $1)
     cd ${ROOTDIR}
 }
 export -f push
@@ -420,14 +420,14 @@ function check_and_clear_libs {
 export -f check_and_clear_libs
 
 function ensure_s3cmd {
-  CUR_DIR=`pwd`
+  CUR_DIR=$(pwd)
   if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
       cd ${PACKAGES}
       curl -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
       tar xf v1.5.0-beta1.tar.gz
   fi
   cd ${PACKAGES}/s3cmd-1.5.0-beta1
-  export PATH=`pwd`:${PATH}
+  export PATH=$(pwd):${PATH}
   cd $CUR_DIR
   if [ ! -f ~/.s3cfg ]; then
     if [[ "${AWS_S3_KEY:-false}" == false ]] || [[ "${AWS_S3_SECRET:-false}" == false ]]; then
@@ -443,7 +443,7 @@ export -f ensure_s3cmd
 
 function ensure_xz {
   if [ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]; then
-      CUR_DIR=`pwd`
+      CUR_DIR=$(pwd)
       mkdir -p ${PACKAGES}
       cd ${PACKAGES}
       # WARNING: this installs liblzma which we need to ensure that gdal does not link to
@@ -466,7 +466,7 @@ export -f ensure_xz
 
 function ensure_nasm {
   if [ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]; then
-      CUR_DIR=`pwd`
+      CUR_DIR=$(pwd)
       mkdir -p ${PACKAGES}
       cd ${PACKAGES}
       # WARNING: this installs liblzma which we need to ensure that gdal does not link to
@@ -493,7 +493,7 @@ function ensure_clang {
   if [ ! -z $1 ]; then
     CVER=$1
   fi
-  CUR_DIR=`pwd`
+  CUR_DIR=$(pwd)
   mkdir -p ${PACKAGES}
   cd ${PACKAGES}
   if [[ ${PLATFORM} == 'Linux' ]]; then
@@ -527,8 +527,8 @@ function ensure_clang {
           mv clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V clang-$CVER
       fi
   fi
-  echoerr "enabled clang at `pwd`/clang-$CVER/bin"
-  export PATH=`pwd`/clang-$CVER/bin:$PATH
+  echoerr "enabled clang at $(pwd)/clang-$CVER/bin"
+  export PATH=$(pwd)/clang-$CVER/bin:$PATH
   export CXX_NAME="clang-$CVER"
   cd $CUR_DIR
 }

@@ -35,18 +35,18 @@ if [ $UNAME = 'Darwin' ]; then
 
     for i in $(ls ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/*input)
     do
-        install_name_tool -change `otool -L "$i" | grep libmapnik | awk '{print $1}'` @loader_path/../../libmapnik.dylib ${i}
+        install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../../libmapnik.dylib ${i}
     done
 
     # fixup c++ programs
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite" ]; then
-        install_name_tool -change `otool -L "$i" | grep libmapnik | awk '{print $1}'` @loader_path/../lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite
+        install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite
     fi
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/svg2png" ]; then
-        install_name_tool -change `otool -L "$i" | grep libmapnik | awk '{print $1}'` @loader_path/../lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite
+        install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite
     fi
     for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
-        do install_name_tool -change `otool -L "$i" | grep libmapnik | awk '{print $1}'` ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib $i;
+        do install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib $i;
     done
 
     # fixup python
@@ -55,7 +55,7 @@ if [ $UNAME = 'Darwin' ]; then
     do
         this_dir="${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/mapnik"
         if [ -d  $this_dir ];then
-            install_name_tool -change `otool -L "$this_dir/_mapnik.so" | grep libmapnik | awk '{print $1}'` @loader_path/../../../libmapnik.dylib $this_dir/_mapnik.so
+            install_name_tool -change $(otool -L "$this_dir/_mapnik.so" | grep libmapnik | awk '{print $1}') @loader_path/../../../libmapnik.dylib $this_dir/_mapnik.so
         fi
     done
 

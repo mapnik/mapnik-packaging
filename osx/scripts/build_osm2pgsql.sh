@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 echoerr 'building osm2pgsql'
-LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} `pkg-config libpq --libs --static`"
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} $(pkg-config libpq --libs --static)"
 OSM2PGSQL_TARGET="${STAGING}/osm2pgsql-osx"
 export DESTDIR=${OSM2PGSQL_TARGET}
 #svn co http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/
