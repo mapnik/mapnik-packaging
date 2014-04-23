@@ -15,15 +15,15 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
-if [ ${UNAME} = 'Darwin' ]; then
+if [[ ${UNAME} == 'Darwin' ]]; then
   SEMVER_PATTERN='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
   DARWIN_MAJOR=$(echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#")
-  if [ ${DARWIN_MAJOR} = "13" ];then
+  if [[ ${DARWIN_MAJOR} == "13" ]]; then
     export LIBCXX_DEFAULT=true
   fi
 fi
 
-if [ "${CXX11}" = true ]; then
+if [[ "${CXX11}" = true ]]; then
   export CXX_STANDARD="cpp11"
 else
   export CXX_STANDARD="cpp03"
@@ -49,9 +49,9 @@ export STAGING="${ROOTDIR}/out/staging"
 export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 
-if [ ${PLATFORM} = 'Linux' ]; then
+if [[ ${PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
-    if [ "${CXX11}" = true ]; then
+    if [[ "${CXX11}" == true ]]; then
         if [[ "${CXX:-false}" == "clang++" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
@@ -73,7 +73,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
           export CXX_NAME="clang-3.3"
       fi
     else
-      if [ "${CXX11}" = true ]; then
+      if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
           export CXX_NAME="gcc-4.8"
@@ -91,7 +91,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     export CXX_VISIBILITY_FLAGS=""
-    if [ "${CXX11}" = true ]; then
+    if [[ "${CXX11}" == true ]]; then
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
@@ -100,14 +100,14 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
-elif [ ${PLATFORM} = 'Linaro' ]; then
+elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export UNAME='Linaro'
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
     cd ${PACKAGES}
     # https://launchpad.net/linaro-toolchain-binaries/support/01/+download/linaro-prebuilt-sysroot-2013.07-2.tar.bz2
     download linaro-prebuilt-sysroot-2013.07-2.tar.bz2
-    if [ ! -d ${SDK_PATH} ]; then
+    if [[ ! -d ${SDK_PATH} ]]; then
         echo "untarring ${SDK_PATH}"
         tar -xf linaro-prebuilt-sysroot-2013.07-2.tar.bz2
     fi
@@ -129,7 +129,7 @@ elif [ ${PLATFORM} = 'Linaro' ]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [ ${PLATFORM} = 'Android' ]; then
+elif [[ ${PLATFORM} == 'Android' ]]; then
     export UNAME='Android'
     export API_LEVEL="android-18"
     export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
@@ -138,7 +138,7 @@ elif [ ${PLATFORM} = 'Android' ]; then
     #ln -s ../android/android-ndk-r9 ./android-ndk-r9
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
     # NOTE: make-standalone-toolchain.sh --help for options
-    if [ ! -d "${PLATFORM_PREFIX}" ]; then
+    if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
         echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
         "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
           --toolchain="${ANDROID_CROSS_COMPILER}" \
@@ -173,11 +173,12 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [ ${UNAME} = 'Darwin' ]; then
+elif [[ ${UNAME} == 'Darwin' ]]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-    export XCODE_PREFIX=$( xcode-select -print-path )
-    if [ -d "${XCODE_PREFIX}/Toolchains/" ]; then
+    XCODE_CMD="xcode-select"
+    export XCODE_PREFIX=$(${XCODE_CMD} -print-path)
+    if [[ -d "${XCODE_PREFIX}/Toolchains/" ]]; then
       # set this up with:
       #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
       # for more info
@@ -218,16 +219,11 @@ elif [ ${UNAME} = 'Darwin' ]; then
     unset RANLIB
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    if [ "${CXX11}" = true ]; then
+    if [[ "${CXX11}" == true ]]; then
         export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
-#        if [ "${LIBCXX_DEFAULT}" = true ]; then
-#            export STDLIB="libcpp"
-#        else
-#            export STDLIB="libstdcpp"
-#        fi
         export STDLIB="libstdcpp"
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
@@ -377,11 +373,11 @@ function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr
 
 function download {
-    if [ ! -f $1 ]; then
-        echoerr downloading $1
+    if [[ ! -f $1 ]]; then
+        echoerr "downloading $1"
         curl -s -S -f -O -L ${S3_BASE}/$1
     else
-        echoerr using cached $1
+        echoerr "using cached $1"
     fi
 }
 export -f download
@@ -403,7 +399,7 @@ function push {
 export -f push
 
 function check_and_clear_libs {
-  if [ $UNAME = 'Darwin' ]; then
+  if [[ $UNAME == 'Darwin' ]]; then
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
            lipo -info $i | grep arch 1>&2;
         done;
@@ -421,7 +417,7 @@ export -f check_and_clear_libs
 
 function ensure_s3cmd {
   CUR_DIR=$(pwd)
-  if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
+  if [[ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]]; then
       cd ${PACKAGES}
       curl -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
       tar xf v1.5.0-beta1.tar.gz
@@ -429,7 +425,7 @@ function ensure_s3cmd {
   cd ${PACKAGES}/s3cmd-1.5.0-beta1
   export PATH=$(pwd):${PATH}
   cd $CUR_DIR
-  if [ ! -f ~/.s3cfg ]; then
+  if [[ ! -f ~/.s3cfg ]]; then
     if [[ "${AWS_S3_KEY:-false}" == false ]] || [[ "${AWS_S3_SECRET:-false}" == false ]]; then
         echoerr 'missing AWS keys: see ensure_s3cmd in settings.sh for details'
     else
@@ -442,7 +438,7 @@ function ensure_s3cmd {
 export -f ensure_s3cmd
 
 function ensure_xz {
-  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]; then
+  if [[ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]]; then
       CUR_DIR=$(pwd)
       mkdir -p ${PACKAGES}
       cd ${PACKAGES}
@@ -465,7 +461,7 @@ function ensure_xz {
 export -f ensure_xz
 
 function ensure_nasm {
-  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]; then
+  if [[ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]]; then
       CUR_DIR=$(pwd)
       mkdir -p ${PACKAGES}
       cd ${PACKAGES}
@@ -490,7 +486,7 @@ export -f ensure_nasm
 
 function ensure_clang {
   CVER="3.3"
-  if [ ! -z $1 ]; then
+  if [[ ! -z $1 ]]; then
     CVER=$1
   fi
   CUR_DIR=$(pwd)
@@ -498,11 +494,11 @@ function ensure_clang {
   cd ${PACKAGES}
   if [[ ${PLATFORM} == 'Linux' ]]; then
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
-      if [ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]; then
+      if [[ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]]; then
           echoerr 'downloading clang'
           curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
       fi
-      if [ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ] && [ ! -d clang-$CVER ]; then
+      if [[ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ]] && [[ ! -d clang-$CVER ]]; then
           echoerr 'uncompressing clang'
           tar xf clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
           mv clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu clang-$CVER
@@ -517,11 +513,11 @@ function ensure_clang {
       if [[ $CVER == "3.2" ]]; then
           DARWIN_V="11"
       fi
-      if [ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]; then
+      if [[ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]]; then
           echoerr 'downloading clang'
           curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
       fi
-      if [ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ] && [ ! -d clang-$CVER ]; then
+      if [[ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ]] && [[ ! -d clang-$CVER ]]; then
           echoerr 'uncompressing clang'
           tar xf clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
           mv clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V clang-$CVER
