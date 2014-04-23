@@ -366,6 +366,7 @@ export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
 export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
+# http://www.openssl.org/source/
 export OPENSSL_VERSION="1.0.1g"
 export LIBUV_VERSION="0.11.23"
 
