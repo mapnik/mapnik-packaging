@@ -155,6 +155,7 @@ export -f build_osrm
 
 function build_http {
   basic_prep
+  sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
   b ./scripts/build_zlib.sh
   b ./scripts/build_libuv.sh
   b ./scripts/build_openssl.sh
