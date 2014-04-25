@@ -1,9 +1,20 @@
 #!/bin/bash
 set -e -u
 set -o pipefail
+
+export CXX11=true
+source iPhoneOS.sh
+
 cd "$( dirname $( dirname "$0" ))"
+
+branch="2.2.x"
+if [ ! -d ${MAPNIK_SOURCE} ]; then
+  git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
+  git branch -v
+fi
+
 # update mapnik
-cd mapnik
+cd ${MAPNIK_SOURCE}
 echo 'pulling from git'
 #git pull
 echo
@@ -18,12 +29,21 @@ else
   echo "new build detected, carrying on"
 fi
 
-BUILD_DEPS=false
+BUILD_DEPS=true
 
 function build_all {
   if [ $BUILD_DEPS = true ];  then
-    ./scripts/build_core_deps.sh
+    ./scripts/build_freetype.sh
+    ./scripts/build_icu.sh
     ./scripts/build_protobuf.sh
+    BOOST_LIBRARIES="--with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex"
+    ./scripts/build_boost.sh ${BOOST_LIBRARIES}
+    ./scripts/build_jpeg.sh
+    ./scripts/build_png.sh
+    ./scripts/build_libxml2.sh
+    ./scripts/build_pkg_config.sh
+    ./scripts/build_bzip2.sh
+    ./scripts/build_zlib.sh
   fi
   ./scripts/build_mapnik_mobile.sh
 }
@@ -44,6 +64,10 @@ build_all
 
 # armv7s
 source iPhoneOSs.sh
+build_all
+
+# armv64
+source iPhoneOS64.sh
 build_all
 
 # done now package

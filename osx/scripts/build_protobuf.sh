@@ -11,6 +11,10 @@ rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2
 mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 cd protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
+
+#Fix for arm64 https://code.google.com/p/protobuf/issues/detail?id=575
+patch src/google/protobuf/stubs/platform_macros.h < ../../../patches/protobuf-ios-arm64.diff
+
 export NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-x86_64/src/protoc"
 if [ $BOOST_ARCH = "arm" ]; then
     if [ ! -f "${NATIVE_PROTOC}" ]; then
