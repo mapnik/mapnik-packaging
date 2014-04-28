@@ -48,10 +48,10 @@ function build_all {
   ./scripts/build_mapnik_mobile.sh
 }
 
-# x86_64
-source MacOSX.sh
-# required for bcp header copy
-build_all
+# # x86_64
+# source MacOSX.sh
+# # required for bcp header copy
+# build_all
 
 # i386
 source iPhoneSimulator.sh
@@ -71,6 +71,6 @@ source iPhoneOS64.sh
 build_all
 
 # done now package
-./scripts/make_universal.sh
-# TODO 
+./scripts/make_universal_ios.sh
+# TODO
 ./scripts/package_mobile_sdk.sh
