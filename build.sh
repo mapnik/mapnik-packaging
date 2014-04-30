@@ -17,22 +17,26 @@ function prep_osx {
   else
       source MacOSX.sh
   fi
-  brew install autoconf automake libtool makedepend | true
+  brew install autoconf automake libtool makedepend cmake | true
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
 }
 
-function prep_linux {
-  cd osx
-  source Linux.sh
-  if [ "${CXX11}" = true ]; then
+function upgrade_gcc {
     echo "adding gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     echo "updating apt"
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8
+}
+
+function prep_linux {
+  cd osx
+  source Linux.sh
+  if [ "${CXX11}" = true ]; then
+    upgrade_gcc
   else
     echo "updating apt"
     sudo apt-get update -y -qq
@@ -135,6 +139,14 @@ function basic_prep {
 function build_osrm {
   set -e
   basic_prep
+  if [[ $UNAME == 'Linux' ]]; then
+      upgrade_gcc
+      export CORE_CC="gcc-4.8"
+      export CC="gcc-4.8"
+      export CORE_CXX="g++-4.8"
+      export CXX="g++-4.8"
+      export CXX_NAME="gcc-4.8"
+  fi
   b ./scripts/build_bzip2.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_icu.sh
