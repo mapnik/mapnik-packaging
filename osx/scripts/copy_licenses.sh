@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 LICENSES=${ROOTDIR}/installer/pkg/licenses

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 cd "$( dirname $( dirname "$0" ))"

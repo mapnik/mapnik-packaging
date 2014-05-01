@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 export PROJ_LIB=${MAPNIK_BIN_SOURCE}/share/mapnik/proj

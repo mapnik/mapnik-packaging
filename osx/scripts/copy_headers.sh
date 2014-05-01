@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 echo '...copying headers needed for node bindings to compile against mapnik'
