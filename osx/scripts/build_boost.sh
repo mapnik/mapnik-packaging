@@ -79,19 +79,22 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
       CROSS_FLAGS="tools/bcp"
   fi
 
-  # TODO set address-model ?
+  BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+  BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
+  ICU_DETAILS="-sHAVE_ICU=0"
 
-  # only build with icudata library support on mac
-  if [ ${BOOST_ARCH} = "x86" ]; then
-      BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
-      BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} ${ICU_CORE_CPP_FLAGS}"
-      ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
-  else
-      mv libs/regex/build/has_icu_test.cpp libs/regex/build/has_icu_test.cpp_
-      echo '#error' > libs/regex/build/has_icu_test.cpp
-      BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-      BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}"
-      ICU_DETAILS=""
+  # should we try to link against (presumably static) icu libs?
+  if [[ -d ${BUILD}/include/unicode ]]; then
+      # only build with icudata library support on mac
+      if [ ${BOOST_ARCH} = "x86" ]; then
+          BOOST_LDFLAGS="${BOOST_LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
+          BOOST_CXXFLAGS="${BOOST_CXXFLAGS}  ${ICU_CORE_CPP_FLAGS}"
+          ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
+      else
+          mv libs/regex/build/has_icu_test.cpp libs/regex/build/has_icu_test.cpp_
+          echo '#error' > libs/regex/build/has_icu_test.cpp
+          BOOST_CXXFLAGS="${BOOST_CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}"
+      fi
   fi
 
   if [ $PLATFORM = 'Android' ]; then
