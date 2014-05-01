@@ -30,6 +30,6 @@ cd freetype-${FREETYPE_VERSION}
  --with-fsref=no \
  --with-fsspec=no \
 
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

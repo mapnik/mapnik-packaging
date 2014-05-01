@@ -24,6 +24,6 @@ LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
  --with-freetype \
  --with-uniscribe=no \
  --with-coretext=no
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
