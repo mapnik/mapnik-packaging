@@ -176,7 +176,6 @@ function build_osmium {
   b ./scripts/build_zlib.sh
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
-  b ./scripts/build_geos.sh
   set +e
 }
 
