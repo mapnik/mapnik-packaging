@@ -22,21 +22,36 @@ if os.uname()[0] == 'Darwin':
     libraries = --with-python ;
     """
 else:
-    USER_JAM = """
-    import option ;
-    import feature ;
-    using %(toolset)s : : %(cxx)s ;
-    project : default-build <toolset>%(toolset)s ;
-    using python
-         : %(ver)s # version
-         : /usr/bin/python%(ver)s%(variant)s # cmd-or-prefix
-         : /usr/include/python%(ver)s # includes
-         : /usr/lib/python%(ver)s/config%(variant)s
-         : <toolset>%(toolset)s # condition
-         ;
-    libraries = --with-python ;
-    """
-# arch: ='32_64'
+    if os.uname()[0] == 'FreeBSD':
+        USER_JAM = """
+        import option ;
+        import feature ;
+        using %(toolset)s : : %(cxx)s ;
+        project : default-build <toolset>%(toolset)s ;
+        using python
+             : %(ver)s # version
+             : /usr/local/bin/python%(ver)s%(variant)s # cmd-or-prefix
+             : /usr/local/include/python%(ver)s # includes
+             : /usr/local/lib/python%(ver)s/config%(variant)s
+             : <toolset>%(toolset)s # condition
+             ;
+        libraries = --with-python ;
+        """
+    else:
+        USER_JAM = """
+        import option ;
+        import feature ;
+        using %(toolset)s : : %(cxx)s ;
+        project : default-build <toolset>%(toolset)s ;
+        using python
+             : %(ver)s # version
+             : /usr/bin/python%(ver)s%(variant)s # cmd-or-prefix
+             : /usr/include/python%(ver)s # includes
+             : /usr/lib/python%(ver)s/config%(variant)s
+             : <toolset>%(toolset)s # condition
+             ;
+        libraries = --with-python ;
+        """
 
 def compile_lib(ver,toolset,addr_model,arch,cxx):
     if ver in ('3.2','3.3'):
