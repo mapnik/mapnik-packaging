@@ -72,6 +72,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           # TODO - use -dumpversion
           export CXX_NAME="clang-3.3"
       fi
+      export BOOST_TOOLSET="clang"
     else
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
@@ -82,12 +83,12 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           export CORE_CXX="g++"
           export CXX_NAME="gcc-4.6"
       fi
+      export BOOST_TOOLSET="gcc"
     fi
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=
     export JOBS=$(grep -c ^processor /proc/cpuinfo || sysctl -n hw.ncpu)
-    export BOOST_TOOLSET="gcc"
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     export CXX_VISIBILITY_FLAGS=""
