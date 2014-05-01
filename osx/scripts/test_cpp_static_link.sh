@@ -51,7 +51,10 @@ int main(void) {
     return 0;
 }
 ' > test.cpp
-ln -s `${CXX} ${CXXFLAGS} -print-file-name=libstdc++.a` libstdc++.a
+if [[ $UNAME == 'Linux' ]]; then
+   LDFLAGS="${LDFLAGS} -static-libstc++"
+   #ln -s `${CXX} ${CXXFLAGS} -print-file-name=libstdc++.a` libstdc++.a
+fi
 ${CXX} -o test test.cpp lib.cpp -L. ${CXXFLAGS} ${LDFLAGS}
 ./test
 if [[ $UNAME == 'Linux' ]]; then
