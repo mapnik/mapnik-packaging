@@ -20,5 +20,5 @@ LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
  --shared-zlib \
  --shared-zlib-includes=${ZLIB_PATH}/include \
  --shared-zlib-libpath=${ZLIB_PATH}/lib
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install

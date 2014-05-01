@@ -34,7 +34,7 @@ rm -rf ${BUILD}/include/liblas
 rm -f ${BUILD}/lib/liblas.*
 
 # oddly LDFLAGS rather than LINK_FLAGS are respected
-# by liblas cmake environment
+# by liblas CMAKE environment
 GDAL_LIBS=$(gdal-config --libs)
 GDAL_LIBS="$GDAL_LIBS $(gdal-config --dep-libs)"
 LDFLAGS="$GDAL_LIBS $LDFLAGS ${STDLIB_LDFLAGS}"
@@ -51,8 +51,8 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 
 check_and_clear_libs
 

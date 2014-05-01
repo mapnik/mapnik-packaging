@@ -10,7 +10,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
   rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  #make clean
+  #$MAKE clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
@@ -76,8 +76,8 @@ echo "ENABLE_SONAME = False" >> config.py
 echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
 
 ./configure || cat config.log
-JOBS=${JOBS} make
-make install
+JOBS=${JOBS} $MAKE
+$MAKE install
 
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
 export PYTHONPATH=""
@@ -99,8 +99,8 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
     rm -f bindings/python/*os
     rm -f bindings/python/mapnik/_mapnik.so
     ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-    JOBS=${JOBS} make
-    make install
+    JOBS=${JOBS} $MAKE
+    $MAKE install
     
     for i in {"2.6","2.7"}
     do
@@ -108,8 +108,8 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
       rm -f bindings/python/*os
       rm -f bindings/python/mapnik/_mapnik.so
       ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-      JOBS=${JOBS} make
-      make install
+      JOBS=${JOBS} $MAKE
+      $MAKE install
     done
 fi
 

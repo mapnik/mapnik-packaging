@@ -35,7 +35,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_BUILD_TYPE=Release \
   ${STDLIB_OVERRIDE}
 
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 
 cd ${PACKAGES}

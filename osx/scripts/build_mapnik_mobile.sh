@@ -10,7 +10,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -f src/libmapnik{*.so,*.dylib,*.a}
   rm -f tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  make clean
+  $MAKE clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
@@ -81,5 +81,5 @@ rm -f bindings/python/mapnik/_mapnik.so
   GRID_RENDERER=False \
   PGSQL2SQLITE=False \
   SYSTEM_FONTS=/System/Library/Fonts
-JOBS=${JOBS} make
-make install
+JOBS=${JOBS} $MAKE
+$MAKE install

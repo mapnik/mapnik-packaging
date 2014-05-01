@@ -51,7 +51,7 @@ fi
 --without-readline \
 --without-regexps \
 --without-c14n
-make -j${JOBS} install
+$MAKE -j${JOBS} install
 cd ${PACKAGES}
 
 check_and_clear_libs

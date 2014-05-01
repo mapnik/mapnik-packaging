@@ -8,7 +8,7 @@ export BOOST_ARCH="arm"
 export ARCH_NAME="gcc-arm"
 export HOST_ARG="--host=arm-linux-androideabi"
 source $(dirname "$BASH_SOURCE")/settings.sh
-
+export MAKE="make"
 if [[ "${CXX11:-false}" == false ]]; then
   export CXX11=false
 fi

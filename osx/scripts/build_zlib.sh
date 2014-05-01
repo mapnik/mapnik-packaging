@@ -20,8 +20,8 @@ else
        patch -N < ${PATCHES}/android-zlib.diff
     fi
     ./configure --prefix=${BUILD}
-    make -j$JOBS
-    make install
+    $MAKE -j$JOBS
+    $MAKE install
     cd ${PACKAGES}
 
     check_and_clear_libs

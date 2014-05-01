@@ -14,6 +14,6 @@ cd fontconfig-${FONTCONFIG_VERSION}
 ./configure ${HOST_ARG} \
   --enable-static --disable-shared --disable-dependency-tracking --prefix=${BUILD} \
   --with-expat=${BUILD}
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

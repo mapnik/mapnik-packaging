@@ -26,7 +26,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DGLFW_BUILD_EXAMPLES=OFF \
   -DCMAKE_BUILD_TYPE=Release
 
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 
 cd ${PACKAGES}

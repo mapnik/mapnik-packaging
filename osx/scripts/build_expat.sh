@@ -15,6 +15,6 @@ cd expat-${EXPAT_VERSION}
 --prefix=${BUILD} \
 --enable-static \
 --disable-shared
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

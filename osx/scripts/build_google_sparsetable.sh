@@ -16,8 +16,8 @@ patch -N ./src/sparsehash/internal/sparsehashtable.h ${PATCHES}/sparsehash_alloc
 ./configure --prefix=${BUILD} ${HOST_ARG} \
 --enable-static --enable-shared \
 --disable-dependency-tracking
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
 
 check_and_clear_libs

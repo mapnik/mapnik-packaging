@@ -14,5 +14,6 @@ else
   export MIN_SDK_VERSION_FLAG="-mmacosx-version-min=10.6"
   export CXX11=false
 fi
+export MAKE="make"
 #export MACOSX_DEPLOYMENT_TARGET=${MIN_SDK_VERSION} # breaks distutils
 source $(dirname "$BASH_SOURCE")/settings.sh

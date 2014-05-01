@@ -11,7 +11,7 @@ mkdir -p ${MAPNIK_DIST}
 
 # clear out mapnik
 cd ${MAPNIK_SOURCE}
-make uninstall
+$MAKE uninstall
 # also remove python versions
 rm -rf ${MAPNIK_BIN_SOURCE}/lib/python*
 # clear up where wer're going

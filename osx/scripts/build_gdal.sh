@@ -20,9 +20,9 @@ if [[ $GDAL_LATEST == true ]]; then
         git diff > latest-${CUR_NOW}
         git checkout .
         git pull || true
-        if [[ -f GDALmake.opt ]]; then
-            make clean
-            make distclean
+        if [[ -f GDAL$MAKE.opt ]]; then
+            $MAKE clean
+            $MAKE distclean
         fi
     fi
 else
@@ -129,8 +129,8 @@ ${FGDB_ARGS} \
 --with-grib=no \
 --with-freexl=no
 
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
 
 check_and_clear_libs

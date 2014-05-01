@@ -57,8 +57,8 @@ LIBS="${LIBS=}" ./configure --prefix=${BUILD} \
 --disable-ntlm-wb \
 --disable-tls-srp \
 --disable-cookies
-make -j$JOBS
-make install
+$MAKE -j$JOBS
+$MAKE install
 
 # download root certs. this is totally unsafe, we're playing with fire here.
 mkdir -p "${BUILD}/etc/openssl/certs"

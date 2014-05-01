@@ -19,8 +19,8 @@ else
 fi
 
 echo 'cleaning and uninstalling old build'
-make clean
-make uninstall
+$MAKE clean
+$MAKE uninstall
 cd ../
 
 rm -rf ${MAPNIK_BIN_SOURCE}

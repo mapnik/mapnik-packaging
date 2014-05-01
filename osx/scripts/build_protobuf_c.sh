@@ -12,6 +12,6 @@ tar xf protobuf-c-${PROTOBUF_C_VERSION}.tar.gz
 cd protobuf-c-${PROTOBUF_C_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared \
 --disable-dependency-tracking
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

@@ -61,8 +61,8 @@ cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 --disable-icuio \
 --disable-samples \
 --disable-dyload
-make -j${JOBS} -i -k 
-make install
+$MAKE -j${JOBS} -i -k
+$MAKE install
 cd ${PACKAGES}
 
 # clear out shared libs

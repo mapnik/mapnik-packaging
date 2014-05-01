@@ -15,6 +15,6 @@ cd libuv-${LIBUV_VERSION}
   --disable-dependency-tracking \
   --enable-largefile \
   --disable-dtrace
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

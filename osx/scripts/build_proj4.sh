@@ -24,11 +24,11 @@ cp ${PATCHES}/config.sub .
 if [ ${BOOST_ARCH} != "arm" ]; then
     # TODO - android: /bin/sh: ../src/nad2bin: cannot execute binary file
     set +e
-    make -j${JOBS} -i -k
-    make install -i -k
+    $MAKE -j${JOBS} -i -k
+    $MAKE install -i -k
     set -e
 else
-    make -j${JOBS}
-    make install
+    $MAKE -j${JOBS}
+    $MAKE install
 fi
 cd ${PACKAGES}

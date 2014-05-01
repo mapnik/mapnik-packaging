@@ -60,6 +60,6 @@ png_LIBS="-I${BUILD}/lib -lpng"
   --enable-xcb-shm=no \
   --disable-dependency-tracking \
   --prefix=${BUILD}
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

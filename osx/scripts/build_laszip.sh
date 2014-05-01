@@ -18,7 +18,7 @@ cd build
 cmake ../ \
 -DCMAKE_INSTALL_PREFIX=${BUILD} \
 -DBUILD_STATIC=ON
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 
 cd ${PACKAGES}

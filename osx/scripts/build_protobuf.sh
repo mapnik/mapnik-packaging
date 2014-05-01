@@ -34,8 +34,8 @@ CXX="${CXX} ${STDLIB_CXXFLAGS}"
 --enable-static --disable-shared \
 --disable-debug --without-zlib \
 --disable-dependency-tracking
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 if [ $BOOST_ARCH = "arm" ]; then
     cp "${NATIVE_PROTOC}" ${BUILD}/bin/
 fi

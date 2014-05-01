@@ -27,8 +27,8 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DBUILD_STATIC_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
   ${CXX_ENABLED}
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 cd ${PACKAGES}
 
 #check_and_clear_libs

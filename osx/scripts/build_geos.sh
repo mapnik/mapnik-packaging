@@ -20,8 +20,8 @@ fi
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} --disable-shared --enable-static \
 --disable-dependency-tracking
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
 
 #check_and_clear_libs

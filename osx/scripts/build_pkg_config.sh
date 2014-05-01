@@ -40,8 +40,8 @@ else
       --disable-dependency-tracking \
       --prefix=${BUILD} \
       --with-pc-path=${BUILD}/lib/pkgconfig
-    make -j${JOBS}
-    make install
+    $MAKE -j${JOBS}
+    $MAKE install
 fi
 
 cd ${PACKAGES}

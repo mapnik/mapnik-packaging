@@ -12,7 +12,7 @@ export ICU_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
 export GDAL_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/gdal"
 export PROJ_LIB="${MAPNIK_BIN_SOURCE}/share/mapnik/proj"
 cd ${MAPNIK_SOURCE}
-make test-local || true
+$MAKE test-local || true
 #TODO - place in dist and there there
 #echoerr 'testing build as packaged'
 : '
@@ -22,8 +22,8 @@ do
       echo testing against python $i
       export PYTHONPATH=${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/
       export PATH=${MAPNIK_BIN_SOURCE}/bin:$PATH
-      # TODO - allow setting python version in make wrapper
-      #make test
+      # TODO - allow setting python version in $MAKE wrapper
+      #$MAKE test
       python${i} tests/visual_tests/test.py -q
       python${i} tests/run_tests.py -q
   else

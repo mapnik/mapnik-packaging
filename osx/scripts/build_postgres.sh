@@ -9,17 +9,6 @@ download postgresql-${POSTGRES_VERSION}.tar.gz
 # postgres
 echoerr 'building postgres for libpq client library'
 
-: '
-postgres/INSTALL has:
-       Client-only installation: If you want to install only the client
-       applications and interface libraries, then you can use these
-       commands:
-gmake -C src/bin install
-gmake -C src/include install
-gmake -C src/interfaces install
-gmake -C doc install
-'
-
 # 64 bit build
 echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
@@ -61,8 +50,8 @@ fi
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
 set +e
-make -j${JOBS} -i -k
-make install -i -k
+$MAKE -j${JOBS} -i -k
+$MAKE install -i -k
 set -e
 cd ${PACKAGES}
 

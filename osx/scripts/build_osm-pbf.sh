@@ -11,9 +11,9 @@ cd OSM-binary
 git checkout ed845badf9980c5
 cd src
 if [ "${AR:-false}" != false ]; then
-  make CXX=$CXX AR=$AR CXXFLAGS="${CXXFLAGS}"
+  $MAKE CXX=$CXX AR=$AR CXXFLAGS="${CXXFLAGS}"
 else
-  make CXX=$CXX CXXFLAGS="${CXXFLAGS}"
+  $MAKE CXX=$CXX CXXFLAGS="${CXXFLAGS}"
 fi 
-make install PREFIX=${BUILD}
+$MAKE install PREFIX=${BUILD}
 cd ${PACKAGES}

@@ -52,6 +52,6 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}" \
   ${STDLIB_OVERRIDE}
 
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 cd ${PACKAGES}

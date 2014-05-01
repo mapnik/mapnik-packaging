@@ -12,16 +12,16 @@ echoerr 'building tiff'
 if [[ $TIFF_LATEST == true ]]; then
     #rm -rf libtiff
     if [ ! -d libtiff ]; then
-        # NOTE: make sure this repo is up to date with syncing from
+        # NOTE: $MAKE sure this repo is up to date with syncing from
         # https://github.com/OSGeo/gdal/commits/trunk/gdal/frmts/gtiff/libtiff
         git clone --quiet --depth=1 https://github.com/vadz/libtiff.git
         cd libtiff
     else
         cd libtiff
         git pull
-        if [[ -f MakeFile ]]; then
-            make clean
-            make distclean
+        if [[ -f $MAKEFile ]]; then
+            $MAKE clean
+            $MAKE distclean
         fi
     fi
 else
@@ -55,6 +55,6 @@ ${HOST_ARG} \
 --disable-lzma --disable-jbig --disable-mdi \
 --without-x
 
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
