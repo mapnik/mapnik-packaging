@@ -46,6 +46,7 @@ echo "PATH = '${BUILD}/bin/'" >> config.py
 echo "BOOST_INCLUDES = '${BUILD}/include'" >> config.py
 echo "BOOST_LIBS = '${BUILD}/lib'" >> config.py
 echo "FREETYPE_CONFIG = '${BUILD}/bin/freetype-config'" >> config.py
+echo "XML2_CONFIG = '${BUILD}/bin/xml2-config'" >> config.py
 echo "ICU_INCLUDES = '${BUILD}/include'" >> config.py
 echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
