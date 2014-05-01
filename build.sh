@@ -165,6 +165,24 @@ function build_osrm {
 
 export -f build_osrm
 
+function build_osmium {
+  set -e
+  basic_prep
+  b ./scripts/build_bzip2.sh
+  b ./scripts/build_expat.sh
+  b ./scripts/build_google_sparsetable.sh
+  # TODO: osrm boost usage does not need icu
+  ./scripts/build_boost.sh --with-test --with-program_options
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_protobuf.sh
+  b ./scripts/build_osm-pbf.sh
+  b ./scripts/build_geos.sh
+  set +e
+}
+
+export -f build_osmium
+
+
 function build_http {
   basic_prep
   sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
