@@ -15,4 +15,4 @@ Contact Dane (dane@dbsgeo.com) with any questions.
 
 Testing with this setup: https://gist.github.com/springmeyer/fabd05d5535e086d5d51
 
-    pkg install git vim gmake python clang34 bash autoconf automake libtool cmake makedepend
+    pkg install git vim gmake python clang34 bash autoconf automake libtool cmake makedepend py27-cairo
