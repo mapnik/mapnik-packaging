@@ -86,7 +86,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=
-    export JOBS=$(grep -c ^processor /proc/cpuinfo)
+    export JOBS=$(grep -c ^processor /proc/cpuinfo || sysctl -n hw.ncpu)
     export BOOST_TOOLSET="gcc"
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
