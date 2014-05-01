@@ -55,6 +55,9 @@ if [[ $UNAME == 'Linux' ]]; then
    LDFLAGS="${LDFLAGS} -static-libstc++"
    #ln -s `${CXX} ${CXXFLAGS} -print-file-name=libstdc++.a` libstdc++.a
 fi
+
+# http://micro.nicholaswilson.me.uk/post/31855915892/rules-of-static-linking-libstdc-libc-libgcc
+
 ${CXX} -o test test.cpp lib.cpp -L. ${CXXFLAGS} ${LDFLAGS}
 ./test
 if [[ $UNAME == 'Linux' ]]; then
