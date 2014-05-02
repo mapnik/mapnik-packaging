@@ -105,7 +105,7 @@ function build_mapnik {
   # for mapnik-vector-tile
   b ./scripts/build_protobuf.sh
   branch="master"
-  if [ "${CXX11}" = false ]; then
+  if [[ "${CXX11}" == false ]]; then
       branch="2.3.x"
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
