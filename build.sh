@@ -42,7 +42,7 @@ function prep_linux {
     sudo apt-get update -y -qq
   fi;
   echo "installing build tools"
-  sudo apt-get install -qq -y build-essential git cmake
+  sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
@@ -52,7 +52,7 @@ function build_mapnik {
   set -e
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
-      sudo apt-get install -qq -y build-essential git unzip python-dev zlib1g-dev python-nose
+      sudo apt-get install -qq -y python-dev python-nose
       # postgres deps
       # https://github.com/mapnik/mapnik-packaging/commit/598db68f4e5314883023eb6048e94ba7c021b6b7
       #sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
@@ -129,7 +129,7 @@ function build_mapnik {
 function basic_prep {
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
-      sudo apt-get install -qq -y build-essential git unzip zlib1g-dev subversion
+      sudo apt-get install -qq -y subversion
   else
       prep_osx
   fi
