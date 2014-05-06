@@ -310,7 +310,7 @@ export ICU_VERSION2="53_1"
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080402"
+export SQLITE_VERSION="3080403"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
@@ -361,7 +361,7 @@ export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
 # export HARFBUZZ_VERSION="0.9.19"
-export HARFBUZZ_VERSION="0.9.27"
+export HARFBUZZ_VERSION="0.9.28"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
