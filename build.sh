@@ -70,8 +70,6 @@ function build_mapnik {
   export BUILD_OPTIONAL_DEPS=true
   # NOTE: harfbuzz needs pkg-config to find icu
   b ./scripts/build_pkg_config.sh
-  b ./scripts/build_bzip2.sh
-  b ./scripts/build_zlib.sh
   b ./scripts/build_icu.sh
   BOOST_LIBRARIES="--with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex"
   if [ ${BOOST_ARCH} != "arm" ]; then
@@ -147,7 +145,6 @@ function build_osrm {
       export CXX="g++-4.8"
       export CXX_NAME="gcc-4.8"
   fi
-  b ./scripts/build_bzip2.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_icu.sh
   b ./scripts/build_lua.sh
@@ -168,12 +165,10 @@ export -f build_osrm
 function build_osmium {
   set -e
   basic_prep
-  b ./scripts/build_bzip2.sh
   b ./scripts/build_expat.sh
   b ./scripts/build_google_sparsetable.sh
   # TODO: osrm boost usage does not need icu
   ./scripts/build_boost.sh --with-test --with-program_options
-  b ./scripts/build_zlib.sh
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
   set +e
@@ -196,7 +191,6 @@ export -f build_http
 
 function build_osm2pgsql {
   basic_prep
-  b ./scripts/build_zlib.sh
   b ./scripts/build_bzip2.sh
   b ./scripts/build_geos.sh
   b ./scripts/build_proj4.sh
