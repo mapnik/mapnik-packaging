@@ -297,13 +297,13 @@ export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 # we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
-# http://site.icu-project.org/download
 # tgz
 # NOTE: regenerate the .dat with new major versions via
 # http://apps.icu-project.org/datacustom/
 # include the 'collators' and 'break iterator'
 # download it, unzip, rename, check it in, then edit the below paths and versions
 export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiterator.dat"
+# http://site.icu-project.org/download
 export ICU_VERSION="53.1"
 export ICU_VERSION2="53_1"
 # http://www.boost.org/users/download/
@@ -328,6 +328,7 @@ export WEBP_VERSION="0.4.0"
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export NASM_VERSION="2.11"
+# http://sourceforge.net/projects/libjpeg-turbo/files/
 export JPEG_TURBO_VERSION="1.3.1"
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
