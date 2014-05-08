@@ -10,10 +10,10 @@ echoerr '*building openssl'
 
 if [[ ${UNAME} == 'Darwin' ]]; then
     OS_COMPILER="darwin64-x86_64-cc"
-    MAKEDEPEND="$makedepend"
+    MAKEDEPEND="makedepend"
 elif [[ ${UNAME} == 'Linux' ]]; then
     OS_COMPILER="linux-x86_64"
-    MAKEDEPEND="gmakedepend"
+    MAKEDEPEND="gccmakedep"
 else
     echoerr "unknown os/compiler version for your platform ${UNAME}"
 fi
@@ -34,7 +34,7 @@ no-ssl2 \
 ${OS_COMPILER} \
 enable-ec_nistp_64_gcc_128
 
-$MAKE depend $MAKEDEPPROG=${$MAKEDEPEND}
+$MAKE depend MAKEDEPPROG=${MAKEDEPEND}
 
 # now re-configure to apply custom $CFLAGS
 CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAGS"
