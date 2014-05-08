@@ -37,8 +37,10 @@ if [ $UNAME = 'Linux' ]; then
   # which can happen if their order is incorrect when linked: see lorder | tsort
   # TODO: only apply this to libmapnik (not python bindings) -Wl,--no-undefined
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+  echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+  echo "OPTIMIZATION = 's'" >> config.py
 fi
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 echo "RUNTIME_LINK = 'static'" >> config.py
