@@ -14,6 +14,7 @@ cd harfbuzz-${HARFBUZZ_VERSION}
 CXXFLAGS="${CXXFLAGS} -DHB_NO_MT"
 CFLAGS="${CFLAGS} -DHB_NO_MT"
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+# WARNING: freetype configure will fail silently unless pkg-config is installed
 ./configure --prefix=${BUILD} ${HOST_ARG} \
  --enable-static --disable-shared --disable-dependency-tracking \
  --with-icu \

@@ -113,7 +113,7 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
       toolset="${BOOST_TOOLSET}" \
       ${ICU_DETAILS} \
       "$@" \
-      link=static,shared \
+      link=static \
       variant=release \
       linkflags="${BOOST_LDFLAGS}" \
       cxxflags="${BOOST_CXXFLAGS}" \
