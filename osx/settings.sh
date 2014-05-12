@@ -58,6 +58,7 @@ export PATCHES="${ROOTDIR}/patches"
 export STAGING="${ROOTDIR}/out/staging"
 export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
+export SYSTEM_CURL="/usr/bin/curl"
 
 if [[ ${PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
@@ -429,7 +430,7 @@ export -f echoerr
 function download {
     if [[ ! -f $1 ]]; then
         echoerr "downloading $1"
-        curl -s -S -f -O -L ${S3_BASE}/$1
+        ${SYSTEM_CURL} -s -S -f -O -L ${S3_BASE}/$1
     else
         echoerr "using cached $1"
     fi
@@ -445,7 +446,7 @@ export -f upload
 function push {
     echo "downloading $1"
     cd ${PACKAGES}
-    curl -s -S -f -O -L $1
+    ${SYSTEM_CURL} -s -S -f -O -L $1
     echo "uploading $(basename $1)"
     upload $(basename $1)
     cd ${ROOTDIR}
@@ -473,7 +474,7 @@ function ensure_s3cmd {
   CUR_DIR=$(pwd)
   if [[ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]]; then
       cd ${PACKAGES}
-      curl -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
+      ${SYSTEM_CURL} -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
       tar xf v1.5.0-beta1.tar.gz
   fi
   cd ${PACKAGES}/s3cmd-1.5.0-beta1
@@ -550,7 +551,7 @@ function ensure_clang {
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
       if [[ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+          ${SYSTEM_CURL} -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
       fi
       if [[ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ]] && [[ ! -d clang-$CVER ]]; then
           echoerr 'uncompressing clang'
@@ -569,7 +570,7 @@ function ensure_clang {
       fi
       if [[ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+          ${SYSTEM_CURL} -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
       fi
       if [[ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ]] && [[ ! -d clang-$CVER ]]; then
           echoerr 'uncompressing clang'
