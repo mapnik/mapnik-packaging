@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ -z "$@" ]]; then
-  echo "please pass boost library names like '--with-thread' or just a path to headers that use boost (bcp will search them)"
+  echo "please pass boost library names like '--with-thread' or one ore more absolute paths to headers that use boost (bcp will search them)"
   exit 1
 fi
 
@@ -23,6 +23,7 @@ if [[ -d boost_${BOOST_VERSION2}-${ARCH_NAME} ]]; then
   cd boost_${BOOST_VERSION2}-${ARCH_NAME}
   rm -rf bin.v2/ || true
   rm -rf stage/
+  rm -rf dist/
   rm -f project-config.jam*
 else
   rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
@@ -73,14 +74,15 @@ B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
 echoerr 'compiling boost'
 
+if [[ ! -f ./dist/bin/bcp ]]; then
+    echoerr 'building bcp'
+    cd tools/bcp
+    ../../b2 -j${JOBS} ${B2_VERBOSE}
+    cd ../../
+fi
+
 # if we've requested libraries
 if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
-
-    if [ $BOOST_ARCH = "arm" ]; then
-        CROSS_FLAGS=""
-    else
-        CROSS_FLAGS="tools/bcp"
-    fi
 
     BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
     BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
@@ -109,7 +111,7 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         BOOST_CXXFLAGS="${BOOST_CXXFLAGS} -I./tmp"
         BOOST_LDFLAGS="${BOOST_LDFLAGS} -L./tmp"
     fi
-    ./b2 ${CROSS_FLAGS} \
+    ./b2 \
         --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
         --ignore-site-config --user-config=user-config.jam \
         architecture="${BOOST_ARCH}" \
@@ -126,23 +128,19 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
     check_and_clear_libs
     echoerr 'done compiling boost'
 else
-    if [[ $BOOST_ARCH != "arm" ]]; then
-        echoerr 'building bcp'
-        ./b2 tools/bcp -j${JOBS} ${B2_VERBOSE} \
-          --ignore-site-config --user-config=user-config.jam \
-          toolset="${BOOST_TOOLSET}"
-        echoerr 'installing headers with bcp'
-        STAGING_DIR=bcp_staging
-        mkdir -p ${STAGING_DIR}
-        rm -rf ${STAGING_DIR}/*
-        for var in "$@"
-        do
-            ./dist/bin/bcp "${var}" ${STAGING_DIR} 1>/dev/null
-        done
+    echoerr 'installing headers with bcp'
+    STAGING_DIR=bcp_staging
+    mkdir -p ${STAGING_DIR}
+    rm -rf ${STAGING_DIR}/*
+    for var in "$@"
+    do
+        ./dist/bin/bcp "${var}" ${STAGING_DIR} 1>/dev/null
+    done
+    if [[ -d ${STAGING_DIR}/boost/ ]]; then
         du -h -d 0 ${STAGING_DIR}/boost/
         mkdir -p ${BUILD}/include
         cp -r ${STAGING_DIR}/boost ${BUILD}/include/
     else
-        echoerr 'skipping installing headers with bcp because we are cross compiling'
+        echoerr "WARNING: did not find any boost headers for '$@'"
     fi
 fi
