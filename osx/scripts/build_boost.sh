@@ -76,73 +76,73 @@ echoerr 'compiling boost'
 # if we've requested libraries
 if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
 
-  if [ $BOOST_ARCH = "arm" ]; then
-      CROSS_FLAGS=""
-  else
-      CROSS_FLAGS="tools/bcp"
-  fi
+    if [ $BOOST_ARCH = "arm" ]; then
+        CROSS_FLAGS=""
+    else
+        CROSS_FLAGS="tools/bcp"
+    fi
 
-  BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-  BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
-  ICU_DETAILS="-sHAVE_ICU=0"
+    BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+    BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
+    ICU_DETAILS="-sHAVE_ICU=0"
 
-  # should we try to link against (presumably static) icu libs?
-  if [[ -d ${BUILD}/include/unicode ]]; then
-      # only build with icudata library support on mac
-      if [ ${BOOST_ARCH} = "x86" ]; then
-          BOOST_LDFLAGS="${BOOST_LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
-          BOOST_CXXFLAGS="${BOOST_CXXFLAGS}  ${ICU_CORE_CPP_FLAGS}"
-          ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
-      else
-          mv libs/regex/build/has_icu_test.cpp libs/regex/build/has_icu_test.cpp_
-          echo '#error' > libs/regex/build/has_icu_test.cpp
-          BOOST_CXXFLAGS="${BOOST_CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}"
-      fi
-  fi
+    # should we try to link against (presumably static) icu libs?
+    if [[ -d ${BUILD}/include/unicode ]]; then
+        # only build with icudata library support on mac
+        if [ ${BOOST_ARCH} = "x86" ]; then
+            BOOST_LDFLAGS="${BOOST_LDFLAGS} -L${BUILD}/lib -licuuc -licui18n -licudata"
+            BOOST_CXXFLAGS="${BOOST_CXXFLAGS}  ${ICU_CORE_CPP_FLAGS}"
+            ICU_DETAILS="-sHAVE_ICU=1 -sICU_PATH=${BUILD}"
+        else
+            mv libs/regex/build/has_icu_test.cpp libs/regex/build/has_icu_test.cpp_
+            echo '#error' > libs/regex/build/has_icu_test.cpp
+            BOOST_CXXFLAGS="${BOOST_CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}"
+        fi
+    fi
 
-  if [ $PLATFORM = 'Android' ]; then
-      # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
-      # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
-      mkdir -p tmp/sys/
-      echo '#include <sys/statfs.h>' > tmp/sys/statvfs.h
-      echo '#define statvfs statfs' >> tmp/sys/statvfs.h
-      BOOST_CXXFLAGS="${BOOST_CXXFLAGS} -I./tmp"
-      BOOST_LDFLAGS="${BOOST_LDFLAGS} -L./tmp"
-  fi
+    if [ $PLATFORM = 'Android' ]; then
+        # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
+        # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
+        mkdir -p tmp/sys/
+        echo '#include <sys/statfs.h>' > tmp/sys/statvfs.h
+        echo '#define statvfs statfs' >> tmp/sys/statvfs.h
+        BOOST_CXXFLAGS="${BOOST_CXXFLAGS} -I./tmp"
+        BOOST_LDFLAGS="${BOOST_LDFLAGS} -L./tmp"
+    fi
     ./b2 ${CROSS_FLAGS} \
-      --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
-      --ignore-site-config --user-config=user-config.jam \
-      architecture="${BOOST_ARCH}" \
-      toolset="${BOOST_TOOLSET}" \
-      ${ICU_DETAILS} \
-      "$@" \
-      link=static \
-      variant=release \
-      linkflags="${BOOST_LDFLAGS}" \
-      cxxflags="${BOOST_CXXFLAGS}" \
-      stage install
+        --prefix=${BUILD} -j${JOBS} ${B2_VERBOSE} \
+        --ignore-site-config --user-config=user-config.jam \
+        architecture="${BOOST_ARCH}" \
+        toolset="${BOOST_TOOLSET}" \
+        ${ICU_DETAILS} \
+        "$@" \
+        link=static \
+        variant=release \
+        linkflags="${BOOST_LDFLAGS}" \
+        cxxflags="${BOOST_CXXFLAGS}" \
+        stage install
 
     # clear out shared libs
     check_and_clear_libs
     echoerr 'done compiling boost'
 else
     if [[ $BOOST_ARCH != "arm" ]]; then
-      echoerr 'building bcp'
-      ./b2 tools/bcp -j${JOBS} ${B2_VERBOSE} \
-        --ignore-site-config --user-config=user-config.jam \
-        toolset="${BOOST_TOOLSET}"
-      echoerr 'installing headers with bcp'
-      STAGING_DIR=bcp_staging
-      mkdir -p ${STAGING_DIR}
-      rm -rf ${STAGING_DIR}/*
-      for var in "$@"
-      do
-          ./dist/bin/bcp "${var}" ${STAGING_DIR} 1>/dev/null
-      done
-      du -h -d 0 ${STAGING_DIR}/boost/
-      mkdir -p ${BUILD}/include
-      cp -r ${STAGING_DIR}/boost ${BUILD}/include/
+        echoerr 'building bcp'
+        ./b2 tools/bcp -j${JOBS} ${B2_VERBOSE} \
+          --ignore-site-config --user-config=user-config.jam \
+          toolset="${BOOST_TOOLSET}"
+        echoerr 'installing headers with bcp'
+        STAGING_DIR=bcp_staging
+        mkdir -p ${STAGING_DIR}
+        rm -rf ${STAGING_DIR}/*
+        for var in "$@"
+        do
+            ./dist/bin/bcp "${var}" ${STAGING_DIR} 1>/dev/null
+        done
+        du -h -d 0 ${STAGING_DIR}/boost/
+        mkdir -p ${BUILD}/include
+        cp -r ${STAGING_DIR}/boost ${BUILD}/include/
     else
-       echoerr 'skipping installing headers with bcp because we are cross compiling'
+        echoerr 'skipping installing headers with bcp because we are cross compiling'
     fi
 fi
