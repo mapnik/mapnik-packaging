@@ -55,6 +55,9 @@ echoerr 'bootstrapping boost'
 if [ $PLATFORM = 'Android' ];  then
     echo "using gcc : arm : ${CXX} ;" > user-config.jam
     ./bootstrap.sh --with-toolset=gcc
+elif [ $PLATFORM = 'Linaro-softfp' ];  then
+    echo "using gcc : arm : ${CXX} ;" > user-config.jam
+    ./bootstrap.sh --with-toolset=gcc
 else
     echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
     ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}

@@ -29,6 +29,16 @@ else
   export CXX_STANDARD="cpp03"
 fi
 
+function nprocs() {
+    # number of processors on the current system
+    case "$(uname -s)" in
+        'Linux')    nproc;;
+        'Darwin')   sysctl -n hw.ncpu;;
+        *)          echo 1;;
+    esac
+}
+export -f nprocs
+
 
 # lowercase platform name
 export platform=$(echo $PLATFORM | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
@@ -57,6 +67,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
     fi
+    export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections / -Wl,--exclude-libs=ALL / Bsymbolic
     # Note: stripping with -Wl,-S breaks dtrace
@@ -116,6 +127,7 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
     export EXTRA_CFLAGS="-fPIC --sysroot ${SDK_PATH}"
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
+    export EXTRA_CPPFLAGS="--sysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="gcc-arm"
@@ -130,6 +142,40 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
+elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
+    export UNAME='Linaro'
+    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    cd ${ROOTDIR}
+    # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
+    export EXTRA_CFLAGS="-fPIC --sysroot ${SYSROOT}"
+    export EXTRA_LDFLAGS="-Wl,-search_paths_first"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
+    export JOBS=`nprocs`
+    export BOOST_TOOLSET="gcc-arm"
+    export PATH="${SDK_PATH}/bin":${PATH}
+    export CORE_CXX="arm-linux-gnueabi-g++"
+    export CORE_CC="arm-linux-gnueabi-gcc"
+    export LD="arm-linux-gnueabi-ld"
+    export AR="arm-linux-gnueabi-ar"
+    export ARCH_FLAGS=
+    export RANLIB="arm-linux-gnueabi-ranlib"
+    export NM="arm-linux-gnueabi-nm"
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
+    export CXX_VISIBILITY_FLAGS=""
+    if [[ "${CXX11}" == true ]]; then
+      export STDLIB="libstdcpp"
+      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_LDFLAGS=""
+    else
+      export STDLIB="libstdcpp"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
+    export ZLIB_PATH="${SYSROOT}/usr"
+
 elif [[ ${PLATFORM} == 'Android' ]]; then
     export UNAME='Android'
     export API_LEVEL="android-18"
@@ -209,6 +255,7 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
+    export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="clang"
@@ -247,6 +294,10 @@ export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
     if [[ ${PLATFORM} = 'Linux' ]]; then
         export ZLIB_PATH="/usr";
+    elif [[ ${PLATFORM} = 'Linaro' ]]; then
+        export ZLIB_PATH="/usr";
+    elif [[ ${PLATFORM} = 'Linaro-softfp' ]]; then
+        export ZLIB_PATH="/usr";
     else
         if [[ ${PLATFORM} = 'Android' ]]; then
             # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
@@ -283,7 +334,7 @@ export CC="${CORE_CC}"
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
-export CPPFLAGS="${CORE_CPPFLAGS}"
+export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
 export LINK_FLAGS=${LDFLAGS}
@@ -542,16 +593,6 @@ function memsize() {
     esac
 }
 export -f memsize
-
-function nprocs() {
-    # number of processors on the current system
-    case "$(uname -s)" in
-        'Linux')    nproc;;
-        'Darwin')   sysctl -n hw.ncpu;;
-        *)          echo 1;;
-    esac
-}
-export -f nprocs
 
 echoerr "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 
