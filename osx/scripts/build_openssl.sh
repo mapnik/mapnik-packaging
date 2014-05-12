@@ -8,14 +8,20 @@ download openssl-${OPENSSL_VERSION}.tar.gz
 
 echoerr '*building openssl'
 
-if [[ ${UNAME} == 'Darwin' ]]; then
-    OS_COMPILER="darwin64-x86_64-cc"
+OS_COMPILER=""
+MAKEDEPEND=""
+
+if [[ ${PLATFORM} == 'Darwin' ]]; then
+    OS_COMPILER="darwin64-x86_64-cc enable-ec_nistp_64_gcc_128"
     MAKEDEPEND="makedepend"
-elif [[ ${UNAME} == 'Linux' ]]; then
-    OS_COMPILER="linux-x86_64"
+elif [[ ${PLATFORM} == 'Linux' ]]; then
+    OS_COMPILER="linux-x86_64 enable-ec_nistp_64_gcc_128"
+    MAKEDEPEND="gccmakedep"
+elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
+    OS_COMPILER="linux-armv4"
     MAKEDEPEND="gccmakedep"
 else
-    echoerr "unknown os/compiler version for your platform ${UNAME}"
+    echoerr "unknown os/compiler version for your platform ${PLATFORM}"
 fi
 
 rm -rf openssl-${OPENSSL_VERSION}
@@ -31,8 +37,7 @@ no-shared \
 enable-tlsext \
 no-ssl2 \
 --openssldir=${BUILD}/etc/openssl \
-${OS_COMPILER} \
-enable-ec_nistp_64_gcc_128
+${OS_COMPILER}
 
 $MAKE depend MAKEDEPPROG=${MAKEDEPEND}
 
@@ -45,7 +50,6 @@ CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAG
 zlib-dynamic \
 no-shared \
 ${OS_COMPILER} \
-enable-ec_nistp_64_gcc_128 \
 "$CFLAGS"
 
 $MAKE
