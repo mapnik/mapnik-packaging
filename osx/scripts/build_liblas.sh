@@ -6,14 +6,23 @@ cd ${PACKAGES}
 
 echoerr 'building liblas'
 
-download libLAS-${LIBLAS_VERSION}.tar.gz
+LIBLAS_LATEST=false
 
-rm -rf libLAS-${LIBLAS_VERSION}
-tar xf libLAS-${LIBLAS_VERSION}.tar.gz
-cd libLAS-${LIBLAS_VERSION}
-#LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
-# workaround https://gist.github.com/hobu/8477865
-patch -N src/gt_wkt_srs.cpp ${PATCHES}/liblas-gt.diff || true
+if [[ $LIBLAS_LATEST ]]; then
+    rm -rf libLAS
+    git clone --depth 1 git@github.com:libLAS/libLAS.git
+    cd libLAS
+else
+    download libLAS-${LIBLAS_VERSION}.tar.gz
+    rm -rf libLAS-${LIBLAS_VERSION}
+    tar xf libLAS-${LIBLAS_VERSION}.tar.gz
+    cd libLAS-${LIBLAS_VERSION}
+    # workaround https://gist.github.com/hobu/8477865
+    patch -N src/gt_wkt_srs.cpp ${PATCHES}/liblas-gt.diff || true
+fi
+
+# Below two patches are to enable linking against a static libgdal.a
+# https://github.com/libLAS/libLAS/issues/33
 # workaround for bogus library path detection
 patch -N cmake/modules/FindGDAL.cmake ${PATCHES}/liblas-find-gdal.diff || true
 # workaround for duplicate symbols:
