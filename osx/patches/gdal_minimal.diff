@@ -1,0 +1,90 @@
+diff --git a/gdal/GDALmake.opt.in b/gdal/GDALmake.opt.in
+index 7140214..3343ef8 100644
+--- a/gdal/GDALmake.opt.in
++++ b/gdal/GDALmake.opt.in
+@@ -475,14 +475,7 @@ FREEXL_INCLUDE = @FREEXL_INCLUDE@
+ #	and their uppercase form should be the format portion of the
+ #	format registration entry point.  eg. gdb -> GDALRegister_GDB().
+ #
+-GDAL_FORMATS = 	gxf gtiff hfa aigrid aaigrid ceos ceos2 iso8211 xpm \
+-		sdts raw dted mem jdem envisat elas fit vrt usgsdem l1b \
+-		nitf bmp pcidsk airsar rs2 ilwis rmf leveller sgi srtmhgt \
+-		idrisi gsg ingr ers jaxapalsar dimap gff cosar pds adrg \
+-		coasp tsx terragen blx msgn til r northwood saga xyz hf2 \
+-		kmlsuperoverlay ctg e00grid zmap ngsgeoid iris map\
+-		@OPT_GDAL_FORMATS@
+-
++GDAL_FORMATS = 	vrt gtiff hfa mem raw @OPT_GDAL_FORMATS@
+ 
+ ifneq ($(LIBZ_SETTING),no)
+ GDAL_FORMATS := $(GDAL_FORMATS) rik ozi pdf
+diff --git a/gdal/ogr/ogrsf_frmts/GNUmakefile b/gdal/ogr/ogrsf_frmts/GNUmakefile
+index c98498f..cda3b0d 100644
+--- a/gdal/ogr/ogrsf_frmts/GNUmakefile
++++ b/gdal/ogr/ogrsf_frmts/GNUmakefile
+@@ -2,11 +2,8 @@
+ include ../../GDALmake.opt
+ 
+ SUBDIRS-yes	:= \
+-	generic avc bna csv dgn geojson gml gmt mem kml \
+-	mitab ntf gpx rec s57 sdts shape tiger vrt \
+-	geoconcept xplane georss gtm dxf pgdump gpsbabel \
+-	sua openair pds htf aeronavfaa edigeo svg idrisi \
+-	arcgen segukooa segy sxf openfilegdb wasp selafin
++	generic geojson mem kml \
++	gpx shape vrt openfilegdb mitab
+ 
+ SUBDIRS-$(HAVE_DODS)	+= dods
+ SUBDIRS-$(HAVE_DWGDIRECT) += dxfdwg
+diff --git a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
+index bf72dd2..37d44e5 100644
+--- a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
++++ b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
+@@ -9,46 +9,14 @@ OBJ	=	ogrsfdriverregistrar.o ogrlayer.o ogrdatasource.o \
+ 		ogrmutexedlayer.o ogrmutexeddatasource.o
+ 
+ BASEFORMATS = \
+-	-DAVCBIN_ENABLED \
+-	-DBNA_ENABLED \
+-	-DCSV_ENABLED \
+-	-DDGN_ENABLED \
+-	-DGML_ENABLED \
+-	-DGMT_ENABLED \
+ 	-DGPX_ENABLED \
+ 	-DMEM_ENABLED \
+-	-DNTF_ENABLED \
+-	-DREC_ENABLED \
+-	-DS57_ENABLED \
+-	-DSDTS_ENABLED \
+ 	-DSHAPE_ENABLED \
+-	-DTAB_ENABLED \
+-	-DTIGER_ENABLED \
+ 	-DVRT_ENABLED \
+ 	-DKML_ENABLED \
+ 	-DGEOJSON_ENABLED \
+-	-DGEOCONCEPT_ENABLED \
+-	-DXPLANE_ENABLED \
+-	-DGEORSS_ENABLED \
+-	-DGTM_ENABLED \
+-	-DDXF_ENABLED \
+-	-DPGDUMP_ENABLED \
+-	-DGPSBABEL_ENABLED \
+-	-DSUA_ENABLED \
+-	-DOPENAIR_ENABLED \
+-	-DPDS_ENABLED \
+-	-DHTF_ENABLED \
+-	-DAERONAVFAA_ENABLED \
+-	-DEDIGEO_ENABLED \
+-	-DSVG_ENABLED \
+-	-DIDRISI_ENABLED \
+-	-DARCGEN_ENABLED \
+-	-DSEGUKOOA_ENABLED \
+-	-DSEGY_ENABLED \
+-	-DSXF_ENABLED \
+ 	-DOPENFILEGDB_ENABLED \
+-	-DWASP_ENABLED \
+-	-DSELAFIN_ENABLED
++	-DTAB_ENABLED \
+ 
+ CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=\"$(INST_DATA)\" $(BASEFORMATS)
+ 

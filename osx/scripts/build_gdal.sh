@@ -20,10 +20,6 @@ if [[ $GDAL_LATEST == true ]]; then
         git diff > latest-${CUR_NOW}
         git checkout .
         git pull || true
-        if [[ -f GDAL$MAKE.opt ]]; then
-            $MAKE clean
-            $MAKE distclean
-        fi
     fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
@@ -32,7 +28,15 @@ else
     cd gdal-${GDAL_VERSION}
 fi
 
+if [[ $GDAL_LATEST == true ]]; then
+    if [[ -f GDALmake.opt ]]; then
+        $MAKE clean
+        $MAKE distclean
+    fi
+    git apply ${PATCHES}/gdal_minimal.diff
+fi
 # purge previous install
+rm -f configure.orig configure.rej 
 rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
 rm -f ${BUILD}/lib/libgdal*
@@ -103,9 +107,9 @@ if [[ $BUILD_WITH_SPATIALITE != "no" ]] || [[ $BUILD_WITH_GEOS != "no" ]]; then
     fi
 fi
 
-
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
+--with-threads=no \
 --enable-static \
 --disable-shared \
 ${FGDB_ARGS} \
