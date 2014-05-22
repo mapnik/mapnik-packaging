@@ -42,7 +42,7 @@ function prep_linux {
     sudo apt-get update -y -qq
   fi;
   echo "installing build tools"
-  sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake
+  sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
