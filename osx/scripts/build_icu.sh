@@ -48,6 +48,8 @@ if [ $BOOST_ARCH = "arm" ]; then
 else
     CROSS_FLAGS=""
 fi
+
+patch -N tools/toolutil/ucbuf.c ${PATCHES}/icu_debug.diff || true
 cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 # note: enable-draft is needed for U_ICUDATA_ENTRY_POINT
 ./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
