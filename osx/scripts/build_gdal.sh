@@ -109,7 +109,6 @@ fi
 
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---without-libtool \
 --with-threads=no \
 --enable-static \
 --disable-shared \
