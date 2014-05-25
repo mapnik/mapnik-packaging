@@ -77,6 +77,7 @@ echo "FRAMEWORK_PYTHON = False" >> config.py
 echo "FULL_LIB_PATH = False" >> config.py
 echo "ENABLE_SONAME = False" >> config.py
 echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
+echo "XMLPARSER = 'ptree'" >> config.py
 
 ./configure || cat config.log
 JOBS=${JOBS} $MAKE

@@ -4,7 +4,13 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download libuv-v${LIBUV_VERSION}.tar.gz
+if [ ! -f libuv-v${LIBUV_VERSION}.tar.gz ]; then
+    echoerr "downloading libuv: https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz"
+    curl -s -S -f -O -L https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz
+    mv v${LIBUV_VERSION}.tar.gz libuv-v${LIBUV_VERSION}.tar.gz
+else
+    echoerr "using cached node at libuv-v${LIBUV_VERSION}.tar.gz"
+fi
 
 echoerr 'building libuv'
 rm -rf libuv-${LIBUV_VERSION}

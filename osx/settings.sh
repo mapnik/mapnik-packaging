@@ -410,6 +410,8 @@ export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
 export NODE_VERSION="0.10.28"
+# stuck at feb 2012
+# https://code.google.com/p/sparsehash/source/list
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
@@ -422,7 +424,7 @@ export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
 export OPENSSL_VERSION="1.0.1g"
-export LIBUV_VERSION="0.11.23"
+export LIBUV_VERSION="0.11.25"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr

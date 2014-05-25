@@ -5,10 +5,10 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [ ! -f node-v${NODE_VERSION}.tar.gz ]; then
-    echo downloading node
+    echoerr "downloading node"
     curl -s -S -f -O  http://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
 else
-    echo downloading node
+    echoerr "using cached node at node-v${NODE_VERSION}.tar.gz"
 fi
 
 echoerr 'building node'
