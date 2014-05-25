@@ -12,7 +12,7 @@ GDAL_LATEST=true
 if [[ $GDAL_LATEST == true ]]; then
     #rm -rf gdal
     if [ ! -d gdal ]; then
-        git clone --quiet --depth=1 https://github.com/OSGeo/gdal.git
+        git clone --quiet https://github.com/OSGeo/gdal.git
         cd gdal/gdal
     else
         cd gdal/gdal
@@ -21,6 +21,8 @@ if [[ $GDAL_LATEST == true ]]; then
         git checkout .
         git pull || true
     fi
+    # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
+    git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
 else
     download gdal-${GDAL_VERSION}.tar.gz
     rm -rf gdal-${GDAL_VERSION}
