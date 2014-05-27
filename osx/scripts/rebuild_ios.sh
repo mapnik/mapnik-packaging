@@ -53,8 +53,13 @@ function build_all {
 # # required for bcp header copy
 # build_all
 
-# i386
+# 32-bit simulator
 source iPhoneSimulator.sh
+# required first for cross compiling later on arm
+build_all
+
+# 64-bit simulator
+source iPhoneSimulator64.sh
 # required first for cross compiling later on arm
 build_all
 
@@ -71,6 +76,6 @@ source iPhoneOS64.sh
 build_all
 
 # done now package
-./scripts/make_universal_ios.sh
+./scripts/make_universal.sh
 # TODO
-./scripts/package_mobile_sdk.sh
+#./scripts/package_mobile_sdk.sh
