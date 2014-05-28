@@ -21,7 +21,7 @@ cp ${PATCHES}/config.sub .
 ./configure --prefix=${BUILD} --without-mutex ${HOST_ARG} \
 --with-jni=no --enable-static --disable-shared --disable-dependency-tracking
 # nad2bin cannot be run in cross compiler environment
-if [ ${BOOST_ARCH} != "arm" ]; then
+if [[ ${BOOST_ARCH} == "arm" ]]; then
     # TODO - android: /bin/sh: ../src/nad2bin: cannot execute binary file
     set +e
     $MAKE -j${JOBS} -i -k

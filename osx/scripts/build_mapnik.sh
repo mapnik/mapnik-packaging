@@ -65,7 +65,6 @@ echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
 echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
-echo "BINDINGS = 'python'" >> config.py
 echo "INPUT_PLUGINS = 'csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
 echo "DEMO = True" >> config.py
 echo "SVG_RENDERER = False" >> config.py
@@ -79,7 +78,17 @@ echo "ENABLE_SONAME = False" >> config.py
 echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
 echo "XMLPARSER = 'ptree'" >> config.py
 
-./configure || cat config.log
+if [[ $BOOST_ARCH == "arm" ]]; then
+    HOST_ARGS='HOST=${ARCH_NAME}'
+    echo "BINDINGS = ''" >> config.py
+    echo "LINKING = 'static'" >> config.py
+    echo "PLUGIN_LINKING = 'static'" >> config.py
+else
+    HOST_ARGS=""
+    echo "BINDINGS = 'python'" >> config.py
+fi
+
+./configure ${HOST_ARGS} || cat config.log
 JOBS=${JOBS} $MAKE
 $MAKE install
 

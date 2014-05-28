@@ -48,7 +48,7 @@ echo "JPEG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "JPEG_LIBS = '${BUILD}/lib'" >> config.py
 
 # disable configure checks for all except OS X
-if [ -n $HOST_ARG ]; then
+if [ $BOOST_ARCH = "arm" ]; then
     export HOST_ARGS_FOR_IOS='HOST=${ARCH_NAME}'
 else
     export HOST_ARGS_FOR_IOS=""
