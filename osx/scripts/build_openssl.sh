@@ -62,7 +62,8 @@ if [[ ${OS_COMPILER} != "" ]]; then
     "$CFLAGS"
 
     $MAKE
-    $MAKE install
+    # https://github.com/openssl/openssl/issues/57
+    $MAKE install_sw
 fi
 
 cd ${PACKAGES}
