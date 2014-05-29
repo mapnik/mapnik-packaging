@@ -38,13 +38,17 @@ if [[ ${OS_COMPILER} != "" ]]; then
     cd openssl-${OPENSSL_VERSION}
     ./Configure \
     --prefix=${BUILD} \
-    no-idea \
-    no-mdc2 \
-    no-rc5 \
-    no-zlib \
-    no-shared \
     enable-tlsext \
-    no-ssl2 \
+    -no-dso \
+    -no-hw \
+    -no-comp \
+    -no-idea \
+    -no-mdc2 \
+    -no-rc5 \
+    -no-zlib \
+    -no-shared \
+    -no-ssl2 \
+    -no-ssl3 \
     --openssldir=${BUILD}/etc/openssl \
     ${OS_COMPILER}
 
