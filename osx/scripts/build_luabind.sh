@@ -14,7 +14,7 @@ cd luabind
 git checkout 789c9e0f98
 # avoid g++ being killed on travis
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=2
+    JOBS=4
 fi
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 

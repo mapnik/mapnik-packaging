@@ -23,7 +23,7 @@ cd Project-OSRM
 git checkout $OSRM_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=2
+    JOBS=4
 fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"

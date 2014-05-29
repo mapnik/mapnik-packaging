@@ -13,7 +13,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=2
+    JOBS=4
 fi
 
 download boost_${BOOST_VERSION2}.tar.bz2
