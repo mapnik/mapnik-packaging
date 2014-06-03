@@ -8,9 +8,9 @@ cd ${PACKAGES}
 echoerr 'building gdal'
 
 GDAL_LATEST=true
+GDAL_PRE_2x=false
 
-if [[ $GDAL_LATEST == true ]]; then
-    #rm -rf gdal
+if [[ ${GDAL_LATEST} == true ]]; then
     if [ ! -d gdal ]; then
         git clone --quiet https://github.com/OSGeo/gdal.git
         cd gdal/gdal
@@ -21,8 +21,13 @@ if [[ $GDAL_LATEST == true ]]; then
         git checkout .
         git pull || true
     fi
-    # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
-    git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
+    if [[ ${GDAL_PRE_2x} == true ]]; then
+        # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
+        git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
+    else
+        git checkout trunk
+        git pull
+    fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
     rm -rf gdal-${GDAL_VERSION}
@@ -30,16 +35,22 @@ else
     cd gdal-${GDAL_VERSION}
 fi
 
-if [[ $GDAL_LATEST == true ]]; then
+if [[ ${GDAL_LATEST} == true ]]; then
     if [[ -f GDALmake.opt ]]; then
         $MAKE clean
         $MAKE distclean
     fi
-    git apply ${PATCHES}/gdal_minimal.diff
+    if [[ ${GDAL_PRE_2x} == true ]]; then
+        git apply ${PATCHES}/gdal_minimal.diff
+    fi
+elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
+    patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
+    patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true
 fi
 # purge previous install
 rm -f configure.orig configure.rej 
-rm -f ${BUILD}/include/cpl_*
+# trouble: cpl_serv.h and cplkeywordparser.h comes from geotiff?
+#rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
 rm -f ${BUILD}/lib/libgdal*
 rm -rf ./.libs
