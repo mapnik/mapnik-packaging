@@ -457,18 +457,23 @@ export -f push
 
 function check_and_clear_libs {
   if [[ $UNAME == 'Darwin' ]]; then
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
-           lipo -info $i | grep arch 1>&2;
-        done;
+        #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
+        #   lipo -info $i | grep arch 1>&2;
+        #done;
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
            otool -L ${i} 1>&2;
+        done;
+        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
+           mv ${i} "${BUILD}/lib/_shared/"
         done;
   else
       for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
          ldd ${i} 1>&2
       done
+      for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
+         mv ${i} "${BUILD}/lib/_shared/"
+      done
   fi
-  rm -f ${BUILD}/lib/{*.so*,*.dylib}
 }
 export -f check_and_clear_libs
 
