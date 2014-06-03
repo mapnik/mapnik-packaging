@@ -122,7 +122,7 @@ fi
 
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---with-threads=no \
+--with-threads=yes \
 --enable-static \
 --disable-shared \
 ${FGDB_ARGS} \
