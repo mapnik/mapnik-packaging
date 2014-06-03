@@ -472,7 +472,7 @@ function check_and_clear_libs {
          ldd ${i} 1>&2
       done
       for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
-          mv ${i} "${BUILD}/lib/_shared/"
+          mv ${i} "${BUILD}/lib/_shared/$(basename ${i})"
       done
   fi
 }

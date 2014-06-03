@@ -18,8 +18,21 @@ index 7140214..3343ef8 100644
  
  ifneq ($(LIBZ_SETTING),no)
  GDAL_FORMATS := $(GDAL_FORMATS) rik ozi pdf
+diff --git a/gdal/configure b/gdal/configure
+index 2ad9f0e..f617358 100755
+--- a/gdal/configure
++++ b/gdal/configure
+@@ -26856,7 +26856,7 @@ $as_echo "$as_me: WARNING: GEOS was found on your system, but geos-config report
+ 
+       HAVE_GEOS="no"
+ 
+-      GEOS_LIBS="`${GEOS_CONFIG} --ldflags` -lgeos_c"
++      GEOS_LIBS="`${GEOS_CONFIG} --ldflags` -lgeos_c ${LIBS}"
+       GEOS_CFLAGS="`${GEOS_CONFIG} --cflags`"
+       GEOS_VERSION="`${GEOS_CONFIG} --version`"
+ 
 diff --git a/gdal/ogr/ogrsf_frmts/GNUmakefile b/gdal/ogr/ogrsf_frmts/GNUmakefile
-index c98498f..cda3b0d 100644
+index c98498f..3fd258d 100644
 --- a/gdal/ogr/ogrsf_frmts/GNUmakefile
 +++ b/gdal/ogr/ogrsf_frmts/GNUmakefile
 @@ -2,11 +2,8 @@
@@ -31,22 +44,22 @@ index c98498f..cda3b0d 100644
 -	geoconcept xplane georss gtm dxf pgdump gpsbabel \
 -	sua openair pds htf aeronavfaa edigeo svg idrisi \
 -	arcgen segukooa segy sxf openfilegdb wasp selafin
-+	generic geojson mem kml \
++	generic csv geojson mem kml \
 +	gpx shape vrt openfilegdb mitab
  
  SUBDIRS-$(HAVE_DODS)	+= dods
  SUBDIRS-$(HAVE_DWGDIRECT) += dxfdwg
 diff --git a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
-index bf72dd2..37d44e5 100644
+index bf72dd2..851acd0 100644
 --- a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
 +++ b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
-@@ -9,46 +9,14 @@ OBJ	=	ogrsfdriverregistrar.o ogrlayer.o ogrdatasource.o \
+@@ -9,46 +9,15 @@ OBJ	=	ogrsfdriverregistrar.o ogrlayer.o ogrdatasource.o \
  		ogrmutexedlayer.o ogrmutexeddatasource.o
  
  BASEFORMATS = \
 -	-DAVCBIN_ENABLED \
 -	-DBNA_ENABLED \
--	-DCSV_ENABLED \
+ 	-DCSV_ENABLED \
 -	-DDGN_ENABLED \
 -	-DGML_ENABLED \
 -	-DGMT_ENABLED \
