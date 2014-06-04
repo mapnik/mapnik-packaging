@@ -7,7 +7,7 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=true
+GDAL_LATEST=false
 GDAL_PRE_2x=false
 
 if [[ ${GDAL_LATEST} == true ]]; then
