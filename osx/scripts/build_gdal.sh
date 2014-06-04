@@ -47,6 +47,23 @@ elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
     patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
     patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true
 fi
+
+# notes to regenerate minimal diff for released version
+: '
+cd ../
+rm -rf gdal-${GDAL_VERSION}
+tar xf gdal-${GDAL_VERSION}.tar.gz
+cd gdal-${GDAL_VERSION}
+git init .
+git add ogr/ogrsf_frmts/generic/ogrregisterall.cpp
+git add GDALmake.opt.in
+git add ogr/ogrsf_frmts/GNUmakefile
+git add ogr/ogrsf_frmts/generic/GNUmakefile
+git commit -a -m "Add files"
+patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff
+git diff > ${PATCHES}/gdal-1.11.0-minimal.diff
+'
+
 # purge previous install
 rm -f configure.orig configure.rej 
 # trouble: cpl_serv.h and cplkeywordparser.h comes from geotiff?
