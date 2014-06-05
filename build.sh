@@ -34,7 +34,11 @@ function upgrade_gcc {
 
 function prep_linux {
   cd osx
-  source Linux.sh
+  if [[ "${PLATFORM:-false}" != false ]]; then
+      source ${PLATFORM}.sh
+  else
+      source Linux.sh
+  fi
   if [ "${CXX11}" = true ]; then
     upgrade_gcc
   else
@@ -184,7 +188,8 @@ function build_http {
   b ./scripts/build_libuv.sh
   b ./scripts/build_openssl.sh
   b ./scripts/build_curl.sh
-  b ./scripts/build_glfw.sh
+  ./scripts/build_boost.sh --with-regex
+  #b ./scripts/build_glfw.sh
   set +e
 }
 export -f build_http

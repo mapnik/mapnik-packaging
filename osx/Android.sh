@@ -3,7 +3,15 @@
 set -u
 
 export PLATFORM="Android"
-export HOST_PLATFORM="MacOSX"
+
+if [[ $UNAME == 'Darwin' ]]; then
+    export HOST_PLATFORM="MacOSX"
+elif [[ $UNAME == 'Linux' ]]; then
+    export HOST_PLATFORM="Linux"
+elif
+    echoerr "unknown host platform for android cross-compile: ${UNAME}"
+fi
+
 export BOOST_ARCH="arm"
 export ARCH_NAME="gcc-arm"
 export HOST_ARG="--host=arm-linux-androideabi"
