@@ -12,12 +12,15 @@ echoerr 'building pkg-config'
 # change line 198 to:
 #      ifndef G_INLINE_FUNC inline
 
-NATIVE_PKG_CONFIG="${PACKAGES}/pkg-config-${PKG_CONFIG_VERSION}-x86_64/pkg-config"
 if [ $BOOST_ARCH = "arm" ]; then
+    OLD_PLATFORM=${PLATFORM}
+    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    NATIVE_PKG_CONFIG="${PACKAGES}/pkg-config-${PKG_CONFIG_VERSION}-${ARCH_NAME}/pkg-config"
+    source ${ROOTDIR}/${OLD_PLATFORM}.sh
     if [ ! -f "${NATIVE_PKG_CONFIG}" ]; then
         echoerr 'native/host arch pkg-config missing, building now'
-        OLD_PLATFORM=${PLATFORM}
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh && ${ROOTDIR}/scripts/build_pkg_config.sh
+        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        ${ROOTDIR}/scripts/build_pkg_config.sh
         source ${ROOTDIR}/${OLD_PLATFORM}.sh
         mkdir -p "${BUILD}/bin/"
         cp "${NATIVE_PKG_CONFIG}" ${BUILD}/bin/
