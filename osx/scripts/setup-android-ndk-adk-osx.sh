@@ -6,7 +6,7 @@ cd ${PACKAGES}
 
 if [[ ! -f "android-ndk-${ANDROID_NDK_VERSION}-${platform}-x86_64.tar.bz2" ]]; then
     echoerr "downloading http://dl.google.com/android/ndk/android-ndk-${ANDROID_NDK_VERSION}-${platform}-x86_64.tar.bz2"
-    wget http://dl.google.com/android/ndk/android-ndk-${ANDROID_NDK_VERSION}-${platform}-x86_64.tar.bz2
+    ${SYSTEM_CURL} -s -S -f -O -L http://dl.google.com/android/ndk/android-ndk-${ANDROID_NDK_VERSION}-${platform}-x86_64.tar.bz2
 else
     echoerr "using cached http://dl.google.com/android/ndk/android-ndk-${ANDROID_NDK_VERSION}-${platform}-x86_64.tar.bz2"
 fi

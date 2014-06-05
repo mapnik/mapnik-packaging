@@ -4,11 +4,12 @@ set -u
 
 export PLATFORM="Android"
 
+UNAME=$(uname -s);
 if [[ $UNAME == 'Darwin' ]]; then
     export HOST_PLATFORM="MacOSX"
 elif [[ $UNAME == 'Linux' ]]; then
     export HOST_PLATFORM="Linux"
-elif
+else
     echoerr "unknown host platform for android cross-compile: ${UNAME}"
 fi
 

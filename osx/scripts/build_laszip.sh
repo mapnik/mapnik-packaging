@@ -7,7 +7,7 @@ cd ${PACKAGES}
 echoerr 'building laszip'
 
 if [ ! -f v2.2.0.tar.gz ]; then
-    wget https://github.com/LASzip/LASzip/archive/v2.2.0.tar.gz
+    ${SYSTEM_CURL} -s -S -f -O -L https://github.com/LASzip/LASzip/archive/v2.2.0.tar.gz
 fi
 
 rm -rf LASzip-2.2.0
