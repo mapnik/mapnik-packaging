@@ -178,7 +178,7 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export ZLIB_PATH="${SYSROOT}/usr"
 
 elif [[ ${PLATFORM} == 'Android' ]]; then
-    export JOBS=$(grep -c ^processor /proc/cpuinfo || sysctl -n hw.ncpu)
+    export JOBS=2
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
