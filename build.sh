@@ -180,6 +180,28 @@ function build_osmium {
 
 export -f build_osmium
 
+function mobile_tools {
+  basic_prep
+  sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_libuv.sh
+  b ./scripts/build_openssl.sh
+  b ./scripts/build_curl.sh
+  b ./scripts/build_protobuf.sh
+  b ./scripts/build_google_sparsetable.sh
+  b ./scripts/build_freetype.sh
+  b ./scripts/build_harfbuzz.sh
+  b ./scripts/build_libxml2.sh
+  b ./scripts/build_jpeg_turbo.sh
+  b ./scripts/build_png.sh
+  b ./scripts/build_webp.sh
+  b ./scripts/build_tiff.sh
+  b ./scripts/build_sqlite.sh
+  ./scripts/build_boost.sh --with-regex
+  set +e
+}
+export -f mobile_tools
+
 
 function build_http {
   basic_prep
@@ -189,7 +211,7 @@ function build_http {
   b ./scripts/build_openssl.sh
   b ./scripts/build_curl.sh
   ./scripts/build_boost.sh --with-regex
-  #b ./scripts/build_glfw.sh
+  b ./scripts/build_glfw.sh
   set +e
 }
 export -f build_http
