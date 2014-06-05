@@ -53,16 +53,18 @@ patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff
 patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
 
 echoerr 'bootstrapping boost'
-if [ $PLATFORM = 'Android' ];  then
-    echo "using gcc : arm : ${CXX} ;" > user-config.jam
-    ./bootstrap.sh --with-toolset=gcc
-elif [ $PLATFORM = 'Linaro-softfp' ];  then
-    echo "using gcc : arm : ${CXX} ;" > user-config.jam
-    ./bootstrap.sh --with-toolset=gcc
-else
-    echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
-    ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
-fi
+bootstrap() {
+  if [ $PLATFORM = 'Android' ];  then
+      echo "using gcc : arm : ${CXX} ;" > user-config.jam
+      ./bootstrap.sh --with-toolset=gcc
+  elif [ $PLATFORM = 'Linaro-softfp' ];  then
+      echo "using gcc : arm : ${CXX} ;" > user-config.jam
+      ./bootstrap.sh --with-toolset=gcc
+  else
+      echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
+      ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
+  fi
+}
 
 # HINT: boostrap failed? look in bootstrap.log and then debug by building from hand:
 # cd .//tools/build/v2/engine/
@@ -76,9 +78,23 @@ echoerr 'compiling boost'
 
 if [[ ! -f ./dist/bin/bcp ]]; then
     echoerr 'building bcp'
-    cd tools/bcp
-    ../../b2 -j${JOBS} ${B2_VERBOSE}
-    cd ../../
+    # dodge android cross compile problem: ld: unknown option: --start-group
+    if [[ ${BOOST_ARCH} == "arm" ]]; then
+        echoerr "compiling bjam for HOST ${HOST_PLATFORM}"
+        OLD_PLATFORM=${PLATFORM}
+        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        bootstrap
+        cd tools/bcp
+        ../../b2 -j${JOBS} ${B2_VERBOSE}
+        cd ../../
+        source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        bootstrap
+    else
+        bootstrap
+        cd tools/bcp
+        ../../b2 -j${JOBS} ${B2_VERBOSE}
+        cd ../../
+    fi
 fi
 
 # if we've requested libraries

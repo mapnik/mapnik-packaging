@@ -17,7 +17,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
 fi
 
 # deps: http://curl.haxx.se/docs/libs.html
-LIBS="${LIBS=}" ./configure --prefix=${BUILD} \
+LIBS="${LIBS=}" ./configure --prefix=${BUILD} ${HOST_ARG} \
 --enable-static \
 --disable-shared \
 --enable-manual \

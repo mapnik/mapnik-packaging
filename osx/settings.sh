@@ -41,7 +41,7 @@ export -f nprocs
 
 
 # lowercase platform name
-export platform=$(echo $PLATFORM | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
@@ -178,11 +178,15 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export ZLIB_PATH="${SYSROOT}/usr"
 
 elif [[ ${PLATFORM} == 'Android' ]]; then
+    export CXX_VISIBILITY_FLAGS=""
+    export EXTRA_CPPFLAGS=""
+    export CORE_CXXFLAGS=""
+    export ANDROID_NDK_VERSION="r9d"
     export UNAME='Android'
-    export API_LEVEL="android-18"
+    export API_LEVEL="android-19"
     export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
-    # run ./scripts/setup-android-ndk-adk-osx.sh to setup
-    export NDK_PATH="${PACKAGES}/android-ndk-r9"
+    ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
+    export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
     #ln -s ../android/android-ndk-r9 ./android-ndk-r9
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
     # NOTE: make-standalone-toolchain.sh --help for options
@@ -194,6 +198,8 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
           --stl=gnustl \
           --arch=arm \
           --platform="${API_LEVEL}"
+    else
+        echo "using ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     alias ldd="arm-linux-androideabi-readelf -d "
@@ -206,10 +212,7 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     export CORE_CXX="arm-linux-androideabi-g++"
     export CORE_CC="arm-linux-androideabi-gcc"
-    if [[ "${CXX_NAME:-false}" == false ]]; then
-        # TODO
-        export CXX_NAME="gcc-4.6"
-    fi
+    export CXX_NAME="androideabi-gcc"
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
     export ARCH_FLAGS=
