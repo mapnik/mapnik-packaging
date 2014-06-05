@@ -437,7 +437,7 @@ export LUA_VERSION="5.1.5"
 export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
-export OPENSSL_VERSION="1.0.1g"
+export OPENSSL_VERSION="1.0.1h"
 export LIBUV_VERSION="0.11.25"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
