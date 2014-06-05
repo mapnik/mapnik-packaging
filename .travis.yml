@@ -6,7 +6,6 @@ compiler:
 env:
   matrix:
     - CXX11=true TARGET=mobile_tools PLATFORM=Android
-    - CXX11=true TARGET=mobile_tools PLATFORM=iPhoneOSs
     - CXX11=true TARGET=build_osmium
     - CXX11=true TARGET=build_osrm QUIET=true
     - CXX11=false TARGET=build_osrm QUIET=true
