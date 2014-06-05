@@ -30,5 +30,10 @@ In file included from /Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx
 /Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp03-libstdcpp-gcc-arm/include/uv-unix.h:41:10: fatal error: 'pthread-fixes.h' file not found
 #include "pthread-fixes.h"
 '
-cp ./include/pthread-fixes.h $BUILD/include/
+
+: '
+/Users/travis/build/mapbox/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp11-libstdcpp-gcc-arm/include/uv-unix.h:50:11: fatal error: 
+      'uv-darwin.h' file not found
+'
+cp ./include/*.h $BUILD/include/
 cd ${PACKAGES}
