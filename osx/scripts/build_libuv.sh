@@ -23,4 +23,12 @@ cd libuv-${LIBUV_VERSION}
   --disable-dtrace
 $MAKE -j${JOBS}
 $MAKE install
+# fix android breakage when building against uv.h
+: '
+In file included from ../../include/llmr/util/time.hpp:4:
+In file included from /Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp03-libstdcpp-gcc-arm/include/uv.h:61:
+/Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp03-libstdcpp-gcc-arm/include/uv-unix.h:41:10: fatal error: 'pthread-fixes.h' file not found
+#include "pthread-fixes.h"
+'
+cp ./include/pthread-fixes.h $BUILD/include/
 cd ${PACKAGES}

@@ -180,25 +180,33 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
 elif [[ ${PLATFORM} == 'Android' ]]; then
     export JOBS=$(grep -c ^processor /proc/cpuinfo || sysctl -n hw.ncpu)
     export CXX_VISIBILITY_FLAGS=""
-    export EXTRA_CPPFLAGS=""
+    export alias ldconfig=true
+    export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
     export ANDROID_NDK_VERSION="r9d"
     export UNAME='Android'
     export API_LEVEL="android-19"
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
     ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
     export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
     #ln -s ../android/android-ndk-r9 ./android-ndk-r9
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
+    export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
     if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
         echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
+        # cd here is to workaround https://code.google.com/p/android/issues/detail?id=67690
+        CUR_DIR=$(pwd)
+        cd "${NDK_PATH}"
         "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
           --toolchain="${ANDROID_CROSS_COMPILER}" \
+          --llvm-version=3.4 \
+          --package-dir="${NDK_PACKAGE_DIR}" \
           --install-dir="${PLATFORM_PREFIX}" \
-          --stl=gnustl \
+          --stl="libcxx" \
           --arch=arm \
           --platform="${API_LEVEL}"
+        cd $CUR_DIR
     else
         echo "using ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
@@ -211,9 +219,11 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
-    export CORE_CXX="arm-linux-androideabi-g++"
-    export CORE_CC="arm-linux-androideabi-gcc"
-    export CXX_NAME="androideabi-gcc"
+    # use clang in order to support std::atomic
+    # https://code.google.com/p/android/issues/detail?id=36496
+    export CORE_CXX="arm-linux-androideabi-clang++"
+    export CORE_CC="arm-linux-androideabi-clang"
+    export CXX_NAME="androideabi-clang"
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
     export ARCH_FLAGS=
