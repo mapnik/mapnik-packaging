@@ -11,8 +11,11 @@ rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2
 mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 cd protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
-export NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-x86_64/src/protoc"
 if [ $BOOST_ARCH = "arm" ]; then
+    OLD_PLATFORM=${PLATFORM}
+    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}/src/protoc"
+    source ${ROOTDIR}/${OLD_PLATFORM}.sh
     if [ ! -f "${NATIVE_PROTOC}" ]; then
         echoerr 'native/host arch protoc missing, building now in subshell'
         OLD_PLATFORM=${PLATFORM}
