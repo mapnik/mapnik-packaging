@@ -4,13 +4,31 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
+HARFBUZZ_LATEST=false
 
-# harfbuzz
 echoerr 'building harfbuzz'
-rm -rf harfbuzz-${HARFBUZZ_VERSION}
-tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
-cd harfbuzz-${HARFBUZZ_VERSION}
+
+if [[ ${HARFBUZZ_LATEST} == true ]]; then
+    if [[ ! -d harfbuzz-master ]]; then
+        git clone git@github.com:behdad/harfbuzz.git harfbuzz-master
+        cd harfbuzz-master
+        ./autogen.sh
+    else
+        cd harfbuzz-master
+        git checkout .
+        git pull
+        # TODO - depends on ragel
+        ./autogen.sh ${HOST_ARG}
+        make clean
+        make distclean
+    fi
+else
+    download harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
+    rm -rf harfbuzz-${HARFBUZZ_VERSION}
+    tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
+    cd harfbuzz-${HARFBUZZ_VERSION}
+fi
+
 CXXFLAGS="${CXXFLAGS} -DHB_NO_MT"
 CFLAGS="${CFLAGS} -DHB_NO_MT"
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
