@@ -56,7 +56,7 @@ if [[ ${OS_COMPILER} != "" ]]; then
     $MAKE depend MAKEDEPPROG=${MAKEDEPEND}
 
     # now re-configure to apply custom $CFLAGS
-    CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAGS"
+    CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS -static $CFLAGS"
 
     # we do this now to avoid breaking '$MAKE depend'
     ./Configure --prefix=${BUILD} \
