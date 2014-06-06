@@ -37,6 +37,9 @@ if [[ ${OS_COMPILER} != "" ]]; then
     rm -rf openssl-${OPENSSL_VERSION}
     tar xf openssl-${OPENSSL_VERSION}.tar.gz
     cd openssl-${OPENSSL_VERSION}
+
+    patch -N util/domd ${PATCHES}/openssl_makedepend.diff
+
     ./Configure \
     --prefix=${BUILD} \
     enable-tlsext \
