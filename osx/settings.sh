@@ -483,7 +483,7 @@ function push {
 export -f push
 
 function check_and_clear_libs {
-  mkdir -p "${BUILD_SHARED_DIR}"
+  mkdir -p "${SHARED_LIBRARY_PATH}"
   if [[ $UNAME == 'Darwin' ]]; then
         #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
         #   lipo -info $i | grep arch 1>&2;
