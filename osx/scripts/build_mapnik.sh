@@ -88,8 +88,9 @@ else
     echo "BINDINGS = 'python'" >> config.py
 fi
 
-./configure ${HOST_ARGS} || cat config.log
-JOBS=${JOBS} $MAKE
+set_dl_path "${SHARED_LIBRARY_PATH}"
+LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS} || cat config.log
+LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
 $MAKE install
 
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
@@ -111,8 +112,8 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
     echo "...Updating and building mapnik python bindings for python ${i}"
     rm -f bindings/python/*os
     rm -f bindings/python/mapnik/_mapnik.so
-    ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-    JOBS=${JOBS} $MAKE
+    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
     $MAKE install
     
     for i in {"2.6","2.7"}
@@ -120,13 +121,16 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
       echo "...Updating and building mapnik python bindings for python ${i}"
       rm -f bindings/python/*os
       rm -f bindings/python/mapnik/_mapnik.so
-      ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-      JOBS=${JOBS} $MAKE
+      LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+      LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
       $MAKE install
     done
 fi
 
 $ROOTDIR/scripts/post_build_fix.sh
+
+unset_dl_path
+
 
 # remove headers for now
 #rm -rf ${MAPNIK_BIN_SOURCE}/include

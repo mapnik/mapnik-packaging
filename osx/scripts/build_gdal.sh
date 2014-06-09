@@ -7,7 +7,7 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=false
+GDAL_LATEST=true
 GDAL_PRE_2x=false
 
 if [[ ${GDAL_LATEST} == true ]]; then
@@ -73,6 +73,7 @@ rm -f configure.orig configure.rej
 #rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
 rm -f ${BUILD}/lib/libgdal*
+rm -f ${SHARED_LIBRARY_PATH}libgdal*
 rm -rf ./.libs
 rm -rf ./libgdal.la
 

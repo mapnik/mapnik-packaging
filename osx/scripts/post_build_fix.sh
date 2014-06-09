@@ -31,12 +31,33 @@ if [ $UNAME = 'Linux' ]; then
   echo todo
 fi
 
+
+function fix_gdal_shared() {
+    if [[ -f "$1" ]]; then
+        LIB_NAME_PULL=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
+        BBB=$(basename $LIB_NAME_PULL)
+        LIB_NAME_ACTUAL=${SHARED_LIBRARY_PATH}$BBB
+        if [[ -f $LIB_NAME_ACTUAL ]]; then
+            LIB_NAME_PUSH="$(dirname "$1")/libgdal_mapnik.dylib"
+            cp ${LIB_NAME_ACTUAL} ${LIB_NAME_PUSH}
+        fi
+        install_name_tool -change $LIB_NAME_PULL \
+          @loader_path/libgdal_mapnik.dylib \
+          "$1"
+    fi
+}
+
 if [ $UNAME = 'Darwin' ]; then
 
     for i in $(ls ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/*input)
     do
         install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../../libmapnik.dylib ${i}
     done
+
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ogr.input"
+    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/ogr.input"
 
     # fixup c++ programs
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite" ]; then

@@ -39,6 +39,23 @@ function nprocs() {
 }
 export -f nprocs
 
+function set_dl_path {
+    case "$(uname -s)" in
+        'Linux')    export LD_LIBRARY_PATH="$1";;
+        'Darwin')   export DYLD_LIBRARY_PATH="$1";;
+        *)          echo 1;;
+    esac
+}
+export -f set_dl_path
+
+function unset_dl_path {
+    case "$(uname -s)" in
+        'Linux')    unset LD_LIBRARY_PATH;;
+        'Darwin')   unset DYLD_LIBRARY_PATH;;
+        *)          echo 1;;
+    esac
+}
+export -f unset_dl_path
 
 # lowercase platform name
 export platform=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
@@ -325,11 +342,6 @@ if [[ $SHARED_ZLIB == true ]]; then
     fi
 fi
 
-# should not be needed now that we set 'LIBRARY_PATH'
-#if [ $UNAME = 'Darwin' ]; then
-  #export DYLD_LIBRARY_PATH="${BUILD}/lib"
-#fi
-
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
 
@@ -349,6 +361,7 @@ export CC="${CORE_CC}"
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
+export SHARED_LIBRARY_PATH="${LIBRARY_PATH}/_shared/"
 export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
@@ -470,7 +483,7 @@ function push {
 export -f push
 
 function check_and_clear_libs {
-  mkdir -p "${BUILD}/lib/_shared/"
+  mkdir -p "${BUILD_SHARED_DIR}"
   if [[ $UNAME == 'Darwin' ]]; then
         #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
         #   lipo -info $i | grep arch 1>&2;
