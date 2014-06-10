@@ -460,7 +460,7 @@ export -f echoerr
 function download {
     if [[ ! -f $1 ]]; then
         echoerr "downloading $1"
-        ${SYSTEM_CURL} -s -S -f -O -L ${S3_BASE}/$1
+        ${SYSTEM_CURL} -s -S -f -O -L --retry 3 ${S3_BASE}/$1
     else
         echoerr "using cached $1"
     fi
