@@ -31,7 +31,20 @@ if [ $UNAME = 'Linux' ]; then
   echo todo
 fi
 
-if [ $UNAME = 'Darwin' ]; then
+if [ $UNAME = 'Linux' ]; then
+    function fix_gdal_shared() {
+        if [[ -f "$1" ]] && [[ -f "${BUILD}/lib/libgdal.so" ]]; then
+            cp "${BUILD}/lib/libgdal.so" LIB_NAME_PUSH="$(dirname "$1")/libgdal_mapnik.dylib"
+        fi
+    }
+
+    # move shared gdal into place
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ogr.input"
+    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/ogr.input"
+
+elif [ $UNAME = 'Darwin' ]; then
 
     function fix_gdal_shared() {
         if [[ -f "$1" ]]; then
