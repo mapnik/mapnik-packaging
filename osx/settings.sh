@@ -362,7 +362,7 @@ export CC="${CORE_CC}"
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
-export SHARED_LIBRARY_PATH="${LIBRARY_PATH}/_shared/"
+export SHARED_LIBRARY_PATH="${LIBRARY_PATH}"
 export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS

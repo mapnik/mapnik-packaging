@@ -47,8 +47,6 @@ fi
 --disable-depend \
 --disable-cassert
 
-# LD=${CC}
-# TODO - linking problems for unknown reasons...
 $MAKE -j${JOBS} -C src/interfaces/libpq/ install
 cd ${PACKAGES}
 

@@ -81,7 +81,7 @@ rm -f configure.orig configure.rej
 #rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
 rm -f ${BUILD}/lib/libgdal*
-rm -f ${SHARED_LIBRARY_PATH}libgdal*
+rm -f ${SHARED_LIBRARY_PATH}/libgdal*
 rm -rf ./.libs
 rm -rf ./libgdal.la
 
