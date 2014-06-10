@@ -44,7 +44,7 @@ if [ $BOOST_ARCH = "arm" ]; then
 fi
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs
 
 : '
 Note: iPhoneSimulator not working atm:

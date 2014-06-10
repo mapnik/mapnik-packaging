@@ -55,4 +55,4 @@ $MAKE install -i -k
 set -e
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs

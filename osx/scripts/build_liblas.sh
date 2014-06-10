@@ -63,7 +63,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
 $MAKE -j${JOBS} VERBOSE=1
 $MAKE install
 
-check_and_clear_libs
+#check_and_clear_libs
 
 #  -DCMAKE_SHARED_LINKER_FLAGS="$GDAL_LIBS"
 

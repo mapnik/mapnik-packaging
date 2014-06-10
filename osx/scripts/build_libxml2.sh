@@ -54,4 +54,4 @@ fi
 $MAKE -j${JOBS} install
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs

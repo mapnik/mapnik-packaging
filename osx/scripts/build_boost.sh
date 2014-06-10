@@ -141,7 +141,7 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         stage install
 
     # clear out shared libs
-    check_and_clear_libs
+    #check_and_clear_libs
     echoerr 'done compiling boost'
 else
     echoerr 'installing headers with bcp'

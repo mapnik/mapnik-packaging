@@ -179,7 +179,7 @@ $MAKE -j${JOBS}
 $MAKE install
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs
 
 # build mdb plugin
 # http://gis.stackexchange.com/a/76792
