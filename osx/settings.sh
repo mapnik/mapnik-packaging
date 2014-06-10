@@ -58,7 +58,8 @@ function unset_dl_path {
 export -f unset_dl_path
 
 # lowercase platform name
-export platform=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform=$(echo ${PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform_alt=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
