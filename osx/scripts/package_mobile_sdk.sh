@@ -166,6 +166,12 @@ if [ -d ${BUILD}/include/google ]; then
     cp "${BUILD}/lib/libprotobuf-lite.a" ${LOCAL_TARGET}/lib/
 fi
 
+# pkg-config - optional
+if [ -d ${BUILD}/bin/pkg-config ]; then
+    echo 'copying pkg-config'
+    cp ${BUILD}/bin/pkg-config ${LOCAL_TARGET}/bin/
+fi
+
 if [ -d "${BUILD_UNIVERSAL}" ]; then
     echoerr "copying universal libs"
     # multiarch mapnik libs
