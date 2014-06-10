@@ -18,6 +18,7 @@ function prep_osx {
       source MacOSX.sh
   fi
   brew install autoconf automake libtool makedepend cmake | true
+  export PATH=$(brew --prefix)/bin:$PATH
   mkdir -p ${BUILD}
   mkdir -p ${BUILD}/lib
   mkdir -p ${BUILD}/include
