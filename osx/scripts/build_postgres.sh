@@ -49,10 +49,7 @@ fi
 
 # LD=${CC}
 # TODO - linking problems for unknown reasons...
-set +e
-$MAKE -j${JOBS} -i -k
-$MAKE install -i -k
-set -e
+$MAKE -j${JOBS} -C src/interfaces/libpq/ install
 cd ${PACKAGES}
 
-#check_and_clear_libs
+check_and_clear_libs
