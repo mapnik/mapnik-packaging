@@ -10,6 +10,14 @@ echoerr 'building gdal'
 GDAL_LATEST=true
 GDAL_PRE_2x=false
 
+GDAL_SHARED_LIB=true
+
+if [[ $GDAL_SHARED_LIB == true ]]; then
+    LIBRARY_ARGS="--disable-static --enable-shared"
+else
+    LIBRARY_ARGS="--enable-static --disable-shared"
+fi
+
 if [[ ${GDAL_LATEST} == true ]]; then
     if [ ! -d gdal ]; then
         git clone --quiet https://github.com/OSGeo/gdal.git
@@ -145,8 +153,7 @@ fi
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
 --with-threads=yes \
---enable-static \
---disable-shared \
+${LIBRARY_ARGS} \
 ${FGDB_ARGS} \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
