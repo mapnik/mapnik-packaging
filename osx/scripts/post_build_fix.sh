@@ -51,16 +51,19 @@ elif [ $UNAME = 'Darwin' ]; then
 
     function fix_gdal_shared() {
         if [[ -f "$1" ]]; then
-            LIB_NAME_PULL=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
-            BBB=$(basename $LIB_NAME_PULL)
-            LIB_NAME_ACTUAL=${SHARED_LIBRARY_PATH}/$BBB
-            if [[ -f $LIB_NAME_ACTUAL ]]; then
-                LIB_NAME_PUSH="$(dirname "$1")/libgdal_mapnik.dylib"
-                cp ${LIB_NAME_ACTUAL} ${LIB_NAME_PUSH}
+            LIBGDAL_PLACED="$(dirname "$1")/libgdal_mapnik.dylib"
+            # if product not already copied into place
+            if [[ ! -f ${LIBGDAL_PLACED} ]]; then
+                # get path to exact libgdal linked to from mapnik plugin
+                LIBGDAL_PATH=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
+                #LIBGDAL_BASENAME=$(basename $LIB_NAME_PULL)
+                # copy libgdal beside plugin and rename it to libgdal_mapnik.dylib
+                cp ${LIBGDAL_PATH} "$(dirname "$1")/libgdal_mapnik.dylib"
+                # now rebuild the linkage given the new name
+                install_name_tool -change ${LIBGDAL_PATH} \
+                  @loader_path/libgdal_mapnik.dylib \
+                  "$1"
             fi
-            install_name_tool -change $LIB_NAME_PULL \
-              @loader_path/libgdal_mapnik.dylib \
-              "$1"
         fi
     }
 
@@ -71,8 +74,8 @@ elif [ $UNAME = 'Darwin' ]; then
 
     fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/gdal.input"
     fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ogr.input"
-    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/gdal.input"
-    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/ogr.input"
+    #fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/gdal.input"
+    #fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/ogr.input"
 
     # fixup c++ programs
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite" ]; then
