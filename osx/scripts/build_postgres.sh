@@ -50,4 +50,6 @@ fi
 $MAKE -j${JOBS} -C src/interfaces/libpq/ install
 cd ${PACKAGES}
 
+rm -f ${BUILD}/lib/libpq{*.so*,*.dylib}
+
 check_and_clear_libs
