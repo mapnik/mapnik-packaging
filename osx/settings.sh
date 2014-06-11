@@ -322,7 +322,11 @@ export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
-export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
+if [[ ${HOST_PLATFORM} != ${PLATFORM} ]]; then
+    export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform}"
+else
+    export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
+fi
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
