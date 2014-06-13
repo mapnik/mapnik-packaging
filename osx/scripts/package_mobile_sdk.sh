@@ -213,8 +213,8 @@ if [[ "${PUBLISH:-false}" != false ]]; then
     #time xz -z -k -e -9 ${TARBALL_NAME}
     echoerr "*uploading ${UPLOAD}"
     ensure_s3cmd
-    s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
     s3cmd ls $(dirname s3://mapnik/dist/dev/*/*)
+    s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
     # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
 else
     echoerr 'skipping publishing'
