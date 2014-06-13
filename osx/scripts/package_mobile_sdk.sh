@@ -217,5 +217,5 @@ if [[ "${PUBLISH:-false}" != false ]]; then
     s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
     # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
 else
-    echoerr 'skipping publishing'
+    echoerr "skipping publishing ${UPLOAD}"
 fi
