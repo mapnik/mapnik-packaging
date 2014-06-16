@@ -84,9 +84,11 @@ elif [ $UNAME = 'Darwin' ]; then
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/svg2png" ]; then
         install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite
     fi
-    for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
-        do install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib $i;
-    done
+    # note: requires -Wl,-headerpad_max_install_names
+    # and now obsolete by `make test-local`
+    #for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
+    #    do install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib $i;
+    #done
 
     # fixup python
 
