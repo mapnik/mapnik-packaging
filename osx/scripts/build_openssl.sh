@@ -39,7 +39,6 @@ if [[ ${OS_COMPILER} != "" ]]; then
     cd openssl-${OPENSSL_VERSION}
 
     patch -N util/domd ${PATCHES}/openssl_makedepend.diff
-    patch -N util/domd ${PATCHES}/openssl_nokrb.diff
 
     ./Configure \
     --prefix=${BUILD} \
