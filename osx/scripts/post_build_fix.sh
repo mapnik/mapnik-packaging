@@ -52,18 +52,12 @@ elif [ $UNAME = 'Darwin' ]; then
     function fix_gdal_shared() {
         if [[ -f "$1" ]]; then
             LIBGDAL_PLACED="$(dirname "$1")/libgdal_mapnik.dylib"
-            # if product not already copied into place
-            if [[ ! -f ${LIBGDAL_PLACED} ]]; then
-                # get path to exact libgdal linked to from mapnik plugin
-                LIBGDAL_PATH=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
-                #LIBGDAL_BASENAME=$(basename $LIB_NAME_PULL)
-                # copy libgdal beside plugin and rename it to libgdal_mapnik.dylib
-                cp ${LIBGDAL_PATH} "$(dirname "$1")/libgdal_mapnik.dylib"
-                # now rebuild the linkage given the new name
-                install_name_tool -change ${LIBGDAL_PATH} \
-                  @loader_path/libgdal_mapnik.dylib \
-                  "$1"
-            fi
+            # get path to exact libgdal linked to from mapnik plugin
+            LIBGDAL_PATH=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
+            # now rebuild the linkage given the new name
+            install_name_tool -change ${LIBGDAL_PATH} \
+              @loader_path/libgdal_mapnik.dylib \
+              "$1"
         fi
     }
 
