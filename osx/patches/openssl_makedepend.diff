@@ -1,0 +1,17 @@
+--- util/domd    2014-06-05 02:41:31.000000000 -0700
++++ util/domd    2014-06-06 06:20:06.213703162 -0700
+@@ -22,12 +22,12 @@
+     done
+     sed -e '/^# DO NOT DELETE.*/,$d' < Makefile > Makefile.tmp
+     echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' >> Makefile.tmp
+-    ${MAKEDEPEND} -Werror -D OPENSSL_DOING_MAKEDEPEND -M $args >> Makefile.tmp || exit 1
++    ${MAKEDEPEND} -Werror -DOPENSSL_DOING_MAKEDEPEND -M $args >> Makefile.tmp || exit 1
+     ${PERL} $TOP/util/clean-depend.pl < Makefile.tmp > Makefile.new
+     RC=$?
+     rm -f Makefile.tmp
+ else
+-    ${MAKEDEPEND} -D OPENSSL_DOING_MAKEDEPEND $@ && \
++    ${MAKEDEPEND} -DOPENSSL_DOING_MAKEDEPEND $@ && \
+     ${PERL} $TOP/util/clean-depend.pl < Makefile > Makefile.new
+     RC=$?
+ fi

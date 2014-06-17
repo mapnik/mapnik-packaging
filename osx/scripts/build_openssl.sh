@@ -37,6 +37,9 @@ if [[ ${OS_COMPILER} != "" ]]; then
     rm -rf openssl-${OPENSSL_VERSION}
     tar xf openssl-${OPENSSL_VERSION}.tar.gz
     cd openssl-${OPENSSL_VERSION}
+
+    patch -N util/domd ${PATCHES}/openssl_makedepend.diff
+
     ./Configure \
     --prefix=${BUILD} \
     enable-tlsext \
@@ -56,7 +59,7 @@ if [[ ${OS_COMPILER} != "" ]]; then
     $MAKE depend MAKEDEPPROG=${MAKEDEPEND}
 
     # now re-configure to apply custom $CFLAGS
-    CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAGS"
+    CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS -static $CFLAGS"
 
     # we do this now to avoid breaking '$MAKE depend'
     ./Configure --prefix=${BUILD} \
