@@ -87,7 +87,9 @@ if [[ ! -f ./dist/bin/bcp ]]; then
         cd tools/bcp
         ../../b2 -j${JOBS} ${B2_VERBOSE}
         cd ../../
+        CURRENT_DIR=`pwd`
         source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        cd ${CURRENT_DIR}
         bootstrap
     else
         bootstrap
