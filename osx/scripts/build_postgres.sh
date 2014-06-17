@@ -47,12 +47,9 @@ fi
 --disable-depend \
 --disable-cassert
 
-# LD=${CC}
-# TODO - linking problems for unknown reasons...
-set +e
-$MAKE -j${JOBS} -i -k
-$MAKE install -i -k
-set -e
+$MAKE -j${JOBS} -C src/interfaces/libpq/ install
 cd ${PACKAGES}
+
+rm -f ${BUILD}/lib/libpq{*.so*,*.dylib}
 
 check_and_clear_libs

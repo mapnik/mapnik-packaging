@@ -166,6 +166,12 @@ if [ -d ${BUILD}/include/google ]; then
     cp "${BUILD}/lib/libprotobuf-lite.a" ${LOCAL_TARGET}/lib/
 fi
 
+# pkg-config - optional
+if [ -d ${BUILD}/bin/pkg-config ]; then
+    echo 'copying pkg-config'
+    cp ${BUILD}/bin/pkg-config ${LOCAL_TARGET}/bin/
+fi
+
 if [ -d "${BUILD_UNIVERSAL}" ]; then
     echoerr "copying universal libs"
     # multiarch mapnik libs
@@ -207,9 +213,9 @@ if [[ "${PUBLISH:-false}" != false ]]; then
     #time xz -z -k -e -9 ${TARBALL_NAME}
     echoerr "*uploading ${UPLOAD}"
     ensure_s3cmd
-    s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
     s3cmd ls $(dirname s3://mapnik/dist/dev/*/*)
+    s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
     # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
 else
-    echoerr 'skipping publishing'
+    echoerr "skipping publishing ${UPLOAD}"
 fi

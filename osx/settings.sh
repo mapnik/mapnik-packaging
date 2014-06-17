@@ -39,9 +39,27 @@ function nprocs() {
 }
 export -f nprocs
 
+function set_dl_path {
+    case "$(uname -s)" in
+        'Linux')    export LD_LIBRARY_PATH="$1";;
+        'Darwin')   export DYLD_LIBRARY_PATH="$1";;
+        *)          echo 1;;
+    esac
+}
+export -f set_dl_path
+
+function unset_dl_path {
+    case "$(uname -s)" in
+        'Linux')    unset LD_LIBRARY_PATH;;
+        'Darwin')   unset DYLD_LIBRARY_PATH;;
+        *)          echo 1;;
+    esac
+}
+export -f unset_dl_path
 
 # lowercase platform name
-export platform=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform=$(echo ${PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform_alt=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
@@ -76,7 +94,11 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
-    export EXTRA_LDFLAGS=""
+
+    # use rpath origin: the idea here is that shared objects will then
+    # default to looking for libraries they depend upon in the same
+    # directory as they exist (emulated the windows dll behavior)
+    export EXTRA_LDFLAGS="-Wl,-z,origin -Wl,-rpath=\\$\$ORIGIN"
     if [[ "${CXX:-false}" == "clang++" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
@@ -300,7 +322,7 @@ export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
-export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
+export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
@@ -325,11 +347,6 @@ if [[ $SHARED_ZLIB == true ]]; then
     fi
 fi
 
-# should not be needed now that we set 'LIBRARY_PATH'
-#if [ $UNAME = 'Darwin' ]; then
-  #export DYLD_LIBRARY_PATH="${BUILD}/lib"
-#fi
-
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
 
@@ -349,6 +366,7 @@ export CC="${CORE_CC}"
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
+export SHARED_LIBRARY_PATH="${LIBRARY_PATH}"
 export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
@@ -376,7 +394,7 @@ export ICU_VERSION2="53_1"
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080403"
+export SQLITE_VERSION="3080500"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
@@ -430,7 +448,7 @@ export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
 # export HARFBUZZ_VERSION="0.9.19"
-export HARFBUZZ_VERSION="0.9.28"
+export HARFBUZZ_VERSION="0.9.29"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
@@ -446,7 +464,7 @@ export -f echoerr
 function download {
     if [[ ! -f $1 ]]; then
         echoerr "downloading $1"
-        ${SYSTEM_CURL} -s -S -f -O -L ${S3_BASE}/$1
+        ${SYSTEM_CURL} -s -S -f -O -L --retry 3 ${S3_BASE}/$1
     else
         echoerr "using cached $1"
     fi
@@ -470,7 +488,7 @@ function push {
 export -f push
 
 function check_and_clear_libs {
-  mkdir -p "${BUILD}/lib/_shared/"
+  mkdir -p "${SHARED_LIBRARY_PATH}"
   if [[ $UNAME == 'Darwin' ]]; then
         #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
         #   lipo -info $i | grep arch 1>&2;
@@ -478,16 +496,16 @@ function check_and_clear_libs {
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
            otool -L ${i} 1>&2;
         done;
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
-            mv ${i} "${BUILD}/lib/_shared/"
-        done;
+        #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
+        #    mv ${i} "${BUILD}/lib/_shared/"
+        #done;
   else
       for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
          ldd ${i} 1>&2
       done
-      for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
-          mv ${i} "${BUILD}/lib/_shared/$(basename ${i})"
-      done
+      #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
+      #    mv ${i} "${BUILD}/lib/_shared/$(basename ${i})"
+      #done
   fi
 }
 export -f check_and_clear_libs

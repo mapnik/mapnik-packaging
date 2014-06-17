@@ -31,12 +31,51 @@ if [ $UNAME = 'Linux' ]; then
   echo todo
 fi
 
-if [ $UNAME = 'Darwin' ]; then
+if [ $UNAME = 'Linux' ]; then
+    function fix_gdal_shared() {
+        if [[ -f "$1" ]] && [[ -f "${BUILD}/lib/libgdal.so" ]]; then
+            cp ${BUILD}/lib/libgdal.so.1 "$(dirname "$1")/"
+            #for i in $(find ${BUILD}/lib/libgdal* -maxdepth 1 -name '*so*' -print); do
+            #    cp ${i} "$(dirname "$1")/"
+            #done;
+        fi
+    }
+
+    # move shared gdal into place
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ogr.input"
+    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/ogr.input"
+
+elif [ $UNAME = 'Darwin' ]; then
+
+    function fix_gdal_shared() {
+        if [[ -f "$1" ]]; then
+            LIBGDAL_PLACED="$(dirname "$1")/libgdal_mapnik.dylib"
+            # if product not already copied into place
+            if [[ ! -f ${LIBGDAL_PLACED} ]]; then
+                # get path to exact libgdal linked to from mapnik plugin
+                LIBGDAL_PATH=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
+                #LIBGDAL_BASENAME=$(basename $LIB_NAME_PULL)
+                # copy libgdal beside plugin and rename it to libgdal_mapnik.dylib
+                cp ${LIBGDAL_PATH} "$(dirname "$1")/libgdal_mapnik.dylib"
+                # now rebuild the linkage given the new name
+                install_name_tool -change ${LIBGDAL_PATH} \
+                  @loader_path/libgdal_mapnik.dylib \
+                  "$1"
+            fi
+        fi
+    }
 
     for i in $(ls ${MAPNIK_BIN_SOURCE}/lib/mapnik/input/*input)
     do
         install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../../libmapnik.dylib ${i}
     done
+
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/gdal.input"
+    fix_gdal_shared "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/ogr.input"
+    #fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/gdal.input"
+    #fix_gdal_shared "${MAPNIK_SOURCE}/plugins/input/ogr.input"
 
     # fixup c++ programs
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite" ]; then
@@ -45,9 +84,11 @@ if [ $UNAME = 'Darwin' ]; then
     if [ -d "${MAPNIK_BIN_SOURCE}/bin/svg2png" ]; then
         install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') @loader_path/../lib/libmapnik.dylib ${MAPNIK_BIN_SOURCE}/bin/pgsql2sqlite
     fi
-    for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
-        do install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib $i;
-    done
+    # note: requires -Wl,-headerpad_max_install_names
+    # and now obsolete by `make test-local`
+    #for i in $(ls ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin);
+    #    do install_name_tool -change $(otool -L "$i" | grep libmapnik | awk '{print $1}') ${MAPNIK_BIN_SOURCE}/lib/libmapnik.dylib $i;
+    #done
 
     # fixup python
 

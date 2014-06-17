@@ -31,4 +31,4 @@ $MAKE -j${JOBS} VERBOSE=1
 $MAKE install
 cd ${PACKAGES}
 
-#check_and_clear_libs
+##check_and_clear_libs

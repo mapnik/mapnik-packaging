@@ -7,8 +7,16 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=false
+GDAL_LATEST=true
 GDAL_PRE_2x=false
+
+GDAL_SHARED_LIB=true
+
+if [[ $GDAL_SHARED_LIB == true ]]; then
+    LIBRARY_ARGS="--disable-static --enable-shared"
+else
+    LIBRARY_ARGS="--enable-static --disable-shared"
+fi
 
 if [[ ${GDAL_LATEST} == true ]]; then
     if [ ! -d gdal ]; then
@@ -25,8 +33,8 @@ if [[ ${GDAL_LATEST} == true ]]; then
         # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
         git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
     else
-        git checkout trunk
-        git pull
+        git checkout trunk || true
+        git pull || true
     fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
@@ -42,10 +50,13 @@ if [[ ${GDAL_LATEST} == true ]]; then
     fi
     if [[ ${GDAL_PRE_2x} == true ]]; then
         git apply ${PATCHES}/gdal_minimal.diff
+    else
+        git apply ${PATCHES}/gdal_minimal_trunk.diff
     fi
 elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
     patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
     patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true
+    #patch -p0 < ${PATCHES}/temptative_fix_for_5509.patch
 fi
 
 # notes to regenerate minimal diff for released version
@@ -70,6 +81,7 @@ rm -f configure.orig configure.rej
 #rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
 rm -f ${BUILD}/lib/libgdal*
+rm -f ${SHARED_LIBRARY_PATH}/libgdal*
 rm -rf ./.libs
 rm -rf ./libgdal.la
 
@@ -81,7 +93,6 @@ CXX="${CXX} ${STDLIB_CXXFLAGS} -Wno-pragmas"
 # fix bigtiff check
 #patch -N configure ${PATCHES}/bigtiff_check.diff || true
 # add ability to link to static geos
-patch -N configure ${PATCHES}/gdal-geos-check.diff || true
 FGDB_ARGS="--with-fgdb=no"
 if [ $UNAME = 'Darwin' ]; then
     # trick the gdal configure into working on os x
@@ -115,6 +126,8 @@ fi
 if [ -f $BUILD/lib/libgeos.a ]; then
     CUSTOM_LIBS="${CUSTOM_LIBS} -lgeos_c -lgeos"
     BUILD_WITH_GEOS="${BUILD}/bin/geos-config"
+    # TODO - needed anymore?
+    #patch -N configure ${PATCHES}/gdal-geos-check.diff || true
 fi
 
 if [ -f $BUILD/lib/libtiff.a ]; then
@@ -140,16 +153,15 @@ fi
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
 --with-threads=yes \
---enable-static \
---disable-shared \
+${LIBRARY_ARGS} \
 ${FGDB_ARGS} \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
 --with-static-proj4=${BUILD} \
---with-sqlite3=${BUILD} \
 --with-spatialite=${BUILD_WITH_SPATIALITE} \
 --with-geos=${BUILD_WITH_GEOS} \
+--with-sqlite3=no \
 --with-hide-internal-symbols=no \
 --with-curl=no \
 --with-pcraster=no \
@@ -167,7 +179,7 @@ $MAKE -j${JOBS}
 $MAKE install
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs
 
 # build mdb plugin
 # http://gis.stackexchange.com/a/76792
