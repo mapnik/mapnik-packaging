@@ -63,12 +63,15 @@ $MAKE install
 # download root certs. this is totally unsafe, we're playing with fire here.
 mkdir -p "${BUILD}/etc/openssl/certs"
 CA_BUNDLE="${BUILD}/etc/openssl/certs/ca-bundle.crt"
-if [ ! -f ${CA_BUNDLE} ]; then
-    ${SYSTEM_CURL} --silent http://curl.haxx.se/ca/cacert.pem -o ${BUILD}/etc/openssl/certs/ca-bundle.crt
-fi
+#if [ ! -f ${CA_BUNDLE} ]; then
+#    ${SYSTEM_CURL} --silent http://curl.haxx.se/ca/cacert.pem -o ${BUILD}/etc/openssl/certs/ca-bundle.crt
+#fi
+cp ${PATCHES}/ca-bundle.crt ${BUILD}/etc/openssl/certs/ca-bundle.crt
 
+: '
 if [[ $BOOST_ARCH != "arm" ]]; then
     # test https with cert
+    echoerr ''
     echo ${BUILD}/bin/curl -I --cacert ${CA_BUNDLE} "https://www.mapbox.com/"
     ${BUILD}/bin/curl -I --cacert ${CA_BUNDLE} "https://www.mapbox.com/"
     # remove curl command line now since the lack of default-known certs
@@ -76,4 +79,5 @@ if [[ $BOOST_ARCH != "arm" ]]; then
     # so we fall back to system curl command
     rm -f ${BUILD}/bin/curl
 fi
+'
 cd ${PACKAGES}
