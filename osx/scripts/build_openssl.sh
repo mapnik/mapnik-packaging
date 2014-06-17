@@ -37,6 +37,10 @@ if [[ ${OS_COMPILER} != "" ]]; then
     rm -rf openssl-${OPENSSL_VERSION}
     tar xf openssl-${OPENSSL_VERSION}.tar.gz
     cd openssl-${OPENSSL_VERSION}
+
+    patch -N util/domd ${PATCHES}/openssl_makedepend.diff
+    patch -N util/domd ${PATCHES}/openssl_nokrb.diff
+
     ./Configure \
     --prefix=${BUILD} \
     enable-tlsext \
@@ -50,23 +54,17 @@ if [[ ${OS_COMPILER} != "" ]]; then
     -no-shared \
     -no-ssl2 \
     -no-ssl3 \
+    -no-krb5 \
+    -DOPENSSL_NO_DEPRECATED \
+    -DOPENSSL_NO_COMP \
+    -DOPENSSL_NO_HEARTBEATS \
     --openssldir=${BUILD}/etc/openssl \
     ${OS_COMPILER}
 
     $MAKE depend MAKEDEPPROG=${MAKEDEPEND}
 
-    # now re-configure to apply custom $CFLAGS
-    CFLAGS="-DOPENSSL_NO_DEPRECATED -DOPENSSL_NO_COMP -DOPENSSL_NO_HEARTBEATS $CFLAGS"
-
-    # we do this now to avoid breaking '$MAKE depend'
-    ./Configure --prefix=${BUILD} \
-    --openssldir=${BUILD}/etc/openssl \
-    zlib-dynamic \
-    no-shared \
-    ${OS_COMPILER} \
-    "$CFLAGS"
-
     $MAKE
+
     # https://github.com/openssl/openssl/issues/57
     $MAKE install_sw
 fi
