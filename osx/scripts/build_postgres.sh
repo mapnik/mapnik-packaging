@@ -47,6 +47,7 @@ fi
 --disable-depend \
 --disable-cassert
 
+$MAKE -j${JOBS} -C src/bin/pg_config install
 $MAKE -j${JOBS} -C src/interfaces/libpq/ install
 cd ${PACKAGES}
 
