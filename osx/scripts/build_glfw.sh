@@ -7,11 +7,12 @@ cd ${PACKAGES}
 echoerr 'building glfw'
 
 if [ ! -d 'glfw-master' ]; then
-  git clone --quiet --depth=1 https://github.com/glfw/glfw.git glfw-master
+  git clone https://github.com/glfw/glfw.git glfw-master
+  cd glfw-master
+  git checkout cb9d194f867d6
+else
+  cd glfw-master
 fi
-
-cd glfw-master
-git pull
 
 rm -rf build
 mkdir build
