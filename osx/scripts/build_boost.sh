@@ -52,16 +52,25 @@ patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_pytho
 patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff || true
 patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
 
-echoerr 'bootstrapping boost'
-bootstrap() {
+gen_config() {
+  echoerr 'generating user-config.jam'
   if [ $PLATFORM = 'Android' ];  then
       echo "using gcc : arm : ${CXX} ;" > user-config.jam
-      ./bootstrap.sh --with-toolset=gcc
   elif [ $PLATFORM = 'Linaro-softfp' ];  then
       echo "using gcc : arm : ${CXX} ;" > user-config.jam
-      ./bootstrap.sh --with-toolset=gcc
   else
       echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
+  fi
+}
+
+bootstrap() {
+  echoerr 'bootstrapping boost'
+  gen_config
+  if [ $PLATFORM = 'Android' ];  then
+      ./bootstrap.sh --with-toolset=gcc
+  elif [ $PLATFORM = 'Linaro-softfp' ];  then
+      ./bootstrap.sh --with-toolset=gcc
+  else
       ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
   fi
 }
@@ -90,7 +99,7 @@ if [[ ! -f ./dist/bin/bcp ]]; then
         CURRENT_DIR=`pwd`
         source ${ROOTDIR}/${OLD_PLATFORM}.sh
         cd ${CURRENT_DIR}
-        bootstrap
+        gen_config
     else
         bootstrap
         cd tools/bcp
