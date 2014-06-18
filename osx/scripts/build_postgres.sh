@@ -49,6 +49,8 @@ fi
 
 $MAKE -j${JOBS} -C src/bin/pg_config install
 $MAKE -j${JOBS} -C src/interfaces/libpq/ install
+cp src/include/postgres_ext.h ${BUILD}/include/
+cp src/include/pg_config_ext.h ${BUILD}/include/
 cd ${PACKAGES}
 
 rm -f ${BUILD}/lib/libpq{*.so*,*.dylib}
