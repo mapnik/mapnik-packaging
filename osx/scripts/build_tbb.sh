@@ -19,13 +19,18 @@ if [[ $CXX11 == true ]]; then
     cd tbb42_20140416oss
     # note: static linking not allowed: http://www.threadingbuildingblocks.org/faq/11
     if [[ $UNAME == 'Darwin' ]]; then
-    $MAKE -j${JOBS} tbb tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
+    $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
     else
-    $MAKE -j${JOBS} tbb tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ tbb_build_dir=$(pwd)/build
+    $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ tbb_build_dir=$(pwd)/build
     fi
 
     # custom install
-    cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib $BUILD/lib/
+    if [[ ${UNAME} == "Darwin" ]]; then
+        cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib $BUILD/lib/
+        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib $BUILD/lib/
+    else
+        cp $(pwd)/build/BUILDPREFIX_release/libtbb*so* $BUILD/lib/
+    fi
     cp -r $(pwd)/include/tbb ${BUILD}/include/
 else
     echoerr 'skipping libtbb build since we only target c++11 mode'
