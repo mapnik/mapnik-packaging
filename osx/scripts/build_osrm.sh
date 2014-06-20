@@ -45,7 +45,9 @@ rm -rf build
 mkdir -p build
 cd build
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
+  -DCMAKE_CXX_COMPILER="$CXX" \
   -DBoost_NO_SYSTEM_PATHS=ON \
+  -DTBB_INSTALL_DIR=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release \
