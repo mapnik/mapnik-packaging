@@ -54,6 +54,8 @@ elif [ $UNAME = 'Darwin' ]; then
             LIBGDAL_PLACED="$(dirname "$1")/libgdal_mapnik.dylib"
             # get path to exact libgdal linked to from mapnik plugin
             LIBGDAL_PATH=$(otool -L "$1" | grep libgdal. | awk '{print $1}')
+            cp ${BUILD}/lib/libgdal.dylib ${LIBGDAL_PLACED}
+            install_name_tool -id @loader_path/libgdal_mapnik.dylib ${LIBGDAL_PLACED}
             # now rebuild the linkage given the new name
             install_name_tool -change ${LIBGDAL_PATH} \
               @loader_path/libgdal_mapnik.dylib \
