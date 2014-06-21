@@ -61,14 +61,15 @@ gen_config() {
   else
       echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
   fi
+  patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
 }
 
 bootstrap() {
   echoerr 'bootstrapping boost'
   gen_config
-  if [ $PLATFORM = 'Android' ];  then
+  if [[ ${PLATFORM} == 'Android' ]];  then
       ./bootstrap.sh --with-toolset=gcc
-  elif [ $PLATFORM = 'Linaro-softfp' ];  then
+  elif [[ ${PLATFORM} == 'Linaro-softfp' ]];  then
       ./bootstrap.sh --with-toolset=gcc
   else
       ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
@@ -129,7 +130,7 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         fi
     fi
 
-    if [ $PLATFORM = 'Android' ]; then
+    if [[ ${PLATFORM} = 'Android' ]]; then
         # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
         # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
         mkdir -p tmp/sys/
