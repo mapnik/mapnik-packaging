@@ -31,7 +31,7 @@ fi
 
 function nprocs() {
     # number of processors on the current system
-    case "$(uname -s)" in
+    case "${UNAME}" in
         'Linux')    nproc;;
         'Darwin')   sysctl -n hw.ncpu;;
         *)          echo 1;;
@@ -40,7 +40,7 @@ function nprocs() {
 export -f nprocs
 
 function set_dl_path {
-    case "$(uname -s)" in
+    case "${UNAME}" in
         'Linux')    export LD_LIBRARY_PATH="$1";;
         'Darwin')   export DYLD_LIBRARY_PATH="$1";;
         *)          echo 1;;
@@ -49,7 +49,7 @@ function set_dl_path {
 export -f set_dl_path
 
 function unset_dl_path {
-    case "$(uname -s)" in
+    case "${UNAME}" in
         'Linux')    unset LD_LIBRARY_PATH;;
         'Darwin')   unset DYLD_LIBRARY_PATH;;
         *)          echo 1;;
@@ -136,7 +136,6 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
       export STDLIB_LDFLAGS=""
     fi
 elif [[ ${PLATFORM} == 'Linaro' ]]; then
-    export UNAME='Linaro'
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
     cd ${PACKAGES}
@@ -166,7 +165,6 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
 elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
-    export UNAME='Linaro'
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     cd ${ROOTDIR}
     # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
@@ -206,7 +204,6 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
     export ANDROID_NDK_VERSION="r9d"
-    export UNAME='Android'
     export API_LEVEL="android-19"
     ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
     export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
@@ -489,7 +486,7 @@ export -f push
 
 function check_and_clear_libs {
   mkdir -p "${SHARED_LIBRARY_PATH}"
-  if [[ $UNAME == 'Darwin' ]]; then
+  if [[ ${UNAME} == 'Darwin' ]]; then
         #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
         #   lipo -info $i | grep arch 1>&2;
         #done;
@@ -627,7 +624,7 @@ export -f ensure_clang
 
 function memsize() {
     # total physical memory in MB
-    case "$(uname -s)" in
+    case "${UNAME}" in
         'Linux')    echo $(($(free | awk '/^Mem:/{print $2}')/1024));;
         'Darwin')   echo $(($(sysctl -n hw.memsize)/1024/1024));;
         *)          echo 1;;
