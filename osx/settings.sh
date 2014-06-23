@@ -39,6 +39,8 @@ function nprocs() {
 }
 export -f nprocs
 
+export JOBS=$(nprocs)
+
 function set_dl_path {
     case "${UNAME}" in
         'Linux')    export LD_LIBRARY_PATH="$1";;
@@ -122,7 +124,6 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=
-    export JOBS=$(grep -c ^processor /proc/cpuinfo || sysctl -n hw.ncpu)
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     export CXX_VISIBILITY_FLAGS=""
@@ -151,7 +152,6 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
     export EXTRA_CPPFLAGS="--sysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabihf-g++"
@@ -172,7 +172,6 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
-    export JOBS=`nprocs`
     export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabi-g++"
@@ -198,7 +197,6 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export ZLIB_PATH="${SYSROOT}/usr"
 
 elif [[ ${PLATFORM} == 'Android' ]]; then
-    export JOBS=2
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
@@ -234,7 +232,6 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_LDFLAGS=""
-    export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
@@ -291,7 +288,6 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export JOBS=$(sysctl -n hw.ncpu)
     export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
     # and needs to default to 'gyp-mac-tool'
@@ -346,11 +342,6 @@ fi
 
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
-
-if [[ $JOBS > 4 ]]; then
-    export JOBS=$(expr $JOBS - 2)
-fi
-
 export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
@@ -543,7 +534,7 @@ function ensure_xz {
       OLD_PLATFORM=${PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
-      make -j$JOBS
+      make -j${JOBS}
       make install
       source "${ROOTDIR}/${OLD_PLATFORM}.sh"
       cd $CUR_DIR
@@ -566,7 +557,7 @@ function ensure_nasm {
       OLD_PLATFORM=${PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
-      make -j$JOBS
+      make -j${JOBS}
       make install install_rdf
       source "${ROOTDIR}/${OLD_PLATFORM}.sh"
       cd $CUR_DIR
