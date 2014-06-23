@@ -22,17 +22,19 @@ if [[ $CXX11 == true ]]; then
     patch -N -p1 <  ${PATCHES}/tbb_compiler_override.diff || true
     # note: static linking not allowed: http://www.threadingbuildingblocks.org/faq/11
     if [[ $UNAME == 'Darwin' ]]; then
-    $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
+      $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
     else
-    $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ tbb_build_dir=$(pwd)/build
+      $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 tbb_build_dir=$(pwd)/build
     fi
 
     # custom install
     if [[ ${UNAME} == "Darwin" ]]; then
-        cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib $BUILD/lib/
-        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib $BUILD/lib/
+        cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib ${BUILD}/lib/
+        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib ${BUILD}/lib/
     else
-        cp $(pwd)/build/BUILDPREFIX_release/libtbb*so* $BUILD/lib/
+        ls -l ${BUILD}/lib/
+        cp $(pwd)/build/BUILDPREFIX_release/libtbb*so* ${BUILD}/lib/
+        ls -l ${BUILD}/lib/
     fi
     cp -r $(pwd)/include/tbb ${BUILD}/include/
 else
