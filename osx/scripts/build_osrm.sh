@@ -21,6 +21,7 @@ rm -rf Project-OSRM
 git clone --quiet ${OSRM_REPO} -b $OSRM_BRANCH Project-OSRM
 cd Project-OSRM
 git checkout $OSRM_COMMIT
+git apply ${PATCHES}/osrm-rt.diff || true
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     JOBS=4
@@ -28,11 +29,11 @@ fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
+# http://www.cmake.org/pipermail/cmake/2009-May/029375.html
+# http://stackoverflow.com/questions/16991225/cmake-and-static-linking
 if [[ ${PLATFORM} == 'Linux' ]]; then
     # workaround undefined reference to 'clock_gettime' when linking osrm-extract
-    if [[ ${CXX} == "clang++" ]]; then
-        LINK_FLAGS="-lrt ${LINK_FLAGS}"
-    fi
+    LINK_FLAGS="-fopenmp ${LINK_FLAGS}"
 fi
 
 if [[ ${CXX11} == true ]]; then
