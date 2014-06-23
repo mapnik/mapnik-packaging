@@ -2,7 +2,7 @@
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
-mkdir -p $BUILD/lib/
+mkdir -p ${BUILD}/lib/
 mkdir -p ${BUILD}/include/
 cd ${PACKAGES}
 
@@ -24,7 +24,7 @@ if [[ $CXX11 == true ]]; then
     if [[ $UNAME == 'Darwin' ]]; then
       $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
     else
-      $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 tbb_build_dir=$(pwd)/build
+      $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX cfg=release arch=intel64 cpp0x=1 tbb_build_dir=$(pwd)/build
     fi
 
     # custom install
@@ -32,9 +32,12 @@ if [[ $CXX11 == true ]]; then
         cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib ${BUILD}/lib/
         cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib ${BUILD}/lib/
     else
-        ls -l ${BUILD}/lib/
-        cp $(pwd)/build/BUILDPREFIX_release/libtbb*so* ${BUILD}/lib/
-        ls -l ${BUILD}/lib/
+        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc_proxy.so.2 ${BUILD}/lib/
+        ln -s $BUILD/lib/libtbbmalloc_proxy.so.2 $BUILD/lib/libtbbmalloc_proxy.so
+        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.so.2 ${BUILD}/lib/
+        ln -s $BUILD/lib/libtbbmalloc.so.2 $BUILD/lib/libtbbmalloc.so
+        cp $(pwd)/build/BUILDPREFIX_release/libtbb.so.2 ${BUILD}/lib/
+        ln -s $BUILD/lib/libtbb.so.2 $BUILD/lib/libtbb.so
     fi
     cp -r $(pwd)/include/tbb ${BUILD}/include/
 else
