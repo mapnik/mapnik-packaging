@@ -2,6 +2,8 @@
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
+mkdir -p $BUILD/lib/
+mkdir -p ${BUILD}/include/
 cd ${PACKAGES}
 
 if [ ! -f tbb42_20140416oss_src.tgz ]; then
