@@ -154,9 +154,10 @@ function build_osrm {
   b ./scripts/build_libxml2.sh
   b ./scripts/build_icu.sh
   b ./scripts/build_lua.sh
+  b ./scripts/build_zlib.sh
+  b ./scripts/build_bzip2.sh
   # TODO: osrm boost usage does not need icu
   ./scripts/build_boost.sh --with-iostreams --with-date_time --with-program_options --with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex
-  b ./scripts/build_zlib.sh
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
   b ./scripts/build_luabind.sh
