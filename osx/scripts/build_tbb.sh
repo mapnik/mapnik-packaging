@@ -15,6 +15,12 @@ fi
 
 echoerr 'building tbb'
 
+function create_links() {
+    libname=$1
+    cp $(pwd)/build/BUILDPREFIX_release/${libname}.so.2 ${BUILD}/lib/
+    ln -s -f $BUILD/lib/${libname}.so.2 $BUILD/lib/${libname}.so
+}
+
 if [[ $CXX11 == true ]]; then
     rm -rf tbb42_20140416oss
     tar xf tbb42_20140416oss_src.tgz
@@ -32,12 +38,9 @@ if [[ $CXX11 == true ]]; then
         cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib ${BUILD}/lib/
         cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib ${BUILD}/lib/
     else
-        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc_proxy.so.2 ${BUILD}/lib/
-        ln -s $BUILD/lib/libtbbmalloc_proxy.so.2 $BUILD/lib/libtbbmalloc_proxy.so
-        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.so.2 ${BUILD}/lib/
-        ln -s $BUILD/lib/libtbbmalloc.so.2 $BUILD/lib/libtbbmalloc.so
-        cp $(pwd)/build/BUILDPREFIX_release/libtbb.so.2 ${BUILD}/lib/
-        ln -s $BUILD/lib/libtbb.so.2 $BUILD/lib/libtbb.so
+        create_links libtbbmalloc_proxy
+        create_links libtbbmalloc
+        create_links libtbb
     fi
     cp -r $(pwd)/include/tbb ${BUILD}/include/
 else
