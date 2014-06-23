@@ -56,12 +56,12 @@ gen_config() {
   echoerr 'generating user-config.jam'
   if [ $PLATFORM = 'Android' ];  then
       echo "using gcc : arm : ${CXX} ;" > user-config.jam
+      patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
   elif [ $PLATFORM = 'Linaro-softfp' ];  then
       echo "using gcc : arm : ${CXX} ;" > user-config.jam
   else
       echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
   fi
-  patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
 }
 
 bootstrap() {
