@@ -6,12 +6,11 @@ compiler:
 env:
   matrix:
     - CXX11=true TARGET=mobile_tools PLATFORM=Android
-    - CXX11=true TARGET=build_gdal QUIET=true
-    #- CXX11=true TARGET=build_osmium
+    - CXX11=true TARGET=build_osmium
     - CXX11=true TARGET=build_osrm QUIET=true
     - CXX11=true TARGET=build_mapnik QUIET=true PUBLISH=true
     - CXX11=false TARGET=build_mapnik QUIET=true PUBLISH=true
-    #- CXX11=false TARGET=build_osm2pgsql QUIET=true
+    - CXX11=false TARGET=build_osm2pgsql QUIET=true
     - CXX11=false TARGET=build_liblas QUIET=true
   global:
     - secure: jLa/ai9FzqYRZkZrjQhn5KbsSrDDLBV2hPlKQh/nMn5bb5RooMnAo/9aSYsq8o4lMtnqsYX7wv/r35GKpJJk1OFBWmj1L94KTfm1TdC5Xlr5iumRbQ9VEPBbMgQw6WU+bp88QxvT0I9DZxgciMk6GV9eBM3dH4BSIwRCamOl018=
