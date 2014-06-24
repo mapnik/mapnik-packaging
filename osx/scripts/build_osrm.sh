@@ -24,7 +24,7 @@ git checkout $OSRM_COMMIT
 git apply ${PATCHES}/osrm-rt.diff || true
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=4
+    JOBS=2
 fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
