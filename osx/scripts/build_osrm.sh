@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    OSRM_COMMIT=547455245e7fe6346386574f6c61e4863540dee9
+    OSRM_COMMIT=63381ad22172e2097f110d773c1cee2cc2b9c951
 fi
 
 if [[ "${OSRM_BRANCH:-false}" == false ]]; then
@@ -21,7 +21,6 @@ rm -rf Project-OSRM
 git clone --quiet ${OSRM_REPO} -b $OSRM_BRANCH Project-OSRM
 cd Project-OSRM
 git checkout $OSRM_COMMIT
-git apply ${PATCHES}/osrm-rt.diff || true
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     JOBS=2
