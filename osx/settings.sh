@@ -97,10 +97,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
 
-    # use rpath origin: the idea here is that shared objects will then
-    # default to looking for libraries they depend upon in the same
-    # directory as they exist (emulated the windows dll behavior)
-    export EXTRA_LDFLAGS='-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
+    export EXTRA_LDFLAGS=""
     if [[ "${CXX:-false}" == "clang++" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"

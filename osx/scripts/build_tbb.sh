@@ -22,6 +22,8 @@ function create_links() {
     ln -s $BUILD/lib/${libname}.so.2 $BUILD/lib/${libname}.so
 }
 
+LDFLAGS="${LD_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
+
 if [[ $CXX11 == true ]]; then
     rm -rf tbb42_20140416oss
     tar xf tbb42_20140416oss_src.tgz
