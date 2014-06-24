@@ -426,7 +426,7 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.28"
+export NODE_VERSION="0.10.29"
 # stuck at feb 2012
 # https://code.google.com/p/sparsehash/source/list
 export SPARSEHASH_VERSION="2.0.2"
