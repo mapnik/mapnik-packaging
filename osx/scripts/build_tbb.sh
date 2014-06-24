@@ -17,8 +17,9 @@ echoerr 'building tbb'
 
 function create_links() {
     libname=$1
+    if [ -f $BUILD/lib/${libname}.so ]; then rm $BUILD/lib/${libname}.so; fi
     cp $(pwd)/build/BUILDPREFIX_release/${libname}.so.2 ${BUILD}/lib/
-    ln -s -f $BUILD/lib/${libname}.so.2 $BUILD/lib/${libname}.so
+    ln -s $BUILD/lib/${libname}.so.2 $BUILD/lib/${libname}.so
 }
 
 if [[ $CXX11 == true ]]; then
