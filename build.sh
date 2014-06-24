@@ -150,7 +150,7 @@ function build_osrm {
       export CXX="g++-4.8"
       export CXX_NAME="gcc-4.8"
   fi
-  ./scripts/build_tbb.sh
+  b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_icu.sh
   b ./scripts/build_lua.sh
@@ -162,8 +162,7 @@ function build_osrm {
   b ./scripts/build_osm-pbf.sh
   b ./scripts/build_luabind.sh
   b ./scripts/build_libstxxl.sh
-  ./scripts/build_osrm.sh
-  #./scripts/package_tarball.sh
+  b ./scripts/build_osrm.sh
   set +e
 }
 
