@@ -405,7 +405,7 @@ export GDAL_VERSION="1.11.0"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # gz
-export POSTGRES_VERSION="9.3.3"
+export POSTGRES_VERSION="9.3.4"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
