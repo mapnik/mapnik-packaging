@@ -12,12 +12,10 @@ function b {
 
 function setup {
   set -e
-  export OLD_PATH="${PATH}"
 }
 
 function teardown {
   set +e
-  export PATH="${OLD_PATH}"
 }
 
 function prep_osx {
