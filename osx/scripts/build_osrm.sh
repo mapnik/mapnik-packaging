@@ -5,7 +5,8 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    OSRM_COMMIT=63381ad22172e2097f110d773c1cee2cc2b9c951
+    #OSRM_COMMIT=63381ad22172e2097f110d773c1cee2cc2b9c951
+    OSRM_COMMIT=.
 fi
 
 if [[ "${OSRM_BRANCH:-false}" == false ]]; then
