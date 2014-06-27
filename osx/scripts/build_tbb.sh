@@ -22,7 +22,9 @@ function create_links() {
     ln -s $BUILD/lib/${libname}.so.2 $BUILD/lib/${libname}.so
 }
 
-LDFLAGS="${LDFLAGS} "'-Wl,-z,origin -Wl,-rpath=\$$ORIGIN'
+if [[ ${UNAME} == 'Linux' ]]; then
+    LDFLAGS="${LDFLAGS} "'-Wl,-z,origin -Wl,-rpath=\$$ORIGIN'
+fi
 
 if [[ $CXX11 == true ]]; then
     rm -rf tbb42_20140416oss

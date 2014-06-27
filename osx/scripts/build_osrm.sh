@@ -30,7 +30,7 @@ LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
 # http://www.cmake.org/pipermail/cmake/2009-May/029375.html
 # http://stackoverflow.com/questions/16991225/cmake-and-static-linking
-if [[ ${PLATFORM} == 'Linux' ]]; then
+if [[ ${UNAME} == 'Linux' ]]; then
     LINK_FLAGS="-fopenmp ${LINK_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
 fi
 

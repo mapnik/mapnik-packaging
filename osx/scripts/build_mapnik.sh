@@ -31,7 +31,7 @@ else
     echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}'" >> config.py
 fi
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
-if [ $UNAME = 'Linux' ]; then
+if [[ ${UNAME} = 'Linux' ]]; then
   # NOTE: --no-undefined works with linux linker to ensure that
   # an error is throw if any symbols cannot be resolve for static libs
   # which can happen if their order is incorrect when linked: see lorder | tsort
