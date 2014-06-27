@@ -4,7 +4,7 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download postgresql-${POSTGRES_VERSION}.tar.gz
+download postgresql-${POSTGRES_VERSION}.tar.bz2
 
 # postgres
 echoerr 'building postgres for libpq client library'
@@ -13,7 +13,7 @@ echoerr 'building postgres for libpq client library'
 echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
-tar xf postgresql-${POSTGRES_VERSION}.tar.gz
+tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 if [[ ${PLATFORM} == 'Linux' ]]; then
     # https://github.com/mapnik/mapnik-packaging/issues/130
