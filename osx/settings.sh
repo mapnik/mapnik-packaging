@@ -357,7 +357,7 @@ export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
 export LINK_FLAGS=${LDFLAGS}
 # silence warnings in C depedencies like cairo, freetype, libxml2, pixman
-export WARNING_CFLAGS="-Wno-long-long -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-strict-prototypes -Wno-unused-variable -Wno-redundant-decls -Wno-return-type -Wno-uninitialized -Wno-unused-result -Wno-format"
+export WARNING_CFLAGS="-Wno-unknown-warning-option -Wno-long-long -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-strict-prototypes -Wno-unused-variable -Wno-redundant-decls -Wno-return-type -Wno-uninitialized -Wno-unused-result -Wno-format"
 # clang specific
 if test "${CC#*'clang'}" != "$CC"; then
   export WARNING_CFLAGS="-Wno-invalid-source-encoding -Wno-cast-align -Wno-extended-offsetof ${WARNING_CFLAGS}"
