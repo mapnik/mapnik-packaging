@@ -161,7 +161,7 @@ function build_osrm {
   b ./scripts/build_osm-pbf.sh
   b ./scripts/build_luabind.sh
   b ./scripts/build_libstxxl.sh
-  b ./scripts/build_osrm.sh
+  ./scripts/build_osrm.sh
   set +e
 }
 

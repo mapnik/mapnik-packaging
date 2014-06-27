@@ -27,6 +27,8 @@ else
     CROSS_FLAGS=""
 fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+CXXFLAGS="${CXXFLAGS} -Wno-unused-local-typedefs"
+
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
 CXX="${CXX} ${STDLIB_CXXFLAGS}"

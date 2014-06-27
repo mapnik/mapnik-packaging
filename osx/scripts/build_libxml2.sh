@@ -22,6 +22,7 @@ if [ ${PLATFORM} = 'Android' ]; then
     CFLAGS="${CFLAGS} -I${RIGHT_HERE}"
     cd ../
 fi
+
 # note --with-writer for osmium
 ./configure --prefix=${BUILD} \
 --enable-static --disable-shared ${HOST_ARG} \

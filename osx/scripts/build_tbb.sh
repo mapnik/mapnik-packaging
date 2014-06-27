@@ -24,6 +24,7 @@ function create_links() {
 
 if [[ ${UNAME} == 'Linux' ]]; then
     LDFLAGS="${LDFLAGS} "'-Wl,-z,origin -Wl,-rpath=\$$ORIGIN'
+    CXXFLAGS="${CXXFLAGS} -Wno-attributes"
 fi
 
 if [[ $CXX11 == true ]]; then
