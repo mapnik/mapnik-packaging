@@ -10,6 +10,16 @@ function b {
   fi
 }
 
+function setup {
+  set -e
+  export OLD_PATH="${PATH}"
+}
+
+function teardown {
+  set +e
+  export PATH="${OLD_PATH}"
+}
+
 function prep_osx {
   cd osx
   if [[ "${PLATFORM:-false}" != false ]]; then
@@ -40,7 +50,7 @@ function prep_linux {
   else
       source Linux.sh
   fi
-  if [ "${CXX11}" = true ]; then
+  if [[ "${CXX11}" == true ]]; then
     upgrade_gcc
   else
     echo "updating apt"
@@ -53,8 +63,25 @@ function prep_linux {
   mkdir -p ${BUILD}/include
 }
 
+function basic_prep {
+  if [[ $UNAME == 'Linux' ]]; then
+      prep_linux
+      sudo apt-get install -qq -y subversion
+  else
+      prep_osx
+  fi
+  echo "Running build with ${JOBS} parallel jobs"
+}
+
+
+: '
+Actual apps. We setup and teardown when building these
+so that the set -e and PATH does not break the parent
+environment in odd ways if this script is sourced
+'
+
 function build_mapnik {
-  set -e
+  setup
   if [[ $UNAME == 'Linux' ]]; then
       prep_linux
       sudo apt-get install -qq -y python-dev python-nose
@@ -72,7 +99,6 @@ function build_mapnik {
   nprocs
   memsize
   echo "Running build with ${JOBS} parallel jobs"
-  export BUILD_OPTIONAL_DEPS=true
   # NOTE: harfbuzz needs pkg-config to find icu
   b ./scripts/build_pkg_config.sh
   b ./scripts/build_icu.sh
@@ -85,6 +111,7 @@ function build_mapnik {
   b ./scripts/build_freetype.sh
   b ./scripts/build_harfbuzz.sh
   b ./scripts/build_libxml2.sh
+  BUILD_OPTIONAL_DEPS=true
   if [ $BUILD_OPTIONAL_DEPS ]; then
     echo 'skipping optional deps'
     b ./scripts/build_jpeg_turbo.sh
@@ -126,21 +153,11 @@ function build_mapnik {
   ./scripts/post_build_fix.sh
   ./scripts/test_mapnik.sh
   ./scripts/package_mobile_sdk.sh
-  set +e
-}
-
-function basic_prep {
-  if [[ $UNAME == 'Linux' ]]; then
-      prep_linux
-      sudo apt-get install -qq -y subversion
-  else
-      prep_osx
-  fi
-  echo "Running build with ${JOBS} parallel jobs"
+  teardown
 }
 
 function build_osrm {
-  set -e
+  setup
   basic_prep
   if [[ $UNAME == 'Linux' ]]; then
       upgrade_gcc
@@ -162,13 +179,13 @@ function build_osrm {
   b ./scripts/build_luabind.sh
   b ./scripts/build_libstxxl.sh
   ./scripts/build_osrm.sh
-  set +e
+  teardown
 }
 
 export -f build_osrm
 
 function build_osmium {
-  set -e
+  setup
   basic_prep
   b ./scripts/build_expat.sh
   b ./scripts/build_google_sparsetable.sh
@@ -176,12 +193,13 @@ function build_osmium {
   ./scripts/build_boost.sh --with-test --with-program_options
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
-  set +e
+  teardown
 }
 
 export -f build_osmium
 
 function mobile_tools {
+  setup
   basic_prep
   sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
   b ./scripts/build_zlib.sh
@@ -199,12 +217,12 @@ function mobile_tools {
   b ./scripts/build_tiff.sh
   b ./scripts/build_sqlite.sh
   ./scripts/build_boost.sh --with-regex
-  set +e
+  teardown
 }
 export -f mobile_tools
 
-
 function build_http {
+  setup
   basic_prep
   sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
   b ./scripts/build_zlib.sh
@@ -213,11 +231,12 @@ function build_http {
   b ./scripts/build_curl.sh
   ./scripts/build_boost.sh --with-regex
   b ./scripts/build_glfw.sh
-  set +e
+  teardown
 }
 export -f build_http
 
 function build_osm2pgsql {
+  setup
   basic_prep
   b ./scripts/build_bzip2.sh
   b ./scripts/build_geos.sh
@@ -225,11 +244,12 @@ function build_osm2pgsql {
   b ./scripts/build_postgres.sh
   b ./scripts/build_protobuf.sh
   b ./scripts/build_protobuf_c.sh
-  set +e
+  teardown
 }
 export -f build_osm2pgsql
 
 function build_liblas {
+  setup
   basic_prep
   b ./scripts/build_zlib.sh
   b ./scripts/build_jpeg_turbo.sh
@@ -246,6 +266,6 @@ function build_liblas {
   b ./scripts/build_laszip.sh
   ./scripts/build_boost.sh --with-thread --with-program_options
   b ./scripts/build_liblas.sh
-  set +e
+  teardown
 }
 export -f build_liblas
