@@ -52,8 +52,6 @@ project mapnik
     <define>BOOST_REGEX_HAS_ICU
     <define>HAVE_CAIRO
     <define>GRID_RENDERER
-    #TODO
-    #<define>HAVE_WEBP
     <cxxflags>/wd4345
     <cxxflags>/wd4661
     <cxxflags>/wd4018
