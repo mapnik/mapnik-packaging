@@ -253,10 +253,10 @@ function build_liblas {
   b ./scripts/build_jpeg_turbo.sh
   b ./scripts/build_png.sh
   b ./scripts/build_tiff.sh
+  b ./scripts/build_proj4.sh
   b ./scripts/build_geotiff.sh
   b ./scripts/build_geos.sh
   b ./scripts/build_sqlite.sh
-  b ./scripts/build_proj4.sh
   b ./scripts/build_spatialite.sh
   b ./scripts/build_expat.sh
   b ./scripts/build_postgres.sh
