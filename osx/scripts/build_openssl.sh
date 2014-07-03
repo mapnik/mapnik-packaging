@@ -58,6 +58,7 @@ if [[ ${OS_COMPILER} != "" ]]; then
     -DOPENSSL_NO_DEPRECATED \
     -DOPENSSL_NO_COMP \
     -DOPENSSL_NO_HEARTBEATS \
+    -fPIC \
     --openssldir=${BUILD}/etc/openssl \
     ${OS_COMPILER}
 

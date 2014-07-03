@@ -20,7 +20,7 @@ fi
 LIBS="${LIBS=}" ./configure --prefix=${BUILD} ${HOST_ARG} \
 --enable-static \
 --disable-shared \
---without-pic \
+--with-pic \
 --enable-manual \
 --with-ssl=${BUILD} \
 --with-zlib=${ZLIB_PATH} \
