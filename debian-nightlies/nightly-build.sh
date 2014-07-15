@@ -44,7 +44,12 @@ PACKAGES["2.0.x"]="mapnik"
 
 # Ubuntu Distributions to build (space-separated)
 # TODO: different dists per branch?
-DISTS="trusty saucy precise lucid utopic"
+declare -A DISTS
+DISTS["master"]="trusty utopic"
+DISTS["2.3.x"]="trusty saucy precise lucid utopic"
+DISTS["2.2.x"]="trusty saucy precise lucid utopic"
+DISTS["2.1.x"]="trusty saucy precise lucid utopic"
+DISTS["2.0.x"]="trusty saucy precise lucid utopic"
 
 ######### Shouldn't need to edit anything past here #########
 
@@ -54,7 +59,7 @@ OPT_FORCE=""
 OPT_CLEAN=""
 OPT_BUILDREV="1"
 BRANCHES_TO_BUILD="${!BRANCHES[@]}"
-DISTS_TO_BUILD="$DISTS"
+DISTS_TO_BUILD="${!DISTS[@]}"
 while getopts "fncr:b:d:" OPT; do
     case $OPT in
         c)
