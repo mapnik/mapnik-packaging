@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -18,6 +18,6 @@ autoreconf -fiv
   --enable-static --disable-shared  \
   --with-jpeg8 \
   --disable-dependency-tracking
-make -j1
-make install
+$MAKE -j1
+$MAKE install
 cd ${PACKAGES}

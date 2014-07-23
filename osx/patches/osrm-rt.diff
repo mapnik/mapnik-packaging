@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3edae66..eeebe1f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -144,6 +144,7 @@ if(APPLE)
+ endif()
+ 
+ if(UNIX AND NOT APPLE)
++  target_link_libraries(osrm-prepare rt)
+   target_link_libraries(osrm-datastore rt)
+   target_link_libraries(OSRM rt)
+ endif()

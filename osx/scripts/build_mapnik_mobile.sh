@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 cd ${MAPNIK_SOURCE}
@@ -10,14 +10,14 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -f src/libmapnik{*.so,*.dylib,*.a}
   rm -f tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  make clean
+  $MAKE clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ $UNAME  == 'Darwin' ]]; then
       JOBS=1
     else
-      JOBS=2
+      JOBS=4
     fi
 fi
 
@@ -48,7 +48,7 @@ echo "JPEG_INCLUDES = '${BUILD}/include'" >> config.py
 echo "JPEG_LIBS = '${BUILD}/lib'" >> config.py
 
 # disable configure checks for all except OS X
-if [ -n $HOST_ARG ]; then
+if [ $BOOST_ARCH = "arm" ]; then
     export HOST_ARGS_FOR_IOS='HOST=${ARCH_NAME}'
 else
     export HOST_ARGS_FOR_IOS=""
@@ -81,5 +81,5 @@ rm -f bindings/python/mapnik/_mapnik.so
   GRID_RENDERER=False \
   PGSQL2SQLITE=False \
   SYSTEM_FONTS=/System/Library/Fonts
-JOBS=${JOBS} make
-make install
+JOBS=${JOBS} $MAKE
+$MAKE install

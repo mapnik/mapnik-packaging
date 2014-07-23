@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u 
 
 mkdir -p ${PACKAGES}
@@ -37,7 +37,7 @@ patch -N src/spatialite/spatialite_init.c ${PATCHES}/libspatial_remove_sqlite3_e
 --disable-gcov \
 --disable-examples
 
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 
 cd ${PACKAGES}

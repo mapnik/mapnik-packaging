@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -6,22 +6,43 @@ cd ${PACKAGES}
 
 echoerr 'building glfw'
 
-rm -rf glfw-master
-git clone --quiet https://github.com/glfw/glfw.git glfw-master
-cd glfw-master
+if [ ! -d 'glfw-master' ]; then
+  git clone https://github.com/glfw/glfw.git glfw-master
+  cd glfw-master
+  git checkout cb9d194f867d6
+else
+  cd glfw-master
+fi
 
 rm -rf build
 mkdir build
 cd build
-cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
-  -DCMAKE_C_COMPILER_ENV_VAR=${CC} \
+
+GLFW_SHARED_FLAGS="-DCMAKE_INSTALL_PREFIX=${BUILD}\
+  -DCMAKE_C_COMPILER=${CC} \
+  -DCMAKE_CXX_COMPILER=${CXX} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
-  -DBUILD_STATIC_LIBS=ON \
   -DBUILD_SHARED_LIBS=OFF \
-  -DCMAKE_BUILD_TYPE=Release
+  -DGLFW_BUILD_DOCS=OFF \
+  -DGLFW_BUILD_TESTS=OFF \
+  -DGLFW_BUILD_EXAMPLES=OFF \
+  -DCMAKE_BUILD_TYPE=Release \
+  "
 
-make -j${JOBS} VERBOSE=1
-make install
+if [[ $BOOST_ARCH == "arm" ]]; then
+  cmake ../ ${GLFW_SHARED_FLAGS} \
+    -DCMAKE_FIND_ROOT_PATH=${SYSROOT} \
+    -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER \
+    -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
+    -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
+    -DGLFW_CLIENT_LIBRARY=glesv2 \
+    -DGLFW_USE_EGL=ON
+else
+  cmake ../ ${GLFW_SHARED_FLAGS}
+fi
+
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 
 cd ${PACKAGES}

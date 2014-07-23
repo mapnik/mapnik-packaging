@@ -1,10 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download libuv-v${LIBUV_VERSION}.tar.gz
+if [ ! -f libuv-v${LIBUV_VERSION}.tar.gz ]; then
+    echoerr "downloading libuv: https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz"
+    curl -s -S -f -O -L https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz
+    mv v${LIBUV_VERSION}.tar.gz libuv-v${LIBUV_VERSION}.tar.gz
+else
+    echoerr "using cached node at libuv-v${LIBUV_VERSION}.tar.gz"
+fi
 
 echoerr 'building libuv'
 rm -rf libuv-${LIBUV_VERSION}
@@ -15,6 +21,19 @@ cd libuv-${LIBUV_VERSION}
   --disable-dependency-tracking \
   --enable-largefile \
   --disable-dtrace
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
+# fix android breakage when building against uv.h
+: '
+In file included from ../../include/llmr/util/time.hpp:4:
+In file included from /Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp03-libstdcpp-gcc-arm/include/uv.h:61:
+/Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp03-libstdcpp-gcc-arm/include/uv-unix.h:41:10: fatal error: 'pthread-fixes.h' file not found
+#include "pthread-fixes.h"
+'
+
+: '
+/Users/travis/build/mapbox/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp11-libstdcpp-gcc-arm/include/uv-unix.h:50:11: fatal error: 
+      'uv-darwin.h' file not found
+'
+cp ./include/*.h $BUILD/include/
 cd ${PACKAGES}

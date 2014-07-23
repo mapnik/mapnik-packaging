@@ -1,30 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-download postgresql-${POSTGRES_VERSION}.tar.gz
+download postgresql-${POSTGRES_VERSION}.tar.bz2
 
 # postgres
 echoerr 'building postgres for libpq client library'
-
-: '
-postgres/INSTALL has:
-       Client-only installation: If you want to install only the client
-       applications and interface libraries, then you can use these
-       commands:
-gmake -C src/bin install
-gmake -C src/include install
-gmake -C src/interfaces install
-gmake -C doc install
-'
 
 # 64 bit build
 echoerr 'building postgres 64 bit'
 cd ${PACKAGES}
 rm -rf postgresql-${POSTGRES_VERSION}
-tar xf postgresql-${POSTGRES_VERSION}.tar.gz
+tar xf postgresql-${POSTGRES_VERSION}.tar.bz2
 cd postgresql-${POSTGRES_VERSION}
 if [[ ${PLATFORM} == 'Linux' ]]; then
     # https://github.com/mapnik/mapnik-packaging/issues/130
@@ -58,12 +47,12 @@ fi
 --disable-depend \
 --disable-cassert
 
-# LD=${CC}
-# TODO - linking problems for unknown reasons...
-set +e
-make -j${JOBS} -i -k
-make install -i -k
-set -e
+$MAKE -j${JOBS} -C src/bin/pg_config install
+$MAKE -j${JOBS} -C src/interfaces/libpq/ install
+cp src/include/postgres_ext.h ${BUILD}/include/
+cp src/include/pg_config_ext.h ${BUILD}/include/
 cd ${PACKAGES}
+
+rm -f ${BUILD}/lib/libpq{*.so*,*.dylib}
 
 check_and_clear_libs

@@ -112,7 +112,7 @@ if /i "%1"=="--libs" (
 
 @rem TODO - figure out how to avoid hardcoding these library names
 if /i "%1"=="--dep-libs" (
-  echo icuuc.lib icuin.lib cairo.lib libboost_system-vc100-mt-1_49.lib
+  echo libpng.lib zlib.lib libwebp.lib libjpeg.lib icuuc.lib icuin.lib cairo.lib libboost_system-vc100-mt-1_49.lib libxml2_a.lib ws2_32.lib
   set hit="yes"
 )
 
@@ -122,7 +122,7 @@ if /i "%1"=="--ldflags" (
 )
 
 if /i "%1"=="--defines" (
-  echo _WINDOWS HAVE_JPEG HAVE_PNG HAVE_TIFF MAPNIK_USE_PROJ4 BOOST_REGEX_HAS_ICU GRID_RENDERER MAPNIK_THREADSAFE BIGINT HAVE_LIBXML2 HAVE_CAIRO
+  echo _WINDOWS HAVE_JPEG HAVE_PNG HAVE_WEBP HAVE_TIFF MAPNIK_USE_PROJ4 BOOST_REGEX_HAS_ICU GRID_RENDERER MAPNIK_THREADSAFE BIGINT HAVE_LIBXML2 HAVE_CAIRO LIBXML_STATIC
   set hit="yes"
 )
 

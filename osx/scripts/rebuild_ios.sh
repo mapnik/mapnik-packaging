@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 cd "$( dirname $( dirname "$0" ))"
@@ -11,7 +11,7 @@ echo
 cd ../
 
 echo 'checking if we should rebuild'
-if [ `git rev-list --max-count=1 HEAD` == `${MAPNIK_CONFIG} --git-revision` ]; then
+if [[ $(git rev-list --max-count=1 HEAD) == $(${MAPNIK_CONFIG} --git-revision) ]]; then
   echo "Version unchanged, aborting build"
   #exit 0
 else

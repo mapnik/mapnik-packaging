@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -15,6 +15,6 @@ cd libpng-${LIBPNG_VERSION}
 ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
   --disable-dependency-tracking \
   --with-zlib-prefix=${ZLIB_PATH}
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

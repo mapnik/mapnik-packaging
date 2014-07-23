@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 echoerr '...packaging mobile sdk tarball'
@@ -6,7 +6,7 @@ echoerr '...packaging mobile sdk tarball'
 # where we are headed
 mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
-DESCRIBE=`${MAPNIK_CONFIG} --git-describe`
+DESCRIBE=$(${MAPNIK_CONFIG} --git-describe)
 # collapse all iOS platform names to one since
 # we provide these multiarch
 if test "${platform#*'iphone'}" != "$platform"; then
@@ -69,7 +69,7 @@ if [ $BCP_TOOL ]; then
     # 43 MB
     #./dist/bin/bcp --scan ${MAPNIK_BIN_SOURCE}/include/mapnik/*hpp ${STAGING_DIR} 1>/dev/null
     #./dist/bin/bcp --scan \
-    #`find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' '` \
+    #$(find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' ') \
     #${STAGING_DIR} 1>/dev/null
     du -h -d 0 boost-staging-minimal/boost/
     cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
@@ -157,13 +157,19 @@ fi
 if [ -d ${BUILD}/include/google ]; then
     echo 'copying protobuf'
     # NOTE: using which here to get the non arm version
-    if [[ `which protoc` ]]; then
-        cp `which protoc` ${LOCAL_TARGET}/bin/
+    if [[ $(which protoc) ]]; then
+        cp $(which protoc) ${LOCAL_TARGET}/bin/
     fi
     mkdir -p ${LOCAL_TARGET}/include/google/protobuf
     cp -r ${BUILD}/include/google/protobuf ${LOCAL_TARGET}/include/google/
     cp ${BUILD}/lib/pkgconfig/protobuf.pc ${LOCAL_TARGET}/lib/pkgconfig/
     cp "${BUILD}/lib/libprotobuf-lite.a" ${LOCAL_TARGET}/lib/
+fi
+
+# pkg-config - optional
+if [ -d ${BUILD}/bin/pkg-config ]; then
+    echo 'copying pkg-config'
+    cp ${BUILD}/bin/pkg-config ${LOCAL_TARGET}/bin/
 fi
 
 if [ -d "${BUILD_UNIVERSAL}" ]; then
@@ -185,9 +191,9 @@ fi
 cd ${MAPNIK_DIST}
 rm -f ./${TARBALL_NAME}*
 echo ${DESCRIBE} > ${LOCAL_TARGET}/VERSION
-echo `${NEW_MAPNIK_CONFIG} -v` >> ${LOCAL_TARGET}/VERSION
-echo `${NEW_MAPNIK_CONFIG} --all-flags` >> ${LOCAL_TARGET}/VERSION
-echo "Produced on `date`" >> ${LOCAL_TARGET}/VERSION
+echo $(${NEW_MAPNIK_CONFIG} -v) >> ${LOCAL_TARGET}/VERSION
+echo $(${NEW_MAPNIK_CONFIG} --all-flags) >> ${LOCAL_TARGET}/VERSION
+echo "Produced on $(date)" >> ${LOCAL_TARGET}/VERSION
 
 echoerr "...creating tarball of mapnik build"
 # -j bz2
@@ -207,9 +213,9 @@ if [[ "${PUBLISH:-false}" != false ]]; then
     #time xz -z -k -e -9 ${TARBALL_NAME}
     echoerr "*uploading ${UPLOAD}"
     ensure_s3cmd
+    s3cmd ls $(dirname s3://mapnik/dist/dev/*/*)
     s3cmd --acl-public put ${MAPNIK_DIST}/${TARBALL_NAME}.bz2 ${UPLOAD}
-    s3cmd ls `dirname s3://mapnik/dist/dev/*/*`
     # update https://gist.github.com/springmeyer/eab2ff20ac560fbb9dd9
 else
-    echoerr 'skipping publishing'
+    echoerr "skipping publishing ${UPLOAD}"
 fi

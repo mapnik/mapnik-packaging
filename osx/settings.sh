@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -u
 
@@ -15,23 +15,53 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
-if [ ${UNAME} = 'Darwin' ]; then
+if [[ ${UNAME} == 'Darwin' ]]; then
   SEMVER_PATTERN='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
-  DARWIN_MAJOR=`echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#"`
-  if [ ${DARWIN_MAJOR} = "13" ];then
+  DARWIN_MAJOR=$(echo $DARWIN_VERSION | sed -e "s#$SEMVER_PATTERN#\1#")
+  if [[ ${DARWIN_MAJOR} == "13" ]]; then
     export LIBCXX_DEFAULT=true
   fi
 fi
 
-if [ "${CXX11}" = true ]; then
+if [[ "${CXX11}" = true ]]; then
   export CXX_STANDARD="cpp11"
 else
   export CXX_STANDARD="cpp03"
 fi
 
+function nprocs() {
+    # number of processors on the current system
+    case "${UNAME}" in
+        'Linux')    nproc;;
+        'Darwin')   sysctl -n hw.ncpu;;
+        *)          echo 1;;
+    esac
+}
+export -f nprocs
+
+export JOBS=$(nprocs)
+
+function set_dl_path {
+    case "${UNAME}" in
+        'Linux')    export LD_LIBRARY_PATH="$1";;
+        'Darwin')   export DYLD_LIBRARY_PATH="$1";;
+        *)          echo 1;;
+    esac
+}
+export -f set_dl_path
+
+function unset_dl_path {
+    case "${UNAME}" in
+        'Linux')    unset LD_LIBRARY_PATH;;
+        'Darwin')   unset DYLD_LIBRARY_PATH;;
+        *)          echo 1;;
+    esac
+}
+export -f unset_dl_path
 
 # lowercase platform name
-export platform=$(echo $PLATFORM | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform=$(echo ${PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform_alt=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
 
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
@@ -48,15 +78,17 @@ export PATCHES="${ROOTDIR}/patches"
 export STAGING="${ROOTDIR}/out/staging"
 export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
+export SYSTEM_CURL="/usr/bin/curl"
 
-if [ ${PLATFORM} = 'Linux' ]; then
+if [[ ${PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
-    if [ "${CXX11}" = true ]; then
+    if [[ "${CXX11}" == true ]]; then
         if [[ "${CXX:-false}" == "clang++" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
     fi
+    export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections / -Wl,--exclude-libs=ALL / Bsymbolic
     # Note: stripping with -Wl,-S breaks dtrace
@@ -64,6 +96,7 @@ if [ ${PLATFORM} = 'Linux' ]; then
     # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
+
     export EXTRA_LDFLAGS=""
     if [[ "${CXX:-false}" == "clang++" ]]; then
       export CORE_CC="clang"
@@ -72,8 +105,9 @@ if [ ${PLATFORM} = 'Linux' ]; then
           # TODO - use -dumpversion
           export CXX_NAME="clang-3.3"
       fi
+      export BOOST_TOOLSET="clang"
     else
-      if [ "${CXX11}" = true ]; then
+      if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
           export CXX_NAME="gcc-4.8"
@@ -82,16 +116,15 @@ if [ ${PLATFORM} = 'Linux' ]; then
           export CORE_CXX="g++"
           export CXX_NAME="gcc-4.6"
       fi
+      export BOOST_TOOLSET="gcc"
     fi
     export AR=ar
     export RANLIB=ranlib
     export ARCH_FLAGS=
-    export JOBS=`grep -c ^processor /proc/cpuinfo`
-    export BOOST_TOOLSET="gcc"
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     export CXX_VISIBILITY_FLAGS=""
-    if [ "${CXX11}" = true ]; then
+    if [[ "${CXX11}" == true ]]; then
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
@@ -100,14 +133,13 @@ if [ ${PLATFORM} = 'Linux' ]; then
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
-elif [ ${PLATFORM} = 'Linaro' ]; then
-    export UNAME='Linaro'
+elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
     cd ${PACKAGES}
     # https://launchpad.net/linaro-toolchain-binaries/support/01/+download/linaro-prebuilt-sysroot-2013.07-2.tar.bz2
     download linaro-prebuilt-sysroot-2013.07-2.tar.bz2
-    if [ ! -d ${SDK_PATH} ]; then
+    if [[ ! -d ${SDK_PATH} ]]; then
         echo "untarring ${SDK_PATH}"
         tar -xf linaro-prebuilt-sysroot-2013.07-2.tar.bz2
     fi
@@ -115,8 +147,8 @@ elif [ ${PLATFORM} = 'Linaro' ]; then
     # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
     export EXTRA_CFLAGS="-fPIC --sysroot ${SDK_PATH}"
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
+    export EXTRA_CPPFLAGS="--sysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabihf-g++"
@@ -129,39 +161,82 @@ elif [ ${PLATFORM} = 'Linaro' ]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [ ${PLATFORM} = 'Android' ]; then
-    export UNAME='Android'
-    export API_LEVEL="android-18"
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
-    # run ./scripts/setup-android-ndk-adk-osx.sh to setup
-    export NDK_PATH="${PACKAGES}/android-ndk-r9"
+elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
+    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    cd ${ROOTDIR}
+    # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
+    export EXTRA_CFLAGS="-fPIC --sysroot ${SYSROOT}"
+    export EXTRA_LDFLAGS="-Wl,-search_paths_first"
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
+    export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
+    export BOOST_TOOLSET="gcc-arm"
+    export PATH="${SDK_PATH}/bin":${PATH}
+    export CORE_CXX="arm-linux-gnueabi-g++"
+    export CORE_CC="arm-linux-gnueabi-gcc"
+    export LD="arm-linux-gnueabi-ld"
+    export AR="arm-linux-gnueabi-ar"
+    export ARCH_FLAGS=
+    export RANLIB="arm-linux-gnueabi-ranlib"
+    export NM="arm-linux-gnueabi-nm"
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
+    export CXX_VISIBILITY_FLAGS=""
+    if [[ "${CXX11}" == true ]]; then
+      export STDLIB="libstdcpp"
+      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_LDFLAGS=""
+    else
+      export STDLIB="libstdcpp"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
+    export ZLIB_PATH="${SYSROOT}/usr"
+
+elif [[ ${PLATFORM} == 'Android' ]]; then
+    export CXX_VISIBILITY_FLAGS=""
+    export alias ldconfig=true
+    export EXTRA_CPPFLAGS="-D__ANDROID__"
+    export CORE_CXXFLAGS=""
+    export ANDROID_NDK_VERSION="r9d"
+    export API_LEVEL="android-19"
+    ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
+    export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
     #ln -s ../android/android-ndk-r9 ./android-ndk-r9
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
+    export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
-    if [ ! -d "${PLATFORM_PREFIX}" ]; then
+    if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
         echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
+        # cd here is to workaround https://code.google.com/p/android/issues/detail?id=67690
+        CUR_DIR=$(pwd)
+        cd "${NDK_PATH}"
         "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
           --toolchain="${ANDROID_CROSS_COMPILER}" \
+          --llvm-version=3.4 \
+          --package-dir="${NDK_PACKAGE_DIR}" \
           --install-dir="${PLATFORM_PREFIX}" \
-          --stl=gnustl \
+          --stl="libcxx" \
           --arch=arm \
           --platform="${API_LEVEL}"
+        cd $CUR_DIR
+    else
+        echo "using ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     alias ldd="arm-linux-androideabi-readelf -d "
     export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_LDFLAGS=""
-    export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
-    export CORE_CXX="arm-linux-androideabi-g++"
-    export CORE_CC="arm-linux-androideabi-gcc"
-    if [[ "${CXX_NAME:-false}" == false ]]; then
-        # TODO
-        export CXX_NAME="gcc-4.6"
-    fi
+    # use clang in order to support std::atomic
+    # https://code.google.com/p/android/issues/detail?id=36496
+    export CORE_CXX="arm-linux-androideabi-clang++"
+    export CORE_CC="arm-linux-androideabi-clang"
+    export CXX_NAME="androideabi-clang"
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
     export ARCH_FLAGS=
@@ -173,11 +248,12 @@ elif [ ${PLATFORM} = 'Android' ]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [ ${UNAME} = 'Darwin' ]; then
+elif [[ ${UNAME} == 'Darwin' ]]; then
     # NOTE: supporting 10.6 on OS X 10.8 requires copying old 10.6 SDK into:
     # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-    export XCODE_PREFIX=$( xcode-select -print-path )
-    if [ -d "${XCODE_PREFIX}/Toolchains/" ]; then
+    XCODE_CMD="xcode-select"
+    export XCODE_PREFIX=$(${XCODE_CMD} -print-path)
+    if [[ -d "${XCODE_PREFIX}/Toolchains/" ]]; then
       # set this up with:
       #   sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
       # for more info
@@ -191,7 +267,7 @@ elif [ ${UNAME} = 'Darwin' ]; then
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
       # Note: stripping with -Wl,-S breaks dtrace
-      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -Wl,-search_paths_first"
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -L${SDK_PATH}/usr/lib -Wl,-search_paths_first"
     else
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
       export SDK_PATH="${XCODE_PREFIX}/usr/"
@@ -207,8 +283,8 @@ elif [ ${UNAME} = 'Darwin' ]; then
     fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
+    export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export JOBS=`sysctl -n hw.ncpu`
     export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
     # and needs to default to 'gyp-mac-tool'
@@ -218,16 +294,11 @@ elif [ ${UNAME} = 'Darwin' ]; then
     unset RANLIB
     # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
     export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    if [ "${CXX11}" = true ]; then
+    if [[ "${CXX11}" == true ]]; then
         export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
-#        if [ "${LIBCXX_DEFAULT}" = true ]; then
-#            export STDLIB="libcpp"
-#        else
-#            export STDLIB="libstdcpp"
-#        fi
         export STDLIB="libstdcpp"
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
@@ -241,7 +312,7 @@ export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
-export BUILD="${BUILD_ROOT}-${ARCH_NAME}"
+export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
@@ -249,6 +320,10 @@ export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
     if [[ ${PLATFORM} = 'Linux' ]]; then
+        export ZLIB_PATH="/usr";
+    elif [[ ${PLATFORM} = 'Linaro' ]]; then
+        export ZLIB_PATH="/usr";
+    elif [[ ${PLATFORM} = 'Linaro-softfp' ]]; then
         export ZLIB_PATH="/usr";
     else
         if [[ ${PLATFORM} = 'Android' ]]; then
@@ -262,18 +337,8 @@ if [[ $SHARED_ZLIB == true ]]; then
     fi
 fi
 
-# should not be needed now that we set 'LIBRARY_PATH'
-#if [ $UNAME = 'Darwin' ]; then
-  #export DYLD_LIBRARY_PATH="${BUILD}/lib"
-#fi
-
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
 export PATH="${BUILD}/bin:$PATH"
-
-if [[ $JOBS > 4 ]]; then
-    export JOBS=$(expr $JOBS - 2)
-fi
-
 export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
@@ -286,34 +351,35 @@ export CC="${CORE_CC}"
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
-export CPPFLAGS="${CORE_CPPFLAGS}"
+export SHARED_LIBRARY_PATH="${LIBRARY_PATH}"
+export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
 export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
 # CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
 export LINK_FLAGS=${LDFLAGS}
 # silence warnings in C depedencies like cairo, freetype, libxml2, pixman
-export WARNING_CFLAGS="-Wno-long-long -Wno-unused-variable -Wno-redundant-decls -Wno-uninitialized -Wno-unused-result -Wno-format"
+export WARNING_CFLAGS="-Wno-unknown-warning-option -Wno-long-long -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-strict-prototypes -Wno-unused-variable -Wno-redundant-decls -Wno-return-type -Wno-uninitialized -Wno-unused-result -Wno-format"
 # clang specific
 if test "${CC#*'clang'}" != "$CC"; then
-  export WARNING_CFLAGS="-Wno-invalid-source-encoding -Wno-unused-parameter -Wno-cast-align -Wno-extended-offsetof ${WARNING_CFLAGS}"
+  export WARNING_CFLAGS="-Wno-invalid-source-encoding -Wno-cast-align -Wno-extended-offsetof ${WARNING_CFLAGS}"
 fi
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 # we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
 
-# http://site.icu-project.org/download
 # tgz
 # NOTE: regenerate the .dat with new major versions via
 # http://apps.icu-project.org/datacustom/
 # include the 'collators' and 'break iterator'
 # download it, unzip, rename, check it in, then edit the below paths and versions
 export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiterator.dat"
+# http://site.icu-project.org/download
 export ICU_VERSION="53.1"
 export ICU_VERSION2="53_1"
 # http://www.boost.org/users/download/
 export BOOST_VERSION="1.55.0"
 export BOOST_VERSION2="1_55_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080402"
+export SQLITE_VERSION="3080500"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
@@ -331,14 +397,15 @@ export WEBP_VERSION="0.4.0"
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export NASM_VERSION="2.11"
+# http://sourceforge.net/projects/libjpeg-turbo/files/
 export JPEG_TURBO_VERSION="1.3.1"
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="1.10.1"
+export GDAL_VERSION="1.11.0"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # gz
-export POSTGRES_VERSION="9.3.3"
+export POSTGRES_VERSION="9.3.4"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
@@ -359,29 +426,31 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.3"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.26"
+export NODE_VERSION="0.10.29"
+# stuck at feb 2012
+# https://code.google.com/p/sparsehash/source/list
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-# export HARFBUZZ_VERSION="0.9.19"
-export HARFBUZZ_VERSION="0.9.27"
+export HARFBUZZ_VERSION="0.9.32"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
 export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
-export OPENSSL_VERSION="1.0.1g"
-export LIBUV_VERSION="0.11.23"
+# http://www.openssl.org/source/
+export OPENSSL_VERSION="1.0.1h"
+export LIBUV_VERSION="0.11.25"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr
 
 function download {
-    if [ ! -f $1 ]; then
-        echoerr downloading $1
-        curl -s -S -f -O -L ${S3_BASE}/$1
+    if [[ ! -f $1 ]]; then
+        echoerr "downloading $1"
+        ${SYSTEM_CURL} -s -S -f -O -L --retry 3 ${S3_BASE}/$1
     else
-        echoerr using cached $1
+        echoerr "using cached $1"
     fi
 }
 export -f download
@@ -395,41 +464,47 @@ export -f upload
 function push {
     echo "downloading $1"
     cd ${PACKAGES}
-    curl -s -S -f -O -L $1
-    echo "uploading `basename $1`"
-    upload `basename $1`
+    ${SYSTEM_CURL} -s -S -f -O -L $1
+    echo "uploading $(basename $1)"
+    upload $(basename $1)
     cd ${ROOTDIR}
 }
 export -f push
 
 function check_and_clear_libs {
-  if [ $UNAME = 'Darwin' ]; then
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
-           lipo -info $i | grep arch 1>&2;
-        done;
+  mkdir -p "${SHARED_LIBRARY_PATH}"
+  if [[ ${UNAME} == 'Darwin' ]]; then
+        #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.a' -print); do
+        #   lipo -info $i | grep arch 1>&2;
+        #done;
         for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
            otool -L ${i} 1>&2;
         done;
-    else
-        for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
-           ldd ${i} 1>&2
-        done
-    fi
-    rm -f ${BUILD}/lib/{*.so*,*.dylib}
+        #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.dylib' -print); do
+        #    mv ${i} "${BUILD}/lib/_shared/"
+        #done;
+  else
+      for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
+         ldd ${i} 1>&2
+      done
+      #for i in $(find ${BUILD}/lib/ -maxdepth 1 -name '*.so*' -print); do
+      #    mv ${i} "${BUILD}/lib/_shared/$(basename ${i})"
+      #done
+  fi
 }
 export -f check_and_clear_libs
 
 function ensure_s3cmd {
-  CUR_DIR=`pwd`
-  if [ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]; then
+  CUR_DIR=$(pwd)
+  if [[ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]]; then
       cd ${PACKAGES}
-      curl -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
+      ${SYSTEM_CURL} -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
       tar xf v1.5.0-beta1.tar.gz
   fi
   cd ${PACKAGES}/s3cmd-1.5.0-beta1
-  export PATH=`pwd`:${PATH}
+  export PATH=$(pwd):${PATH}
   cd $CUR_DIR
-  if [ ! -f ~/.s3cfg ]; then
+  if [[ ! -f ~/.s3cfg ]]; then
     if [[ "${AWS_S3_KEY:-false}" == false ]] || [[ "${AWS_S3_SECRET:-false}" == false ]]; then
         echoerr 'missing AWS keys: see ensure_s3cmd in settings.sh for details'
     else
@@ -442,8 +517,8 @@ function ensure_s3cmd {
 export -f ensure_s3cmd
 
 function ensure_xz {
-  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]; then
-      CUR_DIR=`pwd`
+  if [[ ! -f ${BUILD_TOOLS_ROOT}/bin/xz ]]; then
+      CUR_DIR=$(pwd)
       mkdir -p ${PACKAGES}
       cd ${PACKAGES}
       # WARNING: this installs liblzma which we need to ensure that gdal does not link to
@@ -455,7 +530,7 @@ function ensure_xz {
       OLD_PLATFORM=${PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
-      make -j$JOBS
+      make -j${JOBS}
       make install
       source "${ROOTDIR}/${OLD_PLATFORM}.sh"
       cd $CUR_DIR
@@ -465,8 +540,8 @@ function ensure_xz {
 export -f ensure_xz
 
 function ensure_nasm {
-  if [ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]; then
-      CUR_DIR=`pwd`
+  if [[ ! -f ${BUILD_TOOLS_ROOT}/bin/nasm ]]; then
+      CUR_DIR=$(pwd)
       mkdir -p ${PACKAGES}
       cd ${PACKAGES}
       # WARNING: this installs liblzma which we need to ensure that gdal does not link to
@@ -478,7 +553,7 @@ function ensure_nasm {
       OLD_PLATFORM=${PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
-      make -j$JOBS
+      make -j${JOBS}
       make install install_rdf
       source "${ROOTDIR}/${OLD_PLATFORM}.sh"
       cd $CUR_DIR
@@ -490,19 +565,19 @@ export -f ensure_nasm
 
 function ensure_clang {
   CVER="3.3"
-  if [ ! -z $1 ]; then
+  if [[ ! -z $1 ]]; then
     CVER=$1
   fi
-  CUR_DIR=`pwd`
+  CUR_DIR=$(pwd)
   mkdir -p ${PACKAGES}
   cd ${PACKAGES}
   if [[ ${PLATFORM} == 'Linux' ]]; then
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
-      if [ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]; then
+      if [[ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
+          ${SYSTEM_CURL} -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
       fi
-      if [ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ] && [ ! -d clang-$CVER ]; then
+      if [[ ! -d clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu ]] && [[ ! -d clang-$CVER ]]; then
           echoerr 'uncompressing clang'
           tar xf clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2
           mv clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu clang-$CVER
@@ -517,18 +592,18 @@ function ensure_clang {
       if [[ $CVER == "3.2" ]]; then
           DARWIN_V="11"
       fi
-      if [ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]; then
+      if [[ ! -f clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz ]]; then
           echoerr 'downloading clang'
-          curl -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
+          ${SYSTEM_CURL} -s -S -f -O -L http://llvm.org/releases/$CVER/clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
       fi
-      if [ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ] && [ ! -d clang-$CVER ]; then
+      if [[ ! -d clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V ]] && [[ ! -d clang-$CVER ]]; then
           echoerr 'uncompressing clang'
           tar xf clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V.tar.gz
           mv clang+llvm-$CVER-x86_64-apple-darwin$DARWIN_V clang-$CVER
       fi
   fi
-  echoerr "enabled clang at `pwd`/clang-$CVER/bin"
-  export PATH=`pwd`/clang-$CVER/bin:$PATH
+  echoerr "enabled clang at $(pwd)/clang-$CVER/bin"
+  export PATH=$(pwd)/clang-$CVER/bin:$PATH
   export CXX_NAME="clang-$CVER"
   cd $CUR_DIR
 }
@@ -536,23 +611,13 @@ export -f ensure_clang
 
 function memsize() {
     # total physical memory in MB
-    case "$(uname -s)" in
+    case "${UNAME}" in
         'Linux')    echo $(($(free | awk '/^Mem:/{print $2}')/1024));;
         'Darwin')   echo $(($(sysctl -n hw.memsize)/1024/1024));;
         *)          echo 1;;
     esac
 }
 export -f memsize
-
-function nprocs() {
-    # number of processors on the current system
-    case "$(uname -s)" in
-        'Linux')    nproc;;
-        'Darwin')   sysctl -n hw.ncpu;;
-        *)          echo 1;;
-    esac
-}
-export -f nprocs
 
 echoerr "building against ${STDLIB} in ${CXX_STANDARD} mode with ${CXX}"
 

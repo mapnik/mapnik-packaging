@@ -1,0 +1,26 @@
+diff --git a/gdal/frmts/wms/gdalwmsdataset.cpp b/gdal/frmts/wms/gdalwmsdataset.cpp
+index 9301c60..141a438 100644
+--- a/gdal/frmts/wms/gdalwmsdataset.cpp
++++ b/gdal/frmts/wms/gdalwmsdataset.cpp
+@@ -380,7 +380,7 @@ CPLErr GDALWMSDataset::Initialize(CPLXMLNode *config) {
+     
+     if (ret == CE_None) {
+         const char *pszHttpZeroBlockCodes = CPLGetXMLValue(config, "ZeroBlockHttpCodes", "");
+-        if(pszHttpZeroBlockCodes == '\0') {
++        if(pszHttpZeroBlockCodes[0] == '\0') {
+             m_http_zeroblock_codes.push_back(204);
+         } else {
+             char **kv = CSLTokenizeString2(pszHttpZeroBlockCodes,",",CSLT_HONOURSTRINGS);
+diff --git a/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp b/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp
+index 63a0a4a..2f2fdc4 100644
+--- a/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp
++++ b/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp
+@@ -245,7 +245,7 @@ bool VFKFeature::SetProperties(const char *pszLine)
+     for (poChar = pszLine; *poChar != '\0' && *poChar != ';'; poChar++)
+         /* skip data block name */
+         ;
+-    if (poChar == '\0')
++    if (*poChar == '\0')
+         return FALSE; /* nothing to read */
+ 
+     poChar++; /* skip ';' after data block name*/

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u 
 
 mkdir -p ${PACKAGES}
@@ -16,6 +16,6 @@ CFLAGS="-DSQLITE_ENABLE_RTREE=1 $CFLAGS"
 --enable-static \
 --disable-shared \
 --disable-dependency-tracking
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

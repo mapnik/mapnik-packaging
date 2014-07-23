@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -21,14 +21,11 @@ else
     CXX_ENABLED="-DNO_CXX11=ON"
 fi
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
-  -DBoost_NO_SYSTEM_PATHS=ON \
-  -DCMAKE_INCLUDE_PATH=${BUILD}/include \
-  -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DBUILD_STATIC_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
   ${CXX_ENABLED}
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 cd ${PACKAGES}
 
-#check_and_clear_libs
+##check_and_clear_libs

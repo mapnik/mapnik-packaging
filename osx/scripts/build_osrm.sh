@@ -1,11 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    OSRM_COMMIT=9483b781e2
+    #OSRM_COMMIT=63381ad22172e2097f110d773c1cee2cc2b9c951
+    OSRM_COMMIT=.
 fi
 
 if [[ "${OSRM_BRANCH:-false}" == false ]]; then
@@ -20,7 +21,6 @@ echoerr 'building OSRM'
 rm -rf Project-OSRM
 git clone --quiet ${OSRM_REPO} -b $OSRM_BRANCH Project-OSRM
 cd Project-OSRM
-patch -N CMakeLists.txt ${PATCHES}/osrm-osx.diff || true
 git checkout $OSRM_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
@@ -29,11 +29,10 @@ fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
-if [[ ${PLATFORM} == 'Linux' ]]; then
-    # workaround undefined reference to `clock_gettime' when linking osrm-extract
-    if [[ ${CXX} == "clang++" ]]; then
-        LINK_FLAGS="-lrt ${LINK_FLAGS}"
-    fi
+# http://www.cmake.org/pipermail/cmake/2009-May/029375.html
+# http://stackoverflow.com/questions/16991225/cmake-and-static-linking
+if [[ ${UNAME} == 'Linux' ]]; then
+    LINK_FLAGS="-fopenmp ${LINK_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
 fi
 
 if [[ ${CXX11} == true ]]; then
@@ -46,13 +45,15 @@ rm -rf build
 mkdir -p build
 cd build
 cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
+  -DCMAKE_CXX_COMPILER="$CXX" \
   -DBoost_NO_SYSTEM_PATHS=ON \
+  -DTBB_INSTALL_DIR=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}" \
   ${STDLIB_OVERRIDE}
 
-make -j${JOBS} VERBOSE=1
-make install
+$MAKE -j${JOBS} VERBOSE=1
+$MAKE install
 cd ${PACKAGES}

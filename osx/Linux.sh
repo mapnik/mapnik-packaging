@@ -10,4 +10,5 @@ export HOST_ARG=""
 if [[ "${CXX11:-false}" == false ]]; then
   export CXX11=false
 fi
+export MAKE="make"
 source $(dirname "$BASH_SOURCE")/settings.sh

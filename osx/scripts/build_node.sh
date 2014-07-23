@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [ ! -f node-v${NODE_VERSION}.tar.gz ]; then
-    echo downloading node
+    echoerr "downloading node"
     curl -s -S -f -O  http://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
 else
-    echo downloading node
+    echoerr "using cached node at node-v${NODE_VERSION}.tar.gz"
 fi
 
 echoerr 'building node'
@@ -20,5 +20,5 @@ LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
  --shared-zlib \
  --shared-zlib-includes=${ZLIB_PATH}/include \
  --shared-zlib-libpath=${ZLIB_PATH}/lib
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install

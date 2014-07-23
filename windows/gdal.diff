@@ -1,0 +1,119 @@
+diff --git a/gdal/frmts/makefile.vc b/gdal/frmts/makefile.vc
+index 7fc563c..4b09a16 100644
+--- a/gdal/frmts/makefile.vc
++++ b/gdal/frmts/makefile.vc
+@@ -6,7 +6,7 @@ EXTRAFLAGS =	-DFRMT_ceos -DFRMT_aigrid -DFRMT_elas -DFRMT_hfa -DFRMT_gtiff\
+ 		-DFRMT_dted -DFRMT_mem -DFRMT_jdem -DFRMT_gif \
+ 		-DFRMT_envisat -DFRMT_aaigrid -DFRMT_usgsdem -DFRMT_l1b \
+ 		-DFRMT_fit -DFRMT_vrt -DFRMT_xpm -DFRMT_bmp -DFRMT_rmf \
+-		-DFRMT_nitf -DFRMT_pcidsk -DFRMT_airsar -DFRMT_rs2 \
++		-DFRMT_nitf -DFRMT_airsar -DFRMT_rs2 \
+ 		-DFRMT_ilwis -DFRMT_msgn -DFRMT_rik -DFRMT_pcraster \
+ 		-DFRMT_leveller -DFRMT_sgi -DFRMT_srtmhgt -DFRMT_idrisi \
+ 		-DFRMT_jaxapalsar -DFRMT_ers -DFRMT_ingr -DFRMT_dimap \
+diff --git a/gdal/frmts/o/README.TXT b/gdal/frmts/o/README.TXT
+deleted file mode 100644
+index 2058412..0000000
+--- a/gdal/frmts/o/README.TXT
++++ /dev/null
+@@ -1,7 +0,0 @@
+-gdal/frmts/o
+-------------
+-
+-This directory is where object files are put from the various format
+-drivers so they can be easily linked into GDAL.  This file is here to
+-ensure that the "o" directory isn't lost when people do a cvs checkout
+-with pruning. 
+diff --git a/gdal/nmake.opt b/gdal/nmake.opt
+index 7fa3d27..6cf6df0 100644
+--- a/gdal/nmake.opt
++++ b/gdal/nmake.opt
+@@ -318,9 +318,9 @@ JPEG12_SUPPORTED = 1
+ #		$(OGDIDIR)\lib\$(TARGET)\zlib_ogdi$(OGDIVER).lib
+ 
+ # Uncomment for Expat support (required for KML, GPX and GeoRSS read support).
+-#EXPAT_DIR = "C:\Program Files\Expat 2.0.1"
+-#EXPAT_INCLUDE = -I$(EXPAT_DIR)/source/lib
+-#EXPAT_LIB = $(EXPAT_DIR)/bin/libexpat.lib
++EXPAT_DIR="C:\Program Files (x86)\Expat 2.1.0"
++EXPAT_INCLUDE = -I$(EXPAT_DIR)/source/lib
++EXPAT_LIB = $(EXPAT_DIR)/bin/libexpat.lib
+ 
+ # Uncomment for Xerces based GML and ILI support.
+ #XERCES_DIR =	c:\warmerda\supportlibs\xerces-c_2_6_0
+diff --git a/gdal/ogr/ogrsf_frmts/generic/makefile.vc b/gdal/ogr/ogrsf_frmts/generic/makefile.vc
+index fc4a6ad..8b25c21 100644
+--- a/gdal/ogr/ogrsf_frmts/generic/makefile.vc
++++ b/gdal/ogr/ogrsf_frmts/generic/makefile.vc
+@@ -13,20 +13,12 @@ BASEFORMATS = -DSHAPE_ENABLED -DTAB_ENABLED -DNTF_ENABLED -DSDTS_ENABLED -DTIGER
+ EXTRAFLAGS =	-I.. -I..\.. $(OGDIDEF) $(FMEDEF) $(OCIDEF) $(PGDEF) \
+ 		$(ODBCDEF) $(SQLITEDEF) $(MYSQLDEF) $(ILIDEF) $(DWGDEF) \
+ 		$(SDEDEF) $(BASEFORMATS) $(IDBDEF) $(NASDEF) $(DODSDEF) \
+-		$(PCIDSKDEF) $(LIBKMLDEF) $(WFSDEF) $(SOSIDEF) $(GFTDEF) \
++		$(LIBKMLDEF) $(WFSDEF) $(SOSIDEF) $(GFTDEF) \
+ 		$(COUCHDBDEF) $(FGDBDEF) $(XLSDEF) $(ODSDEF) $(XLSXDEF) $(INGRESDEF) \
+ 		$(ELASTICDEF) $(OSMDEF) $(VFKDEF) $(CARTODBDEF)
+ 
+ !INCLUDE $(GDAL_ROOT)\nmake.opt
+ 
+-!IF "$(PCIDSK_SETTING)" == "EXTERNAL"
+-PCIDSKDEF	=	-DPCIDSK_ENABLED
+-!ENDIF
+-
+-!IF "$(PCIDSK_SETTING)" == "INTERNAL"
+-PCIDSKDEF	=	-DPCIDSK_ENABLED
+-!ENDIF
+-
+ !IFDEF OGDIDIR
+ OGDIDEF	=	-DOGDI_ENABLED
+ !ENDIF
+diff --git a/gdal/ogr/ogrsf_frmts/makefile.vc b/gdal/ogr/ogrsf_frmts/makefile.vc
+index 9e2b55d..0073a33 100644
+--- a/gdal/ogr/ogrsf_frmts/makefile.vc
++++ b/gdal/ogr/ogrsf_frmts/makefile.vc
+@@ -9,7 +9,7 @@ DIRLIST		=	generic geojson shape ntf sdts tiger s57 dgn mitab gml \
+ 			$(OGDIDIR) $(FMEDIR) $(OCIDIR) $(PG_DIR) $(DWGDIR) \
+ 			$(ODBCDIR) $(SQLITE_DIR) $(MYSQL_DIR) $(ILI_DIR) \
+ 			$(SDE_DIR) $(IDB_DIR) $(NAS_DIR) $(DODSDIR) \
+-			$(PCIDSK_DIR) $(LIBKMLDIR) $(WFSDIR) $(SOSIDIR) $(GFTDIR) \
++			$(LIBKMLDIR) $(WFSDIR) $(SOSIDIR) $(GFTDIR) \
+ 			$(COUCHDBDIR) $(FGDB_DIR) $(XLSDIR) $(ODSDIR) $(XLSXDIR) \
+ 			$(INGRESDIR) $(ELASTICDIR) $(OSMDIR) $(VFKDIR) $(CARTODBDIR)
+ 
+@@ -25,14 +25,6 @@ PLUGINDIRLIST	=	$(PLUGIN_ARCOBJECTS_DIR) \
+ 
+ !INCLUDE $(GDAL_ROOT)\nmake.opt
+ 
+-!IF "$(PCIDSK_SETTING)" == "EXTERNAL"
+-PCIDSK_DIR	=	pcidsk
+-PCIDSKOBJ	=	pcidsk\*.obj
+-!ENDIF
+-!IF "$(PCIDSK_SETTING)" == "INTERNAL"
+-PCIDSK_DIR	=	pcidsk
+-PCIDSKOBJ	=	pcidsk\*.obj
+-!ENDIF
+ 
+ !IFDEF OGDIDIR
+ OGDIDIR	=	ogdi
+@@ -231,7 +223,7 @@ default:
+ 				$(OGDIOBJ) $(ODBCOBJ) $(SQLITE_OBJ) \
+ 				$(FMEOBJ) $(OCIOBJ) $(PG_OBJ) $(MYSQL_OBJ) \
+ 				$(ILI_OBJ) $(DWG_OBJ) $(SDE_OBJ) $(FGDB_OBJ) $(ARCDRIVER_OBJ) $(IDB_OBJ) \
+-				$(DODS_OBJ) $(NAS_OBJ) $(PCIDSKOBJ) $(LIBKMLOBJ) $(WFS_OBJ) \
++				$(DODS_OBJ) $(NAS_OBJ) $(LIBKMLOBJ) $(WFS_OBJ) \
+ 				$(SOSI_OBJ) $(GFT_OBJ) $(COUCHDB_OBJ) $(XLS_OBJ) $(ODS_OBJ) $(XLSX_OBJ)  \
+ 				$(INGRESOBJ) $(ELASTIC_OBJ) $(OSM_OBJ) $(VFK_OBJ) $(CARTODB_OBJ)
+ 	lib /out:ogrsf_frmts_sup.lib \
+diff --git a/gdal/ogr/ogrsf_frmts/ogrsf_frmts.h b/gdal/ogr/ogrsf_frmts/ogrsf_frmts.h
+index 7d1439e..c3c534f 100644
+--- a/gdal/ogr/ogrsf_frmts/ogrsf_frmts.h
++++ b/gdal/ogr/ogrsf_frmts/ogrsf_frmts.h
+@@ -418,7 +418,7 @@ void CPL_DLL RegisterOGRBNA();
+ void CPL_DLL RegisterOGRGPX();
+ void CPL_DLL RegisterOGRGeoconcept();
+ void CPL_DLL RegisterOGRIngres();
+-void CPL_DLL RegisterOGRPCIDSK();
++//void CPL_DLL RegisterOGRPCIDSK();
+ void CPL_DLL RegisterOGRXPlane();
+ void CPL_DLL RegisterOGRNAS();
+ void CPL_DLL RegisterOGRGeoRSS();

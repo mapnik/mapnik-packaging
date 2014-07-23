@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -21,14 +21,14 @@ cp ${PATCHES}/config.sub .
 ./configure --prefix=${BUILD} --without-mutex ${HOST_ARG} \
 --with-jni=no --enable-static --disable-shared --disable-dependency-tracking
 # nad2bin cannot be run in cross compiler environment
-if [ ${BOOST_ARCH} != "arm" ]; then
+if [[ ${BOOST_ARCH} == "arm" ]]; then
     # TODO - android: /bin/sh: ../src/nad2bin: cannot execute binary file
     set +e
-    make -j${JOBS} -i -k
-    make install -i -k
+    $MAKE -j${JOBS} -i -k
+    $MAKE install -i -k
     set -e
 else
-    make -j${JOBS}
-    make install
+    $MAKE -j${JOBS}
+    $MAKE install
 fi
 cd ${PACKAGES}

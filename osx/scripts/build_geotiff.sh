@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -12,7 +12,7 @@ if [ ! -d libgeotiff ]; then
     ./autogen.sh
 else
     cd libgeotiff
-    make clean
+    $MAKE clean
 fi
 
 echoerr 'building geotiff'
@@ -24,6 +24,6 @@ echoerr 'building geotiff'
 --with-jpeg=${BUILD} \
 --with-zip=${BUILD} \
 --with-proj=${BUILD}
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

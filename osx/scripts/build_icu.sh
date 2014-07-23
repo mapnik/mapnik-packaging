@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -32,15 +32,15 @@ tar xf icu4c-${ICU_VERSION2}-src.tgz
 mv icu icu-${ARCH_NAME}
 cd icu-${ARCH_NAME}/source
 if [ $BOOST_ARCH = "arm" ]; then
-    if [ -d "$(pwd)/../../icu-i386/source" ]; then
-        NATIVE_BUILD_DIR="$(pwd)/../../icu-i386/source"
-    elif [ -d "$(pwd)/../../icu-x86_64/source" ]; then
-        NATIVE_BUILD_DIR="$(pwd)/../../icu-x86_64/source"
-    else
-        NATIVE_BUILD_DIR="$(pwd)/../../icu-x86_64/source"
+    OLD_PLATFORM=${PLATFORM}
+    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    NATIVE_BUILD_DIR="$(pwd)/../../icu-${ARCH_NAME}/source"
+    source ${ROOTDIR}/${OLD_PLATFORM}.sh
+    if [[ ! -d ${NATIVE_BUILD_DIR} ]]; then
         echoerr 'native/host arch icu missing, building now in subshell'
         OLD_PLATFORM=${PLATFORM}
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh && ${ROOTDIR}/scripts/build_icu.sh
+        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        ${ROOTDIR}/scripts/build_icu.sh
         source ${ROOTDIR}/${OLD_PLATFORM}.sh
     fi
     CROSS_FLAGS="--with-cross-build=${NATIVE_BUILD_DIR}"
@@ -48,6 +48,8 @@ if [ $BOOST_ARCH = "arm" ]; then
 else
     CROSS_FLAGS=""
 fi
+
+patch -N tools/toolutil/ucbuf.c ${PATCHES}/icu_debug.diff || true
 cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 # note: enable-draft is needed for U_ICUDATA_ENTRY_POINT
 ./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
@@ -61,9 +63,6 @@ cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 --disable-icuio \
 --disable-samples \
 --disable-dyload
-make -j${JOBS} -i -k 
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
-
-# clear out shared libs
-rm -f ${BUILD}/lib/{*.so,*.dylib}

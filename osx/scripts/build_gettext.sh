@@ -12,8 +12,8 @@ cd gettext-${GETTEXT_VERSION}
 --without-included-gettext --disable-debug --without-included-glib \
 --without-included-libcroco  --without-included-libxml \
 --without-emacs --without-git --without-cvs
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}
 
 

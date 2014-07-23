@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -14,7 +14,7 @@ cd pixman-${PIXMAN_VERSION}
 --disable-dependency-tracking --prefix=${BUILD} \
 --disable-mmx
 set +e
-make -j${JOBS} -i -k
-make install -i -k
+$MAKE -j${JOBS} -i -k
+$MAKE install -i -k
 set -e
 cd ${PACKAGES}

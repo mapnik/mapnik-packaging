@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -30,6 +30,6 @@ cd freetype-${FREETYPE_VERSION}
  --with-fsref=no \
  --with-fsspec=no \
 
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 cd ${PACKAGES}

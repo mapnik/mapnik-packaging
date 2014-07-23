@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -11,6 +11,6 @@ download lua-${LUA_VERSION}.tar.gz
 rm -rf lua-${LUA_VERSION}
 tar xf lua-${LUA_VERSION}.tar.gz
 cd lua-${LUA_VERSION}
-make generic CC=$CC CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INSTALL_TOP=${BUILD} install
+$MAKE generic CC=$CC CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INSTALL_TOP=${BUILD} install
 
 cd ${PACKAGES}

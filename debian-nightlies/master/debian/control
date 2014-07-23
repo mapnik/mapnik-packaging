@@ -3,6 +3,7 @@ Priority: optional
 Maintainer: Mapnik Developers <mapnik@googlegroups.com>
 Uploaders: Robert Coup <robert@coup.net.nz>
 Build-Depends:
+ g++-4.8,
  make,
  git-core,
  python-support (>= 0.8.4),
@@ -15,6 +16,7 @@ Build-Depends:
  libboost-python-dev (>= 1.49),
  libboost-system-dev (>= 1.49),
  libboost-program-options-dev (>= 1.49),
+ libwebp-dev,
  libpng-dev,
  libjpeg-dev,
  libtiff-dev,
@@ -63,6 +65,7 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ libmapnik (= ${binary:Version})
 Description: Mapnik GDAL input plugin for reading raster datasources.
 
 Package: mapnik-input-plugin-ogr
@@ -70,6 +73,7 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ libmapnik (= ${binary:Version})
 Description: Mapnik OGR input plugin for reading vector datasources.
 
 Package: mapnik-input-plugin-postgis
@@ -77,6 +81,7 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ libmapnik (= ${binary:Version})
 Suggests:
  postgis
 Description: Mapnik PostGIS input plugin for reading vector data from PostGIS tables in PostgreSQL.
@@ -86,6 +91,7 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ libmapnik (= ${binary:Version})
 Description: Mapnik SQLite input plugin for reading vector data in sqlite3 or spatialite databases.
 
 Package: mapnik-input-plugin-osm
@@ -93,6 +99,7 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ libmapnik (= ${binary:Version})
 Description: Mapnik OSM input plugin for reading OSM data out of XML.
 
 Package: libmapnik-dev
@@ -107,6 +114,7 @@ Depends:
  libboost-regex-dev (>= 1.42),
  libboost-python-dev (>= 1.42),
  libboost-system-dev (>= 1.42),
+ libwebp-dev,
  libpng-dev,
  libjpeg-dev,
  libtiff-dev,
@@ -139,7 +147,8 @@ Section: utils
 Architecture: any
 Depends:
  ${shlibs:Depends},
- ${misc:Depends}
+ ${misc:Depends},
+ libmapnik (= ${binary:Version})
 Recommends:
  python-lxml
 Conflicts: mapnik-utils

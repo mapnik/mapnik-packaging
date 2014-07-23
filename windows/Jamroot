@@ -33,6 +33,7 @@ project mapnik
     <include>$(MAPNIK_DEPS_DIR)/proj/src
     <include>$(MAPNIK_DEPS_DIR)/libpng
     <include>$(MAPNIK_DEPS_DIR)/zlib
+    <include>$(MAPNIK_DEPS_DIR)/webp/include
     <include>$(MAPNIK_DEPS_DIR)/jpeg
     <include>$(MAPNIK_DEPS_DIR)/tiff/libtiff
     <include>$(MAPNIK_DEPS_DIR)/libxml2/include
@@ -43,6 +44,7 @@ project mapnik
     <define>MAPNIK_THREADSAFE
     <define>BIGINT
     <define>HAVE_LIBXML2
+    <define>HAVE_WEBP
     <define>HAVE_JPEG
     <define>HAVE_PNG
     <define>HAVE_TIFF
@@ -50,8 +52,6 @@ project mapnik
     <define>BOOST_REGEX_HAS_ICU
     <define>HAVE_CAIRO
     <define>GRID_RENDERER
-    #TODO
-    #<define>HAVE_WEBP
     <cxxflags>/wd4345
     <cxxflags>/wd4661
     <cxxflags>/wd4018
@@ -83,6 +83,7 @@ alias program_options : /site-config//program_options : <link>static ;
 
 alias z : /site-config//z : <link>static ;
 alias png : /site-config//png : <link>static ;
+alias webp : /site-config//webp : <link>static ;
 alias jpeg : /site-config//jpeg : <link>static ;
 alias tiff : /site-config//tiff : <link>static ;
 alias freetype2 : /site-config//freetype2 : <link>static ;
@@ -217,9 +218,13 @@ if $(dll)
         : <location>$(prefix)/lib
        ;
 
-    # statically linking so we don't need to provide
-	#install install-xml2-dll
-    #    : $(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc/libxml2.dll
+	install install-xml2-lib
+        : $(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc/libxml2_a.lib
+        : <location>$(prefix)/lib
+       ;
+
+  #install install-xml2-dll
+    #    : $(MAPNIK_DEPS_DIR)/libxml2/win32/bin.msvc/libxml2_a_dll.lib
     #    : <location>$(prefix)/lib
     #   ;
     #
@@ -229,7 +234,7 @@ if $(dll)
     #   ;
 
 	install install-gdal-dll
-        : $(MAPNIK_DEPS_DIR)/gdal/gdal/gdal110.dll
+        : $(MAPNIK_DEPS_DIR)/gdal/gdal/gdal111.dll
         : <location>$(prefix)/lib
        ;
 }

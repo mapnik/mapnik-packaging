@@ -1,16 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p "${BUILD_UNIVERSAL}"
 
 if [[ $UNAME == 'Darwin' ]]; then
     echo '*making universal libs*'
-    ARCHS="x86_64 arm64 armv7s armv7 i386"
+    ARCHS="x86_64-macosx arm64-iphoneos armv7s-iphoneos armv7-iphoneos i386-iphonesimulator x86_64-iphonesimulator"
     LIBS=$(find ${ROOTDIR}/out/*/lib -maxdepth 1 -name '*.a' -exec basename '{}' \; | sort | uniq)
 
     for arch in ${ARCHS}; do
-        if [ -f "${BUILD_ROOT}-${arch}" ]; then
-            cp -r "${BUILD_ROOT}-${arch}/" "${BUILD_ROOT}-universal"
+        if [ -d "${BUILD_ROOT}-${arch}" ]; then
+            echo '*merging '${BUILD_ROOT}'-'${arch}'*'
+            ditto "${BUILD_ROOT}-${arch}/" "${BUILD_ROOT}-universal"
             build_root_escaped=$(echo "${BUILD_ROOT}" | sed -e 's/[]\/()$*.^|[]/\\&/g')
             find ${BUILD_ROOT}-universal/ \( -name "*.pc" -or -name "*.la" -or -name "*-config" \) \
                 -exec sed -i '' "s/${build_root_escaped}-${arch}/${build_root_escaped}-universal/g" {} \;
@@ -36,11 +37,12 @@ if [[ $UNAME == 'Darwin' ]]; then
         echo '*making universal mapnik*'
         lipo -create -output \
             "${BUILD_UNIVERSAL}/libmapnik.a" \
-            "${BUILD_ROOT}-x86_64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-            "${BUILD_ROOT}-arm64-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-            "${BUILD_ROOT}-armv7s-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-            "${BUILD_ROOT}-armv7-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
-            "${BUILD_ROOT}-i386-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a"
+            "${BUILD_ROOT}-x86_64-macosx-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-arm64-iphoneos-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-armv7s-iphoneos-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-armv7-iphoneos-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-x86_64-iphonesimulator-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
+            "${BUILD_ROOT}-i386-iphonesimulator-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a"
     fi
 
 fi

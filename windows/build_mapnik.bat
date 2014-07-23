@@ -30,7 +30,20 @@ xcopy /i /d /s %MAPNIK_SOURCE%\deps\clipper\include %PREFIX%\include\mapnik\agg 
 xcopy /i /d /s /q %ROOTDIR%\boost-49-vc100\include\boost-1_49\boost %PREFIX%\include\boost /Y
 xcopy /i /d /s %ROOTDIR%\icu\include\unicode %PREFIX%\include\unicode /Y
 xcopy /i /d /s %ROOTDIR%\freetype\include\freetype %PREFIX%\include\freetype /Y
-
+xcopy /i /d /s %ROOTDIR%\libxml2\include\libxml %PREFIX%\include\libxml /Y
+xcopy /i /d /s %ROOTDIR%\zlib\zlib.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\zlib\zconf.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\zlib\zlib.lib %PREFIX%\lib\ /Y
+xcopy /i /d /s %ROOTDIR%\libpng\libpng.lib %PREFIX%\lib\ /Y
+xcopy /i /d /s %ROOTDIR%\libpng\png.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\libpng\pnglibconf.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\libpng\pngconf.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\jpeg\libjpeg.lib %PREFIX%\lib\ /Y
+xcopy /i /d /s %ROOTDIR%\jpeg\jpeglib.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\jpeg\jconfig.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\jpeg\jconfig.h %PREFIX%\include\ /Y
+xcopy /i /d /s %ROOTDIR%\webp\lib\libwebp.lib %PREFIX%\lib\ /Y
+xcopy /i /d /s %ROOTDIR%\webp\include\webp %PREFIX%\include\webp /Y
 xcopy /i /d /s %ROOTDIR%\proj\nad %PREFIX%\share\proj
 xcopy /i /d /s %ROOTDIR%\gdal\gdal\data %PREFIX%\share\gdal
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -11,8 +11,11 @@ rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2
 mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 cd protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
-export NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-x86_64/src/protoc"
 if [ $BOOST_ARCH = "arm" ]; then
+    OLD_PLATFORM=${PLATFORM}
+    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}/src/protoc"
+    source ${ROOTDIR}/${OLD_PLATFORM}.sh
     if [ ! -f "${NATIVE_PROTOC}" ]; then
         echoerr 'native/host arch protoc missing, building now in subshell'
         OLD_PLATFORM=${PLATFORM}
@@ -24,6 +27,8 @@ else
     CROSS_FLAGS=""
 fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+CXXFLAGS="${CXXFLAGS} -Wno-unused-local-typedefs"
+
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass
 CXX="${CXX} ${STDLIB_CXXFLAGS}"
@@ -34,14 +39,14 @@ CXX="${CXX} ${STDLIB_CXXFLAGS}"
 --enable-static --disable-shared \
 --disable-debug --without-zlib \
 --disable-dependency-tracking
-make -j${JOBS}
-make install
+$MAKE -j${JOBS}
+$MAKE install
 if [ $BOOST_ARCH = "arm" ]; then
     cp "${NATIVE_PROTOC}" ${BUILD}/bin/
 fi
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs
 
 : '
 Note: iPhoneSimulator not working atm:

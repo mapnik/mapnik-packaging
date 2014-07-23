@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -22,6 +22,7 @@ if [ ${PLATFORM} = 'Android' ]; then
     CFLAGS="${CFLAGS} -I${RIGHT_HERE}"
     cd ../
 fi
+
 # note --with-writer for osmium
 ./configure --prefix=${BUILD} \
 --enable-static --disable-shared ${HOST_ARG} \
@@ -51,7 +52,7 @@ fi
 --without-readline \
 --without-regexps \
 --without-c14n
-make -j${JOBS} install
+$MAKE -j${JOBS} install
 cd ${PACKAGES}
 
-check_and_clear_libs
+#check_and_clear_libs

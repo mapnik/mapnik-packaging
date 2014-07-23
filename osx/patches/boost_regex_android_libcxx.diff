@@ -1,0 +1,26 @@
+--- libs/regex/src/fileiter.cpp	2014-06-20 19:46:14.000000000 -0700
++++ libs/regex/src/fileiter.cpp	2014-06-20 19:46:02.000000000 -0700
+@@ -21,6 +21,8 @@
+ 
+ #include <boost/config.hpp>
+ #include <climits>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <stdexcept>
+ #include <string>
+ #include <boost/throw_exception.hpp>
+@@ -268,12 +270,12 @@
+         else
+            read_size = std::fread(*node + sizeof(int), buf_size, 1, hfile);
+ #ifndef BOOST_NO_EXCEPTIONS 
+-        if((read_size == 0) || (std::ferror(hfile)))
++        if((read_size == 0) || (ferror(hfile)))
+         { 
+            throw std::runtime_error("Unable to read file."); 
+         } 
+ #else 
+-        BOOST_REGEX_NOEH_ASSERT((0 == std::ferror(hfile)) && (read_size != 0)); 
++        BOOST_REGEX_NOEH_ASSERT((0 == ferror(hfile)) && (read_size != 0)); 
+ #endif 
+       }
+       else

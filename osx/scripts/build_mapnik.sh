@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 
@@ -10,14 +10,14 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
   rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  #make clean
+  #$MAKE clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ $UNAME == 'Darwin' ]]; then
       JOBS=1
     else
-      JOBS=2
+      JOBS=3
     fi
 fi
 
@@ -31,14 +31,16 @@ else
     echo "CUSTOM_CXXFLAGS = '${CXXFLAGS} ${ICU_EXTRA_CPP_FLAGS}'" >> config.py
 fi
 echo "CUSTOM_CFLAGS = '${CFLAGS}'" >> config.py
-if [ $UNAME = 'Linux' ]; then
+if [[ ${UNAME} = 'Linux' ]]; then
   # NOTE: --no-undefined works with linux linker to ensure that
   # an error is throw if any symbols cannot be resolve for static libs
   # which can happen if their order is incorrect when linked: see lorder | tsort
   # TODO: only apply this to libmapnik (not python bindings) -Wl,--no-undefined
-  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -Wl,-z,origin -Wl,-rpath=\\\$\$ORIGIN'" >> config.py
+  echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+  echo "OPTIMIZATION = 's'" >> config.py
 fi
 echo "OPTIMIZATION = '${OPTIMIZATION}'" >> config.py
 echo "RUNTIME_LINK = 'static'" >> config.py
@@ -46,6 +48,7 @@ echo "PATH = '${BUILD}/bin/'" >> config.py
 echo "BOOST_INCLUDES = '${BUILD}/include'" >> config.py
 echo "BOOST_LIBS = '${BUILD}/lib'" >> config.py
 echo "FREETYPE_CONFIG = '${BUILD}/bin/freetype-config'" >> config.py
+echo "XML2_CONFIG = '${BUILD}/bin/xml2-config'" >> config.py
 echo "ICU_INCLUDES = '${BUILD}/include'" >> config.py
 echo "ICU_LIBS = '${BUILD}/lib'" >> config.py
 echo "PNG_INCLUDES = '${BUILD}/include'" >> config.py
@@ -62,7 +65,6 @@ echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
 echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
-echo "BINDINGS = 'python'" >> config.py
 echo "INPUT_PLUGINS = 'csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
 echo "DEMO = True" >> config.py
 echo "SVG_RENDERER = False" >> config.py
@@ -74,10 +76,22 @@ echo "FRAMEWORK_PYTHON = False" >> config.py
 echo "FULL_LIB_PATH = False" >> config.py
 echo "ENABLE_SONAME = False" >> config.py
 echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
+echo "XMLPARSER = 'ptree'" >> config.py
 
-./configure || cat config.log
-JOBS=${JOBS} make
-make install
+if [[ $BOOST_ARCH == "arm" ]]; then
+    HOST_ARGS='HOST=${ARCH_NAME}'
+    echo "BINDINGS = ''" >> config.py
+    echo "LINKING = 'static'" >> config.py
+    echo "PLUGIN_LINKING = 'static'" >> config.py
+else
+    HOST_ARGS=""
+    echo "BINDINGS = 'python'" >> config.py
+fi
+
+set_dl_path "${SHARED_LIBRARY_PATH}"
+LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS} || cat config.log
+LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
+$MAKE install
 
 # https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
 export PYTHONPATH=""
@@ -98,22 +112,25 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
     echo "...Updating and building mapnik python bindings for python ${i}"
     rm -f bindings/python/*os
     rm -f bindings/python/mapnik/_mapnik.so
-    ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-    JOBS=${JOBS} make
-    make install
+    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
+    $MAKE install
     
     for i in {"2.6","2.7"}
     do
       echo "...Updating and building mapnik python bindings for python ${i}"
       rm -f bindings/python/*os
       rm -f bindings/python/mapnik/_mapnik.so
-      ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-      JOBS=${JOBS} make
-      make install
+      LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
+      LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
+      $MAKE install
     done
 fi
 
 $ROOTDIR/scripts/post_build_fix.sh
+
+unset_dl_path
+
 
 # remove headers for now
 #rm -rf ${MAPNIK_BIN_SOURCE}/include

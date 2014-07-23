@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 mkdir -p ${PACKAGES}
@@ -9,8 +9,8 @@ echoerr 'building xz'
 tar xf xz-5.0.3.tar.bz2
 cd xz-5.0.3
 ./configure --prefix=${BUILD}
-make -j$JOBS
-make install
+$MAKE -j$JOBS
+$MAKE install
 cd ${PACKAGES}
 
 # nose

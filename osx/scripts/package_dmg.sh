@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u
 set -o pipefail
 echo '...packaging DMG'
@@ -6,9 +6,9 @@ echo '...packaging DMG'
 rm -f ${ROOTDIR}/installer/*dmg
 rm -rf ${ROOTDIR}/installer/build/*pkg
 freeze ${ROOTDIR}/installer/Mapnik.packproj
-FOUND_VERSION=`${MAPNIK_CONFIG} --version`
+FOUND_VERSION=$(${MAPNIK_CONFIG} --version)
 echo "Mapnik v${FOUND_VERSION}" > ${ROOTDIR}/installer/build/build.log
-echo "Build on `date`" >> ${ROOTDIR}/installer/build/build.log
+echo "Build on $(date)" >> ${ROOTDIR}/installer/build/build.log
 echo "clang --version:" >> ${ROOTDIR}/installer/build/build.log
 ${CXX} -v >> ${ROOTDIR}/installer/build/build.log 2>&1
 cp ${ROOTDIR}/installer/media/welcome.txt ${ROOTDIR}/installer/build/README.txt
