@@ -13,7 +13,11 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=4
+    if [[ $UNAME == 'Darwin' ]]; then
+      JOBS=2
+    else
+      JOBS=6
+    fi
 fi
 
 download boost_${BOOST_VERSION2}.tar.bz2

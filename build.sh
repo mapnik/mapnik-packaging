@@ -109,29 +109,27 @@ function build_mapnik {
   b ./scripts/build_freetype.sh
   b ./scripts/build_harfbuzz.sh
   b ./scripts/build_libxml2.sh
-  BUILD_OPTIONAL_DEPS=true
-  if [ $BUILD_OPTIONAL_DEPS ]; then
-    echo 'skipping optional deps'
-    b ./scripts/build_jpeg_turbo.sh
-    b ./scripts/build_png.sh
-    b ./scripts/build_proj4.sh
-    b ./scripts/build_webp.sh
-    b ./scripts/build_tiff.sh
-    b ./scripts/build_sqlite.sh
-    #./scripts/build_geotiff.sh
-    if [[ ${BOOST_ARCH} != "arm" ]]; then
-      b ./scripts/build_expat.sh
-      b ./scripts/build_gdal.sh
-      b ./scripts/build_postgres.sh
+  b ./scripts/build_jpeg_turbo.sh
+  b ./scripts/build_png.sh
+  b ./scripts/build_proj4.sh
+  b ./scripts/build_webp.sh
+  b ./scripts/build_tiff.sh
+  b ./scripts/build_sqlite.sh
+  #./scripts/build_geotiff.sh
+  # for mapnik-vector-tile
+  b ./scripts/build_protobuf.sh
+  if [[ ${BOOST_ARCH} != "arm" ]]; then
+    b ./scripts/build_expat.sh
+    b ./scripts/build_gdal.sh
+    b ./scripts/build_postgres.sh
+    if [[ "${MINIMAL_MAPNIK:-false}" != false ]]; then
       b ./scripts/build_pixman.sh
       b ./scripts/build_fontconfig.sh
       b ./scripts/build_cairo.sh
-      b ./scripts/build_python_versions.sh
       b ./scripts/build_pycairo.sh
+      b ./scripts/build_python_versions.sh
     fi
   fi
-  # for mapnik-vector-tile
-  b ./scripts/build_protobuf.sh
   branch="master"
   if [[ "${CXX11}" == false ]]; then
       branch="2.3.x"
