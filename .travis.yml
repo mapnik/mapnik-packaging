@@ -9,7 +9,7 @@ env:
     #- CXX11=true TARGET=mobile_tools PLATFORM=Android
     - CXX11=true TARGET=build_osmium
     - CXX11=true TARGET=build_osrm QUIET=true
-    - CXX11=true TARGET=build_mapnik QUIET=true PUBLISH=true
+    - CXX11=true TARGET=build_mapnik QUIET=true PUBLISH=true MINIMAL_MAPNIK=true
     - CXX11=false TARGET=build_mapnik QUIET=true PUBLISH=true
     # broken protobuf-c build
     #- CXX11=false TARGET=build_osm2pgsql QUIET=true

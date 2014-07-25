@@ -122,7 +122,7 @@ function build_mapnik {
     b ./scripts/build_expat.sh
     b ./scripts/build_gdal.sh
     b ./scripts/build_postgres.sh
-    if [[ "${MINIMAL_MAPNIK:-false}" != false ]]; then
+    if [[ "${MINIMAL_MAPNIK:-false}" == false ]]; then
       b ./scripts/build_pixman.sh
       b ./scripts/build_fontconfig.sh
       b ./scripts/build_cairo.sh
