@@ -3,19 +3,24 @@ set -e -u
 set -o pipefail
 
 echoerr 'Building mapnik'
-
 cd ${MAPNIK_SOURCE}
+if [[ ${OFFICIAL_RELEASE} != true ]]; then
+    git pull
+fi
+
 if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -rf ${MAPNIK_BIN_SOURCE}
-  rm -f ${MAPNIK_BIN_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
-  rm -f ${MAPNIK_BIN_SOURCE}/tests/cpp_tests/*-bin
+  rm -f ${MAPNIK_SOURCE}/bindings/python/mapnik/{*.so,*.pyc}
+  rm -f ${MAPNIK_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
+  rm -f ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin
+  rm -f ${MAPNIK_SOURCE}/benchmark/out/*
   # TODO: https://github.com/mapnik/mapnik/issues/2112
   #$MAKE clean
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ $UNAME == 'Darwin' ]]; then
-      JOBS=1
+      JOBS=2
     else
       JOBS=3
     fi
@@ -66,11 +71,13 @@ echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
 echo "INPUT_PLUGINS = 'csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
-echo "DEMO = True" >> config.py
-echo "SVG_RENDERER = False" >> config.py
-echo "CAIRO = True" >> config.py
+echo "FAST = True" >> config.py
+echo "DEMO = False" >> config.py
 echo "PGSQL2SQLITE = False" >> config.py
 echo "SVG2PNG = False" >> config.py
+echo "SAMPLE_INPUT_PLUGINS=False" >> config.py
+echo "CPP_TESTS=True" >> config.py
+echo "BENCHMARK=False" >> config.py
 # note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
 echo "FRAMEWORK_PYTHON = False" >> config.py
 echo "FULL_LIB_PATH = False" >> config.py
@@ -78,18 +85,30 @@ echo "ENABLE_SONAME = False" >> config.py
 echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
 echo "XMLPARSER = 'ptree'" >> config.py
 
+MAPNIK_BINDINGS=""
+if [[ "${MINIMAL_MAPNIK:-false}" != false ]]; then
+    echo "SVG_RENDERER = False" >> config.py
+    echo "CAIRO = False" >> config.py
+else
+    MAPNIK_BINDINGS="python"
+    echo "SVG_RENDERER = True" >> config.py
+    echo "CAIRO = True" >> config.py
+fi
+
 if [[ $BOOST_ARCH == "arm" ]]; then
     HOST_ARGS='HOST=${ARCH_NAME}'
     echo "BINDINGS = ''" >> config.py
     echo "LINKING = 'static'" >> config.py
     echo "PLUGIN_LINKING = 'static'" >> config.py
+    MAPNIK_BINDINGS=""
 else
     HOST_ARGS=""
-    echo "BINDINGS = 'python'" >> config.py
 fi
 
+echo "BINDINGS = '${MAPNIK_BINDINGS}'" >> config.py
+
 set_dl_path "${SHARED_LIBRARY_PATH}"
-LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS} || cat config.log
+LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS}
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
 $MAKE install
 
