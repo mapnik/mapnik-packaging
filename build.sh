@@ -189,6 +189,7 @@ function build_osmium {
   ./scripts/build_boost.sh --with-test --with-program_options
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
+  b ./scripts/build_cryptopp.sh
   teardown
 }
 
