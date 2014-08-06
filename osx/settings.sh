@@ -525,9 +525,9 @@ function ensure_xz {
       # WARNING: this installs liblzma which we need to ensure that gdal does not link to
       download xz-${XZ_VERSION}.tar.bz2
       echoerr '*building xz*'
-      rm -rf xz-5.0.3
-      tar xf xz-5.0.3.tar.bz2
-      cd xz-5.0.3
+      rm -rf xz-${XZ_VERSION}
+      tar xf xz-${XZ_VERSION}.tar.bz2
+      cd xz-${XZ_VERSION}
       OLD_PLATFORM=${PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
