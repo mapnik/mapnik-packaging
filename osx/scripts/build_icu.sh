@@ -53,12 +53,19 @@ patch -N tools/toolutil/ucbuf.c ${PATCHES}/icu_debug.diff || true
 cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 # note: enable-draft is needed for U_ICUDATA_ENTRY_POINT
 ./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
---enable-draft \
---enable-static \
 --with-data-packaging=archive \
+--enable-renaming \
+--enable-strict \
+--enable-release \
+--enable-static \
+--enable-draft \
+--enable-tools \
+--disable-rpath \
+--disable-debug \
 --disable-shared \
 --disable-tests \
 --disable-extras \
+--disable-tracing \
 --disable-layout \
 --disable-icuio \
 --disable-samples \
