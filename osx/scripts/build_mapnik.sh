@@ -22,7 +22,7 @@ if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ $UNAME == 'Darwin' ]]; then
       JOBS=2
     else
-      JOBS=3
+      JOBS=2
     fi
 fi
 
