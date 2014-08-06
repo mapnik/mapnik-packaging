@@ -388,7 +388,7 @@ export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.10"
+export LIBPNG_VERSION="1.6.12"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
@@ -414,9 +414,10 @@ export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
 # http://www.freedesktop.org/software/fontconfig/release/
 # bz2
-export FONTCONFIG_VERSION="2.11.0"
+export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
-export PIXMAN_VERSION="0.32.4"
+# gz
+export PIXMAN_VERSION="0.32.6"
 export CAIRO_VERSION="1.12.16"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
@@ -424,7 +425,7 @@ export PY3CAIRO_VERSION="1.10.0"
 export GEOS_VERSION="3.4.2"
 export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
-export XZ_VERSION="5.0.3"
+export XZ_VERSION="5.0.5"
 export NOSE_VERSION="1.2.1"
 export NODE_VERSION="0.10.29"
 # stuck at feb 2012
