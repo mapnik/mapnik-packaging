@@ -433,7 +433,7 @@ export NODE_VERSION="0.10.29"
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="0.9.32"
+export HARFBUZZ_VERSION="0.9.34"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
