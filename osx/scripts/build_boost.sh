@@ -56,31 +56,42 @@ patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_pytho
 patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff || true
 patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
 
+BOOST_TOOLSET="gcc"
+if [[ $UNAME == 'Darwin' ]]; then
+  BOOST_TOOLSET="clang"
+fi
+
+
 gen_config() {
   echoerr 'generating user-config.jam'
+  echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
   if [ $PLATFORM = 'Android' ];  then
-      echo "using gcc : arm : ${CXX} ;" > user-config.jam
       patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
-  elif [ $PLATFORM = 'Linaro-softfp' ];  then
-      echo "using gcc : arm : ${CXX} ;" > user-config.jam
-  else
-      echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
   fi
+  if [[ "${AR:-false}" != false ]] || [[ "${RANLIB:-false}" != false ]]; then
+      echo ' : ' >> user-config.jam
+      if [[ "${AR:-false}" != false ]]; then
+          echo '<archiver>${AR} ' >> user-config.jam
+      fi
+      if [[ "${RANLIB:-false}" != false ]]; then
+          echo '<ranlib>${RANLIB} ' >> user-config.jam
+      fi
+  fi
+
+  echo ' ;' >> user-config.jam
 }
 
 bootstrap() {
   echoerr 'bootstrapping boost'
   gen_config
-  if [[ ${PLATFORM} == 'Android' ]];  then
-      ./bootstrap.sh --with-toolset=gcc
-  elif [[ ${PLATFORM} == 'Linaro-softfp' ]];  then
-      ./bootstrap.sh --with-toolset=gcc
+  if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
+      ./bootstrap.sh --with-toolset=clang
   else
-      ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
+      ./bootstrap.sh --with-toolset=gcc
   fi
 }
 
-# HINT: boostrap failed? look in bootstrap.log and then debug by building from hand:
+# HINT: bootstrap failed? look in bootstrap.log and then debug by building from hand:
 # cd .//tools/build/v2/engine/
 
 # HINT: problems with icu configure check?

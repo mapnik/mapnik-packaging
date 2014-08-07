@@ -110,7 +110,6 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
           export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
       fi
-      export BOOST_TOOLSET="clang"
     else
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
@@ -121,7 +120,6 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           export CORE_CXX="g++"
           export CXX_NAME="gcc-4.6"
       fi
-      export BOOST_TOOLSET="gcc"
     fi
     echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
     chmod +x ./ar-lto
@@ -156,7 +154,6 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
     export EXTRA_CPPFLAGS="--sysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabihf-g++"
     export CORE_CC="arm-linux-gnueabihf-gcc"
@@ -176,7 +173,6 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
-    export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabi-g++"
     export CORE_CC="arm-linux-gnueabi-gcc"
@@ -292,7 +288,6 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
     # and needs to default to 'gyp-mac-tool'
     #export LD="clang"
