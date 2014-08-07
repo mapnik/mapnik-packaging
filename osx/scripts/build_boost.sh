@@ -56,12 +56,6 @@ patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_pytho
 patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff || true
 patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
 
-BOOST_TOOLSET="gcc"
-if [[ $UNAME == 'Darwin' ]]; then
-  BOOST_TOOLSET="clang"
-fi
-
-
 gen_config() {
   echoerr 'generating user-config.jam'
   echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
