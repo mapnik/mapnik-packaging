@@ -80,10 +80,14 @@ export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 export SYSTEM_CURL="/usr/bin/curl"
 
+if [[ "${CXX:-false}" == false ]]; then
+    export CXX=
+fi
+
 if [[ ${PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
     if [[ "${CXX11}" == true ]]; then
-        if [[ "${CXX:-false}" == "clang++" ]]; then
+        if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
@@ -98,12 +102,13 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
 
     export EXTRA_LDFLAGS=""
-    if [[ "${CXX:-false}" == "clang++" ]]; then
+    if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
       if [[ "${CXX_NAME:-false}" == false ]]; then
-          # TODO - use -dumpversion
-          export CXX_NAME="clang-3.4"
+          CLANG_MAJOR=$(${CXX} -dumpversion | cut -d"." -f1)
+          CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
+          export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
       fi
       export BOOST_TOOLSET="clang"
     else
