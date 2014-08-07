@@ -16,7 +16,7 @@ if [[ ${HARFBUZZ_LATEST} == true ]]; then
     else
         cd harfbuzz-master
         git checkout .
-        git pull
+        git pull || true
         # TODO - depends on ragel
         ./autogen.sh ${HOST_ARG}
         make clean

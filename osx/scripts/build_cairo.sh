@@ -63,3 +63,12 @@ png_LIBS="-I${BUILD}/lib -lpng"
 $MAKE -j${JOBS}
 $MAKE install
 cd ${PACKAGES}
+
+: '
+
+On linux with clang-3.4 and -flto:
+
+Unknown float word ordering. You need to manually preset
+ax_cv_c_float_words_bigendian=no (or yes) according to your system.
+
+'

@@ -144,14 +144,14 @@ function build_mapnik {
   b ./scripts/build_protobuf.sh
   if [[ ${BOOST_ARCH} != "arm" ]]; then
     b ./scripts/build_expat.sh
-    b ./scripts/build_gdal.sh
     b ./scripts/build_postgres.sh
+    b ./scripts/build_python_versions.sh
     if [[ "${MINIMAL_MAPNIK:-false}" == false ]]; then
+      b ./scripts/build_gdal.sh
       b ./scripts/build_pixman.sh
       b ./scripts/build_fontconfig.sh
       b ./scripts/build_cairo.sh
       b ./scripts/build_pycairo.sh
-      b ./scripts/build_python_versions.sh
     fi
   fi
   branch="master"
