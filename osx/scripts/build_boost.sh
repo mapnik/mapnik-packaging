@@ -71,10 +71,10 @@ gen_config() {
   if [[ "${AR:-false}" != false ]] || [[ "${RANLIB:-false}" != false ]]; then
       echo ' : ' >> user-config.jam
       if [[ "${AR:-false}" != false ]]; then
-          echo '<archiver>${AR} ' >> user-config.jam
+          echo "<archiver>${AR} " >> user-config.jam
       fi
       if [[ "${RANLIB:-false}" != false ]]; then
-          echo '<ranlib>${RANLIB} ' >> user-config.jam
+          echo "<ranlib>${RANLIB} " >> user-config.jam
       fi
   fi
 
