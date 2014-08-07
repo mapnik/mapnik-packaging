@@ -136,17 +136,17 @@ function build_mapnik {
   b ./scripts/build_jpeg_turbo.sh
   b ./scripts/build_png.sh
   b ./scripts/build_proj4.sh
-  b ./scripts/build_webp.sh
-  b ./scripts/build_tiff.sh
-  b ./scripts/build_sqlite.sh
   #./scripts/build_geotiff.sh
   # for mapnik-vector-tile
   b ./scripts/build_protobuf.sh
   if [[ ${BOOST_ARCH} != "arm" ]]; then
-    b ./scripts/build_expat.sh
-    b ./scripts/build_postgres.sh
     b ./scripts/build_python_versions.sh
     if [[ "${MINIMAL_MAPNIK:-false}" == false ]]; then
+      b ./scripts/build_webp.sh
+      b ./scripts/build_tiff.sh
+      b ./scripts/build_sqlite.sh
+      b ./scripts/build_expat.sh
+      b ./scripts/build_postgres.sh
       b ./scripts/build_gdal.sh
       b ./scripts/build_pixman.sh
       b ./scripts/build_fontconfig.sh

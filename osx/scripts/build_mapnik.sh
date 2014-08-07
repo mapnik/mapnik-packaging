@@ -108,7 +108,7 @@ fi
 echo "BINDINGS = '${MAPNIK_BINDINGS}'" >> config.py
 
 set_dl_path "${SHARED_LIBRARY_PATH}"
-LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS}
+LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS} || cat config.log
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
 $MAKE install
 
