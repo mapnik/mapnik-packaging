@@ -23,6 +23,11 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   fi
 fi
 
+export USE_LTO=false
+if [[ ${LTO:-false} != false ]];
+    USE_LTO=true
+fi
+
 export BOOST_TOOLSET="gcc"
 if [[ ${UNAME} == 'Darwin' ]]; then
   export BOOST_TOOLSET="clang"
@@ -90,7 +95,7 @@ if [[ "${CXX:-false}" == false ]]; then
 fi
 
 if [[ ${PLATFORM} == 'Linux' ]]; then
-    export EXTRA_CFLAGS="-fPIC -flto"
+    export EXTRA_CFLAGS="-fPIC"
     if [[ "${CXX11}" == true ]]; then
         if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
@@ -106,7 +111,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
 
-    export EXTRA_LDFLAGS="-flto"
+    export EXTRA_LDFLAGS=""
     if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
@@ -126,10 +131,15 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           export CXX_NAME="gcc-4.6"
       fi
     fi
-    echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
-    chmod +x ./ar-lto
-    export AR=$(pwd)/ar-lto
-    export RANLIB=/bin/true
+    if [[ ${USE_LTO} == true ]]; then
+        echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
+        chmod +x ./ar-lto
+        export AR=$(pwd)/ar-lto
+        export RANLIB=/bin/true
+    else
+        export AR=ar
+        export RANLIB=ranlib
+    fi
     export ARCH_FLAGS=
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
@@ -273,17 +283,17 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-      export EXTRA_CFLAGS="-flto ${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+      export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
       # Note: stripping with -Wl,-S breaks dtrace
-      export EXTRA_LDFLAGS="-flto ${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -L${SDK_PATH}/usr/lib -Wl,-search_paths_first"
+      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -L${SDK_PATH}/usr/lib -Wl,-search_paths_first"
     else
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
       export SDK_PATH="${XCODE_PREFIX}/usr/"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
-      export EXTRA_CFLAGS="-flto "
+      export EXTRA_CFLAGS=""
       # todo -no_dead_strip_inits_and_terms
-      export EXTRA_LDFLAGS="-flto -Wl,-search_paths_first"
+      export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     fi
     if [[ "${CXX_NAME:-false}" == false ]]; then
         # TODO
@@ -360,10 +370,7 @@ export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
 export SHARED_LIBRARY_PATH="${LIBRARY_PATH}"
 export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
-export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
-# CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
-export LINK_FLAGS=${LDFLAGS}
-# silence warnings in C depedencies like cairo, freetype, libxml2, pixman
+# silence warnings in C dependencies like cairo, freetype, libxml2, pixman
 export WARNING_CFLAGS="-Wno-unknown-warning-option -Wno-long-long -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-strict-prototypes -Wno-unused-variable -Wno-redundant-decls -Wno-return-type -Wno-uninitialized -Wno-unused-result -Wno-format"
 # clang specific
 if test "${CC#*'clang'}" != "$CC"; then
@@ -372,6 +379,16 @@ fi
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 # we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
+export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
+
+if [[ ${USE_LTO} == true ]]; then
+    export CFLAGS="-flto ${CFLAGS}"
+    export CXXFLAGS="-flto ${CXXFLAGS}"
+    export LDFLAGS="-flto ${LDFLAGS}"
+fi
+
+# CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
+export LINK_FLAGS=${LDFLAGS}
 
 # tgz
 # NOTE: regenerate the .dat with new major versions via
