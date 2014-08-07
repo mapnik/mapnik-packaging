@@ -24,7 +24,7 @@ if [[ ${UNAME} == 'Darwin' ]]; then
 fi
 
 export USE_LTO=false
-if [[ ${LTO:-false} != false ]];
+if [[ ${LTO:-false} != false ]]; then
     USE_LTO=true
 fi
 
