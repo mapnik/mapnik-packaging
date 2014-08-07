@@ -123,8 +123,10 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
       fi
       export BOOST_TOOLSET="gcc"
     fi
-    export AR=ar
-    export RANLIB=ranlib
+    echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
+    chmod +x ./ar-lto
+    export AR=$(pwd)/ar-lto
+    export RANLIB=/bin/true
     export ARCH_FLAGS=
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
@@ -270,17 +272,17 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
-      export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
+      export EXTRA_CFLAGS="-flto ${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
       # Note: stripping with -Wl,-S breaks dtrace
-      export EXTRA_LDFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -L${SDK_PATH}/usr/lib -Wl,-search_paths_first"
+      export EXTRA_LDFLAGS="-flto ${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH} -L${SDK_PATH}/usr/lib -Wl,-search_paths_first"
     else
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
       export SDK_PATH="${XCODE_PREFIX}/usr/"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
-      export EXTRA_CFLAGS=""
+      export EXTRA_CFLAGS="-flto "
       # todo -no_dead_strip_inits_and_terms
-      export EXTRA_LDFLAGS="-Wl,-search_paths_first"
+      export EXTRA_LDFLAGS="-flto -Wl,-search_paths_first"
     fi
     if [[ "${CXX_NAME:-false}" == false ]]; then
         # TODO
