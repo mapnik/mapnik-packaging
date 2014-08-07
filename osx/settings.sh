@@ -103,7 +103,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
       export CORE_CXX="clang++"
       if [[ "${CXX_NAME:-false}" == false ]]; then
           # TODO - use -dumpversion
-          export CXX_NAME="clang-3.3"
+          export CXX_NAME="clang-3.4"
       fi
       export BOOST_TOOLSET="clang"
     else

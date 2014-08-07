@@ -39,6 +39,30 @@ function upgrade_gcc {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8
+    export CORE_CC="gcc-4.8"
+    export CORE_CXX="g++-4.8"
+    export CC="${CORE_CC}"
+    export CXX="${CORE_CXX}"
+    export CXX_NAME="gcc-4.8"
+}
+
+function upgrade_clang {
+    echo "adding clang + gcc-4.8 ppa"
+    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+    sudo apt-get install clang-3.4
+    echo "updating apt"
+    sudo apt-get update -qq -y
+    echo "installing C++11 compiler"
+    sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
+    sudo ln -s /usr/lib/llvm-3.4/lib/LLVMgold.so /usr/lib/LLVMgold.so
+    sudo ln -s /usr/lib/llvm-3.4/lib/libLTO.so /usr/lib/libLTO.so
+    sudo apt-get install binutils-gold
+    export CORE_CC="/usr/bin/clang"
+    export CORE_CXX="/usr/bin/clang++"
+    export CC="${CORE_CC}"
+    export CXX="${CORE_CXX}"
+    export CXX_NAME="clang-3.4"
 }
 
 function prep_linux {
@@ -49,7 +73,7 @@ function prep_linux {
       source Linux.sh
   fi
   if [[ "${CXX11}" == true ]]; then
-    upgrade_gcc
+    upgrade_clang
   else
     echo "updating apt"
     sudo apt-get update -y -qq
@@ -138,7 +162,7 @@ function build_mapnik {
       git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
       git branch -v
   fi
-  if [ "${CXX11}" = false ]; then
+  if [[ "${CXX11}" == false ]]; then
       cd ${MAPNIK_SOURCE}
       git checkout $branch
       git pull
@@ -157,11 +181,6 @@ function build_osrm {
   basic_prep
   if [[ $UNAME == 'Linux' ]]; then
       upgrade_gcc
-      export CORE_CC="gcc-4.8"
-      export CC="gcc-4.8"
-      export CORE_CXX="g++-4.8"
-      export CXX="g++-4.8"
-      export CXX_NAME="gcc-4.8"
   fi
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
