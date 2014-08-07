@@ -85,7 +85,7 @@ if [[ "${CXX:-false}" == false ]]; then
 fi
 
 if [[ ${PLATFORM} == 'Linux' ]]; then
-    export EXTRA_CFLAGS="-fPIC"
+    export EXTRA_CFLAGS="-fPIC -flto"
     if [[ "${CXX11}" == true ]]; then
         if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
@@ -101,7 +101,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
 
-    export EXTRA_LDFLAGS=""
+    export EXTRA_LDFLAGS="-flto"
     if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
