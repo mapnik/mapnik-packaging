@@ -55,8 +55,12 @@ function upgrade_clang {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
-    sudo ln -s /usr/lib/llvm-3.4/lib/LLVMgold.so /usr/lib/LLVMgold.so
-    sudo ln -s /usr/lib/llvm-3.4/lib/libLTO.so /usr/lib/libLTO.so
+    if [[ ! -f /usr/lib/LLVMgold.so ]]; then
+        sudo ln -s /usr/lib/llvm-3.4/lib/LLVMgold.so /usr/lib/LLVMgold.so
+    fi
+    if [[ ! -f /usr/lib/libLTO.so ]]; then
+      sudo ln -s /usr/lib/llvm-3.4/lib/libLTO.so /usr/lib/libLTO.so
+    fi
     sudo apt-get install binutils-gold
     export CORE_CC="/usr/bin/clang"
     export CORE_CXX="/usr/bin/clang++"
