@@ -43,14 +43,13 @@ function upgrade_gcc {
     export CORE_CXX="g++-4.8"
     export CC="${CORE_CC}"
     export CXX="${CORE_CXX}"
-    export CXX_NAME="gcc-4.8"
 }
 
 function upgrade_clang {
     echo "adding clang + gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
-    sudo apt-get install clang-3.4
+    sudo apt-get install clang-3.5
     echo "updating apt"
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
@@ -66,7 +65,6 @@ function upgrade_clang {
     export CORE_CXX="/usr/bin/clang++"
     export CC="${CORE_CC}"
     export CXX="${CORE_CXX}"
-    export CXX_NAME="clang-3.4"
 }
 
 function prep_linux {
