@@ -150,6 +150,10 @@ if [[ $BUILD_WITH_SPATIALITE != "no" ]] || [[ $BUILD_WITH_GEOS != "no" ]]; then
     fi
 fi
 
+# note: it might be tempting to build with --without-libtool
+# but I find that will only lead to a static libgdal.a and will
+# not produce a shared library no matter if --enable-shared is passed
+
 LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
 --with-threads=yes \
@@ -173,7 +177,9 @@ ${FGDB_ARGS} \
 --with-gif=no \
 --with-pg=no \
 --with-grib=no \
---with-freexl=no
+--with-freexl=no \
+--with-avx=no \
+--with-sse=no
 
 $MAKE -j${JOBS}
 $MAKE install
