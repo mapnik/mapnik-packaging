@@ -63,10 +63,10 @@ function upgrade_clang {
         sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so /usr/lib/libLTO.so
     fi
     # for bjam
-    if [[ ! -h "/usr/lib/clang" ]] && [[ ! -f "/usr/lib/clang" ]]; then
+    if [[ ! -h "/usr/bin/clang" ]] && [[ ! -f "/usr/bin/clang" ]]; then
         sudo ln -s /usr/bin/clang-${CLANG_VERSION} /usr/bin/clang
     fi
-    if [[ ! -h "/usr/lib/clang++" ]] && [[ ! -f "/usr/lib/clang" ]]; then
+    if [[ ! -h "/usr/bin/clang++" ]] && [[ ! -f "/usr/bin/clang++" ]]; then
         sudo ln -s /usr/bin/clang++-${CLANG_VERSION} /usr/bin/clang++
     fi
     sudo apt-get install binutils-gold
