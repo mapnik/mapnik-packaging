@@ -219,7 +219,7 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
     export ANDROID_NDK_VERSION="r10"
-    export API_LEVEL="android-19"
+    export API_LEVEL="android-L"
     ${ROOTDIR}/scripts/setup-android-ndk.sh
     export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
     export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.9"
