@@ -117,6 +117,8 @@ if [[ ! -f ./dist/bin/bcp ]]; then
         ../../b2 -j${JOBS} ${B2_VERBOSE}
         cd ../../
     fi
+else
+    bootstrap
 fi
 
 
@@ -139,26 +141,28 @@ if [[ ${UNAME} == 'Darwin' ]]; then
            : <toolset>${BOOST_TOOLSET} # condition
            ;
     " >> $1
-else if [[ ${UNAME} == 'FreeBSD']]; then
-    echo "
-      using python
-           : ${PYTHON_VERSION} # version
-           : /usr/local/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
-           : /usr/local/include/python${PYTHON_VERSION} # includes
-           : /usr/local/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
-           : <toolset>${BOOST_TOOLSET} # condition
-           ;
-    " >> $1
 else
-    echo "
-      using python
-           : ${PYTHON_VERSION} # version
-           : /usr/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
-           : /usr/include/python${PYTHON_VERSION} # includes
-           : /usr/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
-           : <toolset>${BOOST_TOOLSET} # condition
-           ;
-    " >> $1
+  if [[ ${UNAME} == 'FreeBSD' ]]; then
+      echo "
+        using python
+             : ${PYTHON_VERSION} # version
+             : /usr/local/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+             : /usr/local/include/python${PYTHON_VERSION} # includes
+             : /usr/local/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
+             : <toolset>${BOOST_TOOLSET} # condition
+             ;
+      " >> $1
+  else
+      echo "
+        using python
+             : ${PYTHON_VERSION} # version
+             : /usr/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+             : /usr/include/python${PYTHON_VERSION} # includes
+             : /usr/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
+             : <toolset>${BOOST_TOOLSET} # condition
+             ;
+      " >> $1
+  fi
 fi
 }
 
