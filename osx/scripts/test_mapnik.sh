@@ -7,6 +7,11 @@ if [ ! -d "${MAPNIK_BIN_SOURCE}/share/mapnik" ]; then
   ${ROOTDIR}/scripts/post_build_fix.sh
 fi
 
+if [[ ${USE_LTO} == true ]]; then
+    OLD_LD_PRELOAD_VALUE="${LD_PRELOAD}"
+    export LD_PRELOAD="$(pwd)/plugins/input/libgdal.so.1"
+fi
+
 echoerr 'testing build in place'
 export ICU_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
 export GDAL_DATA="${MAPNIK_BIN_SOURCE}/share/mapnik/gdal"
@@ -29,4 +34,8 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
           echo skipping test against python $i
       fi
     done
+fi
+
+if [[ ${USE_LTO} == true ]]; then
+    export LD_PRELOAD="${OLD_LD_PRELOAD_VALUE}"
 fi
