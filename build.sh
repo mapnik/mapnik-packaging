@@ -152,7 +152,6 @@ function build_mapnik {
     if [[ "${MINIMAL_MAPNIK:-false}" == false ]]; then
       b ./scripts/build_gdal.sh
       b ./scripts/build_pixman.sh
-      b ./scripts/build_fontconfig.sh
       b ./scripts/build_cairo.sh
       b ./scripts/build_pycairo.sh
       b ./scripts/build_boost.sh --with-python
