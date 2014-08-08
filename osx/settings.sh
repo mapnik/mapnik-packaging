@@ -218,10 +218,10 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
-    export ANDROID_NDK_VERSION="r9d"
+    export ANDROID_NDK_VERSION="r10"
     export API_LEVEL="android-19"
-    ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
-    export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
+    ${ROOTDIR}/scripts/setup-android-ndk.sh
+    export NDK_PATH="${PACKAGES}/android-ndk64-${ANDROID_NDK_VERSION}"
     #ln -s ../android/android-ndk-r9 ./android-ndk-r9
     export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
