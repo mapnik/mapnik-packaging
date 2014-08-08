@@ -23,6 +23,18 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   fi
 fi
 
+export USE_LTO=false
+if [[ ${LTO:-false} != false ]]; then
+    USE_LTO=true
+    # assist cairo configure
+    export ax_cv_c_float_words_bigendian=no
+fi
+
+export BOOST_TOOLSET="gcc"
+if [[ ${UNAME} == 'Darwin' ]]; then
+  export BOOST_TOOLSET="clang"
+fi
+
 if [[ "${CXX11}" = true ]]; then
   export CXX_STANDARD="cpp11"
 else
@@ -110,7 +122,6 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
           export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
       fi
-      export BOOST_TOOLSET="clang"
     else
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
@@ -121,10 +132,16 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           export CORE_CXX="g++"
           export CXX_NAME="gcc-4.6"
       fi
-      export BOOST_TOOLSET="gcc"
     fi
-    export AR=ar
-    export RANLIB=ranlib
+    if [[ ${USE_LTO} == true ]]; then
+        echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
+        chmod +x ./ar-lto
+        export AR=$(pwd)/ar-lto
+        export RANLIB=/bin/true
+    else
+        export AR=ar
+        export RANLIB=ranlib
+    fi
     export ARCH_FLAGS=
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
@@ -154,7 +171,6 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
     export EXTRA_CPPFLAGS="--sysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabihf-g++"
     export CORE_CC="arm-linux-gnueabihf-gcc"
@@ -174,7 +190,6 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
-    export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabi-g++"
     export CORE_CC="arm-linux-gnueabi-gcc"
@@ -290,7 +305,6 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
     # and needs to default to 'gyp-mac-tool'
     #export LD="clang"
@@ -358,10 +372,7 @@ export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
 export SHARED_LIBRARY_PATH="${LIBRARY_PATH}"
 export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
-export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
-# CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
-export LINK_FLAGS=${LDFLAGS}
-# silence warnings in C depedencies like cairo, freetype, libxml2, pixman
+# silence warnings in C dependencies like cairo, freetype, libxml2, pixman
 export WARNING_CFLAGS="-Wno-unknown-warning-option -Wno-long-long -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-strict-prototypes -Wno-unused-variable -Wno-redundant-decls -Wno-return-type -Wno-uninitialized -Wno-unused-result -Wno-format"
 # clang specific
 if test "${CC#*'clang'}" != "$CC"; then
@@ -370,6 +381,16 @@ fi
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 # we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
+export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
+
+if [[ ${USE_LTO} == true ]]; then
+    export CFLAGS="-flto ${CFLAGS}"
+    export CXXFLAGS="-flto ${CXXFLAGS}"
+    export LDFLAGS="-flto ${LDFLAGS}"
+fi
+
+# CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
+export LINK_FLAGS=${LDFLAGS}
 
 # tgz
 # NOTE: regenerate the .dat with new major versions via

@@ -54,6 +54,8 @@ if [ $UNAME = 'Darwin' ]; then
         done
     
     fi
+else
+    echoerr 'skipping pycairo build (only needed on osx)'
 fi
 
 cd ${PACKAGES}

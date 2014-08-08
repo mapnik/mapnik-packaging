@@ -18,7 +18,7 @@ if [[ $TIFF_LATEST == true ]]; then
         cd libtiff
     else
         cd libtiff
-        git pull
+        git pull || true
         if [[ -f Makefile ]]; then
             $MAKE clean
             $MAKE distclean

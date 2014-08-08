@@ -27,7 +27,8 @@ if [[ -d boost_${BOOST_VERSION2}-${ARCH_NAME} ]]; then
   cd boost_${BOOST_VERSION2}-${ARCH_NAME}
   rm -rf bin.v2/ || true
   rm -rf stage/
-  rm -rf dist/
+  # keep bcp around
+  #rm -rf dist/
   rm -f project-config.jam*
 else
   rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
@@ -58,29 +59,34 @@ patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || 
 
 gen_config() {
   echoerr 'generating user-config.jam'
+  echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
   if [ $PLATFORM = 'Android' ];  then
-      echo "using gcc : arm : ${CXX} ;" > user-config.jam
       patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
-  elif [ $PLATFORM = 'Linaro-softfp' ];  then
-      echo "using gcc : arm : ${CXX} ;" > user-config.jam
-  else
-      echo "using ${BOOST_TOOLSET} : : $(which ${CXX}) ;" > user-config.jam
   fi
+  if [[ "${AR:-false}" != false ]] || [[ "${RANLIB:-false}" != false ]]; then
+      echo ' : ' >> user-config.jam
+      if [[ "${AR:-false}" != false ]]; then
+          echo "<archiver>${AR} " >> user-config.jam
+      fi
+      if [[ "${RANLIB:-false}" != false ]]; then
+          echo "<ranlib>${RANLIB} " >> user-config.jam
+      fi
+  fi
+
+  echo ' ;' >> user-config.jam
 }
 
 bootstrap() {
   echoerr 'bootstrapping boost'
   gen_config
-  if [[ ${PLATFORM} == 'Android' ]];  then
-      ./bootstrap.sh --with-toolset=gcc
-  elif [[ ${PLATFORM} == 'Linaro-softfp' ]];  then
-      ./bootstrap.sh --with-toolset=gcc
+  if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
+      ./bootstrap.sh --with-toolset=clang
   else
-      ./bootstrap.sh --with-toolset=${BOOST_TOOLSET}
+      ./bootstrap.sh --with-toolset=gcc
   fi
 }
 
-# HINT: boostrap failed? look in bootstrap.log and then debug by building from hand:
+# HINT: bootstrap failed? look in bootstrap.log and then debug by building from hand:
 # cd .//tools/build/v2/engine/
 
 # HINT: problems with icu configure check?
@@ -111,10 +117,63 @@ if [[ ! -f ./dist/bin/bcp ]]; then
         ../../b2 -j${JOBS} ${B2_VERBOSE}
         cd ../../
     fi
+else
+    bootstrap
 fi
+
+
+
+write_python_config() {
+# usage:
+# write_python_config <user-config.jam> <version> <base> <variant>
+PYTHON_VERSION=$2
+# note: apple pythons need '/System'
+PYTHON_BASE=$3
+# note: python 3 uses 'm'
+PYTHON_VARIANT=$4
+if [[ ${UNAME} == 'Darwin' ]]; then
+    echo "
+      using python
+           : ${PYTHON_VERSION} # version
+           : ${PYTHON_BASE}/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+           : ${PYTHON_BASE}/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/include/python${PYTHON_VERSION}${PYTHON_VARIANT} # includes
+           : ${PYTHON_BASE}/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT} # a lib actually symlink
+           : <toolset>${BOOST_TOOLSET} # condition
+           ;
+    " >> $1
+else
+  if [[ ${UNAME} == 'FreeBSD' ]]; then
+      echo "
+        using python
+             : ${PYTHON_VERSION} # version
+             : /usr/local/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+             : /usr/local/include/python${PYTHON_VERSION} # includes
+             : /usr/local/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
+             : <toolset>${BOOST_TOOLSET} # condition
+             ;
+      " >> $1
+  else
+      echo "
+        using python
+             : ${PYTHON_VERSION} # version
+             : /usr/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+             : /usr/include/python${PYTHON_VERSION} # includes
+             : /usr/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
+             : <toolset>${BOOST_TOOLSET} # condition
+             ;
+      " >> $1
+  fi
+fi
+}
 
 # if we've requested libraries
 if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
+
+    # add to user-config.jam if python is requested
+    if test "${TARGET_NAMES#*'--with-python'}" != "${TARGET_NAMES}"; then
+        cp user-config.jam user-config.jam.bak
+        write_python_config user-config.jam "2.7" "/System" ""
+    fi
 
     BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
     BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
@@ -155,6 +214,11 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         linkflags="${BOOST_LDFLAGS}" \
         cxxflags="${BOOST_CXXFLAGS}" \
         stage install
+
+    # post install python fixes
+    if test "${TARGET_NAMES#*'--with-python'}" != "${TARGET_NAMES}"; then
+        mv ${BUILD}/lib/libboost_python.a ${BUILD}/lib/libboost_python-2.7.a
+    fi
 
     # clear out shared libs
     #check_and_clear_libs

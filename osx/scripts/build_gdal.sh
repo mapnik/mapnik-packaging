@@ -179,6 +179,19 @@ $MAKE -j${JOBS}
 $MAKE install
 cd ${PACKAGES}
 
+
+: '
+
+with -flto on os x with: Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
+
+perhaps: http://llvm.org/bugs/show_bug.cgi?id=15929 or http://llvm.org/bugs/show_bug.cgi?id=19492
+
+LLVM ERROR: Do not know how to split the result of this operator!
+
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[1]: *** [libgdal.la] Error 1
+
+'
 #check_and_clear_libs
 
 # build mdb plugin
