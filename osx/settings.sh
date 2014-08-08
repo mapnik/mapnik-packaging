@@ -148,7 +148,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     if [[ "${CXX11}" == true ]]; then
       export STDLIB="libstdcpp"
-      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_CXXFLAGS="-std=c++11"
       export STDLIB_LDFLAGS=""
     else
       export STDLIB="libstdcpp"
