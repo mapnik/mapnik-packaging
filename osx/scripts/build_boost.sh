@@ -27,7 +27,8 @@ if [[ -d boost_${BOOST_VERSION2}-${ARCH_NAME} ]]; then
   cd boost_${BOOST_VERSION2}-${ARCH_NAME}
   rm -rf bin.v2/ || true
   rm -rf stage/
-  rm -rf dist/
+  # keep bcp around
+  #rm -rf dist/
   rm -f project-config.jam*
 else
   rm -rf boost_${BOOST_VERSION2}-${ARCH_NAME}
@@ -118,8 +119,57 @@ if [[ ! -f ./dist/bin/bcp ]]; then
     fi
 fi
 
+
+
+write_python_config() {
+# usage:
+# write_python_config <user-config.jam> <version> <base> <variant>
+PYTHON_VERSION=$2
+# note: apple pythons need '/System'
+PYTHON_BASE=$3
+# note: python 3 uses 'm'
+PYTHON_VARIANT=$4
+if [[ ${UNAME} == 'Darwin' ]]; then
+    echo "
+      using python
+           : ${PYTHON_VERSION} # version
+           : ${PYTHON_BASE}/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+           : ${PYTHON_BASE}/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/include/python${PYTHON_VERSION}${PYTHON_VARIANT} # includes
+           : ${PYTHON_BASE}/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT} # a lib actually symlink
+           : <toolset>${BOOST_TOOLSET} # condition
+           ;
+    " >> $1
+else if [[ ${UNAME} == 'FreeBSD']]; then
+    echo "
+      using python
+           : ${PYTHON_VERSION} # version
+           : /usr/local/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+           : /usr/local/include/python${PYTHON_VERSION} # includes
+           : /usr/local/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
+           : <toolset>${BOOST_TOOLSET} # condition
+           ;
+    " >> $1
+else
+    echo "
+      using python
+           : ${PYTHON_VERSION} # version
+           : /usr/bin/python${PYTHON_VERSION}${PYTHON_VARIANT} # cmd-or-prefix
+           : /usr/include/python${PYTHON_VERSION} # includes
+           : /usr/lib/python${PYTHON_VERSION}/config${PYTHON_VARIANT}
+           : <toolset>${BOOST_TOOLSET} # condition
+           ;
+    " >> $1
+fi
+}
+
 # if we've requested libraries
 if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
+
+    # add to user-config.jam if python is requested
+    if test "${TARGET_NAMES#*'--with-python'}" != "${TARGET_NAMES}"; then
+        cp user-config.jam user-config.jam.bak
+        write_python_config user-config.jam "2.7" "/System" ""
+    fi
 
     BOOST_LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
     BOOST_CXXFLAGS="${STDLIB_CXXFLAGS} ${CXXFLAGS}"
@@ -160,6 +210,11 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         linkflags="${BOOST_LDFLAGS}" \
         cxxflags="${BOOST_CXXFLAGS}" \
         stage install
+
+    # post install python fixes
+    if test "${TARGET_NAMES#*'--with-python'}" != "${TARGET_NAMES}"; then
+        mv ${BUILD}/lib/libboost_python.a ${BUILD}/lib/libboost_python-2.7.a
+    fi
 
     # clear out shared libs
     #check_and_clear_libs
