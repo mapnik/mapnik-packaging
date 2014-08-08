@@ -48,21 +48,23 @@ function upgrade_gcc {
 function upgrade_clang {
     echo "adding clang + gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    sudo add-apt-repository 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
-    sudo apt-get install clang-3.5
     echo "updating apt"
-    sudo apt-get update -qq -y
+    sudo apt-get update -y
+    CLANG_VERSION="3.5"
+    sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
     sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
-    if [[ ! -f /usr/lib/LLVMgold.so ]]; then
-        sudo ln -s /usr/lib/llvm-3.4/lib/LLVMgold.so /usr/lib/LLVMgold.so
+    if [[ ! -h /usr/lib/LLVMgold.so ]]; then
+        sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so /usr/lib/LLVMgold.so
     fi
-    if [[ ! -f /usr/lib/libLTO.so ]]; then
-        sudo ln -s /usr/lib/llvm-3.4/lib/libLTO.so /usr/lib/libLTO.so
+    if [[ ! -h /usr/lib/libLTO.so ]]; then
+        sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so /usr/lib/libLTO.so
     fi
     sudo apt-get install binutils-gold
-    export CORE_CC="/usr/bin/clang"
-    export CORE_CXX="/usr/bin/clang++"
+    export CORE_CC="/usr/bin/clang-${CLANG_VERSION}"
+    export CORE_CXX="/usr/bin/clang++-${CLANG_VERSION}"
     export CC="${CORE_CC}"
     export CXX="${CORE_CXX}"
 }
