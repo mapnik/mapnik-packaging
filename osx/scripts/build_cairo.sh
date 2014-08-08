@@ -19,15 +19,17 @@ CFLAGS="${CFLAGS} -Wno-enum-conversion "
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
 png_CFLAGS="-I${BUILD}/include"
 png_LIBS="-I${BUILD}/lib -lpng"
-./configure \
+patch -N test/Makefile.am ${PATCHES}/cairo-disable-tests.diff || true
+./autogen.sh \
   --enable-static --disable-shared \
   --enable-pdf=yes \
   --enable-ft=yes \
   --enable-png=yes \
   --enable-svg=yes \
   --enable-ps=yes \
-  --enable-fc=yes \
-  --enable-interpreter=yes \
+  --enable-fc=no \
+  --enable-script=no \
+  --enable-interpreter=no \
   --enable-quartz=no \
   --enable-quartz-image=no \
   --enable-quartz-font=no \
@@ -58,6 +60,8 @@ png_LIBS="-I${BUILD}/lib -lpng"
   --enable-xcb=no \
   --enable-xlib-xcb=no \
   --enable-xcb-shm=no \
+  --enable-full-testing=no \
+  --enable-symbol-lookup=no \
   --disable-dependency-tracking \
   --prefix=${BUILD}
 $MAKE -j${JOBS}

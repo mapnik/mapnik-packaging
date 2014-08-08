@@ -1,0 +1,10 @@
+--- test/Makefile.am	2014-08-07 19:08:48.000000000 -0700
++++ test/Makefile.am	2014-08-07 19:08:35.000000000 -0700
+@@ -71,7 +71,6 @@
+ endif
+ test_sources += $(test)
+ 
+-noinst_PROGRAMS = cairo-test-suite$(EXEEXT) # always build
+ noinst_SCRIPTS = check-refs.sh
+ 
+ TESTS += cairo-test-suite$(EXEEXT)
