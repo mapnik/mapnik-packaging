@@ -218,12 +218,11 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
-    export ANDROID_NDK_VERSION="r9d"
-    export API_LEVEL="android-19"
-    ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
+    export ANDROID_NDK_VERSION="r10"
+    export API_LEVEL="android-L"
+    ${ROOTDIR}/scripts/setup-android-ndk.sh
     export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
-    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.9"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
     export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
@@ -453,7 +452,6 @@ export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.5"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.29"
 # stuck at feb 2012
 # https://code.google.com/p/sparsehash/source/list
 export SPARSEHASH_VERSION="2.0.2"
@@ -467,7 +465,8 @@ export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
 export OPENSSL_VERSION="1.0.1h"
-export LIBUV_VERSION="0.11.25"
+export LIBUV_VERSION="0.11.28"
+export NODE_VERSION="0.10.30"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr

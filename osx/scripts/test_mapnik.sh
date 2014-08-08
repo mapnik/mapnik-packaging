@@ -14,7 +14,9 @@ export PROJ_LIB="${MAPNIK_BIN_SOURCE}/share/mapnik/proj"
 cd ${MAPNIK_SOURCE}
 
 if [[ ${USE_LTO} == true ]]; then
-    OLD_LD_PRELOAD_VALUE="${LD_PRELOAD}"
+    if [[ "${LDPRELOAD:-false}" != false ]]; then
+        OLD_LD_PRELOAD_VALUE="${LD_PRELOAD}"
+    fi
     export LD_PRELOAD="$(pwd)/plugins/input/libgdal.so.1"
 fi
 
@@ -38,5 +40,7 @@ if [[ ${OFFICIAL_RELEASE} == true ]]; then
 fi
 
 if [[ ${USE_LTO} == true ]]; then
-    export LD_PRELOAD="${OLD_LD_PRELOAD_VALUE}"
+    if [[ "${OLD_LD_PRELOAD_VALUE:-false}" != false ]]; then
+        export LD_PRELOAD="${OLD_LD_PRELOAD_VALUE}"
+    fi
 fi
