@@ -64,15 +64,9 @@ patch -N test/Makefile.am ${PATCHES}/cairo-disable-tests.diff || true
   --enable-symbol-lookup=no \
   --disable-dependency-tracking \
   --prefix=${BUILD}
-$MAKE -j${JOBS}
-$MAKE install
+set +e
+# try to avoid: make[6]: [install-data-local] Error 1 (ignored)
+$MAKE -j${JOBS} -i -k
+$MAKE install -i -k
+set -e
 cd ${PACKAGES}
-
-: '
-
-On linux with clang-3.4 and -flto:
-
-Unknown float word ordering. You need to manually preset
-ax_cv_c_float_words_bigendian=no (or yes) according to your system.
-
-'
