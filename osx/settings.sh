@@ -221,9 +221,8 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export ANDROID_NDK_VERSION="r10"
     export API_LEVEL="android-19"
     ${ROOTDIR}/scripts/setup-android-ndk.sh
-    export NDK_PATH="${PACKAGES}/android-ndk64-${ANDROID_NDK_VERSION}"
-    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
+    export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.9"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
     export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
