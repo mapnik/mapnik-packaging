@@ -69,7 +69,10 @@ function upgrade_clang {
     if [[ ! -h "/usr/bin/clang++" ]] && [[ ! -f "/usr/bin/clang++" ]]; then
         sudo ln -s /usr/bin/clang++-${CLANG_VERSION} /usr/bin/clang++
     fi
-    sudo apt-get install binutils-gold
+    sudo apt-get install -y binutils-gold
+    # TODO - needed on trusty for pkg-config
+    #sudo rm /usr/bin/ld
+    #sudo ln -s /usr/bin/ld.gold /usr/bin/ld
     export CORE_CC="/usr/bin/clang-${CLANG_VERSION}"
     export CORE_CXX="/usr/bin/clang++-${CLANG_VERSION}"
     export CC="${CORE_CC}"
