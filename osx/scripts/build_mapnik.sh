@@ -26,6 +26,10 @@ if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     fi
 fi
 
+if [[ ${USE_LTO} == true ]]; then
+   JOBS=1
+fi
+
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
 echo "DESTDIR = '${MAPNIK_DESTDIR}'" >> config.py
 echo "CXX = '${CXX}'" >> config.py
