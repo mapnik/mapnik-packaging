@@ -54,7 +54,7 @@ function upgrade_clang {
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
     sudo apt-get update -y
-    CLANG_VERSION="3.5"
+    CLANG_VERSION="3.4"
     sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
     if [[ `lsb_release --release | cut -f2` != "14.04" ]]; then
