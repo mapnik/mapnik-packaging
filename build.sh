@@ -85,17 +85,12 @@ function upgrade_clang {
 
 function prep_linux {
   cd osx
+  upgrade_clang
   if [[ "${PLATFORM:-false}" != false ]]; then
       source ${PLATFORM}.sh
   else
       source Linux.sh
   fi
-  #if [[ "${CXX11}" == true ]]; then
-    upgrade_clang
-  #else
-  #  echo "updating apt"
-  #  sudo apt-get update -y -qq
-  #fi;
   echo "installing build tools"
   sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
   mkdir -p ${BUILD}
