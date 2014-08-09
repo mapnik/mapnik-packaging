@@ -3,6 +3,7 @@
 set -u
 
 export PLATFORM="iPhoneOS"
+export XCODE_PLATFORM="${PLATFORM}"
 export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="arm"
 export ARCH_NAME="armv7"

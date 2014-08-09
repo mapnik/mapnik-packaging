@@ -280,9 +280,9 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
-      export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
+      export SDK_ROOT="${XCODE_PREFIX}/Platforms/${XCODE_PLATFORM}.platform/Developer"
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
-      export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
+      export PLATFORM_SDK="${XCODE_PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
       # Note: stripping with -Wl,-S breaks dtrace
