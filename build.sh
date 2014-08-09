@@ -48,14 +48,18 @@ function upgrade_gcc {
 function upgrade_clang {
     echo "adding clang + gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo add-apt-repository 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'
+    if [[ `lsb_release --release | cut -f2` != "14.04" ]];
+        sudo add-apt-repository 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'
+    fi
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
     sudo apt-get update -y
     CLANG_VERSION="3.5"
     sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
-    sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
+    if [[ `lsb_release --release | cut -f2` != "14.04" ]];
+        sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
+    fi
     if [[ ! -h "/usr/lib/LLVMgold.so" ]] && [[ ! -f "/usr/lib/LLVMgold.so" ]]; then
         sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so /usr/lib/LLVMgold.so
     fi
