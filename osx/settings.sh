@@ -41,6 +41,9 @@ else
   export CXX_STANDARD="cpp03"
 fi
 
+function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
+export -f echoerr
+
 function nprocs() {
     # number of processors on the current system
     case "${UNAME}" in
@@ -99,7 +102,7 @@ fi
 if [[ ${PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
     if [[ "${CXX11}" == true ]]; then
-        if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
+        if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
@@ -112,17 +115,17 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
-
     export EXTRA_LDFLAGS=""
-    if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
+
+    if [[ "${CXX:-false}" != false ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+      echoerr "using clang"
       export CORE_CC="clang"
       export CORE_CXX="clang++"
-      if [[ "${CXX_NAME:-false}" == false ]]; then
-          CLANG_MAJOR=$(${CXX} -dumpversion | cut -d"." -f1)
-          CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
-          export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
-      fi
+      CLANG_MAJOR=$(${CXX} -dumpversion | cut -d"." -f1)
+      CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
+      export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
     else
+      echoerr "falling back to gcc"
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
@@ -467,9 +470,6 @@ export CURL_VERSION="7.36.0"
 export OPENSSL_VERSION="1.0.1h"
 export LIBUV_VERSION="0.11.28"
 export NODE_VERSION="0.10.30"
-
-function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
-export -f echoerr
 
 function download {
     if [[ ! -f $1 ]]; then
