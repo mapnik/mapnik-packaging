@@ -53,32 +53,40 @@ function upgrade_clang {
     fi
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
-    sudo apt-get update -y
+    sudo apt-get update -y -qq
     CLANG_VERSION="3.4"
+    echo "installing clang-${CLANG_VERSION}"
+    apt-cache policy clang-${CLANG_VERSION}
     sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
     if [[ `lsb_release --release | cut -f2` != "14.04" ]]; then
+        echo 'upgrading libstdc++'
         sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
     fi
     if [[ ! -h "/usr/lib/LLVMgold.so" ]] && [[ ! -f "/usr/lib/LLVMgold.so" ]]; then
+        echo "symlinking /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so"
         sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so /usr/lib/LLVMgold.so
     fi
     if [[ ! -h "/usr/lib/libLTO.so" ]] && [[ ! -f "/usr/lib/libLTO.so" ]]; then
+        echo "symlinking /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so"
         sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so /usr/lib/libLTO.so
     fi
     # for bjam
     if [[ ! -h "/usr/bin/clang" ]] && [[ ! -f "/usr/bin/clang" ]]; then
+        echo "symlinking /usr/bin/clang-${CLANG_VERSION}"
         sudo ln -s /usr/bin/clang-${CLANG_VERSION} /usr/bin/clang
     fi
     if [[ ! -h "/usr/bin/clang++" ]] && [[ ! -f "/usr/bin/clang++" ]]; then
+        echo "symlinking /usr/bin/clang++-${CLANG_VERSION}"
         sudo ln -s /usr/bin/clang++-${CLANG_VERSION} /usr/bin/clang++
     fi
-    sudo apt-get install -y binutils-gold
+    echo "upgrading binutils-gold"
+    sudo apt-get install -y -qq binutils-gold
     # TODO - needed on trusty for pkg-config
     #sudo rm /usr/bin/ld
     #sudo ln -s /usr/bin/ld.gold /usr/bin/ld
-    export CORE_CC="/usr/bin/clang-${CLANG_VERSION}"
-    export CORE_CXX="/usr/bin/clang++-${CLANG_VERSION}"
+    export CORE_CC="/usr/bin/clang"
+    export CORE_CXX="/usr/bin/clang++"
     export CC="${CORE_CC}"
     export CXX="${CORE_CXX}"
 }
