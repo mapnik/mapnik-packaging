@@ -121,19 +121,14 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
       echoerr "using clang"
       export CORE_CC="clang"
       export CORE_CXX="clang++"
-      CLANG_MAJOR=$(${CXX} -dumpversion | cut -d"." -f1)
-      CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
-      export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
     else
       echoerr "falling back to gcc"
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
-          export CXX_NAME="gcc-4.8"
       else
           export CORE_CC="gcc"
           export CORE_CXX="g++"
-          export CXX_NAME="gcc-4.6"
       fi
     fi
     if [[ ${USE_LTO} == true ]]; then
@@ -258,7 +253,6 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     # https://code.google.com/p/android/issues/detail?id=36496
     export CORE_CXX="arm-linux-androideabi-clang++"
     export CORE_CC="arm-linux-androideabi-clang"
-    export CXX_NAME="androideabi-clang"
     export LD="arm-linux-androideabi-ld"
     export AR="arm-linux-androideabi-ar"
     export ARCH_FLAGS=
@@ -298,10 +292,6 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
       export EXTRA_CFLAGS=""
       # todo -no_dead_strip_inits_and_terms
       export EXTRA_LDFLAGS="-Wl,-search_paths_first"
-    fi
-    if [[ "${CXX_NAME:-false}" == false ]]; then
-        # TODO
-        export CXX_NAME="clang-3.3"
     fi
     export ARCH_FLAGS="-arch ${ARCH_NAME}"
     export PATH=${TOOLCHAIN_ROOT}:$PATH
@@ -369,6 +359,15 @@ export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
 export CXX="${CORE_CXX}"
 export CC="${CORE_CC}"
+if [[ "${CXX_NAME:-false}" == false ]]; then
+    if [[ "${CORE_CXX#*'clang'}" != "$CXX" ]]; then
+        export CXX_NAME="clang"
+    else
+        export CXX_NAME="gcc"
+    fi
+    echo $(${CORE_CXX} -dumpversion)
+fi
+
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
@@ -630,7 +629,6 @@ function ensure_clang {
   fi
   echoerr "enabled clang at $(pwd)/clang-$CVER/bin"
   export PATH=$(pwd)/clang-$CVER/bin:$PATH
-  export CXX_NAME="clang-$CVER"
   cd $CUR_DIR
 }
 export -f ensure_clang
