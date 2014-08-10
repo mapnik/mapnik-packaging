@@ -13,10 +13,10 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    if [[ $UNAME == 'Darwin' ]]; then
-      JOBS=2
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        JOBS=6
     else
-      JOBS=6
+        JOBS=2
     fi
 fi
 
