@@ -39,21 +39,58 @@ function upgrade_gcc {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8
+    export CORE_CC="gcc-4.8"
+    export CORE_CXX="g++-4.8"
+    export CC="${CORE_CC}"
+    export CXX="${CORE_CXX}"
+}
+
+function upgrade_clang {
+    echo "adding clang + gcc-4.8 ppa"
+    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    if [[ `lsb_release --release | cut -f2` != "14.04" ]]; then
+        sudo add-apt-repository 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'
+    fi
+    wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+    echo "updating apt"
+    sudo apt-get update -y
+    CLANG_VERSION="3.4"
+    sudo apt-get install -y clang-${CLANG_VERSION}
+    echo "installing C++11 compiler"
+    if [[ `lsb_release --release | cut -f2` != "14.04" ]]; then
+        sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
+    fi
+    if [[ ! -h "/usr/lib/LLVMgold.so" ]] && [[ ! -f "/usr/lib/LLVMgold.so" ]]; then
+        sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so /usr/lib/LLVMgold.so
+    fi
+    if [[ ! -h "/usr/lib/libLTO.so" ]] && [[ ! -f "/usr/lib/libLTO.so" ]]; then
+        sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so /usr/lib/libLTO.so
+    fi
+    # for bjam
+    if [[ ! -h "/usr/bin/clang" ]] && [[ ! -f "/usr/bin/clang" ]]; then
+        sudo ln -s /usr/bin/clang-${CLANG_VERSION} /usr/bin/clang
+    fi
+    if [[ ! -h "/usr/bin/clang++" ]] && [[ ! -f "/usr/bin/clang++" ]]; then
+        sudo ln -s /usr/bin/clang++-${CLANG_VERSION} /usr/bin/clang++
+    fi
+    sudo apt-get install -y binutils-gold
+    # TODO - needed on trusty for pkg-config
+    #sudo rm /usr/bin/ld
+    #sudo ln -s /usr/bin/ld.gold /usr/bin/ld
+    export CORE_CC="/usr/bin/clang-${CLANG_VERSION}"
+    export CORE_CXX="/usr/bin/clang++-${CLANG_VERSION}"
+    export CC="${CORE_CC}"
+    export CXX="${CORE_CXX}"
 }
 
 function prep_linux {
   cd osx
+  upgrade_clang
   if [[ "${PLATFORM:-false}" != false ]]; then
       source ${PLATFORM}.sh
   else
       source Linux.sh
   fi
-  if [[ "${CXX11}" == true ]]; then
-    upgrade_gcc
-  else
-    echo "updating apt"
-    sudo apt-get update -y -qq
-  fi;
   echo "installing build tools"
   sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
   mkdir -p ${BUILD}
@@ -120,14 +157,13 @@ function build_mapnik {
   b ./scripts/build_protobuf.sh
   if [[ ${BOOST_ARCH} != "arm" ]]; then
     b ./scripts/build_expat.sh
-    b ./scripts/build_gdal.sh
     b ./scripts/build_postgres.sh
     if [[ "${MINIMAL_MAPNIK:-false}" == false ]]; then
+      b ./scripts/build_gdal.sh
       b ./scripts/build_pixman.sh
-      b ./scripts/build_fontconfig.sh
       b ./scripts/build_cairo.sh
       b ./scripts/build_pycairo.sh
-      b ./scripts/build_python_versions.sh
+      ./scripts/build_boost.sh --with-python
     fi
   fi
   branch="master"
@@ -138,7 +174,7 @@ function build_mapnik {
       git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
       git branch -v
   fi
-  if [ "${CXX11}" = false ]; then
+  if [[ "${CXX11}" == false ]]; then
       cd ${MAPNIK_SOURCE}
       git checkout $branch
       git pull
@@ -157,11 +193,6 @@ function build_osrm {
   basic_prep
   if [[ $UNAME == 'Linux' ]]; then
       upgrade_gcc
-      export CORE_CC="gcc-4.8"
-      export CC="gcc-4.8"
-      export CORE_CXX="g++-4.8"
-      export CXX="g++-4.8"
-      export CXX_NAME="gcc-4.8"
   fi
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
@@ -189,6 +220,7 @@ function build_osmium {
   ./scripts/build_boost.sh --with-test --with-program_options
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
+  b ./scripts/build_cryptopp.sh
   teardown
 }
 

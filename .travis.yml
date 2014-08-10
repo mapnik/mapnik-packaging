@@ -5,19 +5,20 @@ compiler:
 
 env:
   matrix:
-    # atomic_fetch_add_4 undefined
+    # Cant' copy from non-directory: / atomic_fetch_add_4 undefined
     #- CXX11=true TARGET=mobile_tools PLATFORM=Android
-    - CXX11=true TARGET=build_osmium
-    - CXX11=true TARGET=build_osrm QUIET=true
-    - CXX11=true TARGET=build_mapnik QUIET=true PUBLISH=true MINIMAL_MAPNIK=true
-    - CXX11=false TARGET=build_mapnik QUIET=true PUBLISH=true
+    #- CXX11=false TARGET=mobile_tools PLATFORM=Android
+    #- CXX11=true TARGET=build_osmium
+    #- CXX11=true TARGET=build_osrm QUIET=true
+    - CXX11=true  TARGET=build_mapnik QUIET=true PUBLISH=true MINIMAL_MAPNIK=false LTO=false
+    - CXX11=false TARGET=build_mapnik QUIET=true PUBLISH=true MINIMAL_MAPNIK=false LTO=false
     # broken protobuf-c build
     #- CXX11=false TARGET=build_osm2pgsql QUIET=true
     # broken spatialite configure
     #- CXX11=false TARGET=build_liblas QUIET=true
   global:
-    - secure: jLa/ai9FzqYRZkZrjQhn5KbsSrDDLBV2hPlKQh/nMn5bb5RooMnAo/9aSYsq8o4lMtnqsYX7wv/r35GKpJJk1OFBWmj1L94KTfm1TdC5Xlr5iumRbQ9VEPBbMgQw6WU+bp88QxvT0I9DZxgciMk6GV9eBM3dH4BSIwRCamOl018=
-    - secure: iQ5aDVTqRYX8YQdxi8gk0jLoNtWvtb7x3ZQORQT9w+y/X4qX+5mV/FV88BQBYF4MMlF5ePGx8IItpEagllIZboAf68CBvclretlPXUiw3JyHaALfHJI1n02y/j/NnY2P3QJUG9QuFBdIAeUWUyReGxOD9Bhcj4E8nHkAgDNsz5k=
+    - secure: Tdy4kT5Zz59e1POud0zwieJ+2ajPaC+5da4cQhS3w+aLs3a8RTd5czfTn8XQPkpViHFX0tr0JIk7vOhCoDmIJkLpr44J3xUwf+gEaJUDCuFPUpd+ddk7tRogMA6Trv12W5D3ZV603uzNdEr7WUv5VfMQo56eK1BI8Z5rGHRNDWo=
+    - secure: O4TCbGsvDnHVWn6DwWADdsldR2Re5DQ7JbJvTEqDv3GoOlHhwJRbOJsNAioQ77MgtyP3F4g3xpWGnFT2jHjnoP+NI54impFOstPXVvO4WvZBtx3U8+kiCQOXAn5QQRo4+KDz3fqZiI9PTXUfOF/Bgu2dqcGupGyFDoHEIQudu+0=
 
 before_install:
  - if [[ `uname -s` == 'Darwin' ]]; then vm_stat && sysctl -n hw.memsize; else free; fi

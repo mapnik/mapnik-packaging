@@ -3,6 +3,7 @@
 set -u
 
 export PLATFORM="iPhoneSimulator"
+export XCODE_PLATFORM="${PLATFORM}"
 export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="x86"
 export ARCH_NAME="i386"

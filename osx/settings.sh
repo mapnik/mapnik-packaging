@@ -23,11 +23,26 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   fi
 fi
 
+export USE_LTO=false
+if [[ ${LTO:-false} != false ]]; then
+    USE_LTO=true
+    # assist cairo configure
+    export ax_cv_c_float_words_bigendian=no
+fi
+
+export BOOST_TOOLSET="gcc"
+if [[ ${UNAME} == 'Darwin' ]]; then
+  export BOOST_TOOLSET="clang"
+fi
+
 if [[ "${CXX11}" = true ]]; then
   export CXX_STANDARD="cpp11"
 else
   export CXX_STANDARD="cpp03"
 fi
+
+function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
+export -f echoerr
 
 function nprocs() {
     # number of processors on the current system
@@ -80,10 +95,14 @@ export MAPNIK_INSTALL="/usr/local"
 export MAPNIK_PACKAGE_PREFIX="mapnik"
 export SYSTEM_CURL="/usr/bin/curl"
 
+if [[ "${CXX:-false}" == false ]]; then
+    export CXX=
+fi
+
 if [[ ${PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
     if [[ "${CXX11}" == true ]]; then
-        if [[ "${CXX:-false}" == "clang++" ]]; then
+        if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
             # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
             export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
         fi
@@ -96,17 +115,17 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
     # http://www.bnikolic.co.uk/blog/gnu-ld-as-needed.html
     # breaks boost
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
-
     export EXTRA_LDFLAGS=""
-    if [[ "${CXX:-false}" == "clang++" ]]; then
+
+    if [[ "${CXX:-false}" != false ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+      echoerr "using clang"
       export CORE_CC="clang"
       export CORE_CXX="clang++"
-      if [[ "${CXX_NAME:-false}" == false ]]; then
-          # TODO - use -dumpversion
-          export CXX_NAME="clang-3.3"
-      fi
-      export BOOST_TOOLSET="clang"
+      CLANG_MAJOR=$(${CXX} -dumpversion | cut -d"." -f1)
+      CLANG_MINOR=$(${CXX} -dumpversion | cut -d"." -f2)
+      export CXX_NAME="clang-${CLANG_MAJOR}.${CLANG_MINOR}"
     else
+      echoerr "falling back to gcc"
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
@@ -116,17 +135,23 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
           export CORE_CXX="g++"
           export CXX_NAME="gcc-4.6"
       fi
-      export BOOST_TOOLSET="gcc"
     fi
-    export AR=ar
-    export RANLIB=ranlib
+    if [[ ${USE_LTO} == true ]]; then
+        echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
+        chmod +x ./ar-lto
+        export AR=$(pwd)/ar-lto
+        export RANLIB=/bin/true
+    else
+        export AR=ar
+        export RANLIB=ranlib
+    fi
     export ARCH_FLAGS=
     # breaking icu symbols?
     #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     export CXX_VISIBILITY_FLAGS=""
     if [[ "${CXX11}" == true ]]; then
       export STDLIB="libstdcpp"
-      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_CXXFLAGS="-std=c++11"
       export STDLIB_LDFLAGS=""
     else
       export STDLIB="libstdcpp"
@@ -149,7 +174,6 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export EXTRA_LDFLAGS="--sysroot ${SDK_PATH} -Wl,-search_paths_first"
     export EXTRA_CPPFLAGS="--sysroot ${SDK_PATH}"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabihf-g++"
     export CORE_CC="arm-linux-gnueabihf-gcc"
@@ -169,7 +193,6 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     export EXTRA_LDFLAGS="-Wl,-search_paths_first"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
-    export BOOST_TOOLSET="gcc-arm"
     export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="arm-linux-gnueabi-g++"
     export CORE_CC="arm-linux-gnueabi-gcc"
@@ -198,12 +221,11 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
-    export ANDROID_NDK_VERSION="r9d"
-    export API_LEVEL="android-19"
-    ${ROOTDIR}/scripts/setup-android-ndk-adk-osx.sh
+    export ANDROID_NDK_VERSION="r10"
+    export API_LEVEL="android-L"
+    ${ROOTDIR}/scripts/setup-android-ndk.sh
     export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
-    #ln -s ../android/android-ndk-r9 ./android-ndk-r9
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.8"
+    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.9"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
     export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
@@ -261,9 +283,9 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
       export CORE_CC="${TOOLCHAIN_ROOT}/clang"
       export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
-      export SDK_ROOT="${XCODE_PREFIX}/Platforms/${PLATFORM}.platform/Developer"
+      export SDK_ROOT="${XCODE_PREFIX}/Platforms/${XCODE_PLATFORM}.platform/Developer"
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
-      export PLATFORM_SDK="${PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
+      export PLATFORM_SDK="${XCODE_PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
       export SDK_PATH="${SDK_ROOT}/SDKs/${PLATFORM_SDK}" ## >= 4.3.1 from MAC
       export EXTRA_CFLAGS="${MIN_SDK_VERSION_FLAG} -isysroot ${SDK_PATH}"
       # Note: stripping with -Wl,-S breaks dtrace
@@ -285,7 +307,6 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     export PATH=${TOOLCHAIN_ROOT}:$PATH
     export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export BOOST_TOOLSET="clang"
     # warning this breaks some c++ linking, like v8 mksnapshot since it then links as C
     # and needs to default to 'gyp-mac-tool'
     #export LD="clang"
@@ -353,10 +374,7 @@ export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
 export SHARED_LIBRARY_PATH="${LIBRARY_PATH}"
 export CPPFLAGS="${CORE_CPPFLAGS} ${EXTRA_CPPFLAGS}"
-export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
-# CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
-export LINK_FLAGS=${LDFLAGS}
-# silence warnings in C depedencies like cairo, freetype, libxml2, pixman
+# silence warnings in C dependencies like cairo, freetype, libxml2, pixman
 export WARNING_CFLAGS="-Wno-unknown-warning-option -Wno-long-long -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-strict-prototypes -Wno-unused-variable -Wno-redundant-decls -Wno-return-type -Wno-uninitialized -Wno-unused-result -Wno-format"
 # clang specific
 if test "${CC#*'clang'}" != "$CC"; then
@@ -365,6 +383,16 @@ fi
 export CFLAGS="-I${BUILD}/include $CORE_CFLAGS $EXTRA_CFLAGS ${WARNING_CFLAGS}"
 # we intentially do not silence warnings in cxx apps, we want to see them all
 export CXXFLAGS="${STDLIB_CXXFLAGS} -I${BUILD}/include $CORE_CXXFLAGS $EXTRA_CXXFLAGS"
+export LDFLAGS="-L${BUILD}/lib $CORE_LDFLAGS $EXTRA_LDFLAGS"
+
+if [[ ${USE_LTO} == true ]]; then
+    export CFLAGS="-flto ${CFLAGS}"
+    export CXXFLAGS="-flto ${CXXFLAGS}"
+    export LDFLAGS="-flto ${LDFLAGS}"
+fi
+
+# CMAKE systems ignore LDFLAGS but accept LINK_FLAGS
+export LINK_FLAGS=${LDFLAGS}
 
 # tgz
 # NOTE: regenerate the .dat with new major versions via
@@ -388,7 +416,7 @@ export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.10"
+export LIBPNG_VERSION="1.6.12"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://code.google.com/p/webp/downloads/list
@@ -414,9 +442,10 @@ export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
 # http://www.freedesktop.org/software/fontconfig/release/
 # bz2
-export FONTCONFIG_VERSION="2.11.0"
+export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
-export PIXMAN_VERSION="0.32.4"
+# gz
+export PIXMAN_VERSION="0.32.6"
 export CAIRO_VERSION="1.12.16"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
@@ -424,15 +453,14 @@ export PY3CAIRO_VERSION="1.10.0"
 export GEOS_VERSION="3.4.2"
 export PROTOBUF_VERSION="2.5.0"
 export PROTOBUF_C_VERSION="0.15"
-export XZ_VERSION="5.0.3"
+export XZ_VERSION="5.0.5"
 export NOSE_VERSION="1.2.1"
-export NODE_VERSION="0.10.29"
 # stuck at feb 2012
 # https://code.google.com/p/sparsehash/source/list
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="0.9.32"
+export HARFBUZZ_VERSION="0.9.34"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
@@ -440,10 +468,8 @@ export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
 export OPENSSL_VERSION="1.0.1h"
-export LIBUV_VERSION="0.11.25"
-
-function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
-export -f echoerr
+export LIBUV_VERSION="0.11.28"
+export NODE_VERSION="0.10.30"
 
 function download {
     if [[ ! -f $1 ]]; then
@@ -505,12 +531,12 @@ function ensure_s3cmd {
   export PATH=$(pwd):${PATH}
   cd $CUR_DIR
   if [[ ! -f ~/.s3cfg ]]; then
-    if [[ "${AWS_S3_KEY:-false}" == false ]] || [[ "${AWS_S3_SECRET:-false}" == false ]]; then
+    if [[ "${AWS_ACCESS_KEY_ID:-false}" == false ]] || [[ "${AWS_SECRET_ACCESS_KEY:-false}" == false ]]; then
         echoerr 'missing AWS keys: see ensure_s3cmd in settings.sh for details'
     else
         echo "[default]" > ~/.s3cfg
-        echo "access_key = $AWS_S3_KEY" >> ~/.s3cfg
-        echo "secret_key = $AWS_S3_SECRET" >> ~/.s3cfg
+        echo "access_key = $AWS_ACCESS_KEY_ID" >> ~/.s3cfg
+        echo "secret_key = $AWS_SECRET_ACCESS_KEY" >> ~/.s3cfg
     fi
   fi
 }
@@ -524,9 +550,9 @@ function ensure_xz {
       # WARNING: this installs liblzma which we need to ensure that gdal does not link to
       download xz-${XZ_VERSION}.tar.bz2
       echoerr '*building xz*'
-      rm -rf xz-5.0.3
-      tar xf xz-5.0.3.tar.bz2
-      cd xz-5.0.3
+      rm -rf xz-${XZ_VERSION}
+      tar xf xz-${XZ_VERSION}.tar.bz2
+      cd xz-${XZ_VERSION}
       OLD_PLATFORM=${PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}

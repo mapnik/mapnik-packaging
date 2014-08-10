@@ -13,12 +13,17 @@ if test "${platform#*'iphone'}" != "$platform"; then
     platform="ios"
 fi
 
+BUILD_POSTFIX=""
+if [[ ${USE_LTO} == true ]]; then
+    BUILD_POSTFIX="-lto"
+fi
+
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
-  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}"
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
   TARBALL_NAME="${PACKAGE_NAME}.tar"
   UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${TARBALL_NAME}.bz2"
 else
-  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}-${CXX_STANDARD}-${STDLIB}-${CXX_NAME}"
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}-${CXX_STANDARD}-${STDLIB}-${CXX_NAME}${BUILD_POSTFIX}"
   TARBALL_NAME="${PACKAGE_NAME}.tar"
   UPLOAD="s3://mapnik/dist/dev/${TARBALL_NAME}.bz2"
 fi
