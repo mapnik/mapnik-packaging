@@ -18,20 +18,6 @@ function teardown {
   set +e
 }
 
-function prep_osx {
-  cd osx
-  if [[ "${PLATFORM:-false}" != false ]]; then
-      source ${PLATFORM}.sh
-  else
-      source MacOSX.sh
-  fi
-  brew install autoconf automake libtool makedepend cmake | true
-  export PATH=$(brew --prefix)/bin:$PATH
-  mkdir -p ${BUILD}
-  mkdir -p ${BUILD}/lib
-  mkdir -p ${BUILD}/include
-}
-
 function upgrade_gcc {
     echo "adding gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
@@ -63,13 +49,23 @@ function upgrade_clang {
         echo 'upgrading libstdc++'
         sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
     fi
-    if [[ ! -h "/usr/lib/LLVMgold.so" ]] && [[ ! -f "/usr/lib/LLVMgold.so" ]]; then
-        echo "symlinking /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so"
-        sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so /usr/lib/LLVMgold.so
-    fi
-    if [[ ! -h "/usr/lib/libLTO.so" ]] && [[ ! -f "/usr/lib/libLTO.so" ]]; then
-        echo "symlinking /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so"
-        sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so /usr/lib/libLTO.so
+    if [[ ${LTO:-false} != false ]]; then
+        echo "upgrading binutils-gold"
+        sudo apt-get install -y -qq binutils-gold
+        if [[ ! -h "/usr/lib/LLVMgold.so" ]] && [[ ! -f "/usr/lib/LLVMgold.so" ]]; then
+            echo "symlinking /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so"
+            sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/LLVMgold.so /usr/lib/LLVMgold.so
+        fi
+        if [[ ! -h "/usr/lib/libLTO.so" ]] && [[ ! -f "/usr/lib/libLTO.so" ]]; then
+            echo "symlinking /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so"
+            sudo ln -s /usr/lib/llvm-${CLANG_VERSION}/lib/libLTO.so /usr/lib/libLTO.so
+        fi
+        # TODO - needed on trusty for pkg-config
+        # since 'binutils-gold' on trusty does not switch
+        # /usr/bin/ld to point to /usr/bin/ld.gold like it does
+        # in the precise package
+        #sudo rm /usr/bin/ld
+        #sudo ln -s /usr/bin/ld.gold /usr/bin/ld
     fi
     # for bjam
     if [[ ! -h "/usr/bin/clang" ]] && [[ ! -f "/usr/bin/clang" ]]; then
@@ -80,20 +76,30 @@ function upgrade_clang {
         echo "symlinking /usr/bin/clang++-${CLANG_VERSION}"
         sudo ln -s /usr/bin/clang++-${CLANG_VERSION} /usr/bin/clang++
     fi
-    echo "upgrading binutils-gold"
-    sudo apt-get install -y -qq binutils-gold
-    # TODO - needed on trusty for pkg-config
-    #sudo rm /usr/bin/ld
-    #sudo ln -s /usr/bin/ld.gold /usr/bin/ld
     export CORE_CC="/usr/bin/clang"
     export CORE_CXX="/usr/bin/clang++"
     export CC="${CORE_CC}"
     export CXX="${CORE_CXX}"
 }
 
+function upgrade_compiler {
+    if [[ ${UNAME} == 'Linux' ]]; then
+        # if CXX is set, detect if clang
+        # otherwise fallback to gcc
+        if [[ "${CXX:-false}" == false ]]; then
+            if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+                upgrade_clang
+            else
+                upgrade_gcc
+            fi
+        else
+            upgrade_gcc
+        fi
+    fi
+}
+
 function prep_linux {
   cd osx
-  upgrade_clang
   if [[ "${PLATFORM:-false}" != false ]]; then
       source ${PLATFORM}.sh
   else
@@ -101,19 +107,33 @@ function prep_linux {
   fi
   echo "installing build tools"
   sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
-  mkdir -p ${BUILD}
-  mkdir -p ${BUILD}/lib
-  mkdir -p ${BUILD}/include
 }
 
-function basic_prep {
-  if [[ $UNAME == 'Linux' ]]; then
+function prep_osx {
+  cd osx
+  if [[ "${PLATFORM:-false}" != false ]]; then
+      source ${PLATFORM}.sh
+  else
+      source MacOSX.sh
+  fi
+  brew install autoconf automake libtool makedepend cmake
+  export PATH=$(brew --prefix)/bin:$PATH
+}
+
+function prepare_os {
+  if [[ ${UNAME} == 'Linux' ]]; then
       prep_linux
       sudo apt-get install -qq -y subversion
   else
       prep_osx
   fi
+  mkdir -p ${BUILD}
+  mkdir -p ${BUILD}/lib
+  mkdir -p ${BUILD}/include
   echo "Running build with ${JOBS} parallel jobs"
+  echo "checking cpu and mem resources"
+  nprocs
+  memsize
 }
 
 
@@ -125,8 +145,9 @@ environment in odd ways if this script is sourced
 
 function build_mapnik {
   setup
-  if [[ $UNAME == 'Linux' ]]; then
-      prep_linux
+  upgrade_compiler
+  prepare_os
+  if [[ ${UNAME} == 'Linux' ]]; then
       sudo apt-get install -qq -y python-dev python-nose
       # postgres deps
       # https://github.com/mapnik/mapnik-packaging/commit/598db68f4e5314883023eb6048e94ba7c021b6b7
@@ -135,13 +156,7 @@ function build_mapnik {
       # remove travis default installed libs which will conflict
       sudo apt-get purge -qq -y libtiff* libjpeg* libpng3
       sudo apt-get autoremove -y -qq
-  else
-      prep_osx
   fi
-  echo "checking cpu and mem resources"
-  nprocs
-  memsize
-  echo "Running build with ${JOBS} parallel jobs"
   # NOTE: harfbuzz needs pkg-config to find icu
   b ./scripts/build_pkg_config.sh
   b ./scripts/build_icu.sh
@@ -198,10 +213,8 @@ function build_mapnik {
 
 function build_osrm {
   setup
-  basic_prep
-  if [[ $UNAME == 'Linux' ]]; then
-      upgrade_gcc
-  fi
+  #upgrade_compiler
+  prepare_os
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_lua.sh
@@ -221,7 +234,8 @@ export -f build_osrm
 
 function build_osmium {
   setup
-  basic_prep
+  upgrade_compiler
+  prepare_os
   b ./scripts/build_expat.sh
   b ./scripts/build_google_sparsetable.sh
   # TODO: osrm boost usage does not need icu
@@ -236,8 +250,10 @@ export -f build_osmium
 
 function mobile_tools {
   setup
-  basic_prep
-  sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
+  prepare_os
+  if [[ ${UNAME} == 'Linux' ]]; then
+      sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
+  fi
   b ./scripts/build_zlib.sh
   b ./scripts/build_libuv.sh
   b ./scripts/build_openssl.sh
@@ -259,8 +275,10 @@ export -f mobile_tools
 
 function build_http {
   setup
-  basic_prep
-  sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
+  prepare_os
+  if [[ ${UNAME} == 'Linux' ]]; then
+      sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
+  fi
   b ./scripts/build_zlib.sh
   b ./scripts/build_libuv.sh
   b ./scripts/build_openssl.sh
@@ -273,7 +291,7 @@ export -f build_http
 
 function build_osm2pgsql {
   setup
-  basic_prep
+  prepare_os
   b ./scripts/build_bzip2.sh
   b ./scripts/build_geos.sh
   b ./scripts/build_proj4.sh
@@ -286,7 +304,7 @@ export -f build_osm2pgsql
 
 function build_liblas {
   setup
-  basic_prep
+  prepare_os
   b ./scripts/build_zlib.sh
   b ./scripts/build_jpeg_turbo.sh
   b ./scripts/build_png.sh
