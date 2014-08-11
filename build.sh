@@ -2,8 +2,39 @@
 
 UNAME=$(uname -s)
 
+# http://nothingworks.donaitken.com/2012/04/returning-booleans-from-bash-functions
+function is_set {
+    # usage:
+    # is_set $variable
+    local R=0; # 0=true
+    if [[ "${1:-unset_val}" == "unset_val" ]]; then
+        R=1 # false
+    fi
+    return $R;
+}
+
+function contains {
+    # usage:
+    # contains substring fullstring
+    local R=0; # 0=true
+    if [[ "${2#*$1}" == $2 ]]; then
+        R=1 # false
+    fi
+    return $R;
+}
+
+function eq {
+    # usage:
+    # eq $var1 value
+    local R=0; # 0=true
+    if [[ "${1}" != $2 ]]; then
+        R=1 # false
+    fi
+    return $R;
+}
+
 function b {
-  if [[ "${QUIET:-false}" != false ]]; then
+  if eq $QUIET true; then
     $1 1>> build.log
   else
     $1
@@ -86,8 +117,8 @@ function upgrade_compiler {
     if [[ ${UNAME} == 'Linux' ]]; then
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
-        if [[ "${CXX:-false}" == false ]]; then
-            if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        if is_set ${CXX}; then
+            if contains 'clang' ${CXX}; then
                 upgrade_clang
             else
                 upgrade_gcc
@@ -116,7 +147,7 @@ function prep_osx {
   else
       source MacOSX.sh
   fi
-  brew install autoconf automake libtool makedepend cmake
+  brew install autoconf automake libtool makedepend cmake || true
   export PATH=$(brew --prefix)/bin:$PATH
 }
 
@@ -213,7 +244,7 @@ function build_mapnik {
 
 function build_osrm {
   setup
-  #upgrade_compiler
+  upgrade_compiler
   prepare_os
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
