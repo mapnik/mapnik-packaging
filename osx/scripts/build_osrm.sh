@@ -14,7 +14,7 @@ if [[ "${OSRM_BRANCH:-false}" == false ]]; then
 fi
 
 if [[ "${OSRM_REPO:-false}" == false ]]; then
-    OSRM_REPO="https://github.com/DennisOSRM/Project-OSRM.git"
+    OSRM_REPO="https://github.com/Project-OSRM/osrm-backend.git"
 fi
 
 echoerr 'building OSRM'
@@ -32,7 +32,7 @@ LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 # http://www.cmake.org/pipermail/cmake/2009-May/029375.html
 # http://stackoverflow.com/questions/16991225/cmake-and-static-linking
 if [[ ${UNAME} == 'Linux' ]]; then
-    LINK_FLAGS="-fopenmp ${LINK_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
+    LINK_FLAGS="${LINK_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
 fi
 
 if [[ ${CXX11} == true ]]; then
