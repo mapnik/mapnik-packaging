@@ -98,7 +98,7 @@ function upgrade_clang {
         #sudo rm /usr/bin/ld
         #sudo ln -s /usr/bin/ld.gold /usr/bin/ld
     fi
-    # for bjam
+    # for bjam since it can't find a custom named clang-3.4
     if [[ ! -h "/usr/bin/clang" ]] && [[ ! -f "/usr/bin/clang" ]]; then
         echo "symlinking /usr/bin/clang-${CLANG_VERSION}"
         sudo ln -s /usr/bin/clang-${CLANG_VERSION} /usr/bin/clang
@@ -107,8 +107,14 @@ function upgrade_clang {
         echo "symlinking /usr/bin/clang++-${CLANG_VERSION}"
         sudo ln -s /usr/bin/clang++-${CLANG_VERSION} /usr/bin/clang++
     fi
-    export CORE_CC="/usr/bin/clang"
-    export CORE_CXX="/usr/bin/clang++"
+    # prefer upgraded clang
+    if [[ -f "/usr/bin/clang++-${CLANG_VERSION}" ]]; then
+        export CORE_CC="/usr/bin/clang-${CLANG_VERSION}"
+        export CORE_CXX="/usr/bin/clang++-${CLANG_VERSION}"
+    else
+        export CORE_CC="/usr/bin/clang"
+        export CORE_CXX="/usr/bin/clang++"
+    fi
     export CC="${CORE_CC}"
     export CXX="${CORE_CXX}"
 }
