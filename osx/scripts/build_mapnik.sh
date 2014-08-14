@@ -74,7 +74,11 @@ echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
 echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
-echo "INPUT_PLUGINS = 'csv,gdal,topojson,pgraster,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+if [[ ${CXX11} == true ]]; then
+    echo "INPUT_PLUGINS = 'csv,gdal,topojson,pgraster,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+else
+    echo "INPUT_PLUGINS = 'csv,gdal,pgraster,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+fi
 echo "FAST = True" >> config.py
 echo "DEMO = False" >> config.py
 echo "PGSQL2SQLITE = False" >> config.py
