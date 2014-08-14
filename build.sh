@@ -74,7 +74,7 @@ function upgrade_clang {
     apt-cache policy clang-${CLANG_VERSION}
     sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
-    if [[ `lsb_release --release | cut -f2` != "14.04" ]]; then
+    if [[ $(lsb_release --release) =~ "12.04" ]]; then
         echo 'upgrading libstdc++'
         sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
     fi
