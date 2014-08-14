@@ -19,11 +19,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
-        JOBS=4
-    else
-        JOBS=2
-    fi
+      JOBS=2
 fi
 
 if [[ ${USE_LTO} == true ]]; then
