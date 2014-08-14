@@ -357,15 +357,31 @@ export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSE
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
-export CXX="${CORE_CXX}"
-export CC="${CORE_CC}"
+if [[ ${CXX:-false} == false ]]; then
+    if [[ ${CORE_CXX:-false} != false ]]; then
+        export CXX="${CORE_CXX}"
+    else
+        export CC="c++"
+    fi
+fi
+
+if [[ ${CC:-false} == false ]]; then
+    if [[ ${CORE_CC:-false} != false ]]; then
+        export CC="${CORE_CC}"
+    else
+        export CC="cc"
+    fi
+fi
+
+
+export CXX_NAME="${CXX}"
 if [[ "${CXX_NAME:-false}" == false ]]; then
-    if [[ "${CORE_CXX#*'clang'}" != "$CXX" ]]; then
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
         export CXX_NAME="clang"
     else
         export CXX_NAME="gcc"
     fi
-    echo $(${CORE_CXX} -dumpversion)
+    echo $(${CXX} -dumpversion)
 fi
 
 export C_INCLUDE_PATH="${BUILD}/include"

@@ -56,10 +56,8 @@ function upgrade_gcc {
     sudo apt-get update -qq -y
     echo "installing C++11 compiler"
     sudo apt-get install -qq -y gcc-4.8 g++-4.8
-    export CORE_CC="gcc-4.8"
-    export CORE_CXX="g++-4.8"
-    export CC="${CORE_CC}"
-    export CXX="${CORE_CXX}"
+    export CC="gcc-4.8"
+    export CXX="g++-4.8"
 }
 
 function upgrade_clang {
@@ -109,14 +107,12 @@ function upgrade_clang {
     fi
     # prefer upgraded clang
     if [[ -f "/usr/bin/clang++-${CLANG_VERSION}" ]]; then
-        export CORE_CC="/usr/bin/clang-${CLANG_VERSION}"
-        export CORE_CXX="/usr/bin/clang++-${CLANG_VERSION}"
+        export CC="/usr/bin/clang-${CLANG_VERSION}"
+        export CXX="/usr/bin/clang++-${CLANG_VERSION}"
     else
-        export CORE_CC="/usr/bin/clang"
-        export CORE_CXX="/usr/bin/clang++"
+        export CC="/usr/bin/clang"
+        export CXX="/usr/bin/clang++"
     fi
-    export CC="${CORE_CC}"
-    export CXX="${CORE_CXX}"
 }
 
 function upgrade_compiler {
