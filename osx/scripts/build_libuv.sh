@@ -19,7 +19,7 @@ cd libuv-${LIBUV_VERSION}
 
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
     unset PLATFORM
-    make
+    $MAKE -j${JOBS}
 else
     ./autogen.sh
     ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
