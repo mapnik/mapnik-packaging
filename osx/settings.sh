@@ -528,6 +528,7 @@ export -f check_and_clear_libs
 
 function ensure_s3cmd {
   CUR_DIR=$(pwd)
+  mkdir -p ${PACKAGES}/
   if [[ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]]; then
       cd ${PACKAGES}
       ${SYSTEM_CURL} -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz

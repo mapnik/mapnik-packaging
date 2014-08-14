@@ -63,13 +63,13 @@ function upgrade_gcc {
 function upgrade_clang {
     echo "adding clang + gcc-4.8 ppa"
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    if [[ `lsb_release --release | cut -f2` != "14.04" ]]; then
-        sudo add-apt-repository 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'
+    CLANG_VERSION="3.4"
+    if [[ $(lsb_release --release) =~ "12.04" ]]; then
+        sudo add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-${CLANG_VERSION} main"
     fi
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
     sudo apt-get update -y -qq
-    CLANG_VERSION="3.4"
     echo "installing clang-${CLANG_VERSION}"
     apt-cache policy clang-${CLANG_VERSION}
     sudo apt-get install -y clang-${CLANG_VERSION}
