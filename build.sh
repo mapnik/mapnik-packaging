@@ -43,6 +43,8 @@ function b {
 
 function setup {
   set -e
+  upgrade_compiler
+  prepare_os
 }
 
 function teardown {
@@ -116,7 +118,7 @@ function upgrade_clang {
 }
 
 function upgrade_compiler {
-    if [[ ${UNAME} == 'Linux' ]]; then
+    if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]]; then
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
         if is_set ${CXX}; then
@@ -178,8 +180,6 @@ environment in odd ways if this script is sourced
 
 function build_mapnik {
   setup
-  upgrade_compiler
-  prepare_os
   if [[ ${UNAME} == 'Linux' ]]; then
       sudo apt-get install -qq -y python-dev python-nose
       # postgres deps
@@ -246,8 +246,6 @@ function build_mapnik {
 
 function build_osrm {
   setup
-  upgrade_compiler
-  prepare_os
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_lua.sh
@@ -267,8 +265,6 @@ export -f build_osrm
 
 function build_osmium {
   setup
-  upgrade_compiler
-  prepare_os
   b ./scripts/build_expat.sh
   b ./scripts/build_google_sparsetable.sh
   # TODO: osrm boost usage does not need icu
@@ -283,7 +279,6 @@ export -f build_osmium
 
 function mobile_tools {
   setup
-  prepare_os
   if [[ ${UNAME} == 'Linux' ]]; then
       sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
   fi
@@ -308,7 +303,6 @@ export -f mobile_tools
 
 function build_http {
   setup
-  prepare_os
   if [[ ${UNAME} == 'Linux' ]]; then
       sudo apt-get install -qq -y xutils-dev # for gccmakedep used in openssl
   fi
@@ -324,7 +318,6 @@ export -f build_http
 
 function build_osm2pgsql {
   setup
-  prepare_os
   b ./scripts/build_bzip2.sh
   b ./scripts/build_geos.sh
   b ./scripts/build_proj4.sh
@@ -337,7 +330,6 @@ export -f build_osm2pgsql
 
 function build_liblas {
   setup
-  prepare_os
   b ./scripts/build_zlib.sh
   b ./scripts/build_jpeg_turbo.sh
   b ./scripts/build_png.sh
