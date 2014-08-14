@@ -20,7 +20,7 @@ fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
-        JOBS=6
+        JOBS=4
     else
         JOBS=2
     fi
