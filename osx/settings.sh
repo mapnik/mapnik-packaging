@@ -361,7 +361,7 @@ if [[ ${CXX:-false} == false ]]; then
     if [[ ${CORE_CXX:-false} != false ]]; then
         export CXX="${CORE_CXX}"
     else
-        export CC="c++"
+        export CXX="c++"
     fi
 fi
 
@@ -373,16 +373,7 @@ if [[ ${CC:-false} == false ]]; then
     fi
 fi
 
-
-export CXX_NAME="${CXX}"
-if [[ "${CXX_NAME:-false}" == false ]]; then
-    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
-        export CXX_NAME="clang"
-    else
-        export CXX_NAME="gcc"
-    fi
-    echo $(${CXX} -dumpversion)
-fi
+echo "using $CXX version : $(${CXX} -dumpversion)"
 
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
