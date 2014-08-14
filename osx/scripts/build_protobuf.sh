@@ -6,6 +6,14 @@ cd ${PACKAGES}
 
 download protobuf-${PROTOBUF_VERSION}.tar.bz2
 
+if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        JOBS=4
+    else
+        JOBS=2
+    fi
+fi
+
 echoerr 'building protobuf C++'
 rm -rf protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 tar xf protobuf-${PROTOBUF_VERSION}.tar.bz2

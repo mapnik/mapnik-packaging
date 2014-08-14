@@ -24,7 +24,11 @@ cd Project-OSRM
 git checkout $OSRM_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=2
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        JOBS=4
+    else
+        JOBS=2
+    fi
 fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
