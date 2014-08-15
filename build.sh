@@ -311,7 +311,7 @@ function build_http {
   b ./scripts/build_openssl.sh
   b ./scripts/build_curl.sh
   ./scripts/build_boost.sh --with-regex
-  b ./scripts/build_glfw.sh
+  #b ./scripts/build_glfw.sh
   teardown
 }
 export -f build_http
