@@ -11,6 +11,16 @@ echoerr '*building openssl'
 OS_COMPILER=""
 MAKEDEPEND="gccmakedep"
 
+# NOTE: MAKEFLAGS=-r may come from gyp Makefiles
+# and will break this build with:
+# make[1]: *** No rule to make target `x86_64cpuid.o', needed by `../libcrypto.a'.  Stop.
+# so check if it is set and warn
+if [[ ${MAKEFLAGS:-false} != false ]]; then
+    echoerr 'Warning MAKEFLAGS set, but we are disabling to prevent openssl pwnage'
+fi
+# now go ahead an unset MAKEFLAGS here to be safe
+unset MAKEFLAGS
+
 if [[ $UNAME == 'Darwin' ]]; then
     MAKEDEPEND="makedepend"
 fi
