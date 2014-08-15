@@ -8,9 +8,6 @@ mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 DESCRIBE=$(${MAPNIK_CONFIG} --git-describe)
 
-# lowercase platform name
-platform_lowercase=$(echo ${MASON_PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
-
 # collapse all iOS platform names to one since
 # we provide these multiarch
 if [[ ${platform_lowercase} =~ "iphone" ]]; then

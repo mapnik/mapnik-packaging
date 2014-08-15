@@ -13,6 +13,9 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export UNAME=$(uname -s);
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
+# lowercase platform name
+export platform_lowercase=$(echo ${MASON_PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
 if [[ ${UNAME} == 'Darwin' ]]; then
@@ -319,7 +322,7 @@ export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
-export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform}"
+export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform_lowercase}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
