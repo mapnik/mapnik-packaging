@@ -31,6 +31,7 @@ elif [[ ${PLATFORM} == 'Android' ]]; then
     OS_COMPILER="android-armv7"
 else
     echoerr "unknown os/compiler version for your platform ${PLATFORM}"
+    false
 fi
 
 if [[ ${OS_COMPILER} != "" ]]; then
