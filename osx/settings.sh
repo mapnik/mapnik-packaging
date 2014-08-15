@@ -74,10 +74,6 @@ function unset_dl_path {
 }
 export -f unset_dl_path
 
-# lowercase platform name
-export platform=$(echo ${PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
-export platform_alt=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
-
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
 export ICU_CORE_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1"
@@ -99,7 +95,7 @@ if [[ "${CXX:-false}" == false ]]; then
     export CXX=
 fi
 
-if [[ ${PLATFORM} == 'Linux' ]]; then
+if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
     if [[ "${CXX11}" == true ]]; then
         if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
@@ -153,7 +149,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
-elif [[ ${PLATFORM} == 'Linaro' ]]; then
+elif [[ ${MASON_PLATFORM} == 'Linaro' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
     cd ${PACKAGES}
@@ -180,7 +176,7 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
+elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     cd ${ROOTDIR}
     # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
@@ -211,7 +207,7 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     fi
     export ZLIB_PATH="${SYSROOT}/usr"
 
-elif [[ ${PLATFORM} == 'Android' ]]; then
+elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
@@ -315,7 +311,7 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
     fi
 else
-    echo '**unhandled platform: ${PLATFORM}**'
+    echo '**unhandled platform: ${MASON_PLATFORM}**'
 fi
 
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${CXX_STANDARD}-${STDLIB}"
@@ -330,16 +326,16 @@ export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
 
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
-    if [[ ${PLATFORM} = 'Linux' ]]; then
+    if [[ ${MASON_PLATFORM} = 'Linux' ]]; then
         export ZLIB_PATH="/usr";
-    elif [[ ${PLATFORM} = 'Linaro' ]]; then
+    elif [[ ${MASON_PLATFORM} = 'Linaro' ]]; then
         export ZLIB_PATH="/usr";
-    elif [[ ${PLATFORM} = 'Linaro-softfp' ]]; then
+    elif [[ ${MASON_PLATFORM} = 'Linaro-softfp' ]]; then
         export ZLIB_PATH="/usr";
     else
-        if [[ ${PLATFORM} = 'Android' ]]; then
+        if [[ ${MASON_PLATFORM} = 'Android' ]]; then
             # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
-            export ZLIB_PATH=$PLATFORM_PREFIX;
+            export ZLIB_PATH=${PLATFORM_PREFIX};
         else
             if [[ ${SDK_PATH} ]]; then
                 export ZLIB_PATH=${SDK_PATH}/usr;
@@ -560,7 +556,7 @@ function ensure_xz {
       rm -rf xz-${XZ_VERSION}
       tar xf xz-${XZ_VERSION}.tar.bz2
       cd xz-${XZ_VERSION}
-      OLD_PLATFORM=${PLATFORM}
+      OLD_PLATFORM=${MASON_PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
       make -j${JOBS}
@@ -583,7 +579,7 @@ function ensure_nasm {
       rm -rf nasm-${NASM_VERSION}
       tar xf nasm-${NASM_VERSION}.tar.bz2
       cd nasm-${NASM_VERSION}
-      OLD_PLATFORM=${PLATFORM}
+      OLD_PLATFORM=${MASON_PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
       make -j${JOBS}
@@ -604,7 +600,7 @@ function ensure_clang {
   CUR_DIR=$(pwd)
   mkdir -p ${PACKAGES}
   cd ${PACKAGES}
-  if [[ ${PLATFORM} == 'Linux' ]]; then
+  if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
       if [[ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]]; then
           echoerr 'downloading clang'

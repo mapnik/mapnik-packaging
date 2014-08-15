@@ -7,14 +7,17 @@ echoerr '...packaging mobile sdk tarball'
 mkdir -p ${MAPNIK_DIST}
 cd ${MAPNIK_DIST}
 DESCRIBE=$(${MAPNIK_CONFIG} --git-describe)
+
+# lowercase platform name
+platform_lowercase=$(echo ${MASON_PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+
 # collapse all iOS platform names to one since
 # we provide these multiarch
-if test "${platform#*'iphone'}" != "$platform"; then
-    platform="ios"
+if [[ ${platform_lowercase} =~ "iphone" ]]; then
+    platform_lowercase="ios"
 fi
 
 BUILD_POSTFIX=""
-#BUILD_POSTFIX="-${CXX_STANDARD}-${STDLIB}"
 if [[ ${USE_LTO} == true ]]; then
     BUILD_POSTFIX="-lto"
 fi

@@ -17,7 +17,7 @@ else
 fi
 # note: -i -k only for android since ranlib breaks: error: bz2: no archive symbol table (run ranlib)
 $MAKE install PREFIX=${BUILD} CC="$CC" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" ${RANLIB_ARGS} -i -k
-if [ ${PLATFORM} = 'Android' ]; then
+if [ ${MASON_PLATFORM} = 'Android' ]; then
     ${RANLIB} ${BUILD}/lib/libbz2.a
 fi
 cd ${PACKAGES}

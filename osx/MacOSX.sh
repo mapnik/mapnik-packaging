@@ -2,8 +2,8 @@
 
 set -u
 
-export PLATFORM="MacOSX"
-export XCODE_PLATFORM="${PLATFORM}"
+export MASON_PLATFORM="MacOSX"
+export XCODE_PLATFORM="${MASON_PLATFORM}"
 export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="x86"
 export ARCH_NAME="x86_64"

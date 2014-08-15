@@ -2,8 +2,8 @@
 
 set -u
 
-export PLATFORM="iPhoneOS"
-export XCODE_PLATFORM="${PLATFORM}"
+export MASON_PLATFORM="iPhoneOS"
+export XCODE_PLATFORM="${MASON_PLATFORM}"
 export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="arm"
 export ARCH_NAME="armv7"

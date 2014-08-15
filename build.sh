@@ -135,8 +135,8 @@ function upgrade_compiler {
 
 function prep_linux {
   cd osx
-  if [[ "${PLATFORM:-false}" != false ]]; then
-      source ${PLATFORM}.sh
+  if [[ "${MASON_PLATFORM:-false}" != false ]]; then
+      source ${MASON_PLATFORM}.sh
   else
       source Linux.sh
   fi
@@ -146,8 +146,8 @@ function prep_linux {
 
 function prep_osx {
   cd osx
-  if [[ "${PLATFORM:-false}" != false ]]; then
-      source ${PLATFORM}.sh
+  if [[ "${MASON_PLATFORM:-false}" != false ]]; then
+      source ${MASON_PLATFORM}.sh
   else
       source MacOSX.sh
   fi

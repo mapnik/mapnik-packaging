@@ -18,7 +18,6 @@ tar xf libuv-v${LIBUV_VERSION}.tar.gz
 cd libuv-${LIBUV_VERSION}
 
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
-    unset PLATFORM
     $MAKE -j${JOBS}
 else
     ./autogen.sh

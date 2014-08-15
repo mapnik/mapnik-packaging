@@ -13,7 +13,7 @@ echoerr 'building pkg-config'
 #      ifndef G_INLINE_FUNC inline
 
 if [ $BOOST_ARCH = "arm" ]; then
-    OLD_PLATFORM=${PLATFORM}
+    OLD_PLATFORM=${MASON_PLATFORM}
     source ${ROOTDIR}/${HOST_PLATFORM}.sh
     NATIVE_PKG_CONFIG="${PACKAGES}/pkg-config-${PKG_CONFIG_VERSION}-${ARCH_NAME}/pkg-config"
     source ${ROOTDIR}/${OLD_PLATFORM}.sh

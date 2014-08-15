@@ -2,7 +2,7 @@
 
 set -u
 
-export PLATFORM="Android"
+export MASON_PLATFORM="Android"
 
 UNAME=$(uname -s);
 if [[ $UNAME == 'Darwin' ]]; then
