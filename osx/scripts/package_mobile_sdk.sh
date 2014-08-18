@@ -20,11 +20,11 @@ if [[ ${USE_LTO} == true ]]; then
 fi
 
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
-  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform_lowercase}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
   TARBALL_NAME="${PACKAGE_NAME}.tar"
   UPLOAD="s3://mapnik/dist/v${DESCRIBE}/${TARBALL_NAME}.bz2"
 else
-  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
+  PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform_lowercase}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
   TARBALL_NAME="${PACKAGE_NAME}.tar"
   UPLOAD="s3://mapnik/dist/dev/${TARBALL_NAME}.bz2"
 fi
