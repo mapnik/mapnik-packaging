@@ -473,8 +473,8 @@ export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
 export OPENSSL_VERSION="1.0.1i"
-export LIBUV_VERSION="0.11.28"
-export NODE_VERSION="0.10.30"
+export LIBUV_VERSION="0.11.29"
+export NODE_VERSION="0.10.31"
 
 function download {
     if [[ ! -f $1 ]]; then
