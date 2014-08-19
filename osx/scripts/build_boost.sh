@@ -60,7 +60,7 @@ patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || 
 gen_config() {
   echoerr 'generating user-config.jam'
   echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
-  if [ $PLATFORM = 'Android' ];  then
+  if [ ${MASON_PLATFORM} = 'Android' ];  then
       patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
   fi
   if [[ "${AR:-false}" != false ]] || [[ "${RANLIB:-false}" != false ]]; then
@@ -101,7 +101,7 @@ if [[ ! -f ./dist/bin/bcp ]]; then
     # dodge android cross compile problem: ld: unknown option: --start-group
     if [[ ${BOOST_ARCH} == "arm" ]]; then
         echoerr "compiling bjam for HOST ${HOST_PLATFORM}"
-        OLD_PLATFORM=${PLATFORM}
+        OLD_PLATFORM=${MASON_PLATFORM}
         source ${ROOTDIR}/${HOST_PLATFORM}.sh
         bootstrap
         cd tools/bcp
@@ -193,7 +193,7 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         fi
     fi
 
-    if [[ ${PLATFORM} = 'Android' ]]; then
+    if [[ ${MASON_PLATFORM} = 'Android' ]]; then
         # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
         # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
         mkdir -p tmp/sys/

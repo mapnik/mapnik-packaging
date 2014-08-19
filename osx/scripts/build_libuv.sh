@@ -6,7 +6,7 @@ cd ${PACKAGES}
 
 if [ ! -f libuv-v${LIBUV_VERSION}.tar.gz ]; then
     echoerr "downloading libuv: https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz"
-    curl -s -S -f -O -L https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz
+    curl -s -S -f -O -L -k https://github.com/joyent/libuv/archive/v${LIBUV_VERSION}.tar.gz
     mv v${LIBUV_VERSION}.tar.gz libuv-v${LIBUV_VERSION}.tar.gz
 else
     echoerr "using cached node at libuv-v${LIBUV_VERSION}.tar.gz"
@@ -16,13 +16,18 @@ echoerr 'building libuv'
 rm -rf libuv-${LIBUV_VERSION}
 tar xf libuv-v${LIBUV_VERSION}.tar.gz
 cd libuv-${LIBUV_VERSION}
-./autogen.sh
-./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
-  --disable-dependency-tracking \
-  --enable-largefile \
-  --disable-dtrace
-$MAKE -j${JOBS}
-$MAKE install
+
+if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
+    $MAKE -j${JOBS}
+else
+    ./autogen.sh
+    ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
+      --disable-dependency-tracking \
+      --enable-largefile \
+      --disable-dtrace
+    $MAKE -j${JOBS}
+    $MAKE install
+fi
 # fix android breakage when building against uv.h
 : '
 In file included from ../../include/llmr/util/time.hpp:4:

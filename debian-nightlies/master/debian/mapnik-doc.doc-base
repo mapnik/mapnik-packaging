@@ -1,8 +1,0 @@
-Document: mapnik
-Title: Mapnik Python API Reference
-Abstract: This manual describes the Python API provided by Mapnik.
-Section: Programming/Python
-
-Format: HTML
-Index: /usr/share/doc/mapnik-doc/python/index.html
-Files: /usr/share/doc/mapnik-doc/python/*.html

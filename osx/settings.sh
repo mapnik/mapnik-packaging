@@ -13,6 +13,9 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export UNAME=$(uname -s);
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
+# lowercase platform name
+export platform_lowercase=$(echo ${MASON_PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
 if [[ ${UNAME} == 'Darwin' ]]; then
@@ -74,10 +77,6 @@ function unset_dl_path {
 }
 export -f unset_dl_path
 
-# lowercase platform name
-export platform=$(echo ${PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
-export platform_alt=$(echo ${UNAME}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
-
 # note: -DUCONFIG_NO_BREAK_ITERATION=1 is desired by mapnik (for toTitle)
 # http://www.icu-project.org/apiref/icu4c/uconfig_8h_source.html
 export ICU_CORE_CPP_FLAGS="-DU_CHARSET_IS_UTF8=1"
@@ -99,7 +98,7 @@ if [[ "${CXX:-false}" == false ]]; then
     export CXX=
 fi
 
-if [[ ${PLATFORM} == 'Linux' ]]; then
+if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
     if [[ "${CXX11}" == true ]]; then
         if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
@@ -153,7 +152,7 @@ if [[ ${PLATFORM} == 'Linux' ]]; then
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
     fi
-elif [[ ${PLATFORM} == 'Linaro' ]]; then
+elif [[ ${MASON_PLATFORM} == 'Linaro' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
     cd ${PACKAGES}
@@ -180,7 +179,7 @@ elif [[ ${PLATFORM} == 'Linaro' ]]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
+elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     cd ${ROOTDIR}
     # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
@@ -211,7 +210,7 @@ elif [[ ${PLATFORM} == 'Linaro-softfp' ]]; then
     fi
     export ZLIB_PATH="${SYSROOT}/usr"
 
-elif [[ ${PLATFORM} == 'Android' ]]; then
+elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
@@ -315,7 +314,7 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
     fi
 else
-    echo '**unhandled platform: ${PLATFORM}**'
+    echo '**unhandled platform: ${MASON_PLATFORM}**'
 fi
 
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${CXX_STANDARD}-${STDLIB}"
@@ -323,23 +322,23 @@ export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
 export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
-export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform}"
+export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform_lowercase}"
 export MAPNIK_DESTDIR="${BUILD}-mapnik"
 export MAPNIK_BIN_SOURCE="${MAPNIK_DESTDIR}${MAPNIK_INSTALL}"
 export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
 
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
-    if [[ ${PLATFORM} = 'Linux' ]]; then
+    if [[ ${MASON_PLATFORM} = 'Linux' ]]; then
         export ZLIB_PATH="/usr";
-    elif [[ ${PLATFORM} = 'Linaro' ]]; then
+    elif [[ ${MASON_PLATFORM} = 'Linaro' ]]; then
         export ZLIB_PATH="/usr";
-    elif [[ ${PLATFORM} = 'Linaro-softfp' ]]; then
+    elif [[ ${MASON_PLATFORM} = 'Linaro-softfp' ]]; then
         export ZLIB_PATH="/usr";
     else
-        if [[ ${PLATFORM} = 'Android' ]]; then
+        if [[ ${MASON_PLATFORM} = 'Android' ]]; then
             # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
-            export ZLIB_PATH=$PLATFORM_PREFIX;
+            export ZLIB_PATH=${PLATFORM_PREFIX};
         else
             if [[ ${SDK_PATH} ]]; then
                 export ZLIB_PATH=${SDK_PATH}/usr;
@@ -357,16 +356,23 @@ export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSE
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
-export CXX="${CORE_CXX}"
-export CC="${CORE_CC}"
-if [[ "${CXX_NAME:-false}" == false ]]; then
-    if [[ "${CORE_CXX#*'clang'}" != "$CXX" ]]; then
-        export CXX_NAME="clang"
+if [[ ${CXX:-false} == false ]]; then
+    if [[ ${CORE_CXX:-false} != false ]]; then
+        export CXX="${CORE_CXX}"
     else
-        export CXX_NAME="gcc"
+        export CXX="c++"
     fi
-    echo $(${CORE_CXX} -dumpversion)
 fi
+
+if [[ ${CC:-false} == false ]]; then
+    if [[ ${CORE_CC:-false} != false ]]; then
+        export CC="${CORE_CC}"
+    else
+        export CC="cc"
+    fi
+fi
+
+echo "using $CXX version : $(${CXX} -dumpversion)"
 
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
@@ -459,14 +465,14 @@ export NOSE_VERSION="1.2.1"
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="0.9.34"
+export HARFBUZZ_VERSION="0.9.35"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
 export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
-export OPENSSL_VERSION="1.0.1h"
+export OPENSSL_VERSION="1.0.1i"
 export LIBUV_VERSION="0.11.28"
 export NODE_VERSION="0.10.30"
 
@@ -521,6 +527,7 @@ export -f check_and_clear_libs
 
 function ensure_s3cmd {
   CUR_DIR=$(pwd)
+  mkdir -p ${PACKAGES}/
   if [[ ! -d ${PACKAGES}/s3cmd-1.5.0-beta1 ]]; then
       cd ${PACKAGES}
       ${SYSTEM_CURL} -s -S -f -O -L https://github.com/s3tools/s3cmd/archive/v1.5.0-beta1.tar.gz
@@ -552,7 +559,7 @@ function ensure_xz {
       rm -rf xz-${XZ_VERSION}
       tar xf xz-${XZ_VERSION}.tar.bz2
       cd xz-${XZ_VERSION}
-      OLD_PLATFORM=${PLATFORM}
+      OLD_PLATFORM=${MASON_PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
       make -j${JOBS}
@@ -575,7 +582,7 @@ function ensure_nasm {
       rm -rf nasm-${NASM_VERSION}
       tar xf nasm-${NASM_VERSION}.tar.bz2
       cd nasm-${NASM_VERSION}
-      OLD_PLATFORM=${PLATFORM}
+      OLD_PLATFORM=${MASON_PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
       make -j${JOBS}
@@ -596,7 +603,7 @@ function ensure_clang {
   CUR_DIR=$(pwd)
   mkdir -p ${PACKAGES}
   cd ${PACKAGES}
-  if [[ ${PLATFORM} == 'Linux' ]]; then
+  if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
       if [[ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]]; then
           echoerr 'downloading clang'

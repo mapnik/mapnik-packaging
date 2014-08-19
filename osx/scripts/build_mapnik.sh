@@ -19,11 +19,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
-        JOBS=6
-    else
-        JOBS=2
-    fi
+      JOBS=2
 fi
 
 if [[ ${USE_LTO} == true ]]; then
@@ -74,7 +70,11 @@ echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
 echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
 echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
-echo "INPUT_PLUGINS = 'csv,gdal,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+if [[ ${CXX11} == true ]]; then
+    echo "INPUT_PLUGINS = 'csv,gdal,topojson,pgraster,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+else
+    echo "INPUT_PLUGINS = 'csv,gdal,pgraster,geojson,ogr,osm,postgis,raster,shape,sqlite'" >> config.py
+fi
 echo "FAST = True" >> config.py
 echo "DEMO = False" >> config.py
 echo "PGSQL2SQLITE = False" >> config.py

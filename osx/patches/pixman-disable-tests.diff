@@ -1,0 +1,10 @@
+--- test/Makefile.am_	2014-08-08 08:25:49.000000000 -0700
++++ test/Makefile.am	2014-08-08 08:25:57.000000000 -0700
+@@ -7,7 +7,4 @@
+ 
+ libutils_la_SOURCES = $(libutils_sources) $(libutils_headers)
+ 
+-noinst_LTLIBRARIES = libutils.la
+-noinst_PROGRAMS = $(TESTPROGRAMS) $(OTHERPROGRAMS)
+-
+ TESTS = $(TESTPROGRAMS)

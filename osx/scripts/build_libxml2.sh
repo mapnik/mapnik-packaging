@@ -10,7 +10,7 @@ echoerr 'building libxml2'
 rm -rf libxml2-${LIBXML2_VERSION}
 tar xf libxml2-${LIBXML2_VERSION}.tar.gz
 cd libxml2-${LIBXML2_VERSION}
-if [ ${PLATFORM} = 'Android' ]; then
+if [ ${MASON_PLATFORM} = 'Android' ]; then
     mkdir ./tmp
     cd ./tmp
     cp ${PATCHES}/glob.c .
