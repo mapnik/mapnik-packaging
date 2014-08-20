@@ -409,8 +409,8 @@ export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiter
 export ICU_VERSION="53.1"
 export ICU_VERSION2="53_1"
 # http://www.boost.org/users/download/
-export BOOST_VERSION="1.55.0"
-export BOOST_VERSION2="1_55_0"
+export BOOST_VERSION="1.56.0"
+export BOOST_VERSION2="1_56_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3080500"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
