@@ -18,6 +18,19 @@ tar xf libuv-v${LIBUV_VERSION}.tar.gz
 cd libuv-${LIBUV_VERSION}
 
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
+    echo "
+    prefix=${BUILD}
+    exec_prefix=${prefix}
+    libdir=${exec_prefix}/lib
+    includedir=${prefix}/include
+
+    Name: libuv
+    Version: ${LIBUV_VERSION}
+    Description: multi-platform support library with a focus on asynchronous I/O.
+
+    Libs: -L\${libdir} -luv @LIBS@
+    Cflags: -I\${includedir}
+    " > ${BUILD}/lib/pkgconfig/libuv.pc
     $MAKE -j${JOBS}
 else
     ./autogen.sh
