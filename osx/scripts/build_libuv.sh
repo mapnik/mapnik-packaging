@@ -53,5 +53,5 @@ In file included from /Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx
 /Users/travis/build/mapbox/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp11-libstdcpp-gcc-arm/include/uv-unix.h:50:11: fatal error: 
       'uv-darwin.h' file not found
 '
-cp ./include/*.h $BUILD/include/
+cp -r ./include/* $BUILD/include/
 cd ${PACKAGES}
