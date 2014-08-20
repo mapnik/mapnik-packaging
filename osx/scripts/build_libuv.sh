@@ -20,9 +20,9 @@ cd libuv-${LIBUV_VERSION}
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
     echo "
     prefix=${BUILD}
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${prefix}/include
+    exec_prefix=\${prefix}
+    libdir=\${exec_prefix}/lib
+    includedir=\${prefix}/include
 
     Name: libuv
     Version: ${LIBUV_VERSION}
