@@ -1,0 +1,28 @@
+--- out/build-cpp11-libcpp-universal/include/curl/curlbuild.h	2014-08-26 13:15:11.000000000 +0200
++++ out/build-cpp11-libcpp-universal/include/curl/curlbuild.h	2014-08-26 13:15:16.000000000 +0200
+@@ -160,7 +160,11 @@
+ #endif
+ 
+ /* The size of `long', as computed by sizeof. */
++#ifdef __LP64__
++#define CURL_SIZEOF_LONG 8
++#else
+ #define CURL_SIZEOF_LONG 4
++#endif
+ 
+ /* Integral data type used for curl_socklen_t. */
+ #define CURL_TYPEOF_CURL_SOCKLEN_T socklen_t
+--- out/build-cpp11-libcpp-universal/include/curl/curlbuild.h   2014-08-26 13:15:11.000000000 +0200
++++ out/build-cpp11-libcpp-universal/include/curl/curlbuild.h   2014-08-26 13:15:16.000000000 +0200
+@@ -160,7 +160,11 @@
+ #endif
+ 
+ /* The size of `long', as computed by sizeof. */
++#ifdef __LP64__
++#define CURL_SIZEOF_LONG 8
++#else
+ #define CURL_SIZEOF_LONG 8
++#endif
+ 
+ /* Integral data type used for curl_socklen_t. */
+ #define CURL_TYPEOF_CURL_SOCKLEN_T socklen_t
