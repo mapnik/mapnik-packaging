@@ -5,7 +5,7 @@ mkdir -p "${BUILD_UNIVERSAL}"
 
 if [[ $UNAME == 'Darwin' ]]; then
     echo '*making universal libs*'
-    ARCHS="x86_64-macosx arm64-iphoneos armv7s-iphoneos armv7-iphoneos i386-iphonesimulator x86_64-iphonesimulator"
+    ARCHS="x86_64-macosx arm64-iphoneos64 armv7s-iphoneoss armv7-iphoneos i386-iphonesimulator x86_64-iphonesimulator"
     LIBS=$(find ${ROOTDIR}/out/*/lib -maxdepth 1 -name '*.a' -exec basename '{}' \; | sort | uniq)
 
     for arch in ${ARCHS}; do
