@@ -30,6 +30,7 @@ Description: multi-platform support library with a focus on asynchronous I/O.
 Libs: -L\${libdir} -luv -lpthread -ldl -framework CoreFoundation -framework CoreServices
 Cflags: -I\${includedir}" > ${BUILD}/lib/pkgconfig/libuv.pc
     $MAKE -j${JOBS}
+    echo $LIBS
     cp libuv.a ${BUILD}/lib/
 else
     ./autogen.sh
