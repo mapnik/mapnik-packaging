@@ -79,7 +79,6 @@ if [ $BCP_TOOL ]; then
     #${STAGING_DIR} 1>/dev/null
     du -h -d 0 boost-staging-minimal/boost/
     cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
-    cp -r boost/phoenix/support/detail ${LOCAL_TARGET}/include/boost/phoenix/support/
 else
     echoerr 'could not find boost bcp'
     exit 1
