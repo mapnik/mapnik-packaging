@@ -30,6 +30,7 @@ Description: multi-platform support library with a focus on asynchronous I/O.
 Libs: -L\${libdir} -luv -lpthread -ldl
 Cflags: -I\${includedir}" > ${BUILD}/lib/pkgconfig/libuv.pc
     $MAKE -j${JOBS}
+    cp libuv.a ${BUILD}/lib/
 else
     ./autogen.sh
     ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
