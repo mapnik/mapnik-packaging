@@ -28,7 +28,7 @@ if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
     Version: ${LIBUV_VERSION}
     Description: multi-platform support library with a focus on asynchronous I/O.
 
-    Libs: -L\${libdir} -luv \@LIBS\@
+    Libs: -L\${libdir} -luv -lpthread -ldl
     Cflags: -I\${includedir}
     " > ${BUILD}/lib/pkgconfig/libuv.pc
     $MAKE -j${JOBS}
