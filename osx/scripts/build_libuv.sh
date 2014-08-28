@@ -18,14 +18,15 @@ tar xf libuv-v${LIBUV_VERSION}.tar.gz
 cd libuv-${LIBUV_VERSION}
 
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
-    export LIBUV_LIBS = -lm -pthread
+    LIBUV_LIBS="-lm -pthread"
 
     if [[ $UNAME == 'Darwin' ]]; then
-        LIBUV_LIBS += -framework Foundation \
-                -framework CoreServices \
-                -framework ApplicationServices
+        LIBUV_LIBS="${LIBUV_LIBS} \
+                    -framework Foundation \
+                    -framework CoreServices \
+                    -framework ApplicationServices"
     elif [[ $UNAME == 'Linux' ]]; then
-        LIBUV_LIBS += -ldl -lrt
+        LIBUV_LIBS="${LIBUV_LIBS} -ldl -lrt"
     fi
 
     echo "prefix=${BUILD}
