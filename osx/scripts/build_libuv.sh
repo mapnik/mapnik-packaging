@@ -18,14 +18,14 @@ tar xf libuv-v${LIBUV_VERSION}.tar.gz
 cd libuv-${LIBUV_VERSION}
 
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
-    LIBS = -lm -pthread
+    export LIBUV_LIBS = -lm -pthread
 
     if [[ $UNAME == 'Darwin' ]]; then
-        LIBS += -framework Foundation \
+        LIBUV_LIBS += -framework Foundation \
                 -framework CoreServices \
                 -framework ApplicationServices
     elif [[ $UNAME == 'Linux' ]]; then
-        LIBS += -ldl -lrt
+        LIBUV_LIBS += -ldl -lrt
     fi
 
     echo "prefix=${BUILD}
@@ -37,7 +37,7 @@ Name: libuv
 Version: ${LIBUV_VERSION}
 Description: multi-platform support library with a focus on asynchronous I/O.
 
-Libs: -L\${libdir} -luv ${LIBS}
+Libs: -L\${libdir} -luv ${LIBUV_LIBS}
 Cflags: -I\${includedir}" > ${BUILD}/lib/pkgconfig/libuv.pc
     $MAKE -j${JOBS}
     cp libuv.a ${BUILD}/lib/
