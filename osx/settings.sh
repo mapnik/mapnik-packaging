@@ -412,7 +412,7 @@ export ICU_VERSION2="53_1"
 export BOOST_VERSION="1.56.0"
 export BOOST_VERSION2="1_56_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080500"
+export SQLITE_VERSION="3080600"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
