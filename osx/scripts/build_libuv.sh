@@ -22,11 +22,11 @@ if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
 
     if [[ $UNAME == 'Darwin' ]]; then
         LIBUV_LIBS="${LIBUV_LIBS} \
--framework Foundation \
--framework ApplicationServices"
+-framework Foundation"
         if [[ ! ${platform_lowercase} =~ "iphone" ]]; then
             LIBUV_LIBS="${LIBUV_LIBS} \
--framework CoreServices"
+-framework CoreServices \
+-framework ApplicationServices"
         fi
     elif [[ $UNAME == 'Linux' ]]; then
         LIBUV_LIBS="${LIBUV_LIBS} -ldl -lrt"
