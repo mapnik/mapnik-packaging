@@ -348,7 +348,7 @@ if [[ $SHARED_ZLIB == true ]]; then
 fi
 
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
-export PATH="${BUILD}/bin:$PATH"
+export PATH="${BUILD}/bin":${PATH}
 export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
