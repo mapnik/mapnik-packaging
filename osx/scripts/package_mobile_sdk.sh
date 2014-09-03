@@ -59,6 +59,7 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
+# TODO - replace with custom build_boost.sh install
 BCP_TOOL=$(find ${PACKAGES}/boost*/dist/* -name 'bcp' -print -quit)
 if [ $BCP_TOOL ]; then
     echoerr 'packaging boost headers'
@@ -79,6 +80,7 @@ if [ $BCP_TOOL ]; then
     #${STAGING_DIR} 1>/dev/null
     du -h -d 0 boost-staging-minimal/boost/
     cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
+    cp -r boost/phoenix/support/detail ${LOCAL_TARGET}/include/boost/phoenix/support/
 else
     echoerr 'could not find boost bcp'
     exit 1
