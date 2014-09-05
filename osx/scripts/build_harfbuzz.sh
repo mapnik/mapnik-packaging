@@ -35,7 +35,7 @@ LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # WARNING: freetype configure will fail silently unless pkg-config is installed
 ./configure --prefix=${BUILD} ${HOST_ARG} \
  --enable-static --disable-shared --disable-dependency-tracking \
- --with-icu \
+ --with-icu=no \
  --with-cairo=no \
  --with-glib=no \
  --with-gobject=no \
