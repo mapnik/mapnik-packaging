@@ -160,6 +160,7 @@ LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --with-threads=yes \
 ${LIBRARY_ARGS} \
 ${FGDB_ARGS} \
+--with-hide-internal-symbols=yes \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
@@ -167,7 +168,6 @@ ${FGDB_ARGS} \
 --with-spatialite=${BUILD_WITH_SPATIALITE} \
 --with-geos=${BUILD_WITH_GEOS} \
 --with-sqlite3=no \
---with-hide-internal-symbols=no \
 --with-curl=no \
 --with-pcraster=no \
 --with-cfitsio=no \

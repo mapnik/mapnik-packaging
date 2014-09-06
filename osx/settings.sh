@@ -140,9 +140,7 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
         export RANLIB=ranlib
     fi
     export ARCH_FLAGS=
-    # breaking icu symbols?
-    #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    export CXX_VISIBILITY_FLAGS=""
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden fno-common"
     if [[ "${CXX11}" == true ]]; then
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11"
@@ -302,8 +300,7 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     unset LD
     unset AR
     unset RANLIB
-    # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden fno-common"
     if [[ "${CXX11}" == true ]]; then
         export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
