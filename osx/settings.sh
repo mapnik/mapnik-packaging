@@ -140,12 +140,13 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
         export RANLIB=ranlib
     fi
     export ARCH_FLAGS=
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
     if [[ "${CXX11}" == true ]]; then
+      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11"
       export STDLIB_LDFLAGS=""
     else
+      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
@@ -300,12 +301,13 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     unset LD
     unset AR
     unset RANLIB
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
     if [[ "${CXX11}" == true ]]; then
+        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
         export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
+        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
         export STDLIB="libstdcpp"
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
