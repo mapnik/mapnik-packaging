@@ -38,7 +38,7 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   export BOOST_TOOLSET="clang"
 fi
 
-if [[ "${CXX11}" = true ]]; then
+if [[ "${CXX11}" == true ]]; then
   export CXX_STANDARD="cpp11"
 else
   export CXX_STANDARD="cpp03"
