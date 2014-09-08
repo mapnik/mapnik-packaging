@@ -267,6 +267,7 @@ export -f build_osrm
 
 function build_osmium {
   setup
+  b ./scripts/build_proj4.sh
   b ./scripts/build_expat.sh
   b ./scripts/build_google_sparsetable.sh
   # TODO: osrm boost usage does not need icu
