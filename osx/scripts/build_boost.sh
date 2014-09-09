@@ -235,6 +235,13 @@ else
     if [[ -d ${STAGING_DIR}/boost/ ]]; then
         du -h -d 0 ${STAGING_DIR}/boost/
         mkdir -p ${BUILD}/include
+        # workaround known bugs in BCP where it cannot copy needed headers
+        if [[ -d "${STAGING_DIR}/boost/phoenix/" ]]; then
+            cp -r boost/phoenix/support/detail ${STAGING_DIR}/boost/phoenix/support/
+        fi
+        if [[ -d "${STAGING_DIR}/boost/atomic/" ]]; then
+            cp -r boost/atomic/detail ${STAGING_DIR}/boost/atomic/
+        fi
         cp -r ${STAGING_DIR}/boost ${BUILD}/include/
     else
         echoerr "WARNING: did not find any boost headers for '$@'"

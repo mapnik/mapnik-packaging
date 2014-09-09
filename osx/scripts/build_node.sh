@@ -11,11 +11,15 @@ else
     echoerr "using cached node at node-v${NODE_VERSION}.tar.gz"
 fi
 
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
+CXXFLAGS="${CXXFLAGS//-fvisibility=hidden}"
+CXXFLAGS="${CXXFLAGS//-flto}"
+LDFLAGS="${LDFLAGS//-flto}"
+
 echoerr 'building node'
 rm -rf node-v${NODE_VERSION}
 tar xf node-v${NODE_VERSION}.tar.gz
 cd node-v${NODE_VERSION}
-LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 ./configure --prefix=${BUILD} \
  --shared-zlib \
  --shared-zlib-includes=${ZLIB_PATH}/include \

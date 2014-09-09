@@ -19,10 +19,6 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-      JOBS=2
-fi
-
-if [[ ${USE_LTO} == true ]]; then
    JOBS=1
 fi
 
