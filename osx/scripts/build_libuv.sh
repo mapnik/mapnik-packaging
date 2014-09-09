@@ -18,7 +18,33 @@ tar xf libuv-v${LIBUV_VERSION}.tar.gz
 cd libuv-${LIBUV_VERSION}
 
 if [[ "${LIBUV_VERSION}" =~ "0.10" ]]; then
+    LIBUV_LIBS="-lm -pthread"
+
+    if [[ $UNAME == 'Darwin' ]]; then
+        LIBUV_LIBS="${LIBUV_LIBS} \
+-framework Foundation"
+        if [[ ! ${platform_lowercase} =~ "iphone" ]]; then
+            LIBUV_LIBS="${LIBUV_LIBS} \
+-framework CoreServices \
+-framework ApplicationServices"
+        fi
+    elif [[ $UNAME == 'Linux' ]]; then
+        LIBUV_LIBS="${LIBUV_LIBS} -ldl -lrt"
+    fi
+
+    echo "prefix=${BUILD}
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: libuv
+Version: ${LIBUV_VERSION}
+Description: multi-platform support library with a focus on asynchronous I/O.
+
+Libs: -L\${libdir} -luv ${LIBUV_LIBS}
+Cflags: -I\${includedir}" > ${BUILD}/lib/pkgconfig/libuv.pc
     $MAKE -j${JOBS}
+    cp libuv.a ${BUILD}/lib/
 else
     ./autogen.sh
     ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
@@ -40,5 +66,5 @@ In file included from /Users/dane/projects/mapbox-gl-native/mapnik-packaging/osx
 /Users/travis/build/mapbox/mapbox-gl-native/mapnik-packaging/osx/out/build-cpp11-libstdcpp-gcc-arm/include/uv-unix.h:50:11: fatal error: 
       'uv-darwin.h' file not found
 '
-cp ./include/*.h $BUILD/include/
+cp -r ./include/* $BUILD/include/
 cd ${PACKAGES}
