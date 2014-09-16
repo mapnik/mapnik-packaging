@@ -38,7 +38,7 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   export BOOST_TOOLSET="clang"
 fi
 
-if [[ "${CXX11}" = true ]]; then
+if [[ "${CXX11}" == true ]]; then
   export CXX_STANDARD="cpp11"
 else
   export CXX_STANDARD="cpp03"
@@ -140,14 +140,13 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
         export RANLIB=ranlib
     fi
     export ARCH_FLAGS=
-    # breaking icu symbols?
-    #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    export CXX_VISIBILITY_FLAGS=""
     if [[ "${CXX11}" == true ]]; then
+      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11"
       export STDLIB_LDFLAGS=""
     else
+      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
@@ -302,13 +301,13 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     unset LD
     unset AR
     unset RANLIB
-    # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [[ "${CXX11}" == true ]]; then
+        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
         export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
+        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
         export STDLIB="libstdcpp"
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
@@ -347,7 +346,7 @@ if [[ $SHARED_ZLIB == true ]]; then
 fi
 
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
-export PATH="${BUILD}/bin:$PATH"
+export PATH="${BUILD}/bin":${PATH}
 export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
@@ -408,10 +407,10 @@ export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiter
 export ICU_VERSION="53.1"
 export ICU_VERSION2="53_1"
 # http://www.boost.org/users/download/
-export BOOST_VERSION="1.55.0"
-export BOOST_VERSION2="1_55_0"
+export BOOST_VERSION="1.56.0"
+export BOOST_VERSION2="1_56_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080500"
+export SQLITE_VERSION="3080600"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
 export FREETYPE_VERSION="2.5.3"
@@ -472,8 +471,8 @@ export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
 export OPENSSL_VERSION="1.0.1i"
-export LIBUV_VERSION="0.11.28"
-export NODE_VERSION="0.10.30"
+export LIBUV_VERSION="0.11.29"
+export NODE_VERSION="0.10.31"
 
 function download {
     if [[ ! -f $1 ]]; then

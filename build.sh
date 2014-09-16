@@ -146,13 +146,15 @@ function prep_linux {
 
 function prep_osx {
   cd osx
+  brew install autoconf automake libtool makedepend cmake || true
+  # NOTE: this needs to be set before sourcing the platform
+  # to ensure that homebrew commands like protoc are not used
+  export PATH=$(brew --prefix)/bin:$PATH
   if [[ "${MASON_PLATFORM:-false}" != false ]]; then
       source ${MASON_PLATFORM}.sh
   else
       source MacOSX.sh
   fi
-  brew install autoconf automake libtool makedepend cmake || true
-  export PATH=$(brew --prefix)/bin:$PATH
 }
 
 function prepare_os {
@@ -265,6 +267,7 @@ export -f build_osrm
 
 function build_osmium {
   setup
+  b ./scripts/build_proj4.sh
   b ./scripts/build_expat.sh
   b ./scripts/build_google_sparsetable.sh
   # TODO: osrm boost usage does not need icu
