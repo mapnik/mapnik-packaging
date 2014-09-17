@@ -18,7 +18,7 @@ else
 fi
 
 # re-run project configure against the new build products
-if [[ -z "${TRAVIS_OS_NAME}" ]]; then
+if [ -z "${TRAVIS:-}" ]; then
   ./configure \
   --pkg-config-root=`pwd`/mapnik-packaging/osx/out/build-cpp11-libcpp-universal/lib/pkgconfig \
   --boost=`pwd`/mapnik-packaging/osx/out/build-cpp11-libcpp-x86_64-macosx \
