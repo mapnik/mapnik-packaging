@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e -u
 set -o pipefail
-mkdir -p "${BUILD_UNIVERSAL}"
+mkdir -p "${BUILD_ROOT}-universal"
 
 if [[ $UNAME == 'Darwin' ]]; then
-    echo '*making universal libs*'
-    ARCHS="x86_64-macosx arm64-iphoneos64 armv7s-iphoneoss armv7-iphoneos i386-iphonesimulator x86_64-iphonesimulator"
+    echo '*making universal libs for ios*'
+    ARCHS="arm64-iphoneos64 armv7s-iphoneoss armv7-iphoneos i386-iphonesimulator x86_64-iphonesimulator64"
     LIBS=$(find ${ROOTDIR}/out/*/lib -maxdepth 1 -name '*.a' -exec basename '{}' \; | sort | uniq)
 
     for arch in ${ARCHS}; do
@@ -27,16 +27,18 @@ if [[ $UNAME == 'Darwin' ]]; then
             fi
         done;
 
-        lipo -create -output \
-            "${BUILD_UNIVERSAL}/lib/${libname}" \
-            $FROM_LIBS
-        lipo -info "${BUILD_UNIVERSAL}/lib/${libname}"
+        if [ ! -z "$FROM_LIBS" ]; then
+            lipo -create -output \
+                "${BUILD_ROOT}-universal/lib/${libname}" \
+                    $FROM_LIBS
+            lipo -info "${BUILD_ROOT}-universal/lib/${libname}"
+        fi
     done;
 
     if [ -f ${MAPNIK_BIN_SOURCE}/lib/libmapnik.a ]; then
         echo '*making universal mapnik*'
         lipo -create -output \
-            "${BUILD_UNIVERSAL}/libmapnik.a" \
+            "${BUILD_ROOT}-universal/libmapnik.a" \
             "${BUILD_ROOT}-x86_64-macosx-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
             "${BUILD_ROOT}-arm64-iphoneos-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \
             "${BUILD_ROOT}-armv7s-iphoneos-mapnik/${MAPNIK_INSTALL}/lib/libmapnik.a" \

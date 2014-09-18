@@ -318,7 +318,6 @@ fi
 
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${CXX_STANDARD}-${STDLIB}"
 export BUILDDIR="build-${CXX_STANDARD}-${STDLIB}"
-export BUILD_UNIVERSAL="${ROOTDIR}/out/${BUILDDIR}-universal"
 export BUILD_ROOT="${ROOTDIR}/out/${BUILDDIR}"
 export BUILD_TOOLS_ROOT="${ROOTDIR}/out/build-tools"
 export BUILD="${BUILD_ROOT}-${ARCH_NAME}-${platform_lowercase}"
