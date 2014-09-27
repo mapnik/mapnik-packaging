@@ -67,7 +67,11 @@ function upgrade_clang {
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     CLANG_VERSION="3.4"
     if [[ $(lsb_release --release) =~ "12.04" ]]; then
-        sudo add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-${CLANG_VERSION} main"
+       sudo add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-${CLANG_VERSION} main"
+    fi
+    if [[ $(lsb_release --release) =~ "14.04" ]]; then
+       CLANG_VERSION="3.5"
+       sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-precise-${CLANG_VERSION} main"
     fi
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
@@ -76,10 +80,8 @@ function upgrade_clang {
     apt-cache policy clang-${CLANG_VERSION}
     sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
-    if [[ $(lsb_release --release) =~ "12.04" ]]; then
-        echo 'upgrading libstdc++'
-        sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
-    fi
+    echo 'upgrading libstdc++'
+    sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
     if [[ ${LTO:-false} != false ]]; then
         echo "upgrading binutils-gold"
         sudo apt-get install -y -qq binutils-gold
