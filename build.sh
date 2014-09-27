@@ -71,7 +71,7 @@ function upgrade_clang {
     fi
     if [[ $(lsb_release --release) =~ "14.04" ]]; then
        CLANG_VERSION="3.5"
-       sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-precise-${CLANG_VERSION} main"
+       sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${CLANG_VERSION} main"
     fi
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
