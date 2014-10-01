@@ -14,14 +14,14 @@ echoerr 'building pkg-config'
 
 if [ $BOOST_ARCH = "arm" ]; then
     OLD_PLATFORM=${MASON_PLATFORM}
-    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
     NATIVE_PKG_CONFIG="${PACKAGES}/pkg-config-${PKG_CONFIG_VERSION}-${ARCH_NAME}/pkg-config"
-    source ${ROOTDIR}/${OLD_PLATFORM}.sh
+    MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
     if [ ! -f "${NATIVE_PKG_CONFIG}" ]; then
         echoerr 'native/host arch pkg-config missing, building now'
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
         ${ROOTDIR}/scripts/build_pkg_config.sh
-        source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
         mkdir -p "${BUILD}/bin/"
         cp "${NATIVE_PKG_CONFIG}" ${BUILD}/bin/
     else

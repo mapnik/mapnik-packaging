@@ -349,7 +349,7 @@ export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSE
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
-if [[ ${CXX:-false} == false ]]; then
+if [[ ${CXX:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
     if [[ ${CORE_CXX:-false} != false ]]; then
         export CXX="${CORE_CXX}"
     else
@@ -357,7 +357,7 @@ if [[ ${CXX:-false} == false ]]; then
     fi
 fi
 
-if [[ ${CC:-false} == false ]]; then
+if [[ ${CC:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
     if [[ ${CORE_CC:-false} != false ]]; then
         export CC="${CORE_CC}"
     else

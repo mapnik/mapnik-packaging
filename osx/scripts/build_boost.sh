@@ -102,13 +102,13 @@ if [[ ! -f ./dist/bin/bcp ]]; then
     if [[ ${BOOST_ARCH} == "arm" ]]; then
         echoerr "compiling bjam for HOST ${HOST_PLATFORM}"
         OLD_PLATFORM=${MASON_PLATFORM}
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
         bootstrap
         cd tools/bcp
         ../../b2 -j${JOBS} ${B2_VERBOSE}
         cd ../../
         CURRENT_DIR=`pwd`
-        source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
         cd ${CURRENT_DIR}
         gen_config
     else

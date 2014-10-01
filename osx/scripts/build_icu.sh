@@ -33,15 +33,15 @@ mv icu icu-${ARCH_NAME}
 cd icu-${ARCH_NAME}/source
 if [ $BOOST_ARCH = "arm" ]; then
     OLD_PLATFORM=${MASON_PLATFORM}
-    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
     NATIVE_BUILD_DIR="$(pwd)/../../icu-${ARCH_NAME}/source"
-    source ${ROOTDIR}/${OLD_PLATFORM}.sh
+    MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
     if [[ ! -d ${NATIVE_BUILD_DIR} ]]; then
         echoerr 'native/host arch icu missing, building now in subshell'
         OLD_PLATFORM=${MASON_PLATFORM}
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
         ${ROOTDIR}/scripts/build_icu.sh
-        source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
     fi
     CROSS_FLAGS="--with-cross-build=${NATIVE_BUILD_DIR}"
     CPPFLAGS="${CPPFLAGS} -I$(pwd)/common -I$(pwd)/tools/tzcode/"
