@@ -214,33 +214,28 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export alias ldconfig=true
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export CORE_CXXFLAGS=""
-    export ANDROID_NDK_VERSION="r10"
-    export API_LEVEL="android-L"
     ${ROOTDIR}/scripts/setup-android-ndk.sh
-    export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.9"
+    export NDK_PATH="${PACKAGES}/android-ndk-${MASON_ANDROID_NDK_VERSION}"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
     export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
     if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
-        echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
-        # cd here is to workaround https://code.google.com/p/android/issues/detail?id=67690
-        CUR_DIR=$(pwd)
-        cd "${NDK_PATH}"
+        echo "creating android toolchain with ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
         "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
-          --toolchain="${ANDROID_CROSS_COMPILER}" \
+          --toolchain="${MASON_ANDROID_CROSS_COMPILER}" \
           --llvm-version=3.4 \
           --package-dir="${NDK_PACKAGE_DIR}" \
           --install-dir="${PLATFORM_PREFIX}" \
           --stl="libcxx" \
-          --arch=arm \
-          --platform="${API_LEVEL}"
+          --arch="${MASON_ANDROID_ARCH}" \
+          --platform="${API_LEVEL}" \
+          --verbose
         cd $CUR_DIR
     else
-        echo "using ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
+        echo "using ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
-    alias ldd="arm-linux-androideabi-readelf -d "
+    alias ldd="${MASON_ANDROID_TARGET}-linux-android-readelf -d "
     export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_LDFLAGS=""
@@ -249,17 +244,17 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     # use clang in order to support std::atomic
     # https://code.google.com/p/android/issues/detail?id=36496
-    export CORE_CXX="arm-linux-androideabi-clang++"
-    export CORE_CC="arm-linux-androideabi-clang"
-    export LD="arm-linux-androideabi-ld"
-    export AR="arm-linux-androideabi-ar"
+    export CORE_CXX="${MASON_ANDROID_TARGET}-linux-android-clang++"
+    export CORE_CC="${MASON_ANDROID_TARGET}-linux-android-clang"
+    export LD="${MASON_ANDROID_TARGET}-linux-android-ld"
+    export AR="${MASON_ANDROID_TARGET}-linux-android-ar"
     export ARCH_FLAGS=
-    export RANLIB="arm-linux-androideabi-ranlib"
+    export RANLIB="${MASON_ANDROID_TARGET}-linux-android-ranlib"
     # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
-    #alias libtool="arm-linux-androideabi-ar cru"
-    #export libtool="arm-linux-androideabi-ar cru"
-    export NM="arm-linux-androideabi-nm"
-    export STDLIB="libstdcpp"
+    #alias libtool="${MASON_ANDROID_TARGET}-linux-android-ar cru"
+    #export libtool="${MASON_ANDROID_TARGET}-linux-android-ar cru"
+    export NM="${MASON_ANDROID_TARGET}-linux-android-nm"
+    export STDLIB="libcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
 elif [[ ${UNAME} == 'Darwin' ]]; then

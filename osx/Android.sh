@@ -3,6 +3,11 @@
 set -u
 
 export MASON_PLATFORM="Android"
+export MASON_ANDROID_NDK_VERSION="r10b"
+export MASON_ANDROID_ARCH="arm64"
+export MASON_API_LEVEL="android-L"
+export MASON_ANDROID_TARGET="aarch64"
+export MASON_ANDROID_CROSS_COMPILER="${MASON_ANDROID_TARGET}-linux-android-4.9"
 
 UNAME=$(uname -s);
 if [[ $UNAME == 'Darwin' ]]; then
@@ -15,7 +20,7 @@ fi
 
 export BOOST_ARCH="arm"
 export ARCH_NAME="gcc-arm"
-export HOST_ARG="--host=arm-linux-androideabi"
+export HOST_ARG="--host=${MASON_ANDROID_TARGET}-linux-android"
 export MAKE="make"
 if [[ "${CXX11:-false}" == false ]]; then
   export CXX11=false
