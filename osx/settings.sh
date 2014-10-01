@@ -228,7 +228,7 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
           --install-dir="${PLATFORM_PREFIX}" \
           --stl="libcxx" \
           --arch="${MASON_ANDROID_ARCH}" \
-          --platform="${API_LEVEL}" \
+          --platform="${MASON_API_LEVEL}" \
           --verbose
         cd $CUR_DIR
     else
