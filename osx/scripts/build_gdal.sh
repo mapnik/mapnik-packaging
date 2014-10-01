@@ -7,7 +7,7 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=false
+GDAL_LATEST=true
 GDAL_PRE_2x=false
 
 GDAL_SHARED_LIB=true
@@ -33,8 +33,10 @@ if [[ ${GDAL_LATEST} == true ]]; then
         # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
         git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
     else
-        git checkout trunk || true
-        git pull || true
+        git checkout trunk
+        git checkout .
+        git pull
+        git checkout 3fdc6e72b6e5cba8de1027c6084a90167f553a96
     fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
