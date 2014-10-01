@@ -19,7 +19,7 @@ if [ -d ${MAPNIK_BIN_SOURCE} ]; then
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-   JOBS=3
+   JOBS=2
 fi
 
 echo "PREFIX = '${MAPNIK_INSTALL}'" > config.py
