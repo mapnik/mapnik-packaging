@@ -427,7 +427,7 @@ export NASM_VERSION="2.11"
 export JPEG_TURBO_VERSION="1.3.1"
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="1.11.0"
+export GDAL_VERSION="1.11.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # gz

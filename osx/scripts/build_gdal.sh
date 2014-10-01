@@ -7,7 +7,7 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=true
+GDAL_LATEST=false
 GDAL_PRE_2x=false
 
 GDAL_SHARED_LIB=true
@@ -53,6 +53,8 @@ if [[ ${GDAL_LATEST} == true ]]; then
     else
         git apply ${PATCHES}/gdal_minimal_trunk.diff
     fi
+elif [[ ${GDAL_VERSION} == "1.11.1" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-1.11.1-minimal.diff
 elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
     patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
     patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true
