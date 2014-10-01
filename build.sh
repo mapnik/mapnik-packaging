@@ -84,9 +84,11 @@ function upgrade_clang {
     if [[ $(lsb_release --id) =~ "Debian" ]]; then
         if [[ $(lsb_release --codename) =~ "wheezy" ]]; then
            CLANG_VERSION="3.5"
+           sudo apt-get install -y python-software-properties
            sudo add-apt-repository "deb http://llvm.org/apt/wheezy/ llvm-toolchain-wheezy-${CLANG_VERSION} main"
         fi
         if [[ $(lsb_release --codename) =~ "jessie" ]]; then
+           sudo apt-get install -y software-properties-common
            sudo add-apt-repository "deb http://llvm.org/apt/unstable/ llvm-toolchain-${CLANG_VERSION} main"
            CLANG_VERSION="3.5"
         fi
