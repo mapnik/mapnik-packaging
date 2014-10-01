@@ -78,6 +78,8 @@ function upgrade_clang {
            CLANG_VERSION="3.5"
            sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${CLANG_VERSION} main"
         fi
+        echo "updating apt"
+        sudo apt-get update -y
         echo 'upgrading libstdc++'
         sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
     fi
@@ -92,6 +94,8 @@ function upgrade_clang {
            sudo add-apt-repository "deb http://llvm.org/apt/unstable/ llvm-toolchain-${CLANG_VERSION} main"
            CLANG_VERSION="3.5"
         fi
+        echo "updating apt"
+        sudo apt-get update -y
         echo 'upgrading libstdc++'
         sudo apt-get install -y libstdc++6 libstdc++-4.9-dev
     fi
