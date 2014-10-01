@@ -163,7 +163,7 @@ function prep_linux {
       source Linux.sh
   fi
   echo "installing build tools"
-  sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
+  sudo apt-get install -qq -y curl build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
 }
 
 function prep_osx {
