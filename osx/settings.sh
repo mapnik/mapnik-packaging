@@ -230,7 +230,6 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
           --arch="${MASON_ANDROID_ARCH}" \
           --platform="${MASON_API_LEVEL}" \
           --verbose
-        cd $CUR_DIR
     else
         echo "using ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
