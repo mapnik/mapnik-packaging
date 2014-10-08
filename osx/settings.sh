@@ -367,6 +367,11 @@ fi
 
 echo "using $CXX version : $(${CXX} -dumpversion)"
 
+# help boost's bootstrap find 'clang' if used
+if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
+    export PATH=$(dirname $(realpath $CXX)):$PATH
+fi
+
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
 export LIBRARY_PATH="${BUILD}/lib"
