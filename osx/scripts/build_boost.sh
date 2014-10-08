@@ -80,7 +80,7 @@ bootstrap() {
   echoerr 'bootstrapping boost'
   gen_config
   if [[ "${CXX#*'clang++'}" != "$CXX" ]]; then
-      ./bootstrap.sh --with-toolset=clang
+      ./bootstrap.sh --with-toolset=cc
   else
       ./bootstrap.sh --with-toolset=gcc
   fi
