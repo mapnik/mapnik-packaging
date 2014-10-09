@@ -67,7 +67,7 @@ function upgrade_gcc {
 }
 
 function upgrade_clang {
-    CLANG_VERSION="3.4"
+    CLANG_VERSION="3.5"
     if [[ $(lsb_release --id) =~ "Ubuntu" ]]; then
         echo "adding clang + gcc-4.8 ppa"
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
@@ -75,7 +75,6 @@ function upgrade_clang {
            sudo add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-${CLANG_VERSION} main"
         fi
         if [[ $(lsb_release --release) =~ "14.04" ]]; then
-           CLANG_VERSION="3.5"
            sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${CLANG_VERSION} main"
         fi
         echo "updating apt"
@@ -85,14 +84,12 @@ function upgrade_clang {
     fi
     if [[ $(lsb_release --id) =~ "Debian" ]]; then
         if [[ $(lsb_release --codename) =~ "wheezy" ]]; then
-           CLANG_VERSION="3.5"
            sudo apt-get install -y python-software-properties
            sudo add-apt-repository "deb http://llvm.org/apt/wheezy/ llvm-toolchain-wheezy-${CLANG_VERSION} main"
         fi
         if [[ $(lsb_release --codename) =~ "jessie" ]]; then
            sudo apt-get install -y software-properties-common
            sudo add-apt-repository "deb http://llvm.org/apt/unstable/ llvm-toolchain-${CLANG_VERSION} main"
-           CLANG_VERSION="3.5"
         fi
         echo "updating apt"
         sudo apt-get update -y
