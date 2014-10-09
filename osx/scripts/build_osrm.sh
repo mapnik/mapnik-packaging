@@ -20,8 +20,8 @@ fi
 echoerr 'building OSRM'
 rm -rf Project-OSRM
 git clone ${OSRM_REPO} Project-OSRM
-git branch $OSRM_BRANCH
 cd Project-OSRM
+git branch $OSRM_BRANCH
 git checkout $OSRM_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
