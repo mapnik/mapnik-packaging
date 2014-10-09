@@ -6,13 +6,25 @@ cd ${PACKAGES}
 
 echoerr 'building luabind'
 
-#download luabind-${LUABIND_VERSION}.tar.gz
 
+if [[ "${LUABIND_COMMIT:-false}" == false ]]; then
+    LUABIND_COMMIT=2b904b3042c2fa0682f4adcd42ee91b6af48a924
+fi
+
+if [[ "${LUABIND_BRANCH:-false}" == false ]]; then
+    LUABIND_BRANCH=develop
+fi
+
+if [[ "${LUABIND_REPO:-false}" == false ]]; then
+    LUABIND_REPO="https://github.com/DennisOSRM/luabind.git"
+fi
+
+echoerr 'building OSRM'
 rm -rf luabind
-git clone --quiet https://github.com/DennisOSRM/luabind.git
+git clone --quiet ${LUABIND_REPO} -b $LUABIND_BRANCH luabind
 cd luabind
-git checkout 789c9e0f98
-# avoid g++ being killed on travis
+git checkout $LUABIND_COMMIT
+
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
         JOBS=4
@@ -20,6 +32,7 @@ if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
         JOBS=2
     fi
 fi
+
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
 if [[ ${CXX11} == true ]]; then
