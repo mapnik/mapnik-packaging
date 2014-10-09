@@ -27,6 +27,10 @@ if [[ ${UNAME} == 'Linux' ]]; then
     CXXFLAGS="${CXXFLAGS} -Wno-attributes"
 fi
 
+# libtbb does not support -fvisibility=hidden
+CXXFLAGS="${CXXFLAGS//-fvisibility=hidden}"
+
+
 if [[ $CXX11 == true ]]; then
     rm -rf tbb42_20140416oss
     tar xf tbb42_20140416oss_src.tgz
