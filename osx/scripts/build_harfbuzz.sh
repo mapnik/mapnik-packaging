@@ -4,7 +4,7 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-HARFBUZZ_LATEST=false
+HARFBUZZ_LATEST=true
 
 echoerr 'building harfbuzz'
 
@@ -13,10 +13,12 @@ if [[ ${HARFBUZZ_LATEST} == true ]]; then
         git clone git@github.com:behdad/harfbuzz.git harfbuzz-master
         cd harfbuzz-master
         ./autogen.sh
+        git checkout a1f27ac3c48cfe6d532dc422cf256952fea472ed
     else
         cd harfbuzz-master
         git checkout .
         git pull || true
+        git checkout a1f27ac3c48cfe6d532dc422cf256952fea472ed
         # TODO - depends on ragel
         ./autogen.sh ${HOST_ARG}
         make clean

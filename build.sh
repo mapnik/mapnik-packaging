@@ -167,12 +167,12 @@ function prep_linux {
       source Linux.sh
   fi
   echo "installing build tools"
-  sudo apt-get install -qq -y curl build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf
+  sudo apt-get install -qq -y curl build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
 }
 
 function prep_osx {
   cd osx
-  brew install autoconf automake libtool makedepend cmake || true
+  brew install autoconf automake libtool makedepend cmake ragel || true
   # NOTE: this needs to be set before sourcing the platform
   # to ensure that homebrew commands like protoc are not used
   export PATH=$(brew --prefix)/bin:$PATH
