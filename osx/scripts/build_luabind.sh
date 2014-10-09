@@ -14,7 +14,11 @@ cd luabind
 git checkout 789c9e0f98
 # avoid g++ being killed on travis
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=4
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        JOBS=4
+    else
+        JOBS=2
+    fi
 fi
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
