@@ -271,7 +271,6 @@ function build_mapnik {
 
 function build_osrm {
   setup
-  ./scripts/build_osrm.sh || true
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
   b ./scripts/build_lua.sh
