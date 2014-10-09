@@ -4,9 +4,6 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echoerr 'building luabind'
-
-
 if [[ "${LUABIND_COMMIT:-false}" == false ]]; then
     LUABIND_COMMIT=2b904b3042c2fa0682f4adcd42ee91b6af48a924
 fi
@@ -19,10 +16,12 @@ if [[ "${LUABIND_REPO:-false}" == false ]]; then
     LUABIND_REPO="https://github.com/DennisOSRM/luabind.git"
 fi
 
-echoerr 'building OSRM'
+echoerr 'building luabind'
 rm -rf luabind
-git clone --quiet ${LUABIND_REPO} -b $LUABIND_BRANCH luabind
+git clone ${LUABIND_REPO} luabind
 cd luabind
+git branch $LUABIND_BRANCH
+git checkout .
 git checkout $LUABIND_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
