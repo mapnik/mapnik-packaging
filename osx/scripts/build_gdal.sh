@@ -33,8 +33,10 @@ if [[ ${GDAL_LATEST} == true ]]; then
         # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
         git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
     else
-        git checkout trunk || true
-        git pull || true
+        git checkout trunk
+        git checkout .
+        git pull
+        git checkout 3fdc6e72b6e5cba8de1027c6084a90167f553a96
     fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
@@ -53,6 +55,8 @@ if [[ ${GDAL_LATEST} == true ]]; then
     else
         git apply ${PATCHES}/gdal_minimal_trunk.diff
     fi
+elif [[ ${GDAL_VERSION} == "1.11.1" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-1.11.1-minimal.diff
 elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
     patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
     patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true

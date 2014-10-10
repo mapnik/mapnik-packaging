@@ -52,34 +52,57 @@ function teardown {
 }
 
 function upgrade_gcc {
-    echo "adding gcc-4.8 ppa"
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    if [[ $(lsb_release --id) =~ "Ubuntu" ]]; then
+        echo "adding gcc-4.8 ppa"
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    fi
     echo "updating apt"
-    sudo apt-get update -qq -y
-    echo "installing C++11 compiler"
-    sudo apt-get install -qq -y gcc-4.8 g++-4.8
-    export CC="gcc-4.8"
-    export CXX="g++-4.8"
+    sudo apt-get update -y
+    if [[ $(lsb_release --id) =~ "Ubuntu" ]]; then
+        echo "installing C++11 compiler"
+        sudo apt-get install -qq -y gcc-4.8 g++-4.8
+        export CC="gcc-4.8"
+        export CXX="g++-4.8"
+    fi
 }
 
 function upgrade_clang {
-    echo "adding clang + gcc-4.8 ppa"
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    CLANG_VERSION="3.4"
-    if [[ $(lsb_release --release) =~ "12.04" ]]; then
-        sudo add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-${CLANG_VERSION} main"
+    CLANG_VERSION="3.5"
+    if [[ $(lsb_release --id) =~ "Ubuntu" ]]; then
+        echo "adding clang + gcc-4.8 ppa"
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        if [[ $(lsb_release --release) =~ "12.04" ]]; then
+           sudo add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-${CLANG_VERSION} main"
+        fi
+        if [[ $(lsb_release --release) =~ "14.04" ]]; then
+           sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${CLANG_VERSION} main"
+        fi
+        echo "updating apt"
+        sudo apt-get update -y
+        echo 'upgrading libstdc++'
+        sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
+    fi
+    if [[ $(lsb_release --id) =~ "Debian" ]]; then
+        if [[ $(lsb_release --codename) =~ "wheezy" ]]; then
+           sudo apt-get install -y python-software-properties
+           sudo add-apt-repository "deb http://llvm.org/apt/wheezy/ llvm-toolchain-wheezy-${CLANG_VERSION} main"
+        fi
+        if [[ $(lsb_release --codename) =~ "jessie" ]]; then
+           sudo apt-get install -y software-properties-common
+           sudo add-apt-repository "deb http://llvm.org/apt/unstable/ llvm-toolchain-${CLANG_VERSION} main"
+        fi
+        echo "updating apt"
+        sudo apt-get update -y
+        echo 'upgrading libstdc++'
+        sudo apt-get install -y libstdc++6 libstdc++-4.9-dev
     fi
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     echo "updating apt"
-    sudo apt-get update -y -qq
+    sudo apt-get update -y
     echo "installing clang-${CLANG_VERSION}"
     apt-cache policy clang-${CLANG_VERSION}
     sudo apt-get install -y clang-${CLANG_VERSION}
     echo "installing C++11 compiler"
-    if [[ $(lsb_release --release) =~ "12.04" ]]; then
-        echo 'upgrading libstdc++'
-        sudo apt-get install -y libstdc++6 libstdc++-4.8-dev
-    fi
     if [[ ${LTO:-false} != false ]]; then
         echo "upgrading binutils-gold"
         sudo apt-get install -y -qq binutils-gold
@@ -141,12 +164,12 @@ function prep_linux {
       source Linux.sh
   fi
   echo "installing build tools"
-  sudo apt-get install -qq -y build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake autoconf
+  sudo apt-get install -qq -y curl build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
 }
 
 function prep_osx {
   cd osx
-  brew install autoconf automake libtool makedepend cmake || true
+  brew install autoconf automake libtool makedepend cmake ragel || true
   # NOTE: this needs to be set before sourcing the platform
   # to ensure that homebrew commands like protoc are not used
   export PATH=$(brew --prefix)/bin:$PATH
@@ -274,7 +297,7 @@ function build_osmium {
   ./scripts/build_boost.sh --with-test --with-program_options
   b ./scripts/build_protobuf.sh
   b ./scripts/build_osm-pbf.sh
-  b ./scripts/build_cryptopp.sh
+  #b ./scripts/build_cryptopp.sh
   teardown
 }
 
