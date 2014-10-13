@@ -230,8 +230,10 @@ function build_mapnik {
   b ./scripts/build_jpeg_turbo.sh
   b ./scripts/build_png.sh
   b ./scripts/build_proj4.sh
-  b ./scripts/build_webp.sh
   b ./scripts/build_tiff.sh
+  # note: webp's cwebp program wants
+  # to link to tiff/jpeg/png
+  b ./scripts/build_webp.sh
   b ./scripts/build_sqlite.sh
   #./scripts/build_geotiff.sh
   # for mapnik-vector-tile
