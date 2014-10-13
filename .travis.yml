@@ -13,10 +13,10 @@ env:
     #- CXX11=true TARGET=mobile_tools MASON_PLATFORM=Android
     #- CXX11=false TARGET=mobile_tools MASON_PLATFORM=Android
     #- CXX11=true TARGET=build_osmium
-    #- CXX11=true TARGET=build_osrm QUIET=true LTO=True
     #- CXX11=true TARGET=build_osrm QUIET=true
-    - CXX11=true  TARGET=build_mapnik QUIET=true PUBLISH=true MINIMAL_MAPNIK=false LTO=false
-    #- CXX11=false TARGET=build_mapnik QUIET=true PUBLISH=true MINIMAL_MAPNIK=false LTO=false
+    - CXX11=true TARGET=build_mapnik QUIET=true
+    - CXX11=true TARGET=build_mapnik MASON_PLATFORM=Android
+    #- CXX11=false TARGET=build_mapnik QUIET=true LTO=false
     # broken protobuf-c build
     #- CXX11=false TARGET=build_osm2pgsql QUIET=true
     # broken spatialite configure
@@ -29,10 +29,10 @@ before_install:
  - if [[ `uname -s` == 'Darwin' ]]; then vm_stat && sysctl -n hw.memsize; else free; fi
 
 install:
- - true
+ - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
 
 before_script:
- - true
+ - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH=true; fi;
 
 script:
  - source ./build.sh
