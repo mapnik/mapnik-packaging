@@ -40,9 +40,10 @@ else
     cd pkg-config-${PKG_CONFIG_VERSION}-${ARCH_NAME}
     ./configure ${HOST_ARG} \
         --disable-debug \
-      --disable-dependency-tracking \
-      --prefix=${BUILD} \
-      --with-pc-path=${BUILD}/lib/pkgconfig
+        --with-internal-glib \
+        --disable-dependency-tracking \
+        --prefix=${BUILD} \
+        --with-pc-path=${BUILD}/lib/pkgconfig
     $MAKE -j${JOBS}
     $MAKE install
 fi

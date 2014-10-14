@@ -215,8 +215,6 @@ function build_mapnik {
       sudo apt-get purge -qq -y libtiff* libjpeg* libpng3
       sudo apt-get autoremove -y -qq
   fi
-  # NOTE: harfbuzz needs pkg-config to find icu
-  b ./scripts/build_pkg_config.sh
   b ./scripts/build_icu.sh
   BOOST_LIBRARIES="--with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex"
   if [ ${BOOST_ARCH} != "arm" ]; then
