@@ -59,6 +59,17 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
+# copy over shapeindex and nik2img
+if [ -f "${MAPNIK_BIN_SOURCE}/bin/shapeindex" ];then
+    echoerr copying shapeindex
+    cp "${MAPNIK_BIN_SOURCE}/bin/shapeindex" "${LOCAL_TARGET}/bin/shapeindex"
+fi
+
+if [ -f "${MAPNIK_BIN_SOURCE}/bin/nik2img" ];then
+    echoerr copying nik2img
+    cp "${MAPNIK_BIN_SOURCE}/bin/nik2img" "${LOCAL_TARGET}/bin/nik2img"
+fi
+
 # TODO - replace with custom build_boost.sh install
 BCP_TOOL=$(find ${PACKAGES}/boost*/dist/* -name 'bcp' -print -quit)
 if [ $BCP_TOOL ]; then
