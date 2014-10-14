@@ -242,7 +242,13 @@ else
         if [[ -d "${STAGING_DIR}/boost/atomic/" ]]; then
             cp -r boost/atomic/detail ${STAGING_DIR}/boost/atomic/
         fi
-        cp -r ${STAGING_DIR}/boost ${BUILD}/include/
+        if [[ "${BCP_TMP:-false}" != false ]]; then
+            echo "copying to ${BCP_TMP}/"
+            cp -r ${STAGING_DIR}/boost ${BCP_TMP}/
+        else
+            echo "not copying to ${BCP_TMP}/"
+            cp -r ${STAGING_DIR}/boost ${BUILD}/include/
+        fi
     else
         echoerr "WARNING: did not find any boost headers for '$@'"
     fi

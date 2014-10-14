@@ -19,6 +19,8 @@ if [[ ${USE_LTO} == true ]]; then
     BUILD_POSTFIX="-lto"
 fi
 
+FULL_SDK=true
+
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
   PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform_lowercase}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
   TARBALL_NAME="${PACKAGE_NAME}.tar"
@@ -31,7 +33,7 @@ fi
 
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 mkdir -p "${LOCAL_TARGET}"
-STAGING_DIR="boost-staging-minimal"
+BCP_STAGING_DIR="$(mktemp -d -t xxxxxxxxxxxxxxxx)"
 
 # clear up where we're going
 rm -rf ${LOCAL_TARGET}/* || rm -rf ${LOCAL_TARGET}/*
@@ -70,36 +72,45 @@ if [ -f "${MAPNIK_BIN_SOURCE}/bin/nik2img" ];then
     cp "${MAPNIK_BIN_SOURCE}/bin/nik2img" "${LOCAL_TARGET}/bin/nik2img"
 fi
 
-# TODO - replace with custom build_boost.sh install
-BCP_TOOL=$(find ${PACKAGES}/boost*/dist/* -name 'bcp' -print -quit)
-if [ $BCP_TOOL ]; then
-    echoerr 'packaging boost headers'
-    # http://www.boost.org/doc/libs/1_55_0b1/tools/bcp/doc/html/index.html
-    cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}/
-    rm -rf ${STAGING_DIR}/*
-    mkdir -p ${STAGING_DIR}
-    # workaround
-    # **** exception(205): std::exception: basic_filebuf::underflow error reading the file
-    # ******** errors detected; see standard output for details ********
-    # 53 MB
-    ./dist/bin/bcp ${MAPNIK_BIN_SOURCE}/include ${STAGING_DIR} 1>/dev/null
-    # below suffers from underflow error
-    # 43 MB
-    #./dist/bin/bcp --scan ${MAPNIK_BIN_SOURCE}/include/mapnik/*hpp ${STAGING_DIR} 1>/dev/null
-    #./dist/bin/bcp --scan \
-    #$(find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' ') \
-    #${STAGING_DIR} 1>/dev/null
-    du -h -d 0 boost-staging-minimal/boost/
-    cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
-    cp -r boost/phoenix/support/detail ${LOCAL_TARGET}/include/boost/phoenix/support/
+if [[ $FULL_SDK == true ]]; then
+    BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh ${MAPNIK_SOURCE}/src ${MAPNIK_SOURCE}/include
 else
-    echoerr 'could not find boost bcp'
-    exit 1
+    BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh ${MAPNIK_BIN_SOURCE}/include
 fi
+
+du -h -d 0 ${BCP_STAGING_DIR}/boost/
+cp -r ${BCP_STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 
 cd ${MAPNIK_DIST}
 
 echoerr "copying headers of other deps"
+
+if [[ $FULL_SDK == true ]]; then
+    # freetype
+    if [[ -d ${BUILD}/include/freetype2 ]]; then
+        echo "copying freetype headers"
+        cp -r ${BUILD}/include/freetype2 ${LOCAL_TARGET}/include/
+    fi
+
+    # gdal
+    if [[ -f ${BUILD}/include/gdal.h ]]; then
+        echo "copying gdal headers"
+        mkdir -p ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/include/gdal* ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/include/cpl* ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/include/ogr* ${LOCAL_TARGET}/include/gdal/
+    fi
+
+    # postgres
+    if [[ -f ${BUILD}/include/postgres_ext.h ]]; then
+        echo "copying postgres headers"
+        mkdir -p ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/post*.h ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/pg_*.h ${LOCAL_TARGET}/include/
+        cp -r ${BUILD}/include/postgresql ${LOCAL_TARGET}/include/
+    fi
+
+fi
 
 # libxml2, needed after https://github.com/mapnik/node-mapnik/issues/239
 if [ -d ${BUILD}/include/libxml2 ]; then
@@ -226,8 +237,8 @@ ls -lh *tar*
 # --best high compression
 # 20 MB
 #time bzip2 -z -k --best ${TARBALL_NAME}
-
 # 13 MB
+
 if [[ "${PUBLISH:-false}" != false ]]; then
     #time xz -z -k -e -9 ${TARBALL_NAME}
     echoerr "*uploading ${UPLOAD}"
