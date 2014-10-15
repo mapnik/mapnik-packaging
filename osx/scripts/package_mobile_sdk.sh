@@ -33,7 +33,7 @@ fi
 
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 mkdir -p "${LOCAL_TARGET}"
-BCP_STAGING_DIR="$(mktemp -d -t xxxxxxxxxxxxxxxx)"
+BCP_STAGING_DIR="$(mktemp -d -t XXXXXXXXXXXXXX)"
 
 # clear up where we're going
 rm -rf ${LOCAL_TARGET}/* || rm -rf ${LOCAL_TARGET}/*
