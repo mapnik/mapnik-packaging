@@ -73,7 +73,13 @@ if [ -f "${MAPNIK_BIN_SOURCE}/bin/nik2img" ];then
 fi
 
 if [[ $FULL_SDK == true ]]; then
-    BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh ${MAPNIK_SOURCE}/src ${MAPNIK_SOURCE}/include
+    BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh \
+        ${MAPNIK_SOURCE}/src \
+        ${MAPNIK_SOURCE}/include \
+        ${MAPNIK_SOURCE}/utils \
+        ${MAPNIK_SOURCE}/tests/cpp_tests \
+        ${MAPNIK_SOURCE}/benchmark \
+        ${MAPNIK_SOURCE}/bindings/python
 else
     BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh ${MAPNIK_BIN_SOURCE}/include
 fi
@@ -99,17 +105,23 @@ if [[ $FULL_SDK == true ]]; then
         cp ${BUILD}/include/gdal* ${LOCAL_TARGET}/include/gdal/
         cp ${BUILD}/include/cpl* ${LOCAL_TARGET}/include/gdal/
         cp ${BUILD}/include/ogr* ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/lib/libgdal* ${LOCAL_TARGET}/lib/
     fi
 
     # postgres
     if [[ -f ${BUILD}/include/postgres_ext.h ]]; then
         echo "copying postgres headers"
         mkdir -p ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/libpq*.h ${LOCAL_TARGET}/include/
         cp ${BUILD}/include/post*.h ${LOCAL_TARGET}/include/
         cp ${BUILD}/include/pg_*.h ${LOCAL_TARGET}/include/
         cp -r ${BUILD}/include/postgresql ${LOCAL_TARGET}/include/
+        cp ${BUILD}/lib/libpq* ${LOCAL_TARGET}/lib/
     fi
-
+    # copy all other boost libs not core deps
+    cp ${BUILD}/lib/libboost_python* ${LOCAL_TARGET}/lib/
+    cp ${BUILD}/lib/libboost_thread* ${LOCAL_TARGET}/lib/
+    cp ${BUILD}/lib/libboost_program* ${LOCAL_TARGET}/lib/
 fi
 
 # libxml2, needed after https://github.com/mapnik/node-mapnik/issues/239
