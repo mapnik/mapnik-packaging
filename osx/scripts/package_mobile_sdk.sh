@@ -118,6 +118,15 @@ if [[ $FULL_SDK == true ]]; then
         cp -r ${BUILD}/include/postgresql ${LOCAL_TARGET}/include/
         cp ${BUILD}/lib/libpq* ${LOCAL_TARGET}/lib/
     fi
+
+    # sqlite
+    if [[ -f ${BUILD}/include/sqlite3.h ]]; then
+        echo "copying sqlite headers"
+        mkdir -p ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/sqlite3*.h ${LOCAL_TARGET}/include/
+        cp ${BUILD}/lib/libsqlite* ${LOCAL_TARGET}/lib/
+    fi
+
     # copy all other boost libs not core deps
     cp ${BUILD}/lib/libboost_python* ${LOCAL_TARGET}/lib/
     cp ${BUILD}/lib/libboost_thread* ${LOCAL_TARGET}/lib/
