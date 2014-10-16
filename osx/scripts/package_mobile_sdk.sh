@@ -79,7 +79,8 @@ if [[ $FULL_SDK == true ]]; then
         ${MAPNIK_SOURCE}/utils \
         ${MAPNIK_SOURCE}/tests/cpp_tests \
         ${MAPNIK_SOURCE}/benchmark \
-        ${MAPNIK_SOURCE}/bindings/python
+        ${MAPNIK_SOURCE}/bindings/python \
+        ${MAPNIK_SOURCE}/plugins/input
 else
     BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh ${MAPNIK_BIN_SOURCE}/include
 fi
