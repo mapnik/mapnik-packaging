@@ -15,11 +15,17 @@ rm -rf cairo-${CAIRO_VERSION}.tar
 xz -d -k cairo-${CAIRO_VERSION}.tar.xz
 tar xf cairo-${CAIRO_VERSION}.tar
 cd cairo-${CAIRO_VERSION}
-CFLAGS="${CFLAGS} -Wno-enum-conversion "
+CFLAGS="${CFLAGS} -Wno-enum-conversion -I${BUILD}/include/pixman-1"
+LDFLAGS="-lfreetype -lpng -lpixman-1"
+# patch cairo to avoid needing pkg-config as a build dep
+patch -N -p1 < ${PATCHES}/cairo-1.12.16.diff || true
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
-png_CFLAGS="-I${BUILD}/include"
-png_LIBS="-I${BUILD}/lib -lpng"
-patch -N test/Makefile.am ${PATCHES}/cairo-disable-tests.diff || true
+#png_CFLAGS="-I${BUILD}/include"
+#png_LIBS="-I${BUILD}/lib -lpng"
+#pixman_CFLAGS="-I${BUILD}/include/pixman-1"
+#pixman_LIBS="-I${BUILD}/lib -lpixman-1"
+#freetype_CFLAGS="-I${BUILD}/include/"
+#freetype_LIBS="-I${BUILD}/lib -lfreetype"
 ./autogen.sh \
   --enable-static --disable-shared \
   --enable-pdf=yes \
