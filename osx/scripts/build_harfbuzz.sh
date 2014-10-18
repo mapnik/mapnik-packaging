@@ -12,9 +12,9 @@ if [[ ${HARFBUZZ_LATEST} == true ]]; then
     if [[ ! -d harfbuzz-master ]]; then
         git clone --quiet https://github.com/behdad/harfbuzz.git harfbuzz-master
         cd harfbuzz-master
-        ./autogen.sh
         git checkout a1f27ac3c48cfe6d532dc422cf256952fea472ed
         git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
+        ./autogen.sh
     else
         cd harfbuzz-master
         git checkout .
