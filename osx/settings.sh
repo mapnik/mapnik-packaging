@@ -212,8 +212,6 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
-    export EXTRA_CPPFLAGS="-D__ANDROID__"
-    export CORE_CXXFLAGS=""
     ${ROOTDIR}/scripts/setup-android-ndk.sh
     export NDK_PATH="${PACKAGES}/android-ndk-${MASON_ANDROID_NDK_VERSION}"
     export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
@@ -234,25 +232,26 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
         echo "using ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
-    alias ldd="${MASON_ANDROID_TARGET}-linux-android-readelf -d "
-    export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
+    alias ldd="${MASON_ANDROID_TARGET}-linux-androideabi-readelf -d "
+    export EXTRA_CFLAGS="-march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1 -fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS=""
+    export EXTRA_CPPFLAGS="-D__ANDROID__"
+    export EXTRA_LDFLAGS="-Wl,--fix-cortex-a8 -Wl,--no-warn-mismatch -lm_hard"
     export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     # use clang in order to support std::atomic
     # https://code.google.com/p/android/issues/detail?id=36496
-    export CORE_CXX="${MASON_ANDROID_TARGET}-linux-android-clang++"
-    export CORE_CC="${MASON_ANDROID_TARGET}-linux-android-clang"
-    export LD="${MASON_ANDROID_TARGET}-linux-android-ld"
-    export AR="${MASON_ANDROID_TARGET}-linux-android-ar"
+    export CORE_CXX="${MASON_ANDROID_TARGET}-linux-androideabi-clang++"
+    export CORE_CC="${MASON_ANDROID_TARGET}-linux-androideabi-clang"
+    export LD="${MASON_ANDROID_TARGET}-linux-androideabi-ld"
+    export AR="${MASON_ANDROID_TARGET}-linux-androideabi-ar"
     export ARCH_FLAGS=
-    export RANLIB="${MASON_ANDROID_TARGET}-linux-android-ranlib"
+    export RANLIB="${MASON_ANDROID_TARGET}-linux-androideabi-ranlib"
     # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
-    #alias libtool="${MASON_ANDROID_TARGET}-linux-android-ar cru"
-    #export libtool="${MASON_ANDROID_TARGET}-linux-android-ar cru"
-    export NM="${MASON_ANDROID_TARGET}-linux-android-nm"
+    #alias libtool="${MASON_ANDROID_TARGET}-linux-androideabi-ar cru"
+    #export libtool="${MASON_ANDROID_TARGET}-linux-androideabi-ar cru"
+    export NM="${MASON_ANDROID_TARGET}-linux-androideabi-nm"
     export STDLIB="libcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
