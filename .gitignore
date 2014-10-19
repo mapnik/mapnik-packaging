@@ -4,4 +4,4 @@ debian-nightlies/*/prev.rev
 debian-nightlies/*/*.changelog
 debian-nightlies/*/mapnik_*
 debian-nightlies/*/mapnik2_*
-
+osx/out
