@@ -34,12 +34,6 @@ if [[ ${UNAME} == 'Linux' ]]; then
     LINK_FLAGS="${LINK_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
 fi
 
-if [[ ${CXX11} == true ]]; then
-    STDLIB_OVERRIDE=""
-else
-    STDLIB_OVERRIDE="-DOSXLIBSTD=\"libstdc++\""
-fi
-
 rm -rf build
 mkdir -p build
 cd build
@@ -50,8 +44,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}" \
-  ${STDLIB_OVERRIDE}
+  -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}"
 
 $MAKE -j${JOBS} VERBOSE=1
 $MAKE install
