@@ -472,6 +472,9 @@ export CURL_VERSION="7.36.0"
 export OPENSSL_VERSION="1.0.1i"
 export LIBUV_VERSION="0.11.29"
 export NODE_VERSION="0.10.31"
+export RASTERLITE_VERSION="1.1g"
+export SPATIALITE_VERSION="4.2.0"
+
 
 function download {
     if [[ ! -f $1 ]]; then
