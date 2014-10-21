@@ -4,13 +4,8 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    #OSRM_COMMIT=63381ad22172e2097f110d773c1cee2cc2b9c951
-    OSRM_COMMIT=.
-fi
-
-if [[ "${OSRM_BRANCH:-false}" == false ]]; then
-    OSRM_BRANCH=develop
+if [[ "${OSRM_RELEASE:-false}" == false ]]; then
+    OSRM_RELEASE=.
 fi
 
 if [[ "${OSRM_REPO:-false}" == false ]]; then
@@ -18,11 +13,10 @@ if [[ "${OSRM_REPO:-false}" == false ]]; then
 fi
 
 echoerr 'building OSRM'
-rm -rf Project-OSRM
-git clone ${OSRM_REPO} Project-OSRM
-cd Project-OSRM
-git branch $OSRM_BRANCH
-git checkout $OSRM_COMMIT
+rm -rf osrm-backend
+git clone ${OSRM_REPO}
+cd osrm-backend
+git checkout ${OSRM_RELEASE}
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
@@ -40,12 +34,6 @@ if [[ ${UNAME} == 'Linux' ]]; then
     LINK_FLAGS="${LINK_FLAGS} "'-Wl,-z,origin -Wl,-rpath=\$ORIGIN'
 fi
 
-if [[ ${CXX11} == true ]]; then
-    STDLIB_OVERRIDE=""
-else
-    STDLIB_OVERRIDE="-DOSXLIBSTD=\"libstdc++\""
-fi
-
 rm -rf build
 mkdir -p build
 cd build
@@ -56,8 +44,7 @@ cmake ../ -DCMAKE_INSTALL_PREFIX=${BUILD} \
   -DCMAKE_INCLUDE_PATH=${BUILD}/include \
   -DCMAKE_LIBRARY_PATH=${BUILD}/lib \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}" \
-  ${STDLIB_OVERRIDE}
+  -DCMAKE_EXE_LINKER_FLAGS="${LINK_FLAGS}"
 
 $MAKE -j${JOBS} VERBOSE=1
 $MAKE install
