@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 set -e -u
 set -o pipefail
-# mkdir -p ${PACKAGES}
-# cd ${PACKAGES}
+mkdir -p ${PACKAGES}
+cd ${PACKAGES}
 
 if [[ "${OSRM_RELEASE:-false}" == false ]]; then
-    #OSRM_RELEASE=63381ad22172e2097f110d773c1cee2cc2b9c951
     OSRM_RELEASE=.
 fi
 
@@ -14,10 +13,10 @@ if [[ "${OSRM_REPO:-false}" == false ]]; then
 fi
 
 echoerr 'building OSRM'
-rm -rf Project-OSRM
+rm -rf osrm-backend
 git clone ${OSRM_REPO}
 cd osrm-backend
-git checkout $OSRM_RELEASE
+git checkout ${OSRM_RELEASE}
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
