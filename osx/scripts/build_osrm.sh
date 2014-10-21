@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 set -e -u
 set -o pipefail
-mkdir -p ${PACKAGES}
-cd ${PACKAGES}
+# mkdir -p ${PACKAGES}
+# cd ${PACKAGES}
 
-if [[ "${OSRM_COMMIT:-false}" == false ]]; then
-    #OSRM_COMMIT=63381ad22172e2097f110d773c1cee2cc2b9c951
-    OSRM_COMMIT=.
-fi
-
-if [[ "${OSRM_BRANCH:-false}" == false ]]; then
-    OSRM_BRANCH=develop
+if [[ "${OSRM_RELEASE:-false}" == false ]]; then
+    #OSRM_RELEASE=63381ad22172e2097f110d773c1cee2cc2b9c951
+    OSRM_RELEASE=.
 fi
 
 if [[ "${OSRM_REPO:-false}" == false ]]; then
@@ -19,10 +15,9 @@ fi
 
 echoerr 'building OSRM'
 rm -rf Project-OSRM
-git clone ${OSRM_REPO} Project-OSRM
-cd Project-OSRM
-git branch $OSRM_BRANCH
-git checkout $OSRM_COMMIT
+git clone ${OSRM_REPO}
+cd osrm-backend
+git checkout $OSRM_RELEASE
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
     if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
