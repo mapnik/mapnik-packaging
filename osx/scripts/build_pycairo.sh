@@ -16,7 +16,9 @@ if [ $UNAME = 'Darwin' ]; then
     tar xf py2cairo-${PY2CAIRO_VERSION}.tar.bz2
     cd py2cairo-${PY2CAIRO_VERSION}
     # apply patch
-    patch wscript < ${PATCHES}/py2cairo-static.diff
+    CFLAGS="-I${BUILD}/include/cairo -I${BUILD}/include/pixman-1 ${CFLAGS}"
+    LDFLAGS="-lcairo -lpixman-1 -lfreetype -lpng -lz ${LDFLAGS}"
+    patch wscript < ${PATCHES}/py2cairo-no-pkg-config.diff
     PYTHON=python2.7 ./waf configure --prefix=${BUILD} --nopyc --nopyo
     PYTHON=python2.7 ./waf install
     cd ${PACKAGES}
