@@ -109,6 +109,11 @@ echo "BINDINGS = '${MAPNIK_BINDINGS}'" >> config.py
 
 set_dl_path "${SHARED_LIBRARY_PATH}"
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS}
+# single job compiles first
+for i in {src/json/libmapnik-json.a,src/json/libmapnik-wkt.a,src/css_color_grammar.os,src/expression_grammar.os,src/transform_expression_grammar.os,src/image_filter_types.os}; do
+    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 --config=cache --implicit-cache --max-drift=1  $i
+done
+# then build the rest
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
 $MAKE install
 
