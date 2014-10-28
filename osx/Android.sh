@@ -5,7 +5,7 @@ set -u
 export MASON_PLATFORM="Android"
 export MASON_ANDROID_NDK_VERSION="r10c"
 export MASON_ANDROID_ARCH="arm"
-export MASON_API_LEVEL="android-19"
+export MASON_API_LEVEL="android-21"
 export MASON_ANDROID_TARGET="arm"
 export MASON_ANDROID_CROSS_COMPILER="${MASON_ANDROID_TARGET}-linux-androideabi-4.9"
 
