@@ -237,13 +237,17 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_CPPFLAGS="-D__ANDROID__"
     export EXTRA_LDFLAGS="-Wl,--fix-cortex-a8 -Wl,--no-warn-mismatch -lm_hard"
-    export BOOST_TOOLSET="gcc-arm"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     # use clang in order to support std::atomic
     # https://code.google.com/p/android/issues/detail?id=36496
     export CORE_CXX="${MASON_ANDROID_TARGET}-linux-androideabi-clang++"
     export CORE_CC="${MASON_ANDROID_TARGET}-linux-androideabi-clang"
+    if [[ "clang" =~ ${CORE_CXX} ]]; then
+      export BOOST_TOOLSET="clang"
+    else
+      export BOOST_TOOLSET="gcc"
+    fi
     export LD="${MASON_ANDROID_TARGET}-linux-androideabi-ld"
     export AR="${MASON_ANDROID_TARGET}-linux-androideabi-ar"
     export ARCH_FLAGS=
