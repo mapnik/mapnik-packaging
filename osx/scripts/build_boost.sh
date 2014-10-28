@@ -37,25 +37,9 @@ else
   cd boost_${BOOST_VERSION2}-${ARCH_NAME}
 fi
 
-if [ $UNAME = 'Darwin' ]; then
-  # patch python build to ensure we do not link boost_python to python
-  # https://svn.boost.org/trac/boost/ticket/3930
-  patch -N tools/build/v2/tools/python.jam ${PATCHES}/python_jam.diff || true
-  # https://svn.boost.org/trac/boost/ticket/6686
-  if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-      patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff || true
-  fi
-fi
-
 # patch to workaround crashes in python.input
 # https://github.com/mapnik/mapnik/issues/1968
 patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
-
-# Patches boost::atomic for LLVM 3.4 as it is used on OS X 10.9 with Xcode 5.1
-# https://github.com/Homebrew/homebrew/issues/27396
-# https://github.com/Homebrew/homebrew/pull/27436
-patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff || true
-patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
 
 gen_config() {
   echoerr 'generating user-config.jam'
@@ -96,7 +80,7 @@ B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
 echoerr 'compiling boost'
 
-if [[ ! -f ./dist/bin/bcp ]]; then
+if [[ ! -f ./dist/bin/bcp ]] || [[ ${BOOST_ARCH} == "arm" ]]; then
     echoerr 'building bcp'
     # dodge android cross compile problem: ld: unknown option: --start-group
     if [[ ${BOOST_ARCH} == "arm" ]]; then
