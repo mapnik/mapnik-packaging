@@ -141,7 +141,7 @@ function upgrade_clang {
 }
 
 function upgrade_compiler {
-    if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]]; then
+    if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]] && [[ ${MASON_PLATFORM} == ${HOST_PLATFORM} ]]; then
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
         if is_set ${CXX}; then
