@@ -44,9 +44,6 @@ patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_pytho
 gen_config() {
   echoerr 'generating user-config.jam'
   echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
-  if [ ${MASON_PLATFORM} = 'Android' ];  then
-      patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
-  fi
   if [[ "${AR:-false}" != false ]] || [[ "${RANLIB:-false}" != false ]]; then
       echo ' : ' >> user-config.jam
       if [[ "${AR:-false}" != false ]]; then
