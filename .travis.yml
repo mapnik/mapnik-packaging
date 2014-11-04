@@ -33,7 +33,7 @@ install:
  - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
 
 before_script:
- - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH=true; fi;
+ - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then echo "publishing" && export PUBLISH=true; else echo "not publishing"; fi;
 
 script:
  - source ./build.sh
