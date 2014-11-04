@@ -426,8 +426,9 @@ export PROJ_GRIDS_VERSION="1.5"
 export LIBPNG_VERSION="1.6.14"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
-# https://code.google.com/p/webp/downloads/list
-export WEBP_VERSION="0.4.0"
+# https://developers.google.com/speed/webp/download
+# http://downloads.webmproject.org/releases/webp/index.html
+export WEBP_VERSION="0.4.2"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
@@ -444,7 +445,7 @@ export POSTGRES_VERSION="9.3.4"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
-export LIBXML2_VERSION="2.9.1"
+export LIBXML2_VERSION="2.9.2"
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
 # http://www.freedesktop.org/software/fontconfig/release/
