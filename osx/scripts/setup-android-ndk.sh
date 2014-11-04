@@ -20,7 +20,7 @@ fi
 if [[ ! -d "android-ndk-${MASON_ANDROID_NDK_VERSION}" ]]; then
     echo "unpacking $(pwd)/android-ndk-${MASON_ANDROID_NDK_VERSION}-${uname_lowercase}-x86_64.bin"
     chmod a+x android-ndk-${MASON_ANDROID_NDK_VERSION}-${uname_lowercase}-x86_64.bin
-    7z x ./android-ndk-${MASON_ANDROID_NDK_VERSION}-${uname_lowercase}-x86_64.bin
+    7z x ./android-ndk-${MASON_ANDROID_NDK_VERSION}-${uname_lowercase}-x86_64.bin > /dev/null
 else
     echo "using cached $(pwd)/android-ndk-${MASON_ANDROID_NDK_VERSION}-${uname_lowercase}-x86_64.bin"
 fi
