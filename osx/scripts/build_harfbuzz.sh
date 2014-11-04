@@ -5,6 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 HARFBUZZ_LATEST=true
+HARFBUZZ_LATEST_HASH=fde3e4a423871463c883cb969e99c29cb6f69f6b
 
 echoerr 'building harfbuzz'
 
@@ -12,14 +13,14 @@ if [[ ${HARFBUZZ_LATEST} == true ]]; then
     if [[ ! -d harfbuzz-master ]]; then
         git clone --quiet https://github.com/behdad/harfbuzz.git harfbuzz-master
         cd harfbuzz-master
-        git checkout a1f27ac3c48cfe6d532dc422cf256952fea472ed
+        git checkout ${HARFBUZZ_LATEST_HASH}
         git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
         ./autogen.sh
     else
         cd harfbuzz-master
         git checkout .
         git pull || true
-        git checkout a1f27ac3c48cfe6d532dc422cf256952fea472ed
+        git checkout ${HARFBUZZ_LATEST_HASH}
         git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
         # TODO - depends on ragel
         ./autogen.sh ${HOST_ARG}
