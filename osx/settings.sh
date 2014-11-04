@@ -457,7 +457,8 @@ export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
 export GEOS_VERSION="3.4.2"
-export PROTOBUF_VERSION="2.5.0"
+# https://github.com/google/protobuf/releases
+export PROTOBUF_VERSION="2.6.1"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.5"
 export NOSE_VERSION="1.2.1"
