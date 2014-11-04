@@ -8,6 +8,7 @@ cd ${PACKAGES}
 echoerr 'building gdal'
 
 GDAL_LATEST=true
+GDAL_LATEST_HASH=0334c2bed93f2eec13e1aa09b412f1b7664211d8
 GDAL_PRE_2x=false
 
 GDAL_SHARED_LIB=true
@@ -36,7 +37,7 @@ if [[ ${GDAL_LATEST} == true ]]; then
         git checkout trunk
         git checkout .
         git pull
-        git checkout 3fdc6e72b6e5cba8de1027c6084a90167f553a96
+        git checkout ${GDAL_LATEST_HASH}
     fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
