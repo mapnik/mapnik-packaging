@@ -141,9 +141,8 @@ function upgrade_clang {
 }
 
 function upgrade_compiler {
-    local MASON_PLATFORM2=${MASON_PLATFORM:-false}
-    local HOST_PLATFORM2=${HOST_PLATFORM:-false}
-    if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]] && [[ ${MASON_PLATFORM2} == ${HOST_PLATFORM2} ]]; then
+    local CROSS_COMPILING=${CROSS_COMPILING:-false}
+    if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]] && [[ $CROSS_COMPILING == false ]]; then
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
         if is_set ${CXX}; then
