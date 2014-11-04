@@ -1,5 +1,5 @@
 diff --git a/gdal/GDALmake.opt.in b/gdal/GDALmake.opt.in
-index 7140214..b12fb32 100644
+index 7994cb7..44bb5b3 100644
 --- a/gdal/GDALmake.opt.in
 +++ b/gdal/GDALmake.opt.in
 @@ -475,13 +475,7 @@ FREEXL_INCLUDE = @FREEXL_INCLUDE@
@@ -18,10 +18,10 @@ index 7140214..b12fb32 100644
  
  ifneq ($(LIBZ_SETTING),no)
 diff --git a/gdal/ogr/ogrsf_frmts/GNUmakefile b/gdal/ogr/ogrsf_frmts/GNUmakefile
-index 60e64ca..7e36732 100644
+index 5b1f8cc..e9854cf 100644
 --- a/gdal/ogr/ogrsf_frmts/GNUmakefile
 +++ b/gdal/ogr/ogrsf_frmts/GNUmakefile
-@@ -2,44 +2,9 @@
+@@ -2,44 +2,8 @@
  include ../../GDALmake.opt
  
  SUBDIRS-yes	:= \
@@ -29,10 +29,8 @@ index 60e64ca..7e36732 100644
 -	mitab ntf gpx rec s57 sdts shape tiger vrt \
 -	geoconcept xplane georss gtm dxf pgdump gpsbabel \
 -	sua openair pds htf aeronavfaa edigeo svg idrisi \
--	arcgen segukooa segy sxf openfilegdb wasp selafin
-+	generic csv geojson mem kml \
-+	gpx shape vrt openfilegdb mitab
- 
+-	arcgen segukooa segy sxf openfilegdb wasp selafin jml
+-
 -SUBDIRS-$(HAVE_DODS)	+= dods
 -SUBDIRS-$(HAVE_DWGDIRECT) += dxfdwg
 -SUBDIRS-$(HAVE_FME)	+= fme
@@ -65,14 +63,16 @@ index 60e64ca..7e36732 100644
 -SUBDIRS-$(HAVE_SQLITE)	+= osm
 -SUBDIRS-$(HAVE_SOSI)	+= sosi
 -SUBDIRS-$(CURL_SETTING) += cartodb
++	generic csv geojson mem kml \
++	gpx shape vrt openfilegdb mitab
  
  default:	$(foreach d,$(SUBDIRS-yes),$(d)-target)
  
 diff --git a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
-index 1715e05..c4671ef 100644
+index 84b236a..c4671ef 100644
 --- a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
 +++ b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
-@@ -13,197 +13,18 @@ CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=\"$(INST_DATA)\"
+@@ -13,198 +13,18 @@ CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=\"$(INST_DATA)\"
  ifeq ($(OGR_ENABLED),yes)
  
  BASEFORMATS = \
@@ -115,7 +115,8 @@ index 1715e05..c4671ef 100644
 -	-DSXF_ENABLED \
 -	-DOPENFILEGDB_ENABLED \
 -	-DWASP_ENABLED \
--	-DSELAFIN_ENABLED
+-	-DSELAFIN_ENABLED \
+-	-DJML_ENABLED
 +	-DOPENFILEGDB_ENABLED
  
  CXXFLAGS :=     $(CXXFLAGS) $(BASEFORMATS)
