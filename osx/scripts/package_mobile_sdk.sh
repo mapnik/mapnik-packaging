@@ -107,6 +107,7 @@ if [[ $FULL_SDK == true ]]; then
         cp ${BUILD}/include/cpl* ${LOCAL_TARGET}/include/gdal/
         cp ${BUILD}/include/ogr* ${LOCAL_TARGET}/include/gdal/
         cp ${BUILD}/lib/libgdal* ${LOCAL_TARGET}/lib/
+        cp ${BUILD}/bin/gdal-config ${LOCAL_TARGET}/bin/
     fi
 
     # postgres

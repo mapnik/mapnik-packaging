@@ -192,6 +192,8 @@ $MAKE install
 cd ${PACKAGES}
 
 
+python -c "data=open('$BUILD/bin/gdal-config','r').read();open('$BUILD/bin/gdal-config','w').write(data.replace('include','include/gdal').replace('$BUILD','\$( cd \"\$( dirname \$( dirname \"\$0\" ))\" && pwd )'))"
+
 : '
 
 with -flto on os x with: Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
