@@ -232,7 +232,7 @@ if [ -d "${BUILD_UNIVERSAL}" ]; then
 else
     # just mapnik single arch
     echoerr "copying mapnik"
-    cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
+    cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik* ${LOCAL_TARGET}/lib/
     echoerr "copying libs of other deps"
     for i in $(${NEW_MAPNIK_CONFIG} --dep-libs | sed 's/-l//g'); do
         if [ -f "${BUILD}/lib/lib${i}.a" ]; then
