@@ -9,7 +9,7 @@ env:
     #- CXX11=false TARGET=build_http
     #- CXX11=false TARGET=build_http
     #- CXX11=false TARGET=mobile_tools
-    - CXX11=true TARGET=mobile_tools MASON_PLATFORM=Android CROSS_COMPILING=true
+    #- CXX11=true TARGET=mobile_tools MASON_PLATFORM=Android CROSS_COMPILING=true
     #- CXX11=false TARGET=mobile_tools MASON_PLATFORM=Android
     #- CXX11=true TARGET=build_osmium
     #- CXX11=true TARGET=build_osrm QUIET=true
