@@ -14,7 +14,7 @@ env:
     #- CXX11=true TARGET=build_osmium
     #- CXX11=true TARGET=build_osrm QUIET=true
     - CXX11=false TARGET=build_mapnik QUIET=true
-    - CXX11=true TARGET=build_mapnik QUIET=true
+    - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=image_data_any
     #- CXX11=true TARGET=build_mapnik MASON_PLATFORM=Android
     #- CXX11=false TARGET=build_mapnik QUIET=true LTO=false
     # broken protobuf-c build

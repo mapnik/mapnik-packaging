@@ -248,17 +248,20 @@ function build_mapnik {
       ./scripts/build_boost.sh --with-python
     fi
   fi
-  branch="master"
-  if [[ "${CXX11}" == false ]]; then
-      branch="2.3.x"
+  if [[ "${MAPNIK_BRANCH:-false}" == false ]]; then
+      if [[ "${CXX11}" == false ]]; then
+          export MAPNIK_BRANCH="2.3.x"
+      else
+          export MAPNIK_BRANCH="master"
+      fi
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
-      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b $branch
+      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b ${MAPNIK_BRANCH}
       git branch -v
   fi
   if [[ "${CXX11}" == false ]]; then
       cd ${MAPNIK_SOURCE}
-      git checkout $branch
+      git checkout ${MAPNIK_BRANCH}
       git pull
       git branch -v
       cd ../
