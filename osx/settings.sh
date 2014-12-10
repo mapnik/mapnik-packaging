@@ -212,14 +212,18 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
-    ${ROOTDIR}/scripts/setup-android-ndk.sh
-    export NDK_PATH="${PACKAGES}/android-ndk-${MASON_ANDROID_NDK_VERSION}"
-    export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
-    export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
+    #${ROOTDIR}/scripts/setup-android-ndk.sh
+    #export ANDROID_NDK_PATH="${PACKAGES}/android-ndk-${MASON_ANDROID_NDK_VERSION}"
+    if [[ ! -d "${ANDROID_NDK_PATH}" ]]; then
+        echo 'ANDROID_NDK_PATH is not defined'
+        exit 1
+    fi
+    export PLATFORM_PREFIX="${ANDROID_NDK_PATH}/active-platform/"
+    export NDK_PACKAGE_DIR="${ANDROID_NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
     if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
         echo "creating android toolchain with ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
-        "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
+        "${ANDROID_NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
           --toolchain="${MASON_ANDROID_CROSS_COMPILER}" \
           --llvm-version=3.4 \
           --package-dir="${NDK_PACKAGE_DIR}" \
