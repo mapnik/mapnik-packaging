@@ -5,22 +5,8 @@ compiler:
 
 env:
   matrix:
-    #- CXX11=true TARGET=build_http
-    #- CXX11=false TARGET=build_http
-    #- CXX11=false TARGET=build_http
-    #- CXX11=false TARGET=mobile_tools
-    #- CXX11=true TARGET=mobile_tools MASON_PLATFORM=Android CROSS_COMPILING=true
-    #- CXX11=false TARGET=mobile_tools MASON_PLATFORM=Android
-    #- CXX11=true TARGET=build_osmium
-    #- CXX11=true TARGET=build_osrm QUIET=true
-    - CXX11=false TARGET=build_mapnik QUIET=true
-    - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=image_data_any
-    #- CXX11=true TARGET=build_mapnik MASON_PLATFORM=Android
-    #- CXX11=false TARGET=build_mapnik QUIET=true LTO=false
-    # broken protobuf-c build
-    #- CXX11=false TARGET=build_osm2pgsql QUIET=true
-    # broken spatialite configure
-    #- CXX11=false TARGET=build_liblas QUIET=true
+    - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=master
+    - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=image_data_any BUILD_POSTFIX=raster-ng
   global:
     - secure: Tdy4kT5Zz59e1POud0zwieJ+2ajPaC+5da4cQhS3w+aLs3a8RTd5czfTn8XQPkpViHFX0tr0JIk7vOhCoDmIJkLpr44J3xUwf+gEaJUDCuFPUpd+ddk7tRogMA6Trv12W5D3ZV603uzNdEr7WUv5VfMQo56eK1BI8Z5rGHRNDWo=
     - secure: O4TCbGsvDnHVWn6DwWADdsldR2Re5DQ7JbJvTEqDv3GoOlHhwJRbOJsNAioQ77MgtyP3F4g3xpWGnFT2jHjnoP+NI54impFOstPXVvO4WvZBtx3U8+kiCQOXAn5QQRo4+KDz3fqZiI9PTXUfOF/Bgu2dqcGupGyFDoHEIQudu+0=

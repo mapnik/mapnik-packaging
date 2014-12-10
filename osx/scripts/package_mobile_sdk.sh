@@ -19,7 +19,9 @@ if [[ ${USE_LTO} == true ]]; then
     BUILD_POSTFIX="-lto"
 fi
 
-FULL_SDK=true
+if [[ "${FULL_SDK:-false}" == false ]]; then
+  export FULL_SDK=true
+fi
 
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
   PACKAGE_NAME="${MAPNIK_PACKAGE_PREFIX}-${platform_lowercase}-sdk-${DESCRIBE}${BUILD_POSTFIX}"
@@ -252,7 +254,7 @@ echoerr "...creating tarball of mapnik build"
 # -j bz2
 # -c compress
 # -f write to file
-# -H symbolic links are followed/materialized (but linux itis -h)
+# -H symbolic links are followed/materialized (but linux it is -h)
 time tar -c -j -f "${MAPNIK_DIST}/${TARBALL_NAME}.bz2" "${PACKAGE_NAME}/"
 ls -lh *tar*
 # -z compress
