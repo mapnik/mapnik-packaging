@@ -5,6 +5,7 @@ compiler:
 
 env:
   matrix:
+    - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=dots BUILD_POSTFIX=dots
     - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=master
     - CXX11=true TARGET=build_mapnik QUIET=true MAPNIK_BRANCH=image_data_any BUILD_POSTFIX=raster-ng
   global:
@@ -19,7 +20,7 @@ install:
  - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
 
 before_script:
- - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then echo "publishing" && export PUBLISH=true; else echo "not publishing"; fi;
+ - if test "${COMMIT_MESSAGE#*'[publish]'}" != "$COMMIT_MESSAGE"; then echo "publishing" && export PUBLISH=true; else echo "not publishing"; fi;
 
 script:
  - source ./build.sh
