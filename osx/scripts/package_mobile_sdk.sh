@@ -14,13 +14,16 @@ if [[ ${platform_lowercase} =~ "iphone" ]]; then
     platform_lowercase="ios"
 fi
 
-BUILD_POSTFIX=""
+if [[ "${BUILD_POSTFIX:-unset}" == "unset" ]];then
+    BUILD_POSTFIX=""
+fi
+
 if [[ ${USE_LTO} == true ]]; then
     BUILD_POSTFIX="-lto"
 fi
 
 if [[ "${FULL_SDK:-false}" == false ]]; then
-  export FULL_SDK=true
+  FULL_SDK=true
 fi
 
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
