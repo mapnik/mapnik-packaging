@@ -208,6 +208,48 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
       export STDLIB_LDFLAGS=""
     fi
     export ZLIB_PATH="${SYSROOT}/usr"
+elif [[ ${MASON_PLATFORM} == 'nacl' ]]; then
+    export SHARED_ZLIB=false
+    export CXX_VISIBILITY_FLAGS=""
+    export alias ldconfig=true
+    if [[ ! -d "${NACL_NDK_PATH}" ]]; then
+        echo 'NACL_NDK_PATH is not defined'
+        exit 1
+    fi
+    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
+    export EXTRA_CFLAGS=""
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS} --pnacl-exceptions=sjlj"
+    export EXTRA_CPPFLAGS=""
+    export EXTRA_LDFLAGS=""
+    export SDK_PATH=
+    export PATH="${NACL_NDK_PATH}/toolchain/mac_pnacl/bin":${PATH}
+    alias ldd="${MASON_NACL_TARGET}-readelf -d "
+    export CORE_CXX="${MASON_NACL_TARGET}-clang++"
+    export CORE_CC="${MASON_NACL_TARGET}-clang"
+    if [[ "clang" =~ ${CORE_CXX} ]]; then
+      export BOOST_TOOLSET="clang"
+    else
+      export BOOST_TOOLSET="gcc"
+    fi
+    export LD="${MASON_NACL_TARGET}-ld"
+    export AR="${MASON_NACL_TARGET}-ar"
+    export RANLIB="${MASON_NACL_TARGET}-ranlib"
+    export NM="${MASON_NACL_TARGET}-nm"
+    export STDLIB="libcpp"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
+    export ARCH_FLAGS=
+    if [[ "${CXX11}" == true ]]; then
+      export CXX_VISIBILITY_FLAGS=""
+      #-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
+      export STDLIB_CXXFLAGS="-std=c++11"
+      export STDLIB_LDFLAGS=""
+    else
+      export CXX_VISIBILITY_FLAGS=""
+      #-fvisibility-inlines-hidden -fno-common"
+      export STDLIB_CXXFLAGS=""
+      export STDLIB_LDFLAGS=""
+    fi
 
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""

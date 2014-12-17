@@ -30,7 +30,16 @@ fi
 
 tar xf icu4c-${ICU_VERSION2}-src.tgz
 mv icu icu-${ARCH_NAME}
-cd icu-${ARCH_NAME}/source
+cd icu-${ARCH_NAME}
+
+if [[ ${MASON_PLATFORM} == 'nacl' ]]; then
+    cp source/config/mh-linux source/config/mh-unknown
+    patch -N ./source/tools/gendict/gendict.cpp ${PATCHES}/icu-gendict-nacl.diff
+    #patch -p1 -N < ${PATCHES}/icu-nacl.diff
+fi
+
+cd ./source
+
 if [ $BOOST_ARCH = "arm" ]; then
     OLD_PLATFORM=${MASON_PLATFORM}
     MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
@@ -50,6 +59,7 @@ else
 fi
 
 cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
+
 # note: enable-draft is needed for U_ICUDATA_ENTRY_POINT
 ./configure ${HOST_ARG} ${CROSS_FLAGS} --prefix=${BUILD} \
 --with-data-packaging=archive \

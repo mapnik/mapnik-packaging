@@ -43,6 +43,9 @@ CXX="${CXX} ${STDLIB_CXXFLAGS}"
 # WARNING: building a shared lib will result in shared libs being listed in
 # the libprotobuf.la and then libproto-c will try to link against them even
 # if they do not exist (as deleted by below)
+if [[ ${MASON_PLATFORM} == 'nacl' ]]; then
+  patch -N -p1 < ${PATCHES}/protobuf-nacl.diff || true
+fi
 ./configure --prefix=${BUILD} ${HOST_ARG} ${CROSS_FLAGS} \
 --enable-static --disable-shared \
 --disable-debug --without-zlib \

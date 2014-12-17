@@ -12,6 +12,6 @@ export HOST_ARG="--host=arm-linux-gnueabi"
 source $(dirname "$BASH_SOURCE")/settings.sh
 export MAKE="make"
 # default to C++11 for this platform
-if [[ "${CXX11:-false}" == false ]]; then
+if [[ "${CXX11:-unset}" == "unset" ]]; then
   export CXX11=true
 fi

@@ -43,6 +43,8 @@ fi
 # enable-defer-strile-load: https://github.com/OSGeo/gdal/commit/fd3b59bcc8a5f80ca96e2595c189c5904f145049#diff-2a2faa3e24fe7c0ec1fd8a818398bd97
 # http://fwarmerdam.blogspot.com/2011/02/mapserver-tiff-overview-performance.html
 # enable-chunky-strip-read http://trac.osgeo.org/gdal/ticket/3514
+cp ${PATCHES}/config.guess config/
+cp ${PATCHES}/config.sub config/
 ./configure --prefix=${BUILD} \
 ${HOST_ARG} \
 --enable-static --disable-shared \

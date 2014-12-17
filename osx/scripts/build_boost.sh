@@ -41,6 +41,10 @@ fi
 # https://github.com/mapnik/mapnik/issues/1968
 patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
 
+if [[ ${MASON_PLATFORM} == 'nacl' ]]; then
+  patch -N -p1 < ${PATCHES}/boost-nacl-57.diff || true
+fi
+
 gen_config() {
   echoerr 'generating user-config.jam'
   echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
@@ -177,7 +181,8 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
     if [[ ${MASON_PLATFORM} = 'Android' ]]; then
         # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
         # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
-        mkdir -p tmp/sys/
+        mkdir -p ./tmp/sys/
+        rm -f ./tmp/sys/*.h
         echo '#include <sys/statfs.h>' > tmp/sys/statvfs.h
         echo '#define statvfs statfs' >> tmp/sys/statvfs.h
         BOOST_CXXFLAGS="${BOOST_CXXFLAGS} -I./tmp"

@@ -8,7 +8,7 @@ export BOOST_ARCH="x86"
 export ARCH_NAME="gcc-x86_64"
 export HOST_ARG=""
 export CXX="clang++"
-if [[ "${CXX11:-false}" == false ]]; then
+if [[ "${CXX11:-unset}" == "unset" ]]; then
   export CXX11=false
 fi
 export MAKE="gmake"

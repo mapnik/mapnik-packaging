@@ -11,7 +11,7 @@ export HOST_ARG="--host=i686-apple-darwin11"
 export ACTIVE_SDK_VERSION="`xcrun --sdk iphonesimulator --show-sdk-version`"
 export MIN_SDK_VERSION_FLAG="-miphoneos-version-min=${ACTIVE_SDK_VERSION}"
 export MAKE="make"
-if [[ "${CXX11:-false}" == false ]]; then
+if [[ "${CXX11:-unset}" == "unset" ]]; then
   export CXX11=false
 fi
 

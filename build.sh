@@ -204,8 +204,7 @@ so that the set -e and PATH does not break the parent
 environment in odd ways if this script is sourced
 '
 
-function build_mapnik {
-  setup
+function build_mapnik_deps {
   if [[ ${UNAME} == 'Linux' ]]; then
       sudo apt-get install -qq -y python-dev python-nose
       # postgres deps
@@ -217,10 +216,14 @@ function build_mapnik {
       sudo apt-get autoremove -y -qq
   fi
   b ./scripts/build_icu.sh
-  BOOST_LIBRARIES="--with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex"
-  if [ ${BOOST_ARCH} != "arm" ]; then
-      BOOST_LIBRARIES="$BOOST_LIBRARIES --with-program_options"
-      # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
+  if [[ ${MASON_PLATFORM} == 'nacl' ]]; then
+      BOOST_LIBRARIES="--with-system --with-regex"
+  else
+      BOOST_LIBRARIES="--with-thread --with-filesystem --disable-filesystem2 --with-system --with-regex"
+      if [ ${BOOST_ARCH} != "arm" ]; then
+          BOOST_LIBRARIES="$BOOST_LIBRARIES --with-program_options"
+          # --with-chrono --with-iostreams --with-date_time --with-atomic --with-timer --with-program_options --with-test
+      fi
   fi
   ./scripts/build_boost.sh ${BOOST_LIBRARIES}
   b ./scripts/build_freetype.sh
@@ -248,6 +251,11 @@ function build_mapnik {
       ./scripts/build_boost.sh --with-python
     fi
   fi
+}
+
+function build_mapnik {
+  setup
+  build_mapnik_deps
   if [[ "${MAPNIK_BRANCH:-false}" == false ]]; then
       if [[ "${CXX11}" == false ]]; then
           export MAPNIK_BRANCH="2.3.x"

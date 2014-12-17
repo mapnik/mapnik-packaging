@@ -12,10 +12,15 @@ else
     rm -rf zlib-${ZLIB_VERSION}
     tar xf zlib-${ZLIB_VERSION}.tar.gz
     cd zlib-${ZLIB_VERSION}
-    if [ ${MASON_PLATFORM} = 'Android' ]; then
-       patch -N < ${PATCHES}/android-zlib.diff
+    if [[ ${MASON_PLATFORM} == 'Android' ]]; then
+        patch -N < ${PATCHES}/android-zlib.diff
     fi
-    ./configure --prefix=${BUILD} --static
+    if [[ ${MASON_PLATFORM} == 'nacl' ]]; then
+        patch -N -p1 < ${PATCHES}/zlib-nacl.diff || true
+        uname=${ARCH_NAME} ./configure --prefix=${BUILD} --static
+    else
+        ./configure --prefix=${BUILD} --static
+    fi
     $MAKE -j$JOBS
     $MAKE install
     cd ${PACKAGES}
