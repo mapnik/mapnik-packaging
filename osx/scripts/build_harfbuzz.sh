@@ -4,7 +4,7 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-HARFBUZZ_LATEST=true
+HARFBUZZ_LATEST=false
 HARFBUZZ_LATEST_HASH=fde3e4a423871463c883cb969e99c29cb6f69f6b
 
 echoerr 'building harfbuzz'

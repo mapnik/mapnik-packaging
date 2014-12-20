@@ -418,16 +418,16 @@ export ICU_VERSION2="54_1"
 export BOOST_VERSION="1.57.0"
 export BOOST_VERSION2="1_57_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080701"
+export SQLITE_VERSION="3080704"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
-export FREETYPE_VERSION="2.5.3"
+export FREETYPE_VERSION="2.5.4"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.14"
+export LIBPNG_VERSION="1.6.15"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://developers.google.com/speed/webp/download
@@ -444,12 +444,13 @@ export EXPAT_VERSION="2.1.0"
 export GDAL_VERSION="1.11.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
-# gz
-export POSTGRES_VERSION="9.3.4"
+# bz2
+export POSTGRES_VERSION="9.4.0"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
 export LIBXML2_VERSION="2.9.2"
+# http://www.bzip.org/downloads.html
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
 # http://www.freedesktop.org/software/fontconfig/release/
@@ -473,14 +474,14 @@ export NOSE_VERSION="1.2.1"
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="0.9.35"
+export HARFBUZZ_VERSION="0.9.37"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
 export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
-export OPENSSL_VERSION="1.0.1i"
+export OPENSSL_VERSION="1.0.1j"
 export LIBUV_VERSION="0.11.29"
 export NODE_VERSION="0.10.33"
 
