@@ -15,7 +15,7 @@ if [[ ${HARFBUZZ_LATEST} == true ]]; then
         cd harfbuzz-master
         git checkout ${HARFBUZZ_LATEST_HASH}
         git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
-        ./autogen.sh
+        NOCONFIGURE=1 ./autogen.sh
     else
         cd harfbuzz-master
         git checkout .
@@ -23,7 +23,7 @@ if [[ ${HARFBUZZ_LATEST} == true ]]; then
         git checkout ${HARFBUZZ_LATEST_HASH}
         git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
         # TODO - depends on ragel
-        ./autogen.sh ${HOST_ARG}
+        NOCONFIGURE=1 ./autogen.sh ${HOST_ARG}
         make clean
         make distclean
     fi
@@ -34,6 +34,8 @@ else
     cd harfbuzz-${HARFBUZZ_VERSION}
     patch -N -p1 < ${PATCHES}/harfbuzz-disable-pkg-config.diff || true
 fi
+
+echo `which aclocal`
 
 FREETYPE_CFLAGS="-I${BUILD}/include/freetype2"
 FREETYPE_LIBS="-L${BUILD}/lib -lfreetype -lz"
