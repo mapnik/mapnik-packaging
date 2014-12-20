@@ -19,6 +19,7 @@ if [[ $TIFF_LATEST == true ]]; then
         git checkout 14bca0edd838b7dd8128960c7f12dd240411ba0b
     else
         cd libtiff
+        git checkout .
         git pull || true
         git checkout 14bca0edd838b7dd8128960c7f12dd240411ba0b
         if [[ -f Makefile ]]; then
