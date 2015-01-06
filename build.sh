@@ -277,7 +277,7 @@ function build_osrm {
   export CXX11=true
   setup
   b ./scripts/build_tbb.sh
-  b ./scripts/build_libxml2.sh
+  b ./scripts/build_expat.sh
   b ./scripts/build_lua.sh
   b ./scripts/build_zlib.sh
   b ./scripts/build_bzip2.sh
