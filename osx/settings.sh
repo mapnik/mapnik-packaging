@@ -121,7 +121,7 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
     else
-      echoerr "falling back to gcc"
+      echoerr "defaulting to g++ instead of clang (set CXX=clang++ to prefer clang++)"
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
@@ -375,7 +375,7 @@ fi
 echo "using $CXX version : $(${CXX} -dumpversion)"
 
 # help boost's bootstrap find 'clang' if used
-if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
+if [[ ${MASON_PLATFORM} == 'Linux' ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
     export PATH=$(dirname $(realpath $CXX)):$PATH
 fi
 
