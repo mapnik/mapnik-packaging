@@ -5,11 +5,11 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 if [[ "${LUABIND_COMMIT:-false}" == false ]]; then
-    LUABIND_COMMIT=2b904b3042c2fa0682f4adcd42ee91b6af48a924
+    LUABIND_COMMIT=e414c57bcb687bb3091b7c55bbff6947f052e46b
 fi
 
 if [[ "${LUABIND_BRANCH:-false}" == false ]]; then
-    LUABIND_BRANCH=develop
+    LUABIND_BRANCH=master
 fi
 
 if [[ "${LUABIND_REPO:-false}" == false ]]; then
@@ -20,8 +20,8 @@ echoerr 'building luabind'
 rm -rf luabind
 git clone ${LUABIND_REPO} luabind
 cd luabind
-git branch $LUABIND_BRANCH
 git checkout .
+git checkout $LUABIND_BRANCH
 git checkout $LUABIND_COMMIT
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
