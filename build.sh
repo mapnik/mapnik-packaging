@@ -145,7 +145,7 @@ function upgrade_compiler {
     if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]] && [[ $CROSS_COMPILING == false ]]; then
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
-        if [[ "${CXX:-unset_val}" == "unset_val" ]]; then
+        if [[ "${CXX:-unset_val}" != "unset_val" ]]; then
             if contains 'clang' ${CXX}; then
                 upgrade_clang
             else
