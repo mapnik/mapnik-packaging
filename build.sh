@@ -145,7 +145,7 @@ function upgrade_compiler {
     if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]] && [[ $CROSS_COMPILING == false ]]; then
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
-        if is_set ${CXX}; then
+        if [[ "${CXX:-unset_val}" == "unset_val" ]]; then
             if contains 'clang' ${CXX}; then
                 upgrade_clang
             else
@@ -274,6 +274,7 @@ function build_mapnik {
 }
 
 function build_osrm {
+  export CXX11=true
   setup
   b ./scripts/build_tbb.sh
   b ./scripts/build_libxml2.sh
@@ -293,6 +294,7 @@ function build_osrm {
 export -f build_osrm
 
 function build_osmium {
+  export CXX11=true
   setup
   b ./scripts/build_proj4.sh
   b ./scripts/build_expat.sh
