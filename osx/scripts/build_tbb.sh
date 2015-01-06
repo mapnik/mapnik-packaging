@@ -6,7 +6,7 @@ mkdir -p ${BUILD}/lib/
 mkdir -p ${BUILD}/include/
 cd ${PACKAGES}
 
-TBB_VERSION="tbb43_20140724oss"
+TBB_VERSION="tbb43_20141204oss"
 
 if [ ! -f ${TBB_VERSION}_src.tgz ]; then
     echoerr "downloading intel tbb"
