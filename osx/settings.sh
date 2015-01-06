@@ -217,8 +217,12 @@ elif [[ ${MASON_PLATFORM} == 'nacl' ]]; then
         exit 1
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
-    export EXTRA_CFLAGS=""
-    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS} --pnacl-exceptions=sjlj"
+    # -Wno-implicit-function-declaration works around jpeg-turbo:
+    # tjunittest.c:564:9: warning: implicit declaration of function 'random' is invalid in C99
+    export EXTRA_CFLAGS="-Wno-implicit-function-declaration"
+    # -Wno-c++11-narrowing works around boost_regex breakage:
+    # ./boost/regex/v4/cpp_regex_traits.hpp:827:7: error: constant expression evaluates to -105 which cannot be narrowed to type 'char_class_type' (aka 'unsigned int')
+    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS} --pnacl-exceptions=sjlj -Wno-c++11-narrowing"
     export EXTRA_CPPFLAGS=""
     export EXTRA_LDFLAGS=""
     export SDK_PATH=
@@ -236,19 +240,14 @@ elif [[ ${MASON_PLATFORM} == 'nacl' ]]; then
     export RANLIB="${MASON_NACL_TARGET}-ranlib"
     export NM="${MASON_NACL_TARGET}-nm"
     export STDLIB="libcpp"
-    export STDLIB_CXXFLAGS=""
-    export STDLIB_LDFLAGS=""
+    export STDLIB_CXXFLAGS="-stdlib=libc++"
+    export STDLIB_LDFLAGS="-stdlib=libc++"
+    export CXX_VISIBILITY_FLAGS=""
     export ARCH_FLAGS=
+    # https://developer.chrome.com/native-client/devguide/devcycle/building#c-standard-libraries
     if [[ "${CXX11}" == true ]]; then
-      export CXX_VISIBILITY_FLAGS=""
       #-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
-      export STDLIB_CXXFLAGS="-std=c++11"
-      export STDLIB_LDFLAGS=""
-    else
-      export CXX_VISIBILITY_FLAGS=""
-      #-fvisibility-inlines-hidden -fno-common"
-      export STDLIB_CXXFLAGS=""
-      export STDLIB_LDFLAGS=""
+      export STDLIB_CXXFLAGS="${STDLIB_CXXFLAGS} -std=gnu++11"
     fi
 
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then

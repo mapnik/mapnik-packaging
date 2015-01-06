@@ -17,7 +17,8 @@ autoreconf -fiv
   NASM="${BUILD_TOOLS_ROOT}/bin/nasm" \
   --enable-static --disable-shared  \
   --with-jpeg8 \
-  --disable-dependency-tracking
+  --disable-dependency-tracking \
+  --without-turbojpeg
 $MAKE -j1
 $MAKE install
 cd ${PACKAGES}

@@ -10,7 +10,7 @@ echoerr 'building sqlite'
 rm -rf sqlite-autoconf-${SQLITE_VERSION}
 tar xf sqlite-autoconf-${SQLITE_VERSION}.tar.gz
 cd sqlite-autoconf-${SQLITE_VERSION}
-CFLAGS="-DSQLITE_ENABLE_RTREE=1 $CFLAGS"
+CFLAGS="-DSQLITE_ENABLE_RTREE=1 -DSQLITE_OMIT_LOAD_EXTENSION=1 $CFLAGS"
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
 --enable-static \

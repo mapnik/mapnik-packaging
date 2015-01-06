@@ -6,11 +6,12 @@ cd ${MAPNIK_SOURCE}
 echoerr 'Building mapnik mobile'
 
 if [ -d ${MAPNIK_BIN_SOURCE} ]; then
-  rm -rf ${MAPNIK_BIN_SOURCE}
-  rm -f src/libmapnik{*.so,*.dylib,*.a}
-  rm -f tests/cpp_tests/*-bin
+  #rm -rf ${MAPNIK_BIN_SOURCE}
+  #rm -f src/libmapnik{*.so,*.dylib,*.a}
+  #rm -f tests/cpp_tests/*-bin
   # TODO: https://github.com/mapnik/mapnik/issues/2112
-  $MAKE clean
+  #$MAKE clean
+  :
 fi
 
 if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
