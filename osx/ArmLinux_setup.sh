@@ -5,8 +5,10 @@ CXX11=${CXX11-true}
 TARGET=${TARGET-build_mapnik}
 QUIET=${QUIET-true}
 MAPNIK_BRANCH=${MAPNIK_BRANCH-master}
+CXX=${CXX-g++}
+CC=${CC-gcc}
 
-export COMPILE_ENV="sudo chroot $CHROOT_BASE /usr/bin/env MASON_PLATFORM=${MASON_PLATFORM} CXX11=${CXX11} TARGET=${TARGET} QUIET=${QUIET} MAPNIK_BRANCH=${MAPNIK_BRANCH}"
+export COMPILE_ENV="sudo chroot $CHROOT_BASE /usr/bin/env MASON_PLATFORM=${MASON_PLATFORM} CXX11=${CXX11} TARGET=${TARGET} QUIET=${QUIET} MAPNIK_BRANCH=${MAPNIK_BRANCH} CXX=${CXX} CC=${CC}"
 
 # setup chroot/qemu
 sudo apt-get install debootstrap qemu-user-static
