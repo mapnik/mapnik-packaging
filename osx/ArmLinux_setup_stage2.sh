@@ -14,3 +14,10 @@ dpkg-reconfigure tzdata locales
 
 # set up apt-get
 echo "deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi" > /etc/apt/sources.list
+
+# redefine these for the chroot environment
+export MASON_PLATFORM=ArmLinux
+export CXX11=true
+export TARGET=build_mapnik
+export QUIET=true
+export MAPNIK_BRANCH=master
