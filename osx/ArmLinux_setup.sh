@@ -1,6 +1,12 @@
 CHROOT_BASE=. # This makes Travis CI environment easier
 
-export COMPILE_ENV="sudo chroot $CHROOT_BASE"
+MASON_PLATFORM=${MASON_PLATFORM-ArmLinux}
+CXX11=${CXX11-true}
+TARGET=${TARGET-build_mapnik}
+QUIET=${QUIET-true}
+MAPNIK_BRANCH=${MAPNIK_BRANCH-master}
+
+export COMPILE_ENV="sudo chroot $CHROOT_BASE /usr/bin/env MASON_PLATFORM=${MASON_PLATFORM} CXX11=${CXX11} TARGET=${TARGET} QUIET=${QUIET} MAPNIK_BRANCH=${MAPNIK_BRANCH}"
 
 # setup chroot/qemu
 sudo apt-get install debootstrap qemu-user-static
