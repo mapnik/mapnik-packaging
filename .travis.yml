@@ -22,5 +22,4 @@ before_script:
  - if test "${MASON_PLATFORM}" == "ArmLinux"; then source osx/ArmLinux_setup.sh; fi;
  
 script:
- - $COMPILE_ENV source ./build.sh
- - $COMPILE_ENV ${TARGET}
+ - $COMPILE_ENV ./wrapper.sh
