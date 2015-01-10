@@ -7,6 +7,7 @@ sudo apt-get install debootstrap qemu-user-static
 sudo debootstrap --foreign --variant=minbase --arch armhf --include=locales testing `pwd`/$CHROOT_BASE http://mirrordirector.raspbian.org/raspbian
 sudo cp /usr/bin/qemu-arm-static $CHROOT_BASE/usr/bin/
 sudo cp osx/ArmLinux_setup_stage2.sh $CHROOT_BASE/tmp/setup.sh
+sudo cp osx/ArmLinux_fake_sudo.sh $CHROOT_BASE/usr/bin/sudo
 
 # enter chroot/qemu
 $COMPILE_ENV /tmp/setup.sh
