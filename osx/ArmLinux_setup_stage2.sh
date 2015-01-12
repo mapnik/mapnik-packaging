@@ -16,4 +16,4 @@ dpkg-reconfigure tzdata locales
 echo "deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi" > /etc/apt/sources.list
 
 apt-get update
-apt-get install -q -y lsb-release
+apt-get install -q -y lsb-release wget
