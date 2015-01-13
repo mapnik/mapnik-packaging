@@ -210,8 +210,13 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     export ZLIB_PATH="${SYSROOT}/usr"
 
 elif [[ ${MASON_PLATFORM} == 'ArmLinux' ]]; then
+    export EXTRA_CFLAGS=""
+    export EXTRA_LDFLAGS=""
+    export EXTRA_CXXFLAGS=""
+    export EXTRA_CPPFLAGS=""
     export CORE_CXX="g++"
     export CORE_CC="gcc"
+    export ARCH_FLAGS=""
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
