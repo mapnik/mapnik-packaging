@@ -221,6 +221,7 @@ elif [[ ${MASON_PLATFORM} == 'ArmLinux' ]]; then
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
     fi
+    export SDK_PATH=""
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
