@@ -5,8 +5,10 @@ CXX11=${CXX11-true}
 TARGET=${TARGET-build_mapnik}
 QUIET=${QUIET-true}
 MAPNIK_BRANCH=${MAPNIK_BRANCH-master}
-CXX=${CXX-g++}
-CC=${CC-gcc}
+
+# select g++/gcc here because upgrade_(compiler) is called before platorm script
+CXX=g++
+CC=gcc
 
 export COMPILE_ENV="sudo chroot $CHROOT_BASE /usr/bin/env MASON_PLATFORM=${MASON_PLATFORM} CXX11=${CXX11} TARGET=${TARGET} QUIET=${QUIET} MAPNIK_BRANCH=${MAPNIK_BRANCH} CXX=${CXX} CC=${CC}"
 
