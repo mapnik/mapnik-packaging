@@ -422,14 +422,14 @@ export BOOST_VERSION2="1_57_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3080704"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
-# http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
-export FREETYPE_VERSION="2.5.4"
+# http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
+export FREETYPE_VERSION="2.5.5"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.15"
+export LIBPNG_VERSION="1.6.16"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.3"
 # https://developers.google.com/speed/webp/download
@@ -441,6 +441,8 @@ export JPEG_VERSION="8d"
 export NASM_VERSION="2.11"
 # http://sourceforge.net/projects/libjpeg-turbo/files/
 export JPEG_TURBO_VERSION="1.3.1"
+# http://sourceforge.net/projects/expat/
+# gz
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
 export GDAL_VERSION="1.11.1"
@@ -461,7 +463,7 @@ export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
 export PIXMAN_VERSION="0.32.6"
-export CAIRO_VERSION="1.12.16"
+export CAIRO_VERSION="1.12.18"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
