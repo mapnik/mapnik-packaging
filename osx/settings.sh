@@ -210,19 +210,8 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     export ZLIB_PATH="${SYSROOT}/usr"
 
 elif [[ ${MASON_PLATFORM} == 'ArmLinux' ]]; then
-    #NOTE: This section was originally based on Linaro-softfp version
-
-    export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
-    cd ${ROOTDIR}
-    # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
-    export EXTRA_CFLAGS="-fPIC --sysroot ${SYSROOT}"
-    export EXTRA_LDFLAGS="-Wl,-search_paths_first"
-    export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_CPPFLAGS="--sysroot ${SYSROOT}"
-    export PATH="${SDK_PATH}/bin":${PATH}
     export CORE_CXX="g++"
     export CORE_CC="gcc"
-    export ARCH_FLAGS=
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
@@ -232,7 +221,6 @@ elif [[ ${MASON_PLATFORM} == 'ArmLinux' ]]; then
       export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
       export STDLIB_LDFLAGS=""
     fi
-    export ZLIB_PATH="${SYSROOT}/usr"
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
