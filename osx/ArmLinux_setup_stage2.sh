@@ -17,3 +17,6 @@ echo "deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-f
 
 apt-get update
 apt-get install -q -y lsb-release wget
+
+# mount proc for 'free'
+mount proc /proc -t proc
