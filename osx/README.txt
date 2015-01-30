@@ -4,7 +4,7 @@ Contact Dane (dane@dbsgeo.com) with any questions.
 
 ## linux setup
 
-    apt-get install -y build-essential unzip python-dev \
+    apt-get install -y build-essential zlib1g-dev unzip python-dev \
       git libtool g++ autotools-dev automake cmake make xutils-dev realpath ragel
 
 ## osx
