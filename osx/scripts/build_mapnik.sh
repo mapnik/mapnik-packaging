@@ -112,18 +112,20 @@ LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS}
 if [[ ${CXX11} == true ]]; then
   # single job compiles first
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
-  --config=cache --implicit-cache --max-drift=1 \
-  src/json/libmapnik-json.a \
-  src/wkt/libmapnik-wkt.a \
-  src/css_color_grammar.os \
-  src/expression_grammar.os \
-  src/transform_expression_grammar.os \
-  src/image_filter_types.os \
-  src/renderer_common/process_group_symbolizer.cpp \
-  src/agg/process_markers_symbolizer.cpp \
-  src/grid/process_markers_symbolizer.cpp \
-  src/cairo/process_markers_symbolizer.cpp
-
+    --config=cache --implicit-cache --max-drift=1 \
+    src/json/libmapnik-json.a \
+    src/wkt/libmapnik-wkt.a \
+    src/css_color_grammar.os \
+    src/expression_grammar.os \
+    src/transform_expression_grammar.os \
+    src/image_filter_types.os \
+    src/renderer_common/process_group_symbolizer.os \
+    src/agg/process_markers_symbolizer.os \
+    src/agg/process_group_symbolizer.os \
+    src/grid/process_markers_symbolizer.os \
+    src/grid/process_group_symbolizer.os \
+    src/cairo/process_markers_symbolizer.os \
+    src/cairo/process_group_symbolizer.os
 fi
 # then build the rest
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
