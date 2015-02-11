@@ -125,7 +125,10 @@ if [[ ${CXX11} == true ]]; then
     src/grid/process_markers_symbolizer.os \
     src/grid/process_group_symbolizer.os \
     src/cairo/process_markers_symbolizer.os \
-    src/cairo/process_group_symbolizer.os
+    src/cairo/process_group_symbolizer.os \
+    plugins/input/geojson/large_geojson_featureset.os \
+    plugins/input/geojson/geojson_datasource.os
+
 fi
 # then build the rest
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
