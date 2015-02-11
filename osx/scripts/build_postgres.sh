@@ -27,7 +27,6 @@ fi
 --without-bonjour \
 --without-openssl \
 --without-pam \
---without-krb5 \
 --without-gssapi \
 --without-ossp-uuid \
 --without-readline \
