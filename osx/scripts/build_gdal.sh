@@ -7,7 +7,7 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=true
+GDAL_LATEST=false
 GDAL_LATEST_HASH=0334c2bed93f2eec13e1aa09b412f1b7664211d8
 GDAL_PRE_2x=false
 
@@ -58,6 +58,8 @@ if [[ ${GDAL_LATEST} == true ]]; then
     fi
 elif [[ ${GDAL_VERSION} == "1.11.1" ]]; then
     patch -N -p1 < ${PATCHES}/gdal-1.11.1-minimal.diff
+elif [[ ${GDAL_VERSION} == "1.11.2" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-1.11.2-minimal.diff
 elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
     patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
     patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true

@@ -446,7 +446,7 @@ export JPEG_TURBO_VERSION="1.4.0"
 # gz
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="1.11.1"
+export GDAL_VERSION="1.11.2"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # bz2
