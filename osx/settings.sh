@@ -420,7 +420,7 @@ export ICU_VERSION2="54_1"
 export BOOST_VERSION="1.57.0"
 export BOOST_VERSION2="1_57_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080704"
+export SQLITE_VERSION="3080802"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
 export FREETYPE_VERSION="2.5.5"
@@ -431,7 +431,7 @@ export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
 export LIBPNG_VERSION="1.6.16"
 # http://download.osgeo.org/libtiff/
-export LIBTIFF_VERSION="4.0.3"
+export LIBTIFF_VERSION="4.0.4beta"
 # https://developers.google.com/speed/webp/download
 # http://downloads.webmproject.org/releases/webp/index.html
 export WEBP_VERSION="0.4.2"
@@ -440,7 +440,8 @@ export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export NASM_VERSION="2.11"
 # http://sourceforge.net/projects/libjpeg-turbo/files/
-export JPEG_TURBO_VERSION="1.3.1"
+# tar.gz
+export JPEG_TURBO_VERSION="1.4.0"
 # http://sourceforge.net/projects/expat/
 # gz
 export EXPAT_VERSION="2.1.0"
@@ -478,7 +479,7 @@ export NOSE_VERSION="1.2.1"
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="0.9.37"
+export HARFBUZZ_VERSION="0.9.38"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"

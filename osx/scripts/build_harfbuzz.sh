@@ -4,7 +4,7 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-HARFBUZZ_LATEST=true
+HARFBUZZ_LATEST=false
 HARFBUZZ_LATEST_HASH=7d5e7613ced3dd39d05df83c
 
 echoerr 'building harfbuzz'
@@ -32,10 +32,8 @@ else
     rm -rf harfbuzz-${HARFBUZZ_VERSION}
     tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
     cd harfbuzz-${HARFBUZZ_VERSION}
-    patch -N -p1 < ${PATCHES}/harfbuzz-disable-pkg-config.diff || true
 fi
 
-echo `which aclocal`
 
 FREETYPE_CFLAGS="-I${BUILD}/include/freetype2"
 FREETYPE_LIBS="-L${BUILD}/lib -lfreetype -lz"

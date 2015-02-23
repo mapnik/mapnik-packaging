@@ -5,7 +5,7 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 
-TIFF_LATEST=true
+TIFF_LATEST=false
 
 echoerr 'building tiff'
 
