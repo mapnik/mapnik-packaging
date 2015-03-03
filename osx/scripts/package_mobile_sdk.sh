@@ -16,10 +16,10 @@ fi
 
 if [[ "${BUILD_POSTFIX:-unset}" == "unset" ]];then
     BUILD_POSTFIX=""
-fi
-
-if [[ ${USE_LTO} == true ]]; then
-    BUILD_POSTFIX="-lto"
+else
+    if [[ ${USE_LTO} == true ]]; then
+        BUILD_POSTFIX="-${BUILD_POSTFIX}-lto"
+    fi
 fi
 
 if [[ "${FULL_SDK:-false}" == false ]]; then
