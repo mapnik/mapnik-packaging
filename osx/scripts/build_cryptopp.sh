@@ -8,6 +8,14 @@ cd ${PACKAGES}
 CRYPTOPP_VERSION="562"
 download cryptopp${CRYPTOPP_VERSION}.zip
 
+if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        JOBS=4
+    else
+        JOBS=2
+    fi
+fi
+
 echoerr 'building cryptopp'
 rm -rf cryptopp${CRYPTOPP_VERSION}
 unzip -d cryptopp${CRYPTOPP_VERSION} cryptopp${CRYPTOPP_VERSION}.zip

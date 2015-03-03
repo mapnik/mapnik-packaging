@@ -1,0 +1,13 @@
+--- wscript_	2014-10-23 07:58:53.000000000 -0700
++++ wscript	2014-10-23 07:59:07.000000000 -0700
+@@ -27,8 +27,8 @@
+   ctx.check_tool('python')
+   ctx.check_python_version((2,6,0))
+   ctx.check_python_headers()
+-  ctx.check_cfg(package='cairo', atleast_version=cairo_version_required,
+-                 args='--cflags --libs')
++  #ctx.check_cfg(package='cairo', atleast_version=cairo_version_required,
++  #               args='--cflags --libs')
+ 
+   # add gcc options
+   if env['CC_NAME'] == 'gcc':

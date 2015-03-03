@@ -7,7 +7,8 @@ cd ${PACKAGES}
 # gdal
 echoerr 'building gdal'
 
-GDAL_LATEST=true
+GDAL_LATEST=false
+GDAL_LATEST_HASH=0334c2bed93f2eec13e1aa09b412f1b7664211d8
 GDAL_PRE_2x=false
 
 GDAL_SHARED_LIB=true
@@ -33,8 +34,10 @@ if [[ ${GDAL_LATEST} == true ]]; then
         # before https://github.com/OSGeo/gdal/commit/25cf0d6d573f690c3202886de2d6b9af57d9c2e7
         git checkout 94bd162a965a9b08691a3d0f6b949421ce8fded7
     else
-        git checkout trunk || true
-        git pull || true
+        git checkout trunk
+        git checkout .
+        git pull
+        git checkout ${GDAL_LATEST_HASH}
     fi
 else
     download gdal-${GDAL_VERSION}.tar.gz
@@ -53,6 +56,10 @@ if [[ ${GDAL_LATEST} == true ]]; then
     else
         git apply ${PATCHES}/gdal_minimal_trunk.diff
     fi
+elif [[ ${GDAL_VERSION} == "1.11.1" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-1.11.1-minimal.diff
+elif [[ ${GDAL_VERSION} == "1.11.2" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-1.11.2-minimal.diff
 elif [[ ${GDAL_VERSION} == "1.11.0" ]]; then
     patch -N ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp ${PATCHES}/gdal-1.11.0-filegdbtable_issue_5464.diff || true
     patch -N -p1 < ${PATCHES}/gdal-1.11.0-minimal.diff || true
@@ -80,7 +87,8 @@ rm -f configure.orig configure.rej
 # trouble: cpl_serv.h and cplkeywordparser.h comes from geotiff?
 #rm -f ${BUILD}/include/cpl_*
 rm -f ${BUILD}/include/gdal*
-rm -f ${BUILD}/lib/libgdal*
+# note: need -r to delete possible libgdal.1.dylib.dSYM
+rm -rf ${BUILD}/lib/libgdal*
 rm -f ${SHARED_LIBRARY_PATH}/libgdal*
 rm -rf ./.libs
 rm -rf ./libgdal.la
@@ -159,6 +167,7 @@ LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 --with-threads=yes \
 ${LIBRARY_ARGS} \
 ${FGDB_ARGS} \
+--with-hide-internal-symbols=yes \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
@@ -166,7 +175,6 @@ ${FGDB_ARGS} \
 --with-spatialite=${BUILD_WITH_SPATIALITE} \
 --with-geos=${BUILD_WITH_GEOS} \
 --with-sqlite3=no \
---with-hide-internal-symbols=no \
 --with-curl=no \
 --with-pcraster=no \
 --with-cfitsio=no \
@@ -185,6 +193,8 @@ $MAKE -j${JOBS}
 $MAKE install
 cd ${PACKAGES}
 
+
+python -c "data=open('$BUILD/bin/gdal-config','r').read();open('$BUILD/bin/gdal-config','w').write(data.replace('include','include/gdal').replace('$BUILD','\$( cd \"\$( dirname \$( dirname \"\$0\" ))\" && pwd )'))"
 
 : '
 

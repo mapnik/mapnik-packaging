@@ -44,3 +44,6 @@ if [[ ${USE_LTO} == true ]]; then
         export LD_PRELOAD="${OLD_LD_PRELOAD_VALUE}"
     fi
 fi
+
+set +e +u
+

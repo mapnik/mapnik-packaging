@@ -21,21 +21,21 @@ mv protobuf-${PROTOBUF_VERSION} protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 cd protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}
 if [ $BOOST_ARCH = "arm" ]; then
     OLD_PLATFORM=${MASON_PLATFORM}
-    source ${ROOTDIR}/${HOST_PLATFORM}.sh
+    MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
     NATIVE_PROTOC="${PACKAGES}/protobuf-${PROTOBUF_VERSION}-${ARCH_NAME}/src/protoc"
-    source ${ROOTDIR}/${OLD_PLATFORM}.sh
+    MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
     if [ ! -f "${NATIVE_PROTOC}" ]; then
         echoerr 'native/host arch protoc missing, building now in subshell'
         OLD_PLATFORM=${MASON_PLATFORM}
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh && ${ROOTDIR}/scripts/build_protobuf.sh
-        source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh && ${ROOTDIR}/scripts/build_protobuf.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
     fi
     CROSS_FLAGS="--with-protoc=${NATIVE_PROTOC}"
 else
     CROSS_FLAGS=""
 fi
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-CXXFLAGS="${CXXFLAGS} -Wno-unused-local-typedefs"
+CXXFLAGS="${CXXFLAGS} -Wno-unused-local-typedefs -Wno-unknown-warning-option"
 
 # note: we put ${STDLIB_CXXFLAGS} into CXX instead of CXXFLAGS due to libtool oddity:
 # http://stackoverflow.com/questions/16248360/autotools-libtool-link-library-with-libstdc-despite-stdlib-libc-option-pass

@@ -14,9 +14,16 @@ if [[ ${platform_lowercase} =~ "iphone" ]]; then
     platform_lowercase="ios"
 fi
 
-BUILD_POSTFIX=""
+if [[ "${BUILD_POSTFIX:-unset}" == "unset" ]];then
+    BUILD_POSTFIX=""
+fi
+
 if [[ ${USE_LTO} == true ]]; then
     BUILD_POSTFIX="-lto"
+fi
+
+if [[ "${FULL_SDK:-false}" == false ]]; then
+  FULL_SDK=true
 fi
 
 if [[ ${OFFICIAL_RELEASE} == true ]]; then
@@ -31,7 +38,7 @@ fi
 
 LOCAL_TARGET="${MAPNIK_DIST}/${PACKAGE_NAME}"
 mkdir -p "${LOCAL_TARGET}"
-STAGING_DIR="boost-staging-minimal"
+BCP_STAGING_DIR="$(mktemp -d -t XXXXXXXXXXXXXX)"
 
 # clear up where we're going
 rm -rf ${LOCAL_TARGET}/* || rm -rf ${LOCAL_TARGET}/*
@@ -59,35 +66,79 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
-BCP_TOOL=$(find ${PACKAGES}/boost*/dist/* -name 'bcp' -print -quit)
-if [ $BCP_TOOL ]; then
-    echoerr 'packaging boost headers'
-    # http://www.boost.org/doc/libs/1_55_0b1/tools/bcp/doc/html/index.html
-    cd ${PACKAGES}/boost_${BOOST_VERSION2}-${ARCH_NAME}/
-    rm -rf ${STAGING_DIR}/*
-    mkdir -p ${STAGING_DIR}
-    # workaround
-    # **** exception(205): std::exception: basic_filebuf::underflow error reading the file
-    # ******** errors detected; see standard output for details ********
-    # 53 MB
-    ./dist/bin/bcp ${MAPNIK_BIN_SOURCE}/include ${STAGING_DIR} 1>/dev/null
-    # below suffers from underflow error
-    # 43 MB
-    #./dist/bin/bcp --scan ${MAPNIK_BIN_SOURCE}/include/mapnik/*hpp ${STAGING_DIR} 1>/dev/null
-    #./dist/bin/bcp --scan \
-    #$(find ${MAPNIK_BIN_SOURCE}/include -type d | sed 's/$/\/*/' | tr '\n' ' ') \
-    #${STAGING_DIR} 1>/dev/null
-    du -h -d 0 boost-staging-minimal/boost/
-    cp -r ${STAGING_DIR}/boost ${LOCAL_TARGET}/include/
-    cp -r boost/phoenix/support/detail ${LOCAL_TARGET}/include/boost/phoenix/support/
-else
-    echoerr 'could not find boost bcp'
-    exit 1
+# copy over shapeindex and nik2img
+if [ -f "${MAPNIK_BIN_SOURCE}/bin/shapeindex" ];then
+    echoerr copying shapeindex
+    cp "${MAPNIK_BIN_SOURCE}/bin/shapeindex" "${LOCAL_TARGET}/bin/shapeindex"
 fi
+
+if [ -f "${MAPNIK_BIN_SOURCE}/bin/nik2img" ];then
+    echoerr copying nik2img
+    cp "${MAPNIK_BIN_SOURCE}/bin/nik2img" "${LOCAL_TARGET}/bin/nik2img"
+fi
+
+if [[ $FULL_SDK == true ]]; then
+    BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh \
+        ${MAPNIK_SOURCE}/src \
+        ${MAPNIK_SOURCE}/include \
+        ${MAPNIK_SOURCE}/utils \
+        ${MAPNIK_SOURCE}/tests/cpp_tests \
+        ${MAPNIK_SOURCE}/benchmark \
+        ${MAPNIK_SOURCE}/bindings/python \
+        ${MAPNIK_SOURCE}/plugins/input
+else
+    BCP_TMP=${BCP_STAGING_DIR}/boost ${ROOTDIR}/scripts/build_boost.sh ${MAPNIK_BIN_SOURCE}/include
+fi
+
+du -h -d 0 ${BCP_STAGING_DIR}/boost/
+cp -r ${BCP_STAGING_DIR}/boost ${LOCAL_TARGET}/include/
 
 cd ${MAPNIK_DIST}
 
 echoerr "copying headers of other deps"
+
+if [[ $FULL_SDK == true ]]; then
+    # freetype
+    if [[ -d ${BUILD}/include/freetype2 ]]; then
+        echo "copying freetype headers"
+        cp -r ${BUILD}/include/freetype2 ${LOCAL_TARGET}/include/
+    fi
+
+    # gdal
+    if [[ -f ${BUILD}/include/gdal.h ]]; then
+        echo "copying gdal headers"
+        mkdir -p ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/include/gdal* ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/include/cpl* ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/include/ogr* ${LOCAL_TARGET}/include/gdal/
+        cp ${BUILD}/lib/libgdal* ${LOCAL_TARGET}/lib/
+        cp ${BUILD}/bin/gdal-config ${LOCAL_TARGET}/bin/
+    fi
+
+    # postgres
+    if [[ -f ${BUILD}/include/postgres_ext.h ]]; then
+        echo "copying postgres headers"
+        mkdir -p ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/libpq*.h ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/post*.h ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/pg_*.h ${LOCAL_TARGET}/include/
+        cp -r ${BUILD}/include/postgresql ${LOCAL_TARGET}/include/
+        cp ${BUILD}/lib/libpq* ${LOCAL_TARGET}/lib/
+    fi
+
+    # sqlite
+    if [[ -f ${BUILD}/include/sqlite3.h ]]; then
+        echo "copying sqlite headers"
+        mkdir -p ${LOCAL_TARGET}/include/
+        cp ${BUILD}/include/sqlite3*.h ${LOCAL_TARGET}/include/
+        cp ${BUILD}/lib/libsqlite* ${LOCAL_TARGET}/lib/
+    fi
+
+    # copy all other boost libs not core deps
+    cp ${BUILD}/lib/libboost_python* ${LOCAL_TARGET}/lib/
+    cp ${BUILD}/lib/libboost_thread* ${LOCAL_TARGET}/lib/
+    cp ${BUILD}/lib/libboost_program* ${LOCAL_TARGET}/lib/
+fi
 
 # libxml2, needed after https://github.com/mapnik/node-mapnik/issues/239
 if [ -d ${BUILD}/include/libxml2 ]; then
@@ -186,7 +237,7 @@ if [ -d "${BUILD_UNIVERSAL}" ]; then
 else
     # just mapnik single arch
     echoerr "copying mapnik"
-    cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik.* ${LOCAL_TARGET}/lib/
+    cp ${MAPNIK_BIN_SOURCE}/lib/libmapnik* ${LOCAL_TARGET}/lib/
     echoerr "copying libs of other deps"
     for i in $(${NEW_MAPNIK_CONFIG} --dep-libs | sed 's/-l//g'); do
         if [ -f "${BUILD}/lib/lib${i}.a" ]; then
@@ -206,7 +257,7 @@ echoerr "...creating tarball of mapnik build"
 # -j bz2
 # -c compress
 # -f write to file
-# -H symbolic links are followed/materialized (but linux itis -h)
+# -H symbolic links are followed/materialized (but linux it is -h)
 time tar -c -j -f "${MAPNIK_DIST}/${TARBALL_NAME}.bz2" "${PACKAGE_NAME}/"
 ls -lh *tar*
 # -z compress
@@ -214,8 +265,8 @@ ls -lh *tar*
 # --best high compression
 # 20 MB
 #time bzip2 -z -k --best ${TARBALL_NAME}
-
 # 13 MB
+
 if [[ "${PUBLISH:-false}" != false ]]; then
     #time xz -z -k -e -9 ${TARBALL_NAME}
     echoerr "*uploading ${UPLOAD}"

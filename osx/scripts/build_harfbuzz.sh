@@ -5,20 +5,25 @@ mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
 HARFBUZZ_LATEST=false
+HARFBUZZ_LATEST_HASH=7d5e7613ced3dd39d05df83c
 
 echoerr 'building harfbuzz'
 
 if [[ ${HARFBUZZ_LATEST} == true ]]; then
     if [[ ! -d harfbuzz-master ]]; then
-        git clone git@github.com:behdad/harfbuzz.git harfbuzz-master
+        git clone --quiet https://github.com/behdad/harfbuzz.git harfbuzz-master
         cd harfbuzz-master
-        ./autogen.sh
+        git checkout ${HARFBUZZ_LATEST_HASH}
+        git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
+        NOCONFIGURE=1 ./autogen.sh
     else
         cd harfbuzz-master
         git checkout .
         git pull || true
+        git checkout ${HARFBUZZ_LATEST_HASH}
+        git apply ${PATCHES}/harfbuzz-disable-pkg-config.diff
         # TODO - depends on ragel
-        ./autogen.sh ${HOST_ARG}
+        NOCONFIGURE=1 ./autogen.sh ${HOST_ARG}
         make clean
         make distclean
     fi
@@ -29,13 +34,15 @@ else
     cd harfbuzz-${HARFBUZZ_VERSION}
 fi
 
-CXXFLAGS="${CXXFLAGS} -DHB_NO_MT"
-CFLAGS="${CFLAGS} -DHB_NO_MT"
-LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
-# WARNING: freetype configure will fail silently unless pkg-config is installed
+
+FREETYPE_CFLAGS="-I${BUILD}/include/freetype2"
+FREETYPE_LIBS="-L${BUILD}/lib -lfreetype -lz"
+CXXFLAGS="${CXXFLAGS} -DHB_NO_MT ${FREETYPE_CFLAGS}"
+CFLAGS="${CFLAGS} -DHB_NO_MT ${FREETYPE_CFLAGS}"
+LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} ${FREETYPE_LIBS}"
 ./configure --prefix=${BUILD} ${HOST_ARG} \
  --enable-static --disable-shared --disable-dependency-tracking \
- --with-icu \
+ --with-icu=no \
  --with-cairo=no \
  --with-glib=no \
  --with-gobject=no \
@@ -43,6 +50,6 @@ LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
  --with-freetype \
  --with-uniscribe=no \
  --with-coretext=no
-$MAKE -j${JOBS}
+$MAKE -j${JOBS} V=1
 $MAKE install
 cd ${PACKAGES}

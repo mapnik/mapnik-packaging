@@ -6,11 +6,13 @@ mkdir -p ${BUILD}/lib/
 mkdir -p ${BUILD}/include/
 cd ${PACKAGES}
 
-if [ ! -f tbb42_20140416oss_src.tgz ]; then
+TBB_VERSION="tbb43_20141204oss"
+
+if [ ! -f ${TBB_VERSION}_src.tgz ]; then
     echoerr "downloading intel tbb"
-    curl -s -S -f -O -L https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb42_20140416oss_src.tgz
+    curl -s -S -f -O -L https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/${TBB_VERSION}_src.tgz
 else
-    echoerr "using cached node at tbb42_20140416oss_src.tgz"
+    echoerr "using cached node at ${TBB_VERSION}_src.tgz"
 fi
 
 echoerr 'building tbb'
@@ -27,10 +29,14 @@ if [[ ${UNAME} == 'Linux' ]]; then
     CXXFLAGS="${CXXFLAGS} -Wno-attributes"
 fi
 
+# libtbb does not support -fvisibility=hidden
+CXXFLAGS="${CXXFLAGS//-fvisibility=hidden}"
+
+
 if [[ $CXX11 == true ]]; then
-    rm -rf tbb42_20140416oss
-    tar xf tbb42_20140416oss_src.tgz
-    cd tbb42_20140416oss
+    rm -rf ${TBB_VERSION}
+    tar xf ${TBB_VERSION}_src.tgz
+    cd ${TBB_VERSION}
     patch -N -p1 <  ${PATCHES}/tbb_compiler_override.diff || true
     # note: static linking not allowed: http://www.threadingbuildingblocks.org/faq/11
     if [[ $UNAME == 'Darwin' ]]; then

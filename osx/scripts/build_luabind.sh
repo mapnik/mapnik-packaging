@@ -4,18 +4,34 @@ set -o pipefail
 mkdir -p ${PACKAGES}
 cd ${PACKAGES}
 
-echoerr 'building luabind'
-
-#download luabind-${LUABIND_VERSION}.tar.gz
-
-rm -rf luabind
-git clone --quiet https://github.com/DennisOSRM/luabind.git
-cd luabind
-git checkout 789c9e0f98
-# avoid g++ being killed on travis
-if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
-    JOBS=4
+if [[ "${LUABIND_COMMIT:-false}" == false ]]; then
+    LUABIND_COMMIT=e414c57bcb687bb3091b7c55bbff6947f052e46b
 fi
+
+if [[ "${LUABIND_BRANCH:-false}" == false ]]; then
+    LUABIND_BRANCH=master
+fi
+
+if [[ "${LUABIND_REPO:-false}" == false ]]; then
+    LUABIND_REPO="https://github.com/DennisOSRM/luabind.git"
+fi
+
+echoerr 'building luabind'
+rm -rf luabind
+git clone ${LUABIND_REPO} luabind
+cd luabind
+git checkout .
+git checkout $LUABIND_BRANCH
+git checkout $LUABIND_COMMIT
+
+if [[ "${TRAVIS_COMMIT:-false}" != false ]]; then
+    if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+        JOBS=4
+    else
+        JOBS=2
+    fi
+fi
+
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
 if [[ ${CXX11} == true ]]; then

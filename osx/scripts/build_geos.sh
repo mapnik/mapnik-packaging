@@ -15,7 +15,7 @@ rm -rf geos-${GEOS_VERSION}
 tar xf geos-${GEOS_VERSION}.tar.bz2
 cd geos-${GEOS_VERSION}
 if [[ ${CXX11} == true ]]; then
-  patch -N configure ${PATCHES}/geos-ansi.diff
+  patch -N -p1 < ${PATCHES}/geos-cpp11.diff
 fi
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} --disable-shared --enable-static \

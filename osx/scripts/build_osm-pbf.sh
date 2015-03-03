@@ -8,7 +8,7 @@ echoerr 'building OSM-binary'
 rm -rf OSM-binary
 git clone --quiet https://github.com/scrosby/OSM-binary.git
 cd OSM-binary
-git checkout ed845badf9980c5
+git checkout 37304305779795ad6fe6a54f7d3f1abea761fba4
 cd src
 if [ "${AR:-false}" != false ]; then
   $MAKE CXX=$CXX AR=$AR CXXFLAGS="${CXXFLAGS}"

@@ -38,7 +38,7 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   export BOOST_TOOLSET="clang"
 fi
 
-if [[ "${CXX11}" = true ]]; then
+if [[ "${CXX11}" == true ]]; then
   export CXX_STANDARD="cpp11"
 else
   export CXX_STANDARD="cpp03"
@@ -121,7 +121,7 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
       export CORE_CC="clang"
       export CORE_CXX="clang++"
     else
-      echoerr "falling back to gcc"
+      echoerr "defaulting to g++ instead of clang (set CXX=clang++ to prefer clang++)"
       if [[ "${CXX11}" == true ]]; then
           export CORE_CC="gcc-4.8"
           export CORE_CXX="g++-4.8"
@@ -140,14 +140,13 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
         export RANLIB=ranlib
     fi
     export ARCH_FLAGS=
-    # breaking icu symbols?
-    #export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
-    export CXX_VISIBILITY_FLAGS=""
     if [[ "${CXX11}" == true ]]; then
+      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS="-std=c++11"
       export STDLIB_LDFLAGS=""
     else
+      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
       export STDLIB="libstdcpp"
       export STDLIB_CXXFLAGS=""
       export STDLIB_LDFLAGS=""
@@ -213,54 +212,55 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
-    export EXTRA_CPPFLAGS="-D__ANDROID__"
-    export CORE_CXXFLAGS=""
-    export ANDROID_NDK_VERSION="r10"
-    export API_LEVEL="android-L"
-    ${ROOTDIR}/scripts/setup-android-ndk.sh
-    export NDK_PATH="${PACKAGES}/android-ndk-${ANDROID_NDK_VERSION}"
-    export ANDROID_CROSS_COMPILER="arm-linux-androideabi-4.9"
-    export PLATFORM_PREFIX="${NDK_PATH}/active-platform/"
-    export NDK_PACKAGE_DIR="${NDK_PATH}/package-dir/"
+    #${ROOTDIR}/scripts/setup-android-ndk.sh
+    #export ANDROID_NDK_PATH="${PACKAGES}/android-ndk-${MASON_ANDROID_NDK_VERSION}"
+    if [[ ! -d "${ANDROID_NDK_PATH}" ]]; then
+        echo 'ANDROID_NDK_PATH is not defined'
+        exit 1
+    fi
+    export PLATFORM_PREFIX="${ANDROID_NDK_PATH}/active-platform/"
+    export NDK_PACKAGE_DIR="${ANDROID_NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
     if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
-        echo "creating android toolchain with ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
-        # cd here is to workaround https://code.google.com/p/android/issues/detail?id=67690
-        CUR_DIR=$(pwd)
-        cd "${NDK_PATH}"
-        "${NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
-          --toolchain="${ANDROID_CROSS_COMPILER}" \
+        echo "creating android toolchain with ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
+        "${ANDROID_NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
+          --toolchain="${MASON_ANDROID_CROSS_COMPILER}" \
           --llvm-version=3.4 \
           --package-dir="${NDK_PACKAGE_DIR}" \
           --install-dir="${PLATFORM_PREFIX}" \
           --stl="libcxx" \
-          --arch=arm \
-          --platform="${API_LEVEL}"
-        cd $CUR_DIR
+          --arch="${MASON_ANDROID_ARCH}" \
+          --platform="${MASON_API_LEVEL}" \
+          --verbose
     else
-        echo "using ${ANDROID_CROSS_COMPILER}/${API_LEVEL} at ${PLATFORM_PREFIX}"
+        echo "using ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
-    alias ldd="arm-linux-androideabi-readelf -d "
-    export EXTRA_CFLAGS="-fPIC -D_LITTLE_ENDIAN"
+    alias ldd="${MASON_ANDROID_TARGET}-linux-androideabi-readelf -d "
+    export EXTRA_CFLAGS="-march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1 -fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
-    export EXTRA_LDFLAGS=""
-    export BOOST_TOOLSET="gcc-arm"
+    export EXTRA_CPPFLAGS="-D__ANDROID__"
+    export EXTRA_LDFLAGS="-Wl,--fix-cortex-a8 -Wl,--no-warn-mismatch -lm_hard"
     export SDK_PATH=
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     # use clang in order to support std::atomic
     # https://code.google.com/p/android/issues/detail?id=36496
-    export CORE_CXX="arm-linux-androideabi-clang++"
-    export CORE_CC="arm-linux-androideabi-clang"
-    export LD="arm-linux-androideabi-ld"
-    export AR="arm-linux-androideabi-ar"
+    export CORE_CXX="${MASON_ANDROID_TARGET}-linux-androideabi-clang++"
+    export CORE_CC="${MASON_ANDROID_TARGET}-linux-androideabi-clang"
+    if [[ "clang" =~ ${CORE_CXX} ]]; then
+      export BOOST_TOOLSET="clang"
+    else
+      export BOOST_TOOLSET="gcc"
+    fi
+    export LD="${MASON_ANDROID_TARGET}-linux-androideabi-ld"
+    export AR="${MASON_ANDROID_TARGET}-linux-androideabi-ar"
     export ARCH_FLAGS=
-    export RANLIB="arm-linux-androideabi-ranlib"
+    export RANLIB="${MASON_ANDROID_TARGET}-linux-androideabi-ranlib"
     # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
-    #alias libtool="arm-linux-androideabi-ar cru"
-    #export libtool="arm-linux-androideabi-ar cru"
-    export NM="arm-linux-androideabi-nm"
-    export STDLIB="libstdcpp"
+    #alias libtool="${MASON_ANDROID_TARGET}-linux-androideabi-ar cru"
+    #export libtool="${MASON_ANDROID_TARGET}-linux-androideabi-ar cru"
+    export NM="${MASON_ANDROID_TARGET}-linux-androideabi-nm"
+    export STDLIB="libcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
 elif [[ ${UNAME} == 'Darwin' ]]; then
@@ -302,13 +302,13 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     unset LD
     unset AR
     unset RANLIB
-    # breaks node.js -fvisibility=hidden and partially breaks gdal bin programs
-    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden"
     if [[ "${CXX11}" == true ]]; then
+        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
         export STDLIB="libcpp"
         export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
         export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
     else
+        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
         export STDLIB="libstdcpp"
         export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
         export STDLIB_LDFLAGS="-stdlib=libstdc++"
@@ -348,7 +348,7 @@ if [[ $SHARED_ZLIB == true ]]; then
 fi
 
 export PKG_CONFIG_PATH="${BUILD}/lib/pkgconfig"
-export PATH="${BUILD}/bin:$PATH"
+export PATH="${BUILD}/bin":${PATH}
 export ARCHFLAGS="${ARCH_FLAGS}"
 export CORE_CPPFLAGS=""
 export DEBUG_FLAGS="-DNDEBUG"
@@ -356,7 +356,7 @@ export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSE
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
-if [[ ${CXX:-false} == false ]]; then
+if [[ ${CXX:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
     if [[ ${CORE_CXX:-false} != false ]]; then
         export CXX="${CORE_CXX}"
     else
@@ -364,7 +364,7 @@ if [[ ${CXX:-false} == false ]]; then
     fi
 fi
 
-if [[ ${CC:-false} == false ]]; then
+if [[ ${CC:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
     if [[ ${CORE_CC:-false} != false ]]; then
         export CC="${CORE_CC}"
     else
@@ -373,6 +373,13 @@ if [[ ${CC:-false} == false ]]; then
 fi
 
 echo "using $CXX version : $(${CXX} -dumpversion)"
+
+# help boost's bootstrap find 'clang' a custom path to clang binary is used
+if [[ ${MASON_PLATFORM} == 'Linux' ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+  if [[ -f $CXX ]]; then
+    export PATH=$(dirname $(realpath $CXX)):$PATH
+  fi
+fi
 
 export C_INCLUDE_PATH="${BUILD}/include"
 export CPLUS_INCLUDE_PATH="${BUILD}/include"
@@ -404,45 +411,51 @@ export LINK_FLAGS=${LDFLAGS}
 # http://apps.icu-project.org/datacustom/
 # include the 'collators' and 'break iterator'
 # download it, unzip, rename, check it in, then edit the below paths and versions
-export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt53l_only_collator_and_breakiterator.dat"
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt54l_only_collator_and_breakiterator.dat"
 # http://site.icu-project.org/download
-export ICU_VERSION="53.1"
-export ICU_VERSION2="53_1"
+export ICU_VERSION="54.1"
+export ICU_VERSION2="54_1"
 # http://www.boost.org/users/download/
-export BOOST_VERSION="1.55.0"
-export BOOST_VERSION2="1_55_0"
+# bz2
+export BOOST_VERSION="1.57.0"
+export BOOST_VERSION2="1_57_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080500"
+export SQLITE_VERSION="3080802"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
-# http://nongnu.askapache.com/freetype/freetype-2.5.3.tar.bz2
-export FREETYPE_VERSION="2.5.3"
+# http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
+export FREETYPE_VERSION="2.5.5"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.12"
+export LIBPNG_VERSION="1.6.16"
 # http://download.osgeo.org/libtiff/
-export LIBTIFF_VERSION="4.0.3"
-# https://code.google.com/p/webp/downloads/list
-export WEBP_VERSION="0.4.0"
+export LIBTIFF_VERSION="4.0.4beta"
+# https://developers.google.com/speed/webp/download
+# http://downloads.webmproject.org/releases/webp/index.html
+export WEBP_VERSION="0.4.2"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
 export NASM_VERSION="2.11"
 # http://sourceforge.net/projects/libjpeg-turbo/files/
-export JPEG_TURBO_VERSION="1.3.1"
+# tar.gz
+export JPEG_TURBO_VERSION="1.4.0"
+# http://sourceforge.net/projects/expat/
+# gz
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="1.11.0"
+export GDAL_VERSION="1.11.2"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
-# gz
-export POSTGRES_VERSION="9.3.4"
+# bz2
+export POSTGRES_VERSION="9.4.0"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
-export LIBXML2_VERSION="2.9.1"
+export LIBXML2_VERSION="2.9.2"
+# http://www.bzip.org/downloads.html
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
 # http://www.freedesktop.org/software/fontconfig/release/
@@ -451,12 +464,13 @@ export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
 export PIXMAN_VERSION="0.32.6"
-export CAIRO_VERSION="1.12.16"
+export CAIRO_VERSION="1.12.18"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
 export GEOS_VERSION="3.4.2"
-export PROTOBUF_VERSION="2.5.0"
+# https://github.com/google/protobuf/releases
+export PROTOBUF_VERSION="2.6.1"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.5"
 export NOSE_VERSION="1.2.1"
@@ -465,16 +479,16 @@ export NOSE_VERSION="1.2.1"
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="0.9.35"
+export HARFBUZZ_VERSION="0.9.38"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
 export LIBLAS_VERSION="1.7.0"
 export CURL_VERSION="7.36.0"
 # http://www.openssl.org/source/
-export OPENSSL_VERSION="1.0.1i"
-export LIBUV_VERSION="0.11.28"
-export NODE_VERSION="0.10.30"
+export OPENSSL_VERSION="1.0.1j"
+export LIBUV_VERSION="0.11.29"
+export NODE_VERSION="0.10.33"
 
 function download {
     if [[ ! -f $1 ]]; then

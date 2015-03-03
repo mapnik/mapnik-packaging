@@ -37,32 +37,13 @@ else
   cd boost_${BOOST_VERSION2}-${ARCH_NAME}
 fi
 
-if [ $UNAME = 'Darwin' ]; then
-  # patch python build to ensure we do not link boost_python to python
-  # https://svn.boost.org/trac/boost/ticket/3930
-  patch -N tools/build/v2/tools/python.jam ${PATCHES}/python_jam.diff || true
-  # https://svn.boost.org/trac/boost/ticket/6686
-  if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
-      patch -N tools/build/v2/tools/darwin.jam ${PATCHES}/boost_sdk.diff || true
-  fi
-fi
-
 # patch to workaround crashes in python.input
 # https://github.com/mapnik/mapnik/issues/1968
 patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
 
-# Patches boost::atomic for LLVM 3.4 as it is used on OS X 10.9 with Xcode 5.1
-# https://github.com/Homebrew/homebrew/issues/27396
-# https://github.com/Homebrew/homebrew/pull/27436
-patch -N boost/atomic/detail/cas128strong.hpp ${PATCHES}/boost_cas128strong.diff || true
-patch -N boost/atomic/detail/gcc-atomic.hpp ${PATCHES}/boost_gcc-atomic.diff || true
-
 gen_config() {
   echoerr 'generating user-config.jam'
   echo "using ${BOOST_TOOLSET} : : $(which ${CXX})" > user-config.jam
-  if [ ${MASON_PLATFORM} = 'Android' ];  then
-      patch -N libs/regex/src/fileiter.cpp ${PATCHES}/boost_regex_android_libcxx.diff || true
-  fi
   if [[ "${AR:-false}" != false ]] || [[ "${RANLIB:-false}" != false ]]; then
       echo ' : ' >> user-config.jam
       if [[ "${AR:-false}" != false ]]; then
@@ -96,19 +77,19 @@ B2_VERBOSE="-d0"
 #B2_VERBOSE="-d2"
 echoerr 'compiling boost'
 
-if [[ ! -f ./dist/bin/bcp ]]; then
+if [[ ! -f ./dist/bin/bcp ]] || [[ ${BOOST_ARCH} == "arm" ]]; then
     echoerr 'building bcp'
     # dodge android cross compile problem: ld: unknown option: --start-group
     if [[ ${BOOST_ARCH} == "arm" ]]; then
         echoerr "compiling bjam for HOST ${HOST_PLATFORM}"
         OLD_PLATFORM=${MASON_PLATFORM}
-        source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
         bootstrap
         cd tools/bcp
         ../../b2 -j${JOBS} ${B2_VERBOSE}
         cd ../../
         CURRENT_DIR=`pwd`
-        source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
         cd ${CURRENT_DIR}
         gen_config
     else
@@ -235,7 +216,20 @@ else
     if [[ -d ${STAGING_DIR}/boost/ ]]; then
         du -h -d 0 ${STAGING_DIR}/boost/
         mkdir -p ${BUILD}/include
-        cp -r ${STAGING_DIR}/boost ${BUILD}/include/
+        # workaround known bugs in BCP where it cannot copy needed headers
+        if [[ -d "${STAGING_DIR}/boost/phoenix/" ]]; then
+            cp -r boost/phoenix/support/detail ${STAGING_DIR}/boost/phoenix/support/
+        fi
+        if [[ -d "${STAGING_DIR}/boost/atomic/" ]]; then
+            cp -r boost/atomic/detail ${STAGING_DIR}/boost/atomic/
+        fi
+        if [[ "${BCP_TMP:-false}" != false ]]; then
+            echo "copying to ${BCP_TMP}/"
+            cp -r ${STAGING_DIR}/boost ${BCP_TMP}/
+        else
+            echo "not copying to ${BCP_TMP}/"
+            cp -r ${STAGING_DIR}/boost ${BUILD}/include/
+        fi
     else
         echoerr "WARNING: did not find any boost headers for '$@'"
     fi
