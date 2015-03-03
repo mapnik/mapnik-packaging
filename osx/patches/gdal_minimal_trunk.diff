@@ -1,8 +1,8 @@
 diff --git a/gdal/GDALmake.opt.in b/gdal/GDALmake.opt.in
-index 7994cb7..44bb5b3 100644
+index fb1cade..c601589 100644
 --- a/gdal/GDALmake.opt.in
 +++ b/gdal/GDALmake.opt.in
-@@ -475,13 +475,7 @@ FREEXL_INCLUDE = @FREEXL_INCLUDE@
+@@ -485,13 +485,7 @@ FREEXL_INCLUDE = @FREEXL_INCLUDE@
  #	and their uppercase form should be the format portion of the
  #	format registration entry point.  eg. gdb -> GDALRegister_GDB().
  #
@@ -18,10 +18,10 @@ index 7994cb7..44bb5b3 100644
  
  ifneq ($(LIBZ_SETTING),no)
 diff --git a/gdal/ogr/ogrsf_frmts/GNUmakefile b/gdal/ogr/ogrsf_frmts/GNUmakefile
-index 5b1f8cc..e9854cf 100644
+index 36600a8..e9854cf 100644
 --- a/gdal/ogr/ogrsf_frmts/GNUmakefile
 +++ b/gdal/ogr/ogrsf_frmts/GNUmakefile
-@@ -2,44 +2,8 @@
+@@ -2,45 +2,8 @@
  include ../../GDALmake.opt
  
  SUBDIRS-yes	:= \
@@ -55,6 +55,7 @@ index 5b1f8cc..e9854cf 100644
 -SUBDIRS-$(CURL_SETTING) += gft
 -SUBDIRS-$(CURL_SETTING) += gme
 -SUBDIRS-$(CURL_SETTING) += couchdb
+-SUBDIRS-$(CURL_SETTING) += cloudant
 -SUBDIRS-$(HAVE_FREEXL)  += xls
 -SUBDIRS-$(HAVE_EXPAT)   += ods
 -SUBDIRS-$(HAVE_EXPAT)   += xlsx
@@ -69,10 +70,10 @@ index 5b1f8cc..e9854cf 100644
  default:	$(foreach d,$(SUBDIRS-yes),$(d)-target)
  
 diff --git a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
-index 84b236a..c4671ef 100644
+index ffefdc2..37dd0e0 100644
 --- a/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
 +++ b/gdal/ogr/ogrsf_frmts/generic/GNUmakefile
-@@ -13,198 +13,18 @@ CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=\"$(INST_DATA)\"
+@@ -14,202 +14,18 @@ CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=\"$(INST_DATA)\"
  ifeq ($(OGR_ENABLED),yes)
  
  BASEFORMATS = \
@@ -241,6 +242,10 @@ index 84b236a..c4671ef 100644
 -CXXFLAGS :=	$(CXXFLAGS) -DCOUCHDB_ENABLED
 -endif
 -
+-ifeq ($(CURL_SETTING),yes)
+-CXXFLAGS :=	$(CXXFLAGS) -DCLOUDANT_ENABLED
+-endif
+-
 -ifeq ($(HAVE_FREEXL),yes)
 -CXXFLAGS :=	$(CXXFLAGS) -DFREEXL_ENABLED
 -endif
@@ -271,4 +276,4 @@ index 84b236a..c4671ef 100644
 -
  endif
  
- CPPFLAGS	:=	-I.. -I../.. $(GDAL_INCLUDE) $(CPPFLAGS)
+ CPPFLAGS	:=	-I.. -I../..  $(CPPFLAGS)
