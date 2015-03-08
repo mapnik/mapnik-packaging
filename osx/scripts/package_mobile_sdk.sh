@@ -15,7 +15,9 @@ if [[ ${platform_lowercase} =~ "iphone" ]]; then
 fi
 
 if [[ "${BUILD_POSTFIX:-unset}" == "unset" ]];then
-    BUILD_POSTFIX=""
+    if [[ ${USE_LTO} == true ]]; then
+        BUILD_POSTFIX="-lto"
+    fi
 else
     if [[ ${USE_LTO} == true ]]; then
         BUILD_POSTFIX="-${BUILD_POSTFIX}-lto"
