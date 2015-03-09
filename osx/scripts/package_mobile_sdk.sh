@@ -17,6 +17,8 @@ fi
 if [[ "${BUILD_POSTFIX:-unset}" == "unset" ]];then
     if [[ ${USE_LTO} == true ]]; then
         BUILD_POSTFIX="-lto"
+    else
+        BUILD_POSTFIX=""
     fi
 else
     if [[ ${USE_LTO} == true ]]; then
