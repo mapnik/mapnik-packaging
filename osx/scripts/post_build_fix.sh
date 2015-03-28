@@ -4,17 +4,20 @@ set -o pipefail
 echo "...fixing install names of mapnik and dependencies"
 
 mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/"
-mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
 
+mkdir -p "${MAPNIK_BIN_SOURCE}/share/mapnik/icu"
 DATA_FILE=$(find ${BUILD}/share/icu/*/icudt*.dat -maxdepth 1 -name '*.dat' -print -quit)
 if [ "${DATA_FILE}" ];then
     cp "${DATA_FILE}" "${MAPNIK_BIN_SOURCE}/share/mapnik/icu/"
 fi
 if [ -d ${BUILD}/share/proj ];then
-  cp -r "${BUILD}/share/proj" "${MAPNIK_BIN_SOURCE}/share/mapnik/proj/"
+  cp -r "${BUILD}/share/proj" "${MAPNIK_BIN_SOURCE}/share/mapnik/"
 fi
 if [ -d ${BUILD}/share/gdal ];then
-cp -r "${BUILD}/share/gdal" "${MAPNIK_BIN_SOURCE}/share/mapnik/gdal/"
+  cp -r "${BUILD}/share/gdal" "${MAPNIK_BIN_SOURCE}/share/mapnik/"
+  rm "${MAPNIK_BIN_SOURCE}/share/mapnik/*svg"
+  rm "${MAPNIK_BIN_SOURCE}/share/mapnik/*png"
+  rm "${MAPNIK_BIN_SOURCE}/share/mapnik/*ini"
 fi
 
 # py2cairo
