@@ -15,9 +15,9 @@ if [ -d ${BUILD}/share/proj ];then
 fi
 if [ -d ${BUILD}/share/gdal ];then
   cp -r "${BUILD}/share/gdal" "${MAPNIK_BIN_SOURCE}/share/mapnik/"
-  rm "${MAPNIK_BIN_SOURCE}/share/mapnik/*svg"
-  rm "${MAPNIK_BIN_SOURCE}/share/mapnik/*png"
-  rm "${MAPNIK_BIN_SOURCE}/share/mapnik/*ini"
+  rm -f "${MAPNIK_BIN_SOURCE}/share/mapnik/gdal/*svg"
+  rm -f "${MAPNIK_BIN_SOURCE}/share/mapnik/gdal/*png"
+  rm -f "${MAPNIK_BIN_SOURCE}/share/mapnik/gdal/*ini"
 fi
 
 # py2cairo
