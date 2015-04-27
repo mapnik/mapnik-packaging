@@ -20,24 +20,7 @@ if [[ ${USE_LTO} == true ]]; then
     export LD_PRELOAD="$(pwd)/plugins/input/libgdal.so.1"
 fi
 
-$MAKE test-local || true
-
-if [[ ${OFFICIAL_RELEASE} == true ]]; then
-    for i in {"2.7","2.6",}
-    do
-      if [ -d "${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/mapnik" ]; then
-          echo testing against python $i
-          export PYTHONPATH=${MAPNIK_BIN_SOURCE}/lib/python${i}/site-packages/
-          export PATH=${MAPNIK_BIN_SOURCE}/bin:$PATH
-          # TODO - allow setting python version in $MAKE wrapper
-          #$MAKE test
-          python${i} tests/visual_tests/test.py -q
-          python${i} tests/run_tests.py -q
-      else
-          echo skipping test against python $i
-      fi
-    done
-fi
+$MAKE test || true
 
 if [[ ${USE_LTO} == true ]]; then
     if [[ "${OLD_LD_PRELOAD_VALUE:-false}" != false ]]; then

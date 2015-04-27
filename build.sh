@@ -207,7 +207,6 @@ environment in odd ways if this script is sourced
 function build_mapnik {
   setup
   if [[ ${UNAME} == 'Linux' ]]; then
-      sudo apt-get install -qq -y python-dev python-nose
       # postgres deps
       # https://github.com/mapnik/mapnik-packaging/commit/598db68f4e5314883023eb6048e94ba7c021b6b7
       #sudo apt-get install -qq -y libpam0g-dev libgss-dev libkrb5-dev libldap2-dev libavahi-compat-libdnssd-dev
@@ -244,8 +243,6 @@ function build_mapnik {
       b ./scripts/build_gdal.sh
       b ./scripts/build_pixman.sh
       b ./scripts/build_cairo.sh
-      b ./scripts/build_pycairo.sh
-      ./scripts/build_boost.sh --with-python
     fi
   fi
   if [[ "${MAPNIK_BRANCH:-false}" == false ]]; then

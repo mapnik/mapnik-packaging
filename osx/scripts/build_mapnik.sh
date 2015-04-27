@@ -10,9 +10,9 @@ fi
 
 if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -rf ${MAPNIK_BIN_SOURCE}
-  rm -f ${MAPNIK_SOURCE}/bindings/python/mapnik/{*.so,*.pyc}
   rm -f ${MAPNIK_SOURCE}/src/libmapnik{*.so,*.dylib,*.a}
-  rm -f ${MAPNIK_SOURCE}/tests/cpp_tests/*-bin
+  rm -f ${MAPNIK_SOURCE}/test/*/*-bin
+  rm -f ${MAPNIK_SOURCE}/test/unit/run
   rm -f ${MAPNIK_SOURCE}/benchmark/out/*
   # TODO: https://github.com/mapnik/mapnik/issues/2112
   #$MAKE clean
@@ -64,7 +64,6 @@ echo "PROJ_INCLUDES = '${BUILD}/include'" >> config.py
 echo "PROJ_LIBS = '${BUILD}/lib'" >> config.py
 echo "CAIRO_INCLUDES = '${BUILD}/include'" >> config.py
 echo "CAIRO_LIBS = '${BUILD}/lib'" >> config.py
-echo "PYTHON_PREFIX = '${MAPNIK_INSTALL}'" >> config.py
 echo "PATH_REMOVE = '/usr/:/usr/local/'" >> config.py
 if [[ ${CXX11} == true ]]; then
     echo "INPUT_PLUGINS = 'csv,gdal,topojson,pgraster,geojson,ogr,postgis,raster,shape,sqlite'" >> config.py
@@ -78,11 +77,8 @@ echo "SVG2PNG = False" >> config.py
 echo "SAMPLE_INPUT_PLUGINS=False" >> config.py
 echo "CPP_TESTS=True" >> config.py
 echo "BENCHMARK=False" >> config.py
-# note, we use FRAMEWORK_PYTHON=False so linking works to custom framework despite use of -isysroot
-echo "FRAMEWORK_PYTHON = False" >> config.py
 echo "FULL_LIB_PATH = False" >> config.py
 echo "ENABLE_SONAME = False" >> config.py
-echo "BOOST_PYTHON_LIB = 'boost_python-2.7'" >> config.py
 echo "XMLPARSER = 'ptree'" >> config.py
 
 MAPNIK_BINDINGS=""
@@ -90,7 +86,6 @@ if [[ "${MINIMAL_MAPNIK:-false}" != false ]]; then
     echo "SVG_RENDERER = False" >> config.py
     echo "CAIRO = False" >> config.py
 else
-    MAPNIK_BINDINGS="python"
     echo "SVG_RENDERER = True" >> config.py
     echo "CAIRO = True" >> config.py
 fi
@@ -133,40 +128,6 @@ fi
 # then build the rest
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
 $MAKE install
-
-# https://github.com/mapnik/mapnik/issues/1901#issuecomment-18920366
-export PYTHONPATH=""
-
-echo "
-from os import path
-mapnik_data_dir = path.normpath(path.join(__file__,'../../../../../share/mapnik/'))
-env = {
-    'ICU_DATA': path.join(mapnik_data_dir, 'icu'),
-    'GDAL_DATA': path.join(mapnik_data_dir, 'gdal'),
-    'PROJ_LIB': path.join(mapnik_data_dir, 'proj')
-}
-" > bindings/python/mapnik/mapnik_settings.py
-
-if [[ ${OFFICIAL_RELEASE} == true ]]; then
-    # python versions
-    export i="3.3"
-    echo "...Updating and building mapnik python bindings for python ${i}"
-    rm -f bindings/python/*os
-    rm -f bindings/python/mapnik/_mapnik.so
-    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure BINDINGS=python PYTHON=/usr/local/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-    LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
-    $MAKE install
-    
-    for i in {"2.6","2.7"}
-    do
-      echo "...Updating and building mapnik python bindings for python ${i}"
-      rm -f bindings/python/*os
-      rm -f bindings/python/mapnik/_mapnik.so
-      LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure BINDINGS=python PYTHON=/usr/bin/python${i} BOOST_PYTHON_LIB=boost_python-${i}
-      LIBRARY_PATH="${SHARED_LIBRARY_PATH}" JOBS=${JOBS} $MAKE
-      $MAKE install
-    done
-fi
 
 $ROOTDIR/scripts/post_build_fix.sh
 
