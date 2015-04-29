@@ -32,6 +32,7 @@ else
     rm -rf harfbuzz-${HARFBUZZ_VERSION}
     tar xf harfbuzz-${HARFBUZZ_VERSION}.tar.bz2
     cd harfbuzz-${HARFBUZZ_VERSION}
+    patch -N -p1 < ${PATCHES}/harfbuzz-0.9.40c.diff
 fi
 
 
