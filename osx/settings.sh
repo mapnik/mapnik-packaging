@@ -434,7 +434,7 @@ export LIBPNG_VERSION="1.6.16"
 export LIBTIFF_VERSION="4.0.4beta"
 # https://developers.google.com/speed/webp/download
 # http://downloads.webmproject.org/releases/webp/index.html
-export WEBP_VERSION="0.4.2"
+export WEBP_VERSION="0.4.3"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
