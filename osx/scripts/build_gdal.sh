@@ -168,6 +168,7 @@ LIBS=$CUSTOM_LIBS ./configure ${HOST_ARG} \
 ${LIBRARY_ARGS} \
 ${FGDB_ARGS} \
 --with-hide-internal-symbols=yes \
+--with-expat=${BUILD} \
 --with-libtiff=${BUILD} \
 --with-jpeg=${BUILD} \
 --with-png=${BUILD} \
