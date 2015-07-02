@@ -56,6 +56,8 @@ if [[ ${GDAL_LATEST} == true ]]; then
     else
         git apply ${PATCHES}/gdal_minimal_trunk.diff
     fi
+elif [[ ${GDAL_VERSION} == "2.0.0" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-2.0.0-minimal-3.diff
 elif [[ ${GDAL_VERSION} == "1.11.1" ]]; then
     patch -N -p1 < ${PATCHES}/gdal-1.11.1-minimal.diff
 elif [[ ${GDAL_VERSION} == "1.11.2" ]]; then
