@@ -411,16 +411,16 @@ export LINK_FLAGS=${LDFLAGS}
 # http://apps.icu-project.org/datacustom/
 # include the 'collators' and 'break iterator'
 # download it, unzip, rename, check it in, then edit the below paths and versions
-export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt54l_only_collator_and_breakiterator.dat"
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt55l_only_collator_and_breakiterator.dat"
 # http://site.icu-project.org/download
-export ICU_VERSION="54.1"
-export ICU_VERSION2="54_1"
+export ICU_VERSION="55.1"
+export ICU_VERSION2="55_1"
 # http://www.boost.org/users/download/
 # bz2
-export BOOST_VERSION="1.57.0"
-export BOOST_VERSION2="1_57_0"
+export BOOST_VERSION="1.58.0"
+export BOOST_VERSION2="1_58_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3080802"
+export SQLITE_VERSION="3081002"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
 export FREETYPE_VERSION="2.5.5"
@@ -429,19 +429,20 @@ export PROJ_VERSION="4.8.0"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.16"
+export LIBPNG_VERSION="1.6.17"
 # http://download.osgeo.org/libtiff/
-export LIBTIFF_VERSION="4.0.4beta"
+export LIBTIFF_VERSION="4.0.4"
 # https://developers.google.com/speed/webp/download
 # http://downloads.webmproject.org/releases/webp/index.html
 export WEBP_VERSION="0.4.3"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
-export NASM_VERSION="2.11"
+# https://github.com/mozilla/mozjpeg/issues/175#issuecomment-104057260
+export NASM_VERSION="2.11.06"
 # http://sourceforge.net/projects/libjpeg-turbo/files/
 # tar.gz
-export JPEG_TURBO_VERSION="1.4.0"
+export JPEG_TURBO_VERSION="1.4.1"
 # http://sourceforge.net/projects/expat/
 # gz
 export EXPAT_VERSION="2.1.0"
@@ -464,7 +465,7 @@ export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
 export PIXMAN_VERSION="0.32.6"
-export CAIRO_VERSION="1.12.18"
+export CAIRO_VERSION="1.14.2"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
@@ -508,6 +509,7 @@ export -f upload
 
 function push {
     echo "downloading $1"
+    mkdir -p ${PACKAGES}
     cd ${PACKAGES}
     ${SYSTEM_CURL} -s -S -f -O -L $1
     echo "uploading $(basename $1)"
