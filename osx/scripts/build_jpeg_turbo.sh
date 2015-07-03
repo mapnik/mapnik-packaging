@@ -8,6 +8,8 @@ download libjpeg-turbo-${JPEG_TURBO_VERSION}.tar.gz
 
 ensure_nasm
 
+export PATH="${BUILD_TOOLS_ROOT}/bin":$PATH
+
 echoerr 'building jpeg turbo'
 rm -rf libjpeg-turbo-${JPEG_TURBO_VERSION}
 tar xf libjpeg-turbo-${JPEG_TURBO_VERSION}.tar.gz
