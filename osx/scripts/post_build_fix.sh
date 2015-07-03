@@ -29,7 +29,7 @@ fi
 if [ $UNAME = 'Linux' ]; then
     function fix_gdal_shared() {
         if [[ -f "$1" ]] && [[ -f "${BUILD}/lib/libgdal.so" ]]; then
-            cp ${BUILD}/lib/libgdal.so.1 "$(dirname "$1")/"
+            cp ${BUILD}/lib/libgdal.so.20 "$(dirname "$1")/"
             #for i in $(find ${BUILD}/lib/libgdal* -maxdepth 1 -name '*so*' -print); do
             #    cp ${i} "$(dirname "$1")/"
             #done;
