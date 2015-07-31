@@ -224,7 +224,6 @@ function build_mapnik {
   ./scripts/build_boost.sh ${BOOST_LIBRARIES}
   b ./scripts/build_freetype.sh
   b ./scripts/build_harfbuzz.sh
-  b ./scripts/build_libxml2.sh
   b ./scripts/build_jpeg_turbo.sh
   b ./scripts/build_png.sh
   b ./scripts/build_proj4.sh
