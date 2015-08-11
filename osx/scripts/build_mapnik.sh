@@ -73,6 +73,7 @@ echo "BENCHMARK=False" >> config.py
 echo "FULL_LIB_PATH = False" >> config.py
 echo "ENABLE_SONAME = False" >> config.py
 echo "XMLPARSER = 'ptree'" >> config.py
+echo "NO_ATEXIT = True" >> config.py
 
 MAPNIK_BINDINGS=""
 if [[ "${MINIMAL_MAPNIK:-false}" != false ]]; then
