@@ -465,7 +465,7 @@ export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
 export PIXMAN_VERSION="0.32.6"
-export CAIRO_VERSION="1.12.18"
+export CAIRO_VERSION="1.14.2"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
