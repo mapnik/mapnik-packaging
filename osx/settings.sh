@@ -274,8 +274,8 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
       # for more info
       #   man xcrun
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin"
-      export CORE_CC="${TOOLCHAIN_ROOT}/clang"
-      export CORE_CXX="${XCODE_PREFIX}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+      export CORE_CC="/usr/bin/clang"
+      export CORE_CXX="/usr/bin/clang++"
       export SDK_ROOT="${XCODE_PREFIX}/Platforms/${XCODE_PLATFORM}.platform/Developer"
       # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
       export PLATFORM_SDK="${XCODE_PLATFORM}${ACTIVE_SDK_VERSION}.sdk"
@@ -286,8 +286,8 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     else
       export TOOLCHAIN_ROOT="${XCODE_PREFIX}/usr/bin"
       export SDK_PATH="${XCODE_PREFIX}/usr/"
-      export CORE_CC="${TOOLCHAIN_ROOT}/clang"
-      export CORE_CXX="${TOOLCHAIN_ROOT}/clang++"
+      export CORE_CC="/usr/bin/clang"
+      export CORE_CXX="/usr/bin/clang++"
       export EXTRA_CFLAGS=""
       # todo -no_dead_strip_inits_and_terms
       export EXTRA_LDFLAGS="-Wl,-search_paths_first"
