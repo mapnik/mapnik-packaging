@@ -252,15 +252,13 @@ function build_mapnik {
       fi
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
-      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b ${MAPNIK_BRANCH}
-      git branch -v
-  fi
-  if [[ "${CXX11}" == false ]]; then
-      cd ${MAPNIK_SOURCE}
+      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE}
       git checkout ${MAPNIK_BRANCH}
-      git pull
       git branch -v
-      cd ../
+  else
+      git fetch -v
+      git checkout ${MAPNIK_BRANCH}
+      git branch -v
   fi
   ./scripts/build_mapnik.sh
   ./scripts/post_build_fix.sh
