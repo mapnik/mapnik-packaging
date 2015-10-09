@@ -160,7 +160,7 @@ function upgrade_compiler {
 function prep_linux {
   cd osx
   echo "installing build tools"
-  sudo apt-get install -qq -y curl build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
+  sudo apt-get install -qq -y curl pkg-config build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
   if [[ "${MASON_PLATFORM:-false}" != false ]]; then
       source ${MASON_PLATFORM}.sh
   else
@@ -252,15 +252,13 @@ function build_mapnik {
       fi
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
-      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE} -b ${MAPNIK_BRANCH}
-      git branch -v
-  fi
-  if [[ "${CXX11}" == false ]]; then
-      cd ${MAPNIK_SOURCE}
+      git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE}
       git checkout ${MAPNIK_BRANCH}
-      git pull
       git branch -v
-      cd ../
+  else
+      git fetch -v
+      git checkout ${MAPNIK_BRANCH}
+      git branch -v
   fi
   ./scripts/build_mapnik.sh
   ./scripts/post_build_fix.sh

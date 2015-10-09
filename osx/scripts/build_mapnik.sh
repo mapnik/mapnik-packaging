@@ -4,9 +4,6 @@ set -o pipefail
 
 echoerr 'Building mapnik'
 cd ${MAPNIK_SOURCE}
-if [[ ${OFFICIAL_RELEASE} != true ]]; then
-    git pull
-fi
 
 if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -rf ${MAPNIK_BIN_SOURCE}
