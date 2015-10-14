@@ -423,15 +423,15 @@ export BOOST_VERSION2="1_59_0"
 export SQLITE_VERSION="3081002"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
-export FREETYPE_VERSION="2.6"
+export FREETYPE_VERSION="2.6.1"
 # http://download.osgeo.org/proj/
-export PROJ_VERSION="4.8.0"
+export PROJ_VERSION="4.9.2"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.17"
+export LIBPNG_VERSION="1.6.18"
 # http://download.osgeo.org/libtiff/
-export LIBTIFF_VERSION="4.0.4"
+export LIBTIFF_VERSION="4.0.6"
 # https://developers.google.com/speed/webp/download
 # http://downloads.webmproject.org/releases/webp/index.html
 export WEBP_VERSION="0.4.3"
@@ -442,12 +442,12 @@ export JPEG_VERSION="8d"
 export NASM_VERSION="2.11.06"
 # http://sourceforge.net/projects/libjpeg-turbo/files/
 # tar.gz
-export JPEG_TURBO_VERSION="1.4.1"
+export JPEG_TURBO_VERSION="1.4.2"
 # http://sourceforge.net/projects/expat/
 # gz
 export EXPAT_VERSION="2.1.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="2.0.0"
+export GDAL_VERSION="2.0.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # bz2
