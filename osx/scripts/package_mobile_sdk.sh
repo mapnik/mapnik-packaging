@@ -72,15 +72,20 @@ if [ -d "${MAPNIK_BIN_SOURCE}/lib/mapnik/input/" ];then
     cp -r "${MAPNIK_BIN_SOURCE}/lib/mapnik/input" "${LOCAL_TARGET}/lib/mapnik/"
 fi
 
-# copy over shapeindex and nik2img
+# copy over command line tools we might wish to bundle with node-mapnik
 if [ -f "${MAPNIK_BIN_SOURCE}/bin/shapeindex" ];then
     echoerr copying shapeindex
     cp "${MAPNIK_BIN_SOURCE}/bin/shapeindex" "${LOCAL_TARGET}/bin/shapeindex"
 fi
 
-if [ -f "${MAPNIK_BIN_SOURCE}/bin/nik2img" ];then
-    echoerr copying nik2img
-    cp "${MAPNIK_BIN_SOURCE}/bin/nik2img" "${LOCAL_TARGET}/bin/nik2img"
+if [ -f "${MAPNIK_BIN_SOURCE}/bin/mapnik-render" ];then
+    echoerr copying mapnik-render
+    cp "${MAPNIK_BIN_SOURCE}/bin/mapnik-render" "${LOCAL_TARGET}/bin/mapnik-render"
+fi
+
+if [ -f "${MAPNIK_BIN_SOURCE}/bin/mapnik-index" ];then
+    echoerr copying mapnik-index
+    cp "${MAPNIK_BIN_SOURCE}/bin/mapnik-index" "${LOCAL_TARGET}/bin/mapnik-index"
 fi
 
 if [[ $FULL_SDK == true ]]; then
