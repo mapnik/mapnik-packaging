@@ -18,6 +18,10 @@ else
 fi
 
 cd freetype-${FREETYPE_VERSION}
+# workaround freetype 2.6.1 glitch
+if [[ ${FREETYPE_VERSION} == "2.6.1" ]]; then
+    ln -s builds/unix/install-sh .
+fi
 # NOTE: --with-zlib=yes means external, non-bundled zip will be used
 ./configure --prefix=${BUILD} --enable-static --disable-shared ${HOST_ARG} \
  --with-zlib=yes \
