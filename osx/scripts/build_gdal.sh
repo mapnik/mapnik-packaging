@@ -200,7 +200,7 @@ $MAKE install
 cd ${PACKAGES}
 
 
-python -c "data=open('$BUILD/bin/gdal-config','r').read();open('$BUILD/bin/gdal-config','w').write(data.replace('include','include/gdal').replace('$BUILD','\$( cd \"\$( dirname \$( dirname \"\$0\" ))\" && pwd )'))"
+python -c "data=open('$BUILD/bin/gdal-config','r').read();open('$BUILD/bin/gdal-config','w').write(data.replace('include','include').replace('$BUILD','\$( cd \"\$( dirname \$( dirname \"\$0\" ))\" && pwd )'))"
 
 : '
 

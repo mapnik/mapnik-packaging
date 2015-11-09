@@ -420,7 +420,7 @@ export ICU_VERSION2="55_1"
 export BOOST_VERSION="1.59.0"
 export BOOST_VERSION2="1_59_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3081002"
+export SQLITE_VERSION="3090200"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
 export FREETYPE_VERSION="2.6.1"
@@ -434,7 +434,7 @@ export LIBPNG_VERSION="1.6.18"
 export LIBTIFF_VERSION="4.0.6"
 # https://developers.google.com/speed/webp/download
 # http://downloads.webmproject.org/releases/webp/index.html
-export WEBP_VERSION="0.4.3"
+export WEBP_VERSION="0.4.4"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.0"
 export JPEG_VERSION="8d"
