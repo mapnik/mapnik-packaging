@@ -436,7 +436,7 @@ export LIBTIFF_VERSION="4.0.6"
 # http://downloads.webmproject.org/releases/webp/index.html
 export WEBP_VERSION="0.4.4"
 # http://download.osgeo.org/geotiff/libgeotiff/
-export LIBGEOTIFF_VERSION="1.4.0"
+export LIBGEOTIFF_VERSION="1.4.1"
 export JPEG_VERSION="8d"
 # https://github.com/mozilla/mozjpeg/issues/175#issuecomment-104057260
 export NASM_VERSION="2.11.06"
