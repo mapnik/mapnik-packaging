@@ -429,7 +429,7 @@ export PROJ_VERSION="4.9.2"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.18"
+export LIBPNG_VERSION="1.6.19"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.6"
 # https://developers.google.com/speed/webp/download
@@ -451,11 +451,11 @@ export GDAL_VERSION="2.0.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # bz2
-export POSTGRES_VERSION="9.4.0"
+export POSTGRES_VERSION="9.4.5"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
-export LIBXML2_VERSION="2.9.2"
+export LIBXML2_VERSION="2.9.3"
 # http://www.bzip.org/downloads.html
 export BZIP2_VERSION="1.0.6"
 export PKG_CONFIG_VERSION="0.25"
@@ -464,8 +464,8 @@ export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
-export PIXMAN_VERSION="0.32.6"
-export CAIRO_VERSION="1.14.2"
+export PIXMAN_VERSION="0.32.8"
+export CAIRO_VERSION="1.14.4"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
@@ -480,7 +480,7 @@ export NOSE_VERSION="1.2.1"
 export SPARSEHASH_VERSION="2.0.2"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
-export HARFBUZZ_VERSION="1.0.6"
+export HARFBUZZ_VERSION="1.1.0"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
