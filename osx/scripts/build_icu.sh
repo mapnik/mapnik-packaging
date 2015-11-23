@@ -71,4 +71,6 @@ cp ${PREMADE_ICU_DATA_LIBRARY} ./data/in/*dat
 --disable-dyload
 $MAKE -j${JOBS}
 $MAKE install
+# workaround http://bugs.icu-project.org/trac/ticket/11744#comment:8
+cp ./data/out/*dat ${BUILD}/share/icu/*/
 cd ${PACKAGES}
