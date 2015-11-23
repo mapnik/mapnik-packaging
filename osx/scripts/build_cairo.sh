@@ -18,7 +18,7 @@ cd cairo-${CAIRO_VERSION}
 CFLAGS="${CFLAGS} -Wno-enum-conversion -I${BUILD}/include/pixman-1"
 LDFLAGS="-lfreetype -lpng -lpixman-1"
 # patch cairo to avoid needing pkg-config as a build dep
-patch -N -p1 < ${PATCHES}/cairo-1.12.16.diff || true
+patch -N -p1 < ${PATCHES}/cairo-1.14.4.diff || true
 # NOTE: PKG_CONFIG_PATH must be correctly set by this point
 #png_CFLAGS="-I${BUILD}/include"
 #png_LIBS="-I${BUILD}/lib -lpng"
