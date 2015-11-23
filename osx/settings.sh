@@ -411,10 +411,10 @@ export LINK_FLAGS=${LDFLAGS}
 # http://apps.icu-project.org/datacustom/
 # include the 'collators' and 'break iterator'
 # download it, unzip, rename, check it in, then edit the below paths and versions
-export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt55l_only_collator_and_breakiterator.dat"
+export PREMADE_ICU_DATA_LIBRARY="${ROOTDIR}/icudt56l_only_collator_and_breakiterator.dat"
 # http://site.icu-project.org/download
-export ICU_VERSION="55.1"
-export ICU_VERSION2="55_1"
+export ICU_VERSION="56.1"
+export ICU_VERSION2="56_1"
 # http://www.boost.org/users/download/
 # bz2
 export BOOST_VERSION="1.59.0"
