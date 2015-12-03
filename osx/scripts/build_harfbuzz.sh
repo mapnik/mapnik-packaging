@@ -38,8 +38,8 @@ fi
 
 FREETYPE_CFLAGS="-I${BUILD}/include/freetype2"
 FREETYPE_LIBS="-L${BUILD}/lib -lfreetype -lz"
-CXXFLAGS="${CXXFLAGS} -DHB_NO_MT ${FREETYPE_CFLAGS}"
-CFLAGS="${CFLAGS} -DHB_NO_MT ${FREETYPE_CFLAGS}"
+CXXFLAGS="${CXXFLAGS} ${FREETYPE_CFLAGS}"
+CFLAGS="${CFLAGS} ${FREETYPE_CFLAGS}"
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS} ${FREETYPE_LIBS}"
 ./configure --prefix=${BUILD} ${HOST_ARG} \
  --enable-static --disable-shared --disable-dependency-tracking \
