@@ -34,7 +34,7 @@ if [[ ${UNAME} = 'Linux' ]]; then
   # an error is throw if any symbols cannot be resolve for static libs
   # which can happen if their order is incorrect when linked: see lorder | tsort
   # TODO: only apply this to libmapnik (not python bindings) -Wl,--no-undefined
-  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
+  echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS} -Wl,-z,origin -Wl,-rpath=\\\$\$ORIGIN'" >> config.py
 else
   echo "CUSTOM_LDFLAGS = '${STDLIB_LDFLAGS} ${LDFLAGS}'" >> config.py
 fi
