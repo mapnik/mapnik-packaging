@@ -429,7 +429,7 @@ export PROJ_VERSION="4.9.2"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.19"
+export LIBPNG_VERSION="1.6.20"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.6"
 # https://developers.google.com/speed/webp/download
