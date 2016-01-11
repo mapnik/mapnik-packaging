@@ -112,7 +112,6 @@ if [[ ${CXX11} == true ]]; then
     src/grid/process_group_symbolizer.os \
     src/cairo/process_markers_symbolizer.os \
     src/cairo/process_group_symbolizer.os \
-    plugins/input/geojson/large_geojson_featureset.os \
     plugins/input/geojson/geojson_datasource.os || true
   # try a second time in the case of a killed compile
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
@@ -130,7 +129,6 @@ if [[ ${CXX11} == true ]]; then
     src/grid/process_group_symbolizer.os \
     src/cairo/process_markers_symbolizer.os \
     src/cairo/process_group_symbolizer.os \
-    plugins/input/geojson/large_geojson_featureset.os \
     plugins/input/geojson/geojson_datasource.os || true
   # try a third time in the case of a killed compile
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
@@ -148,7 +146,6 @@ if [[ ${CXX11} == true ]]; then
     src/grid/process_group_symbolizer.os \
     src/cairo/process_markers_symbolizer.os \
     src/cairo/process_group_symbolizer.os \
-    plugins/input/geojson/large_geojson_featureset.os \
     plugins/input/geojson/geojson_datasource.os
 fi
 # then build the rest
