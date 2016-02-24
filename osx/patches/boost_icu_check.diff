@@ -1,0 +1,10 @@
+--- libs/regex/build/has_icu_test.cpp	2016-02-23 11:46:09.000000000 -0800
++++ libs/regex/build/has_icu_test.cpp	2016-02-23 11:46:07.000000000 -0800
+@@ -23,6 +23,7 @@
+ 
+ int main()
+ {
++   return 0;
+    // To detect possible binary mismatches between the installed ICU build, and whatever
+    // C++ std lib's we're using, we need to:
+    // * Make sure we call ICU C++ API's
