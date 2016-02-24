@@ -4,6 +4,7 @@ set -o pipefail
 
 echoerr 'Building mapnik'
 cd ${MAPNIK_SOURCE}
+git submodule update --init
 
 if [ -d ${MAPNIK_BIN_SOURCE} ]; then
   rm -rf ${MAPNIK_BIN_SOURCE}
