@@ -40,6 +40,7 @@ fi
 # patch to workaround crashes in python.input
 # https://github.com/mapnik/mapnik/issues/1968
 patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
+#patch -N libs/regex/build/has_icu_test.cpp ${PATCHES}/boost_icu_check.diff || true
 
 gen_config() {
   echoerr 'generating user-config.jam'
@@ -68,7 +69,7 @@ bootstrap() {
 }
 
 # HINT: bootstrap failed? look in bootstrap.log and then debug by building from hand:
-# cd .//tools/build/v2/engine/
+# cd ./tools/build/src/engine/
 
 # HINT: problems with icu configure check?
 # cat bin.v2/config.log to see problems
