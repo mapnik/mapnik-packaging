@@ -22,7 +22,7 @@ fi
 
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} \
---enable-thread-safety \
+--disable-thread-safety \
 --enable-largefile \
 --without-bonjour \
 --without-openssl \
