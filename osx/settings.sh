@@ -420,16 +420,17 @@ export ICU_VERSION2="56_1"
 export BOOST_VERSION="1.59.0"
 export BOOST_VERSION2="1_59_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3100000"
+export SQLITE_VERSION="3110000"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
+# will require visual test updates: export FREETYPE_VERSION="2.6.3"
 export FREETYPE_VERSION="2.6.1"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.9.2"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.20"
+export LIBPNG_VERSION="1.6.21"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.6"
 # https://developers.google.com/speed/webp/download
@@ -451,7 +452,7 @@ export GDAL_VERSION="2.0.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # bz2
-export POSTGRES_VERSION="9.4.5"
+export POSTGRES_VERSION="9.5.1"
 # http://zlib.net/zlib-1.2.8.tar.gz
 export ZLIB_VERSION="1.2.8"
 # ftp://xmlsoft.org/libxml2/
@@ -464,6 +465,7 @@ export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
+# will require visual test updates: export PIXMAN_VERSION="0.34.0"
 export PIXMAN_VERSION="0.32.8"
 export CAIRO_VERSION="1.14.4"
 export PY2CAIRO_VERSION="1.10.0"
@@ -475,11 +477,11 @@ export PROTOBUF_VERSION="2.6.1"
 export PROTOBUF_C_VERSION="0.15"
 export XZ_VERSION="5.0.5"
 export NOSE_VERSION="1.2.1"
-# stuck at feb 2012
-# https://code.google.com/p/sparsehash/source/list
-export SPARSEHASH_VERSION="2.0.2"
+# https://github.com/sparsehash/sparsehash/releases
+export SPARSEHASH_VERSION="2.0.3"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
+# will require visual test updates: export HARFBUZZ_VERSION="1.2.0"
 export HARFBUZZ_VERSION="1.1.2"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
