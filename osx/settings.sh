@@ -2,6 +2,16 @@
 
 set -u
 
+
+# block usage of mapnik-packaging within
+# /usr or /usr/local because we remove those
+# paths from the build in scripts/build_mapnik.sh
+# and removing them will break builds
+if [[ $(pwd) =~ "/usr/" ]]; then
+  echo "mapnik-packaging must not be use within /usr - please clone elsewhere"
+  exit 1
+fi
+
 # settings
 export OFFICIAL_RELEASE=false
 export USE_BOOST_TRUNK='false'
