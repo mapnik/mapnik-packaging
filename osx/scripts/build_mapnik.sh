@@ -101,8 +101,8 @@ if [[ ${CXX11} == true ]]; then
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
     --config=cache --implicit-cache --max-drift=1 \
     src/renderer_common/render_group_symbolizer.os \
-    src/renderer_common/marker_helpers.os \
     src/renderer_common/render_thunk_extractor.os \
+    src/marker_helpers.os \
     src/json/libmapnik-json.a \
     src/wkt/libmapnik-wkt.a \
     src/css_color_grammar.os \
@@ -113,8 +113,8 @@ if [[ ${CXX11} == true ]]; then
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
     --config=cache --implicit-cache --max-drift=1 \
     src/renderer_common/render_group_symbolizer.os \
-    src/renderer_common/marker_helpers.os \
     src/renderer_common/render_thunk_extractor.os \
+    src/marker_helpers.os \
     src/json/libmapnik-json.a \
     src/wkt/libmapnik-wkt.a \
     src/css_color_grammar.os \
@@ -125,8 +125,8 @@ if [[ ${CXX11} == true ]]; then
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
     --config=cache --implicit-cache --max-drift=1 \
     src/renderer_common/render_group_symbolizer.os \
-    src/renderer_common/marker_helpers.os \
     src/renderer_common/render_thunk_extractor.os \
+    src/marker_helpers.os \
     src/json/libmapnik-json.a \
     src/wkt/libmapnik-wkt.a \
     src/css_color_grammar.os \
