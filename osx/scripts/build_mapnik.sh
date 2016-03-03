@@ -96,6 +96,7 @@ echo "BINDINGS = '${MAPNIK_BINDINGS}'" >> config.py
 
 set_dl_path "${SHARED_LIBRARY_PATH}"
 LIBRARY_PATH="${SHARED_LIBRARY_PATH}" ./configure ${HOST_ARGS} || cat config.log
+cat config.log
 if [[ ${CXX11} == true ]]; then
   # single job compiles first
   LIBRARY_PATH="${SHARED_LIBRARY_PATH}" python scons/scons.py -j1 \
