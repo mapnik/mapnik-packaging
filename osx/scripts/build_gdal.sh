@@ -124,6 +124,10 @@ if [[ $UNAME == 'Darwin' ]]; then
     CXXFLAGS=" -Wno-unknown-warning-option $CXXFLAGS"
 fi
 
+# https://trac.osgeo.org/gdal/ticket/6380
+CXXFLAGS="-DGDAL_NO_AUTOLOAD $CXXFLAGS"
+CFLAGS="-DGDAL_NO_AUTOLOAD $CFLAGS"
+
 LDFLAGS="${STDLIB_LDFLAGS} ${LDFLAGS}"
 # --with-geotiff=${BUILD} \
 
