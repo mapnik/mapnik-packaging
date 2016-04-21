@@ -233,8 +233,6 @@ function build_mapnik {
   b ./scripts/build_webp.sh
   b ./scripts/build_sqlite.sh
   #./scripts/build_geotiff.sh
-  # for mapnik-vector-tile
-  b ./scripts/build_protobuf.sh
   if [[ ${BOOST_ARCH} != "arm" ]]; then
     b ./scripts/build_expat.sh
     b ./scripts/build_postgres.sh
