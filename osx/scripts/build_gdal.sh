@@ -40,9 +40,9 @@ if [[ ${GDAL_LATEST} == true ]]; then
         git checkout ${GDAL_LATEST_HASH}
     fi
 else
-    download gdal-${GDAL_VERSION}.tar.gz
+    download gdal-${GDAL_VERSION}RC3.tar.gz
     rm -rf gdal-${GDAL_VERSION}
-    tar xf gdal-${GDAL_VERSION}.tar.gz
+    tar xf gdal-${GDAL_VERSION}RC3.tar.gz
     cd gdal-${GDAL_VERSION}
 fi
 
@@ -59,6 +59,8 @@ if [[ ${GDAL_LATEST} == true ]]; then
 elif [[ ${GDAL_VERSION} == "2.0.0" ]]; then
     patch -N -p1 < ${PATCHES}/gdal-2.0.0-minimal-3.diff
     patch -N -p1 < ${PATCHES}/gdal-2.0.0-non-shared-vrt.diff
+elif [[ ${GDAL_VERSION} == "2.1.0" ]]; then
+    patch -N -p1 < ${PATCHES}/gdal-2.1.0-minimal.diff
 elif [[ ${GDAL_VERSION} == "2.0.1" ]]; then
     patch -N -p1 < ${PATCHES}/gdal-2.0.1-minimal.diff
 elif [[ ${GDAL_VERSION} == "1.11.1" ]]; then
