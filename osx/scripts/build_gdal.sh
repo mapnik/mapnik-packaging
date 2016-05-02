@@ -40,9 +40,9 @@ if [[ ${GDAL_LATEST} == true ]]; then
         git checkout ${GDAL_LATEST_HASH}
     fi
 else
-    download gdal-${GDAL_VERSION}RC3.tar.gz
+    download gdal-${GDAL_VERSION}.tar.gz
     rm -rf gdal-${GDAL_VERSION}
-    tar xf gdal-${GDAL_VERSION}RC3.tar.gz
+    tar xf gdal-${GDAL_VERSION}.tar.gz
     cd gdal-${GDAL_VERSION}
 fi
 
