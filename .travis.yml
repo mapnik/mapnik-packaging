@@ -23,7 +23,7 @@ install:
 
 before_script:
  - if test "${COMMIT_MESSAGE#*'[publish]'}" != "$COMMIT_MESSAGE"; then echo "publishing" && export PUBLISH=true; else echo "not publishing"; fi;
-
+ - if test "${MASON_PLATFORM}" == "ArmLinux"; then source osx/ArmLinux_setup.sh; fi;
+ 
 script:
- - source ./build.sh
- - ${TARGET}
+ - $COMPILE_ENV ./wrapper.sh

@@ -58,7 +58,7 @@ function upgrade_gcc {
     fi
     echo "updating apt"
     sudo apt-get update -y
-    if [[ $(lsb_release --id) =~ "Ubuntu" ]]; then
+    if [[ $(lsb_release --id) =~ "Ubuntu" ]] || [[ $(lsb_release --id) =~ "Raspbian" ]]; then
         echo "installing C++11 compiler"
         sudo apt-get install -qq -y gcc-4.8 g++-4.8
         export CC="gcc-4.8"
@@ -91,6 +91,8 @@ function upgrade_clang {
            sudo apt-get install -y software-properties-common
            sudo add-apt-repository "deb http://llvm.org/apt/unstable/ llvm-toolchain-${CLANG_VERSION} main"
         fi
+    fi
+    if [[ $(lsb_release --id) =~ "Debian" ]] || [[ $(lsb_release --id) =~ "Raspbian" ]]; then
         echo "updating apt"
         sudo apt-get update -y
         echo 'upgrading libstdc++'

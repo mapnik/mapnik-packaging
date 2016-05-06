@@ -219,6 +219,24 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     fi
     export ZLIB_PATH="${SYSROOT}/usr"
 
+elif [[ ${MASON_PLATFORM} == 'ArmLinux' ]]; then
+    export EXTRA_CFLAGS=""
+    export EXTRA_LDFLAGS=""
+    export EXTRA_CXXFLAGS=""
+    export EXTRA_CPPFLAGS=""
+    export CORE_CXX="g++"
+    export CORE_CC="gcc"
+    export ARCH_FLAGS=""
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS=""
+    export STDLIB_LDFLAGS=""
+    export CXX_VISIBILITY_FLAGS=""
+    if [[ "${CXX11}" == true ]]; then
+      export STDLIB="libstdcpp"
+      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
+      export STDLIB_LDFLAGS=""
+    fi
+    export SDK_PATH=""
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
