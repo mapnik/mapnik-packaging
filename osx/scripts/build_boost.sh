@@ -40,7 +40,7 @@ fi
 # patch to workaround crashes in python.input
 # https://github.com/mapnik/mapnik/issues/1968
 patch -N libs/python/src/converter/builtin_converters.cpp ${PATCHES}/boost_python_shared_ptr_gil.diff || true
-#patch -N libs/regex/build/has_icu_test.cpp ${PATCHES}/boost_icu_check.diff || true
+patch -N libs/regex/build/has_icu_test.cpp ${PATCHES}/boost_icu_check.diff || true
 
 gen_config() {
   echoerr 'generating user-config.jam'

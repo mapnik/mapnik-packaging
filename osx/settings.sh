@@ -427,8 +427,8 @@ export ICU_VERSION="56.1"
 export ICU_VERSION2="56_1"
 # http://www.boost.org/users/download/
 # bz2
-export BOOST_VERSION="1.59.0"
-export BOOST_VERSION2="1_59_0"
+export BOOST_VERSION="1.60.0"
+export BOOST_VERSION2="1_60_0"
 # http://www.sqlite.org/download.html
 export SQLITE_VERSION="3110000"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
