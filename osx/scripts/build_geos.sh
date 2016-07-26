@@ -14,9 +14,7 @@ CXX="${CXX} ${STDLIB_CXXFLAGS}"
 rm -rf geos-${GEOS_VERSION}
 tar xf geos-${GEOS_VERSION}.tar.bz2
 cd geos-${GEOS_VERSION}
-if [[ ${CXX11} == true ]]; then
-  patch -N -p1 < ${PATCHES}/geos-cpp11.diff
-fi
+patch -N -p1 < ${PATCHES}/geos-cpp11.diff
 ./configure ${HOST_ARG} \
 --prefix=${BUILD} --disable-shared --enable-static \
 --disable-dependency-tracking

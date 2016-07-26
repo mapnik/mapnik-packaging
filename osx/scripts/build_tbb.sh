@@ -33,28 +33,24 @@ fi
 CXXFLAGS="${CXXFLAGS//-fvisibility=hidden}"
 
 
-if [[ $CXX11 == true ]]; then
-    rm -rf ${TBB_VERSION}
-    tar xf ${TBB_VERSION}_src.tgz
-    cd ${TBB_VERSION}
-    patch -N -p1 <  ${PATCHES}/tbb_compiler_override.diff || true
-    # note: static linking not allowed: http://www.threadingbuildingblocks.org/faq/11
-    if [[ $UNAME == 'Darwin' ]]; then
-      $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
-    else
-      $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX cfg=release arch=intel64 cpp0x=1 tbb_build_dir=$(pwd)/build
-    fi
-
-    # custom install
-    if [[ ${UNAME} == "Darwin" ]]; then
-        cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib ${BUILD}/lib/
-        cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib ${BUILD}/lib/
-    else
-        create_links libtbbmalloc_proxy
-        create_links libtbbmalloc
-        create_links libtbb
-    fi
-    cp -r $(pwd)/include/tbb ${BUILD}/include/
+rm -rf ${TBB_VERSION}
+tar xf ${TBB_VERSION}_src.tgz
+cd ${TBB_VERSION}
+patch -N -p1 <  ${PATCHES}/tbb_compiler_override.diff || true
+# note: static linking not allowed: http://www.threadingbuildingblocks.org/faq/11
+if [[ $UNAME == 'Darwin' ]]; then
+  $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX arch=intel64 cpp0x=1 stdlib=libc++ compiler=clang tbb_build_dir=$(pwd)/build
 else
-    echoerr 'skipping libtbb build since we only target c++11 mode'
+  $MAKE -j${JOBS} tbb_build_prefix=BUILDPREFIX cfg=release arch=intel64 cpp0x=1 tbb_build_dir=$(pwd)/build
 fi
+
+# custom install
+if [[ ${UNAME} == "Darwin" ]]; then
+    cp $(pwd)/build/BUILDPREFIX_release/libtbb.dylib ${BUILD}/lib/
+    cp $(pwd)/build/BUILDPREFIX_release/libtbbmalloc.dylib ${BUILD}/lib/
+else
+    create_links libtbbmalloc_proxy
+    create_links libtbbmalloc
+    create_links libtbb
+fi
+cp -r $(pwd)/include/tbb ${BUILD}/include/

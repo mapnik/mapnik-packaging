@@ -48,11 +48,7 @@ if [[ ${UNAME} == 'Darwin' ]]; then
   export BOOST_TOOLSET="clang"
 fi
 
-if [[ "${CXX11}" == true ]]; then
-  export CXX_STANDARD="cpp11"
-else
-  export CXX_STANDARD="cpp03"
-fi
+export CXX_STANDARD="cpp11"
 
 function echoerr() { echo 1>&2;echo "**** $@ ****" 1>&2;echo 1>&2; }
 export -f echoerr
@@ -110,12 +106,6 @@ fi
 
 if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
-    if [[ "${CXX11}" == true ]]; then
-        if [[ "${CXX#*'clang'}" != "$CXX" ]]; then
-            # workaround http://llvm.org/bugs/show_bug.cgi?id=13530#c3
-            export EXTRA_CFLAGS="${EXTRA_CFLAGS} -D__float128=void"
-        fi
-    fi
     export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     # TODO -Wl,--gc-sections / -Wl,--exclude-libs=ALL / Bsymbolic
@@ -126,20 +116,9 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
     #export EXTRA_LDFLAGS="-Wl,--no-undefined -Wl,--no-allow-shlib-undefined"
     export EXTRA_LDFLAGS=""
 
-    if [[ "${CXX:-false}" != false ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
-      echoerr "using clang"
-      export CORE_CC="clang"
-      export CORE_CXX="clang++"
-    else
-      echoerr "defaulting to g++ instead of clang (set CXX=clang++ to prefer clang++)"
-      if [[ "${CXX11}" == true ]]; then
-          export CORE_CC="gcc-4.8"
-          export CORE_CXX="g++-4.8"
-      else
-          export CORE_CC="gcc"
-          export CORE_CXX="g++"
-      fi
-    fi
+    echoerr "using clang"
+    export CORE_CC="clang"
+    export CORE_CXX="clang++"
     if [[ ${USE_LTO} == true ]]; then
         echo 'ar "$@" --plugin /usr/lib/LLVMgold.so' > ar-lto
         chmod +x ./ar-lto
@@ -150,17 +129,10 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
         export RANLIB=ranlib
     fi
     export ARCH_FLAGS=
-    if [[ "${CXX11}" == true ]]; then
-      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
-      export STDLIB="libstdcpp"
-      export STDLIB_CXXFLAGS="-std=c++11"
-      export STDLIB_LDFLAGS=""
-    else
-      export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
-      export STDLIB="libstdcpp"
-      export STDLIB_CXXFLAGS=""
-      export STDLIB_LDFLAGS=""
-    fi
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS="-std=c++11"
+    export STDLIB_LDFLAGS=""
 elif [[ ${MASON_PLATFORM} == 'Linaro' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
@@ -208,15 +180,9 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
     export CXX_VISIBILITY_FLAGS=""
-    if [[ "${CXX11}" == true ]]; then
-      export STDLIB="libstdcpp"
-      export STDLIB_CXXFLAGS="-std=c++11 -DBOOST_SPIRIT_USE_PHOENIX_V3=1"
-      export STDLIB_LDFLAGS=""
-    else
-      export STDLIB="libstdcpp"
-      export STDLIB_CXXFLAGS=""
-      export STDLIB_LDFLAGS=""
-    fi
+    export STDLIB="libstdcpp"
+    export STDLIB_CXXFLAGS="-std=c++11"
+    export STDLIB_LDFLAGS=""
     export ZLIB_PATH="${SYSROOT}/usr"
 
 elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
@@ -312,17 +278,10 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     unset LD
     unset AR
     unset RANLIB
-    if [[ "${CXX11}" == true ]]; then
-        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
-        export STDLIB="libcpp"
-        export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
-        export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
-    else
-        export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fno-common"
-        export STDLIB="libstdcpp"
-        export STDLIB_CXXFLAGS="-Wno-c++11-long-long -stdlib=libstdc++"
-        export STDLIB_LDFLAGS="-stdlib=libstdc++"
-    fi
+    export CXX_VISIBILITY_FLAGS="-fvisibility-inlines-hidden -fvisibility=hidden -fno-common"
+    export STDLIB="libcpp"
+    export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
+    export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
 else
     echo '**unhandled platform: ${MASON_PLATFORM}**'
 fi

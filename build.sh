@@ -73,17 +73,17 @@ function upgrade_clang {
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update -y
     fi
-    sudo apt-get install -y libstdc++6 libstdc++-5-dev g++-5
+    sudo apt-get install -y libstdc++-5-dev
     git clone --depth 1 https://github.com/mapbox/mason.git ./.mason
     ./.mason/mason install clang 3.8.0
     export PATH=$(./.mason/mason prefix clang 3.8.0)/bin:${PATH}
-    export CXX=clang++
-    export CC=clang
+    export CXX=clang++-3.8
+    export CC=clang-3.8
 }
 
 function upgrade_compiler {
     local CROSS_COMPILING=${CROSS_COMPILING:-false}
-    if [[ ${UNAME} == 'Linux' ]] && [[ ${CXX11} == true ]] && [[ $CROSS_COMPILING == false ]]; then
+    if [[ ${UNAME} == 'Linux' ]] && [[ $CROSS_COMPILING == false ]]; then
         upgrade_clang
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
@@ -185,11 +185,7 @@ function build_mapnik {
     fi
   fi
   if [[ "${MAPNIK_BRANCH:-false}" == false ]]; then
-      if [[ "${CXX11}" == false ]]; then
-          export MAPNIK_BRANCH="2.3.x"
-      else
-          export MAPNIK_BRANCH="master"
-      fi
+        export MAPNIK_BRANCH="master"
   fi
   if [ ! -d ${MAPNIK_SOURCE} ]; then
       git clone --quiet https://github.com/mapnik/mapnik.git ${MAPNIK_SOURCE}
@@ -206,7 +202,6 @@ function build_mapnik {
 }
 
 function build_osrm {
-  export CXX11=true
   setup
   b ./scripts/build_tbb.sh
   b ./scripts/build_expat.sh
@@ -226,7 +221,6 @@ function build_osrm {
 export -f build_osrm
 
 function build_osmium {
-  export CXX11=true
   setup
   b ./scripts/build_proj4.sh
   b ./scripts/build_expat.sh

@@ -115,9 +115,9 @@ if [ $UNAME = 'Darwin' ]; then
         if [ ! -f "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so" ]; then
            touch "${PACKAGES}/FileGDB_API/lib/libFileGDBAPI.so"
         fi
-        if [ "${CXX11}" = false ]; then
-          FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
-        fi
+        #if [ "${CXX11}" = false ]; then
+        #  FGDB_ARGS="--with-fgdb=${PACKAGES}/FileGDB_API/"
+        #fi
     fi
 fi
 
@@ -158,12 +158,8 @@ if [ -f $BUILD/lib/libproj.a ]; then
 fi
 
 if [[ $BUILD_WITH_SPATIALITE != "no" ]] || [[ $BUILD_WITH_GEOS != "no" ]]; then
-    if [[ $CXX11 == true ]]; then
-        if [[ $STDLIB == "libcpp" ]]; then
-            CUSTOM_LIBS="$CUSTOM_LIBS -lc++ -lm"
-        else
-            CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++ -lm"
-        fi
+    if [[ $STDLIB == "libcpp" ]]; then
+        CUSTOM_LIBS="$CUSTOM_LIBS -lc++ -lm"
     else
         CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++ -lm"
     fi

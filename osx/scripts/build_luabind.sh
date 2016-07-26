@@ -34,12 +34,6 @@ fi
 
 LINK_FLAGS="${STDLIB_LDFLAGS} ${LINK_FLAGS}"
 
-if [[ ${CXX11} == true ]]; then
-    STDLIB_OVERRIDE=""
-else
-    STDLIB_OVERRIDE="-DOSXLIBSTD=\"libstdc++\""
-fi
-
 rm -rf build
 mkdir build
 cd build

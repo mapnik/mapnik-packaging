@@ -21,12 +21,8 @@ if [ -f $BUILD/lib/libgeos.a ]; then
     BUILD_WITH_GEOS="${BUILD}/bin/geos-config"
 fi
 
-if [[ $CXX11 == true ]]; then
-    if [[ $STDLIB == "libcpp" ]]; then
-        CUSTOM_LIBS="$CUSTOM_LIBS -lc++ -lm"
-    else
-        CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++ -lm"
-    fi
+if [[ $STDLIB == "libcpp" ]]; then
+    CUSTOM_LIBS="$CUSTOM_LIBS -lc++ -lm"
 else
     CUSTOM_LIBS="$CUSTOM_LIBS -lstdc++ -lm"
 fi

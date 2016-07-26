@@ -12,12 +12,10 @@ echo '
 std::string hello();
 ' > lib.hpp
 
-if [[ ${CXX11} == true ]]; then
-    echo '
-    // C++11 usage
-    std::string hello_move(std::string && moved);
-    ' >> lib.hpp
-fi
+echo '
+// C++11 usage
+std::string hello_move(std::string && moved);
+' >> lib.hpp
 
 echo '
 #include "lib.hpp"
@@ -26,14 +24,12 @@ std::string hello() {
 }
 ' > lib.cpp
 
-if [[ ${CXX11} == true ]]; then
-    echo '
-    // C++11 usage
-    std::string hello_move(std::string && moved)
-    {
-        return std::move(moved);
-    }' >> lib.cpp
-fi
+echo '
+// C++11 usage
+std::string hello_move(std::string && moved)
+{
+    return std::move(moved);
+}' >> lib.cpp
 
 echo '
 #include <iostream>
