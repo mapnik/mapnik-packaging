@@ -74,7 +74,11 @@ function upgrade_clang {
         sudo apt-get update -y
     fi
     sudo apt-get install -y libstdc++-5-dev
-    git clone --depth 1 https://github.com/mapbox/mason.git ./.mason
+    if [[ -d ./.mason ]]; then
+      (cd .mason && git pull)
+    else
+      git clone --depth 1 https://github.com/mapbox/mason.git ./.mason
+    fi
     ./.mason/mason install clang 3.8.0
     export PATH=$(./.mason/mason prefix clang 3.8.0)/bin:${PATH}
     export CXX=clang++-3.8
