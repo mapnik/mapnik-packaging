@@ -88,6 +88,10 @@ function upgrade_clang {
 function upgrade_compiler {
     local CROSS_COMPILING=${CROSS_COMPILING:-false}
     if [[ ${UNAME} == 'Linux' ]] && [[ $CROSS_COMPILING == false ]]; then
+        if [[ ! `which sudo` ]]; then
+          apt-get install sudo
+        fi
+        sudo apt-get install -y curl lsb-release git
         upgrade_clang
         # if CXX is set, detect if clang
         # otherwise fallback to gcc
