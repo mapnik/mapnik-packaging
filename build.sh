@@ -106,7 +106,10 @@ function upgrade_compiler {
 function prep_linux {
   cd osx
   echo "installing build tools"
-  sudo apt-get install -qq -y curl pkg-config build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
+  if [[ ! `which sudo` ]]; then
+    apt-get install sudo
+  fi
+  sudo apt-get install -qq -y curl lsb-release pkg-config build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
   if [[ "${MASON_PLATFORM:-false}" != false ]]; then
       source ${MASON_PLATFORM}.sh
   else
