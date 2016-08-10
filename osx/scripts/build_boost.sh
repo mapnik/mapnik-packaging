@@ -83,14 +83,14 @@ if [[ ! -f ./dist/bin/bcp ]] || [[ ${BOOST_ARCH} == "arm" ]]; then
     # dodge android cross compile problem: ld: unknown option: --start-group
     if [[ ${BOOST_ARCH} == "arm" ]]; then
         echoerr "compiling bjam for HOST ${HOST_PLATFORM}"
-        OLD_PLATFORM=${MASON_PLATFORM}
-        MASON_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
+        OLD_PLATFORM=${MP_PLATFORM}
+        MP_CROSS=1 source ${ROOTDIR}/${HOST_PLATFORM}.sh
         bootstrap
         cd tools/bcp
         ../../b2 -j${JOBS} ${B2_VERBOSE}
         cd ../../
         CURRENT_DIR=`pwd`
-        MASON_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
+        MP_CROSS=1 source ${ROOTDIR}/${OLD_PLATFORM}.sh
         cd ${CURRENT_DIR}
         gen_config
     else
@@ -175,7 +175,7 @@ if test "${TARGET_NAMES#*'--with'}" != "${TARGET_NAMES}"; then
         fi
     fi
 
-    if [[ ${MASON_PLATFORM} = 'Android' ]]; then
+    if [[ ${MP_PLATFORM} = 'Android' ]]; then
         # TODO - fixed in boost 1.55: https://svn.boost.org/trac/boost/changeset/85251
         # workaround libs/filesystem/src/operations.cpp:77:30: fatal error: sys/statvfs.h: No such file or directory
         mkdir -p tmp/sys/

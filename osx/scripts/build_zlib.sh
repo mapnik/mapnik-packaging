@@ -12,7 +12,7 @@ else
     rm -rf zlib-${ZLIB_VERSION}
     tar xf zlib-${ZLIB_VERSION}.tar.gz
     cd zlib-${ZLIB_VERSION}
-    if [ ${MASON_PLATFORM} = 'Android' ]; then
+    if [ ${MP_PLATFORM} = 'Android' ]; then
        patch -N < ${PATCHES}/android-zlib.diff
     fi
     ./configure --prefix=${BUILD} --static

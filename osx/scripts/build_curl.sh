@@ -12,7 +12,7 @@ tar xf curl-${CURL_VERSION}.tar.bz2
 cd curl-${CURL_VERSION}
 
 
-if [ ${MASON_PLATFORM} = 'Linux' ]; then
+if [ ${MP_PLATFORM} = 'Linux' ]; then
     LIBS="-ldl ${LIBS=}"
 fi
 

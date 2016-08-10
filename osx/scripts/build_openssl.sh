@@ -25,22 +25,22 @@ if [[ $UNAME == 'Darwin' ]]; then
     MAKEDEPEND="makedepend"
 fi
 
-if [[ ${MASON_PLATFORM} == 'MacOSX' ]]; then
+if [[ ${MP_PLATFORM} == 'MacOSX' ]]; then
     OS_COMPILER="darwin64-x86_64-cc enable-ec_nistp_64_gcc_128"
-elif [[ ${MASON_PLATFORM} =~ 'iPhone' ]]; then
+elif [[ ${MP_PLATFORM} =~ 'iPhone' ]]; then
     if [[ ${ARCH_NAME} == 'arm64' ]]; then
         OS_COMPILER="BSD-generic64 enable-ec_nistp_64_gcc_128"
     else
         OS_COMPILER="BSD-generic32"
     fi
-elif [[ ${MASON_PLATFORM} == 'Linux' ]]; then
+elif [[ ${MP_PLATFORM} == 'Linux' ]]; then
     OS_COMPILER="linux-x86_64 enable-ec_nistp_64_gcc_128"
-elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
+elif [[ ${MP_PLATFORM} == 'Linaro-softfp' ]]; then
     OS_COMPILER="linux-armv4"
-elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
+elif [[ ${MP_PLATFORM} == 'Android' ]]; then
     OS_COMPILER="android-armv7"
 else
-    echoerr "unknown os/compiler version for your platform ${MASON_PLATFORM}"
+    echoerr "unknown os/compiler version for your platform ${MP_PLATFORM}"
     false
 fi
 
