@@ -24,7 +24,7 @@ export UNAME=$(uname -s);
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 # lowercase platform name
-export platform_lowercase=$(echo ${MASON_PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
+export platform_lowercase=$(echo ${MP_PLATFORM}| sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/")
 
 export DARWIN_VERSION=$(uname -r)
 export LIBCXX_DEFAULT=false
@@ -104,7 +104,7 @@ if [[ "${CXX:-false}" == false ]]; then
     export CXX=
 fi
 
-if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
+if [[ ${MP_PLATFORM} == 'Linux' ]]; then
     export EXTRA_CFLAGS="-fPIC"
     export EXTRA_CPPFLAGS=""
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
@@ -133,7 +133,7 @@ if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS="-std=c++11"
     export STDLIB_LDFLAGS=""
-elif [[ ${MASON_PLATFORM} == 'Linaro' ]]; then
+elif [[ ${MP_PLATFORM} == 'Linaro' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     export SDK_PATH="${PACKAGES}/linaro-prebuilt-sysroot-2013.07-2"
     cd ${PACKAGES}
@@ -160,7 +160,7 @@ elif [[ ${MASON_PLATFORM} == 'Linaro' ]]; then
     export STDLIB="libstdcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
-elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
+elif [[ ${MP_PLATFORM} == 'Linaro-softfp' ]]; then
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
     cd ${ROOTDIR}
     # NOTE --sysroot used here instead of -isysroot because I assume the former works better on linux
@@ -185,11 +185,11 @@ elif [[ ${MASON_PLATFORM} == 'Linaro-softfp' ]]; then
     export STDLIB_LDFLAGS=""
     export ZLIB_PATH="${SYSROOT}/usr"
 
-elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
+elif [[ ${MP_PLATFORM} == 'Android' ]]; then
     export CXX_VISIBILITY_FLAGS=""
     export alias ldconfig=true
     #${ROOTDIR}/scripts/setup-android-ndk.sh
-    #export ANDROID_NDK_PATH="${PACKAGES}/android-ndk-${MASON_ANDROID_NDK_VERSION}"
+    #export ANDROID_NDK_PATH="${PACKAGES}/android-ndk-${MP_ANDROID_NDK_VERSION}"
     if [[ ! -d "${ANDROID_NDK_PATH}" ]]; then
         echo 'ANDROID_NDK_PATH is not defined'
         exit 1
@@ -198,21 +198,21 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export NDK_PACKAGE_DIR="${ANDROID_NDK_PATH}/package-dir/"
     # NOTE: make-standalone-toolchain.sh --help for options
     if [[ ! -d "${PLATFORM_PREFIX}" ]]; then
-        echo "creating android toolchain with ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
+        echo "creating android toolchain with ${MP_ANDROID_CROSS_COMPILER}/${MP_API_LEVEL} at ${PLATFORM_PREFIX}"
         "${ANDROID_NDK_PATH}/build/tools/make-standalone-toolchain.sh"  \
-          --toolchain="${MASON_ANDROID_CROSS_COMPILER}" \
+          --toolchain="${MP_ANDROID_CROSS_COMPILER}" \
           --llvm-version=3.4 \
           --package-dir="${NDK_PACKAGE_DIR}" \
           --install-dir="${PLATFORM_PREFIX}" \
           --stl="libcxx" \
-          --arch="${MASON_ANDROID_ARCH}" \
-          --platform="${MASON_API_LEVEL}" \
+          --arch="${MP_ANDROID_ARCH}" \
+          --platform="${MP_API_LEVEL}" \
           --verbose
     else
-        echo "using ${MASON_ANDROID_CROSS_COMPILER}/${MASON_API_LEVEL} at ${PLATFORM_PREFIX}"
+        echo "using ${MP_ANDROID_CROSS_COMPILER}/${MP_API_LEVEL} at ${PLATFORM_PREFIX}"
     fi
     export ICU_EXTRA_CPP_FLAGS="${ICU_EXTRA_CPP_FLAGS} -DU_HAVE_NL_LANGINFO_CODESET=0"
-    alias ldd="${MASON_ANDROID_TARGET}-linux-androideabi-readelf -d "
+    alias ldd="${MP_ANDROID_TARGET}-linux-androideabi-readelf -d "
     export EXTRA_CFLAGS="-march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1 -fPIC -D_LITTLE_ENDIAN"
     export EXTRA_CXXFLAGS="${EXTRA_CFLAGS}"
     export EXTRA_CPPFLAGS="-D__ANDROID__"
@@ -221,21 +221,21 @@ elif [[ ${MASON_PLATFORM} == 'Android' ]]; then
     export PATH="${PLATFORM_PREFIX}/bin":${PATH}
     # use clang in order to support std::atomic
     # https://code.google.com/p/android/issues/detail?id=36496
-    export CORE_CXX="${MASON_ANDROID_TARGET}-linux-androideabi-clang++"
-    export CORE_CC="${MASON_ANDROID_TARGET}-linux-androideabi-clang"
+    export CORE_CXX="${MP_ANDROID_TARGET}-linux-androideabi-clang++"
+    export CORE_CC="${MP_ANDROID_TARGET}-linux-androideabi-clang"
     if [[ "clang" =~ ${CORE_CXX} ]]; then
       export BOOST_TOOLSET="clang"
     else
       export BOOST_TOOLSET="gcc"
     fi
-    export LD="${MASON_ANDROID_TARGET}-linux-androideabi-ld"
-    export AR="${MASON_ANDROID_TARGET}-linux-androideabi-ar"
+    export LD="${MP_ANDROID_TARGET}-linux-androideabi-ld"
+    export AR="${MP_ANDROID_TARGET}-linux-androideabi-ar"
     export ARCH_FLAGS=
-    export RANLIB="${MASON_ANDROID_TARGET}-linux-androideabi-ranlib"
+    export RANLIB="${MP_ANDROID_TARGET}-linux-androideabi-ranlib"
     # TODO - some builds hardcode libtool which breaks since os x version is used (zlib)
-    #alias libtool="${MASON_ANDROID_TARGET}-linux-androideabi-ar cru"
-    #export libtool="${MASON_ANDROID_TARGET}-linux-androideabi-ar cru"
-    export NM="${MASON_ANDROID_TARGET}-linux-androideabi-nm"
+    #alias libtool="${MP_ANDROID_TARGET}-linux-androideabi-ar cru"
+    #export libtool="${MP_ANDROID_TARGET}-linux-androideabi-ar cru"
+    export NM="${MP_ANDROID_TARGET}-linux-androideabi-nm"
     export STDLIB="libcpp"
     export STDLIB_CXXFLAGS=""
     export STDLIB_LDFLAGS=""
@@ -283,7 +283,7 @@ elif [[ ${UNAME} == 'Darwin' ]]; then
     export STDLIB_CXXFLAGS="-std=c++11 -stdlib=libc++"
     export STDLIB_LDFLAGS="-stdlib=libc++" #-lc++ -lc++abi
 else
-    echo '**unhandled platform: ${MASON_PLATFORM}**'
+    echo '**unhandled platform: ${MP_PLATFORM}**'
 fi
 
 export MAPNIK_SOURCE="${ROOTDIR}/mapnik-${CXX_STANDARD}-${STDLIB}"
@@ -298,14 +298,14 @@ export MAPNIK_CONFIG="${MAPNIK_BIN_SOURCE}/bin/mapnik-config"
 
 export ZLIB_PATH="${BUILD}"
 if [[ $SHARED_ZLIB == true ]]; then
-    if [[ ${MASON_PLATFORM} = 'Linux' ]]; then
+    if [[ ${MP_PLATFORM} = 'Linux' ]]; then
         export ZLIB_PATH="/usr";
-    elif [[ ${MASON_PLATFORM} = 'Linaro' ]]; then
+    elif [[ ${MP_PLATFORM} = 'Linaro' ]]; then
         export ZLIB_PATH="/usr";
-    elif [[ ${MASON_PLATFORM} = 'Linaro-softfp' ]]; then
+    elif [[ ${MP_PLATFORM} = 'Linaro-softfp' ]]; then
         export ZLIB_PATH="/usr";
     else
-        if [[ ${MASON_PLATFORM} = 'Android' ]]; then
+        if [[ ${MP_PLATFORM} = 'Android' ]]; then
             # TODO - mavericks: ln -sf $(xcrun --show-sdk-path)/usr/include /usr/include
             export ZLIB_PATH=${PLATFORM_PREFIX};
         else
@@ -325,7 +325,7 @@ export CORE_CFLAGS="${DEBUG_FLAGS} -O${OPTIMIZATION} ${ARCH_FLAGS} -D_FILE_OFFSE
 export CORE_CXXFLAGS="${CXX_VISIBILITY_FLAGS} ${CORE_CFLAGS}"
 export CORE_LDFLAGS="-O${OPTIMIZATION} ${ARCH_FLAGS}"
 
-if [[ ${CXX:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
+if [[ ${CXX:-false} == false ]] || [[ ${MP_CROSS:-false} != false ]]; then
     if [[ ${CORE_CXX:-false} != false ]]; then
         export CXX="${CORE_CXX}"
     else
@@ -333,7 +333,7 @@ if [[ ${CXX:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
     fi
 fi
 
-if [[ ${CC:-false} == false ]] || [[ ${MASON_CROSS:-false} != false ]]; then
+if [[ ${CC:-false} == false ]] || [[ ${MP_CROSS:-false} != false ]]; then
     if [[ ${CORE_CC:-false} != false ]]; then
         export CC="${CORE_CC}"
     else
@@ -344,7 +344,7 @@ fi
 echo "using $CXX version : $(${CXX} -dumpversion)"
 
 # help boost's bootstrap find 'clang' a custom path to clang binary is used
-if [[ ${MASON_PLATFORM} == 'Linux' ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
+if [[ ${MP_PLATFORM} == 'Linux' ]] && [[ "${CXX#*'clang'}" != "$CXX" ]]; then
   if [[ -f $CXX ]]; then
     export PATH=$(dirname $(realpath $CXX)):$PATH
   fi
@@ -546,7 +546,7 @@ function ensure_xz {
       rm -rf xz-${XZ_VERSION}
       tar xf xz-${XZ_VERSION}.tar.bz2
       cd xz-${XZ_VERSION}
-      OLD_PLATFORM=${MASON_PLATFORM}
+      OLD_PLATFORM=${MP_PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
       make -j${JOBS}
@@ -569,7 +569,7 @@ function ensure_nasm {
       rm -rf nasm-${NASM_VERSION}
       tar xf nasm-${NASM_VERSION}.tar.bz2
       cd nasm-${NASM_VERSION}
-      OLD_PLATFORM=${MASON_PLATFORM}
+      OLD_PLATFORM=${MP_PLATFORM}
       source "${ROOTDIR}/${HOST_PLATFORM}.sh"
       ./configure --prefix=${BUILD_TOOLS_ROOT}
       make -j${JOBS}
@@ -590,7 +590,7 @@ function ensure_clang {
   CUR_DIR=$(pwd)
   mkdir -p ${PACKAGES}
   cd ${PACKAGES}
-  if [[ ${MASON_PLATFORM} == 'Linux' ]]; then
+  if [[ ${MP_PLATFORM} == 'Linux' ]]; then
       # http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-linux-gnu-ubuntu-13.10.tar.xz
       if [[ ! -f clang+llvm-$CVER-Ubuntu-13.04-x86_64-linux-gnu.tar.bz2 ]]; then
           echoerr 'downloading clang'

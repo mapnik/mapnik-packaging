@@ -114,8 +114,8 @@ function prep_linux {
     apt-get install sudo
   fi
   sudo apt-get install -qq -y curl lsb-release pkg-config build-essential git cmake zlib1g-dev unzip make libtool autotools-dev automake realpath autoconf ragel
-  if [[ "${MASON_PLATFORM:-false}" != false ]]; then
-      source ${MASON_PLATFORM}.sh
+  if [[ "${MP_PLATFORM:-false}" != false ]]; then
+      source ${MP_PLATFORM}.sh
   else
       source Linux.sh
   fi
@@ -127,8 +127,8 @@ function prep_osx {
   # NOTE: this needs to be set before sourcing the platform
   # to ensure that homebrew commands like protoc are not used
   export PATH=$(brew --prefix)/bin:$PATH
-  if [[ "${MASON_PLATFORM:-false}" != false ]]; then
-      source ${MASON_PLATFORM}.sh
+  if [[ "${MP_PLATFORM:-false}" != false ]]; then
+      source ${MP_PLATFORM}.sh
   else
       source MacOSX.sh
   fi

@@ -2,8 +2,8 @@
 
 set -u
 
-export MASON_PLATFORM="iPhoneSimulator"
-export XCODE_PLATFORM="${MASON_PLATFORM}"
+export MP_PLATFORM="iPhoneSimulator"
+export XCODE_PLATFORM="${MP_PLATFORM}"
 export HOST_PLATFORM="MacOSX"
 export BOOST_ARCH="x86"
 export ARCH_NAME="i386"

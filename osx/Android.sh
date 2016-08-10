@@ -2,12 +2,12 @@
 
 set -u
 
-export MASON_PLATFORM="Android"
-export MASON_ANDROID_NDK_VERSION="r10c"
-export MASON_ANDROID_ARCH="arm"
-export MASON_API_LEVEL="android-21"
-export MASON_ANDROID_TARGET="arm"
-export MASON_ANDROID_CROSS_COMPILER="${MASON_ANDROID_TARGET}-linux-androideabi-4.9"
+export MP_PLATFORM="Android"
+export MP_ANDROID_NDK_VERSION="r10c"
+export MP_ANDROID_ARCH="arm"
+export MP_API_LEVEL="android-21"
+export MP_ANDROID_TARGET="arm"
+export MP_ANDROID_CROSS_COMPILER="${MP_ANDROID_TARGET}-linux-androideabi-4.9"
 
 UNAME=$(uname -s);
 if [[ $UNAME == 'Darwin' ]]; then
@@ -20,7 +20,7 @@ fi
 
 export BOOST_ARCH="arm"
 export ARCH_NAME="gcc-arm"
-export HOST_ARG="--host=${MASON_ANDROID_TARGET}-linux-androideabi"
+export HOST_ARG="--host=${MP_ANDROID_TARGET}-linux-androideabi"
 export MAKE="make"
 
 source $(dirname "$BASH_SOURCE")/settings.sh

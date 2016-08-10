@@ -2,7 +2,7 @@
 
 set -u
 
-export MASON_PLATFORM="Linux"
+export MP_PLATFORM="Linux"
 export HOST_PLATFORM="Linux"
 export BOOST_ARCH="x86"
 export ARCH_NAME="gcc-x86_64"
