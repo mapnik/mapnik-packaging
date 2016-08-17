@@ -389,22 +389,22 @@ export ICU_VERSION2="56_1"
 export BOOST_VERSION="1.61.0"
 export BOOST_VERSION2="1_61_0"
 # http://www.sqlite.org/download.html
-export SQLITE_VERSION="3110000"
+export SQLITE_VERSION="3140100"
 # http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2
 # http://nongnu.askapache.com/freetype/freetype-2.5.5.tar.bz2
 # will require visual test updates: export FREETYPE_VERSION="2.6.3"
-export FREETYPE_VERSION="2.6.1"
+export FREETYPE_VERSION="2.6.5"
 # http://download.osgeo.org/proj/
 export PROJ_VERSION="4.9.2"
 # TODO - test proj-datumgrid-1.6RC1.zip
 export PROJ_GRIDS_VERSION="1.5"
 # http://www.libpng.org/pub/png/libpng.html
-export LIBPNG_VERSION="1.6.21"
+export LIBPNG_VERSION="1.6.24"
 # http://download.osgeo.org/libtiff/
 export LIBTIFF_VERSION="4.0.6"
 # https://developers.google.com/speed/webp/download
 # http://downloads.webmproject.org/releases/webp/index.html
-export WEBP_VERSION="0.5.0"
+export WEBP_VERSION="0.5.1"
 # http://download.osgeo.org/geotiff/libgeotiff/
 export LIBGEOTIFF_VERSION="1.4.1"
 export JPEG_VERSION="8d"
@@ -412,12 +412,13 @@ export JPEG_VERSION="8d"
 export NASM_VERSION="2.11.06"
 # http://sourceforge.net/projects/libjpeg-turbo/files/
 # tar.gz
-export JPEG_TURBO_VERSION="1.4.2"
+export JPEG_TURBO_VERSION="1.5.0"
 # http://sourceforge.net/projects/expat/
-# gz
-export EXPAT_VERSION="2.1.0"
+# bz2
+export EXPAT_VERSION="2.2.0"
 # http://download.osgeo.org/gdal/CURRENT/
-export GDAL_VERSION="2.1.0"
+# gz
+export GDAL_VERSION="2.1.1"
 export GETTEXT_VERSION="0.18.1.1"
 # http://ftp.postgresql.org/pub/source/
 # bz2
@@ -434,9 +435,8 @@ export PKG_CONFIG_VERSION="0.25"
 export FONTCONFIG_VERSION="2.11.1"
 # http://cairographics.org/releases/
 # gz
-# will require visual test updates: export PIXMAN_VERSION="0.34.0"
-export PIXMAN_VERSION="0.32.8"
-export CAIRO_VERSION="1.14.4"
+export PIXMAN_VERSION="0.34.0"
+export CAIRO_VERSION="1.14.6"
 export PY2CAIRO_VERSION="1.10.0"
 export PY3CAIRO_VERSION="1.10.0"
 # http://download.osgeo.org/geos/
@@ -451,7 +451,7 @@ export SPARSEHASH_VERSION="2.0.3"
 # http://www.freedesktop.org/software/harfbuzz/release/
 # bz2
 # will require visual test updates: export HARFBUZZ_VERSION="1.2.0"
-export HARFBUZZ_VERSION="1.1.2"
+export HARFBUZZ_VERSION="1.3.0"
 export STXXL_VERSION="1.4.0"
 export LUABIND_VERSION="0.9.1"
 export LUA_VERSION="5.1.5"
