@@ -67,22 +67,19 @@ function upgrade_gcc {
 }
 
 function upgrade_clang {
-    CLANG_VERSION="3.8"
     if [[ $(lsb_release --id) =~ "Ubuntu" ]]; then
         echo "adding ubuntu-toolchain-r ppa"
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update -y
     fi
-    sudo apt-get install -y libstdc++-5-dev
+    sudo apt-get install -y libstdc++-4.9-dev
     if [[ -d ./.mason ]]; then
-      (cd .mason && git pull)
-    else
-      git clone --depth 1 https://github.com/mapbox/mason.git ./.mason
+      mkdir .mason && curl -sSfL https://github.com/mapbox/mason/archive/v0.5.0.tar.gz | tar --gunzip --extract --strip-components=1 --directory=./.mason
     fi
-    ./.mason/mason install clang 3.8.0
-    export PATH=$(./.mason/mason prefix clang 3.8.0)/bin:${PATH}
-    export CXX=clang++-3.8
-    export CC=clang-3.8
+    ./.mason/mason install clang++ 3.9.1
+    export PATH=$(./.mason/mason prefix clang++ 3.9.1)/bin:${PATH}
+    export CXX=clang++-3.9
+    export CC=clang-3.9
 }
 
 function upgrade_compiler {
@@ -93,17 +90,6 @@ function upgrade_compiler {
         fi
         sudo apt-get install -y curl lsb-release git
         upgrade_clang
-        # if CXX is set, detect if clang
-        # otherwise fallback to gcc
-        #if [[ "${CXX:-unset_val}" != "unset_val" ]]; then
-        #    if contains 'clang' ${CXX}; then
-        #        upgrade_clang
-        #    else
-        #        upgrade_gcc
-        #    fi
-        #else
-        #    upgrade_gcc
-        #fi
     fi
 }
 
