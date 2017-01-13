@@ -73,7 +73,7 @@ function upgrade_clang {
         sudo apt-get update -y
     fi
     sudo apt-get install -y libstdc++-4.9-dev
-    if [[ -d ./.mason ]]; then
+    if [[ ! -d ./.mason ]]; then
       mkdir .mason && curl -sSfL https://github.com/mapbox/mason/archive/v0.5.0.tar.gz | tar --gunzip --extract --strip-components=1 --directory=./.mason
     fi
     ./.mason/mason install clang++ 3.9.1
