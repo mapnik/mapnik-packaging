@@ -40,6 +40,8 @@ if [[ ${LTO:-false} != false ]]; then
     USE_LTO=true
     # assist cairo configure
     export ax_cv_c_float_words_bigendian=no
+else
+    USE_LTO=false
 fi
 
 export BOOST_TOOLSET="gcc"
