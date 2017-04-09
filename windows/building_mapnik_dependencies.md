@@ -67,7 +67,7 @@ The order in %PATH% variable is important (Git / Cygwin / GnuWin32 )
     curl https://webp.googlecode.com/files/libwebp-%WEBP_VERSION%-windows-x86.zip -O
     curl http://ftp.igh.cnrs.fr/pub/nongnu/freetype/freetype-%FREETYPE_VERSION%.tar.gz -O
     curl http://ftp.postgresql.org/pub/source/v%POSTGRESQL_VERSION%/postgresql-%POSTGRESQL_VERSION%.tar.gz -O
-    curl ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng15/libpng-%LIBPNG_VERSION%.tar.gz -O
+    curl ftp://ftp.simplesystems.org/pub/libpng/png/src/history/libpng15/libpng-%LIBPNG_VERSION%.tar.gz -O
     curl http://www.zlib.net/zlib-%ZLIB_VERSION%.tar.gz -O
     curl http://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz -O
     curl http://www.cairographics.org/releases/pixman-%PIXMAN_VERSION%.tar.gz -O
